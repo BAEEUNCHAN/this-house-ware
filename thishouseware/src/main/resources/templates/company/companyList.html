@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+
+<body>
+	<div class="text-center">
+		<h3>회사목록</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>회사명</th>
+						<th>고객명</th>
+						<th>연락처</th> <!-- yyyy년MM월dd일 -->
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="info : ${companys}"> <!-- 조건, 반복문 있을 때 구분하기 위해 th:block -->
+						<tr><!-- 여기 onclick 넣어도 됨. -->
+							<td>[[${info.companyNo}]]</td>	
+							<td>[[${info.companyName}]]</td>	
+							<td>[[${info.customerName}]]</td>	
+							<td>[[${info.phone}]]</td>	
+						</tr>
+					</th:block>		
+				</tbody>
+			</table>
+	</div>
+</body>
+</html>

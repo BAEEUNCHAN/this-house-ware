@@ -3,21 +3,25 @@
 
 ### 🍀프로젝트 소개 🍀
 
-이 프로젝트는 기업 내 직원들이 보다 원활하고 효율적으로 의사소통하며, 안정적이고 생산적인 업무 환경을 구현하기 위한 목적으로 기획되었다.  
+이 프로젝트는 기업 내 직원들이 보다 원활하고 효율적으로 의사소통하며,  
+안정적이고 생산적인 업무 환경을 구현하기 위한 목적으로 기획되었다.  
 각 기업의 특성과 요구 사항을 반영하여 부서별, 직급별로 최적화된 그룹웨어 솔루션을 제공하는 것을 핵심 목표로 두며  
-또한 다양한 부서 간의 소통과 업무 흐름을 체계적으로 관리하고,  
+또한 다양한 부서 간의 소통과 업무 흐름을 체계적으로 관리하고,<br>
 각 기업의 니즈에 맞춘 맞춤형 솔루션을 제공하여, 궁극적으로 기업의 업무 생산성을 극대화한다.  
+<br>
 
 ### 🍀팀원🍀
 ### 하성수, 박종원, 권수민, 배은찬, 안예림
 
+<br>
 
 ### 🌈사용 기술🌈
-#### Java, SpringBoot, 
-#### BootStrap5, HTML5, Javascript, Jquery, Ajax, CSS, Mybatis 
-#### Oracle 11g, Oracle Cloud
-#### AWS EC2
-#### Maven, Lombok, thymeleaf
+  
+#### Java, SpringBoot<br>
+#### BootStrap5, HTML5, Javascript, Jquery, Ajax, CSS, Mybatis <br>
+#### Oracle 11g, Oracle Cloud<br>
+#### AWS EC2<br>
+#### Maven, Lombok, thymeleaf<br>
 
 
 

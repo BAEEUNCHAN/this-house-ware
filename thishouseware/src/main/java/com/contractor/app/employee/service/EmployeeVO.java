@@ -3,7 +3,10 @@ package com.contractor.app.employee.service;
 import java.awt.Image;
 import java.util.Date;
 
-public class employeeVO {
+import lombok.Data;
+
+@Data
+public class EmployeeVO {
 	String id;
 	String password;
 	String name;

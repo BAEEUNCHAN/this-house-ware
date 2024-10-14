@@ -20,10 +20,10 @@
 				<tbody>
 					<th:block th:each="info : ${companys}"> <!-- 조건, 반복문 있을 때 구분하기 위해 th:block -->
 						<tr><!-- 여기 onclick 넣어도 됨. -->
-							<td>[[${info.bno}]]</td>	
-							<td>[[${info.title}]]</td>	
-							<td>[[${info.writer}]]</td>	
-							<td>[[${#dates.format(info.regdate, "yyyy년 MM월 dd일")}]]</td>	
+							<td>[[${info.companyNo}]]</td>	
+							<td>[[${info.companyName}]]</td>	
+							<td>[[${info.customerName}]]</td>	
+							<td>[[${info.phone}]]</td>	
 						</tr>
 					</th:block>		
 				</tbody>

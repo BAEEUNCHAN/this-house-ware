@@ -1,4 +1,4 @@
-package com.contractor.app.complain.service;
+package com.contractor.app.company.service;
 
 import lombok.Builder;
 import lombok.Data;

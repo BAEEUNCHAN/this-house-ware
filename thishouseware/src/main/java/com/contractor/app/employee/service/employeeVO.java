@@ -1,10 +1,9 @@
-package com.contractor.app.manager.service;
+package com.contractor.app.employee.service;
 
 import java.awt.Image;
 import java.util.Date;
 
-public class UserVO {
-	
+public class employeeVO {
 	String id;
 	String password;
 	String name;
@@ -16,5 +15,4 @@ public class UserVO {
 	int departemntNo;
 	String positionCode;
 	Image dSignature;
-
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title></title>
+  <th:block th:replace="~{common/configs/default_config :: 'ConfigFrag'}"></th:block>
+</head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <!-- <footer th:insert="~{common/fragments/default_footer :: 'FooterFrag'}"></footer> -->
+      <div class="sidebar" data-background-color="dark" th:insert="~{common/fragments/default_sidebar :: 'SidebarFrag'}">
+      </div>
+      <!-- End Sidebar -->
+      <div class="main-panel"> 
+      	<!-- 헤더 시작 -->  
+        <div class="main-header" th:insert="~{common/fragments/default_header :: 'HeaderFrag'}">
+          
+        </div>  
+		<!-- 헤더 종료 -->
+		
+		<!-- 메인 페이지 --> 
+        <div class="container">
+        	<div class="page-inner" layout:fragment="Content"></div>
+        </div>
+
+		<!-- footer 파트 -->
+		<footer class="footer" th:insert="~{common/fragments/default_footer :: 'FooterFrag'}">
+		</footer>
+      </div> 
+ 
+       
+    </div>
+        
+        
+    <th:block th:replace="~{common/configs/script_config :: 'ConfigScript'}"></th:block>
+
+  </body>
+</html>

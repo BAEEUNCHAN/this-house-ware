@@ -13,7 +13,10 @@
 	
 	
 	<h1>수민</h1>
-	<button type="button" th:onclick='|location.href="@{/boardList}"|'>게시판목록</button>
+	<button type="button" th:onclick='|location.href="@{board/boardMainPage}"|'>게시판</button>
+	<button type="button" th:onclick='|location.href="@{board/boardList}"|'>게시판목록</button>
+	<button type="button" th:onclick='|location.href="@{board/boardInsert}"|'>게시판등록</button>
+	<button type="button" th:onclick='|location.href="@{board/postInsert}"|'>게시글등록</button>
 	
 	<h1>예림</h1>
 	<button type="button" th:onclick='|location.href="@{/companyList}"|'>회사목록</button>

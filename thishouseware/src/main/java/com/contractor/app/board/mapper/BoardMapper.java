@@ -7,4 +7,7 @@ import com.contractor.app.board.service.BoardsVO;
 public interface BoardMapper {
 	// 전체조회
 	public List<BoardsVO> selectBoardAll();
+	
+	// 등록
+	public int insertBoardInfo(BoardsVO boardsVO);
 }

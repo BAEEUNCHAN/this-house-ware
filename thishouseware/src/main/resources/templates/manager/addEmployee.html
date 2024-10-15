@@ -14,25 +14,25 @@
 	        <div class="row">
 	          <div class="col-md-8">
 	            <div class="form-group">
-	              <label for="email2">이메일</label>
-	              <input type="email" class="form-control" id="email2" placeholder="이메일">
+	              <label for="email">이메일</label>
+	              <input type="email" class="form-control" id="email" name="email" placeholder="이메일">
 	            </div>
 	            <!-- inline -->
 	            <div class="form-group">
-	              <label for="inlineinput" class="col-md-3 col-form-label">이름</label>
-	              <input type="text" class="form-control input-full" id="inlineinput" placeholder="이름입력">
+	              <label for="name" class="col-md-3 col-form-label">이름</label>
+	              <input type="text" class="form-control input-full" id="name" name="name" placeholder="이름입력">
 	            </div>                        
 	            <div class="form-group">
 	              <label for="password">제공 비밀번호</label>
-	              <input type="password" class="form-control" id="password" placeholder="비밀번호">
+	              <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호">
 	            </div>
 	            <div class="form-group">
-	              <label for="inlineinput" class="col-md-3 col-form-label">연락처</label>
-	              <input type="text" class="form-control input-full" id="inlineinput" placeholder="연락처">
+	              <label for="phone" class="col-md-3 col-form-label">연락처</label>
+	              <input type="text" class="form-control input-full" id="phone" placeholder="연락처">
 	            </div>  
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">직급</label>
-	              <select class="form-select" id="exampleFormControlSelect1">
+	              <select class="form-select" id="positionCode" name="positionCode">
 	                <option value="a1">사장</option>
 	                <option value="a2">관리자</option>
 	                <option value="a3">본부장</option>
@@ -43,29 +43,35 @@
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">부서</label>
-	              <select class="form-select" id="exampleFormControlSelect1">
-	                <option>1</option>
+	              <select class="form-select" id="departemntNo" name="departemntNo">
+	                <th:block th:each="info : ${departments}">
+	                	<option value="info.departmentNo">[[${info.departmentName}]]</option>
+	                </th:block> 
 	              </select>
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">입사일</label>
 	              <input type="date"
-	                id="date"
+	                id="hireDt"
+									name="hireDt"
 	                max="2050-01-01"
 	                min="2000-01-01"
-	                value="2020-01-01">
+	                value="2025-01-01">
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlFile1">사진입력</label>
-	              <input type="file" class="form-control-file" id="exampleFormControlFile1">
+	              <input type="file" name="imageLink" class="form-control-file" id="exampleFormControlFile1">
 	            </div>
 	          </div>
 	        </div>
 	      </div>
 	      <div class="card-action">
-	        <button class="btn btn-success">추가하기</button>
+	        <button id="addEmployee" class="btn btn-success">추가하기</button>
 	        <input type="reset" class="btn btn-danger">초기화하기</button>
 	      </div>
 	    </form>
 	  </div>
 	</div>
+<script>
+
+</script>

@@ -25,7 +25,7 @@ public class CompanyController {
 	public String companyList(Model model) {
 		List<CompanysVO> list = companyService.companyList();
 		model.addAttribute("companys", list);
-		return "company/companyLIst";
+		return "company/companyList";
 	}
 	
 	// 회사(고객)정보 등록 : URI - insertCompany / RETURN - company/insertCompany

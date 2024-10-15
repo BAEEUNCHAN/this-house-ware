@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<body>
+	<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">불편/장애 진행상황 목록</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="col-md-2">No</th>
+											<th class="col-md-5">제목</th>
+											<th class="col-md-2">회사번호</th>
+											<th class="col-md-4">작성날짜</th>
+											<!-- yyyy년MM월dd일 -->
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:each="info : ${complains}">
+											<!-- 조건, 반복문 있을 때 구분하기 위해 th:block -->
+											<tr>
+												<!-- 여기 onclick 넣어도 됨. -->
+												<td>[[${info.complainNo}]]</td>
+												<td>[[${info.complainTitle}]]</td>
+												<td>[[${info.companyNo}]]</td>
+												<td>[[${info.uploadDt}]]</td>
+											</tr>
+										</th:block>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

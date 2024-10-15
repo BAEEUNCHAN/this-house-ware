@@ -22,4 +22,10 @@ public class CompanyServiceImpl implements CompanyService {
 	public List<CompanysVO> companyList() {
 		return companyMapper.selectCompanyAll();
 	}
+	
+	@Override
+	public int insertCompany(CompanysVO companyVO) {
+		int result = companyMapper.insertCompanyInfo(companyVO);
+		return result == 1 ? companyVO.getCompanyNo() : -1;
+	}
 }

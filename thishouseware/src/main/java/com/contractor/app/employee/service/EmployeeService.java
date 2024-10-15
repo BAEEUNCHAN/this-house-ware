@@ -6,4 +6,6 @@ public interface EmployeeService {
 
 	List<DepartmentVO> getDepartmentList();
 
+	int addUser(EmployeeVO empVO);
+
 }

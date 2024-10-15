@@ -5,7 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class ComplainsVO {
+public class ComplainsVO  {
 	private Integer complainNo;		// 문의번호(PK)		, Not Null
 	private Integer complainType;	// 불편구분			, Not Null
 	private Date complainDt;		// 문제발생일시

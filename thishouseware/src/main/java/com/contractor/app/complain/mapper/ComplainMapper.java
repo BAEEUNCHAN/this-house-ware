@@ -10,7 +10,8 @@ public interface ComplainMapper {
 	public List<ComplainsVO> selectComplainAll();
 	
 	
-	// 문의 단건조회 public ComplainsVO selectComplainInfo(ComplainsVO complainVO);
+	// 문의 단건조회
+	public ComplainsVO selectComplainInfo(ComplainsVO complainVO);
 	 
 	// 문의 등록
 	public int insertComplainInfo(ComplainsVO complainVO);

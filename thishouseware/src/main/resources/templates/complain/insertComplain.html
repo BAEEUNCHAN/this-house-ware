@@ -3,32 +3,161 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	<style>
+	.card .card-action{
+	margin-top: 20px;
+	}
+	</style>
 <body>
-	<div class="page-inner">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="card-title">불편/장애사항 등록</div>
-					</div>
-					<div class="card-body">
-					<div class="col-md-12">
-						<div class="form-group">
-							<h5>회사명</h5>
-							<label for="exampleFormControlSelect2">회사명을 선택해주세요.</label>
-								<select multiple class="form-control" id="exampleFormControlSelect2">
-									<th:block th:each="info : ${companys}">
-										<option value="info.companyNo">[[${info.companyName}]]</option>
-									</th:block>
-								</select>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 등록</a></li>
+				</ul>
+			</div>
+			<div class="row">
+			<form name="insertForm" th:action="@{/insertCompany}"
+									method="post">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">불편/장애사항 등록</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<!-- 왼쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+									<!-- <div class="card-title">회사명</div> -->
+									<label for="companyName">회사명 : </label> <label
+										for="exampleFormControlSelect2"></label> 
+									<select multiple name="companyName"
+										class="form-control" id="companyName"
+										style="width: 179px; font-size: 12px;">
+										<th:block th:each="info : ${complains}">
+											<option th:value="${info.companyName}">[[${info.companyName}]]</option>
+										</th:block>
+									</select>
+
+									
+									<!-- <button class="btn btn-primary" width="120px">회사등록</button> -->
+
+									<!-- <div class="card-title">고객명</div> -->
+									<br /> <label for="customerName">고객명 : </label> <input type="text"
+										name="customerName" aria-label="Username" id="customerName"
+										aria-describedby="basic-addon1" placeholder="고객 이름을 입력하세요."><br />
+									<br />
+									<!-- <div class="card-title">연락처</div> -->
+									<label for="phone">연락처 : </label> <input type="number"
+										name="phone" aria-label="Username" id="phone"
+										aria-describedby="basic-addon1" placeholder="'-'없이 숫자만 입력."><br />
+
+
+								</div>
+								<!-- 왼쪽화면 끝 -->
+
+
+								<!-- 오른쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+				
+									<br />
+									<!-- <div class="card-title">문제발생일시</div> -->
+									<label for="complainDt">문제발생일시 : </label> <input type="date"
+										name="complainDt" id="date" max="2077-10-10" min="2020-06-05" value="2020-10-15"><br />
+									<br />
+									<br />
+									<br />
+
+									<!-- <div class="card-title">문의구분</div> -->
+									<label for="complainType">문의구분 : </label>
+									<div class="form-group">
+										<!-- <label>Gender</label><br /> -->
+										<div class="d-flex">
+											<div class="form-check">
+												<input class="form-check-input" type="radio"
+													name="complainType" id="complainType" value="1"/> <label
+													class="form-check-label" for="flexRadioDefault1">
+													고객불편 </label>
+											</div>
+											<div class="form-check">
+												<input class="form-check-input" type="radio"
+													name="complainType" id="complainType" value="2" />
+												<label class="form-check-label" for="flexRadioDefault2">
+													운영장애 </label>
+											</div>
+										</div>
+									</div>
+									
+									
+
+								</div>
+								<!-- 오른쪽화면 끝 -->
+							</div>
+							<div class="card-action">
+							
+							<label for="complainTitle">제목 : </label>
+							<input type="text"
+										name="complainTitle" aria-label="Username" size=90 maxlength=70
+										aria-describedby="basic-addon1" placeholder="제목을 입력하세요."><br /><br />
+							
+							<label for="complainContent">문의내용</label>
+							<textarea class="form-control" name="complainContent" id="comment" rows="5" placeholder="600자 이내로 입력하세요."></textarea>
+							
+							<label for="complainRequest">요청사항</label>
+							<textarea class="form-control" name="complainRequest" id="comment" rows="5" placeholder="600자 이내로 입력하세요."></textarea>
+							<br/>
+							
+								<button type="submit" class="btn btn-success">등록</button>
+								<button class="btn btn-danger">취소</button>
+							</div>
 						</div>
 					</div>
-					<div class="card-body"></div>
-					</div>
 				</div>
+				<br/>
+				</form>
 			</div>
 		</div>
 	</div>
-
+	<script>
+	
+	
+		
+	
+	// submit을 하기 전 제목, 작성자, 작성일자 확인, 값이 없는 경우 등록되지 않도록 이벤트걸기.
+		// Form 태그 네임속성 활용해서 이벤트 걸기
+		$(insertForm).on('submit', complainInsertHandler)
+		
+		function complainInsertHandler(event){
+			event.preventDefault(); // submit stop
+			
+			if(!document.getElementById('companyName').value) alert('회사를 선택하세요. 해당 회사가 없으면 회사 등록을 해주세요.');
+			if(!document.getElementById('complainType').value) alert('문의구분(고객불편/운영장애)을 선택해주세요.');
+			
+			let customerName = $('form [name="customerName"]'); // 공백은 하위요소 찾는 것.
+			if(customerName.val() == ''){
+				alert('고객명을 입력해주세요.');
+				customerName.focus();
+				return;
+			}
+			
+			let phone = $('form [name="phone"]'); // 공백은 하위요소 찾는 것.
+			if(phone.val() == ''){
+				alert('연락처를 입력해주세요.');
+				phone.focus();
+				return;
+			}
+			
+			
+		
+			alert('게시글이 등록되었습니다.');
+			insertForm.submit();
+		}
+	</script>
 </body>
 </html>

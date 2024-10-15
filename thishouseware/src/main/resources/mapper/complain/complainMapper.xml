@@ -7,17 +7,37 @@
 	
 	SELECT		c.complain_no
 				,c.complain_dt
+				,c.complain_title
 				,c.complain_content
 				,c.complain_request
 				,c.upload_dt
 				,c.progress
 				,c.complain_type
-				,c.company_no
+				,p.company_no
                 ,p.company_name
 	FROM		complains c JOIN companys p
     ON          c.company_no = p.company_no
 	ORDER BY    company_no
 
+</select>
+
+<!-- 문의 단건조회 -->
+<select id="selectComplainInfo" resultType="ComplainsVO">
+	
+	SELECT		c.complain_no
+				,c.complain_dt
+				,c.complain_title
+				,c.complain_content
+				,c.complain_request
+				,c.upload_dt
+				,c.progress
+				,c.complain_type
+				,p.company_no
+                ,p.company_name
+	FROM		complains c RIGHT JOIN companys p
+    ON          c.company_no = p.company_no
+	WHERE		c.complain_no = #{complainNo}
+	
 </select>
 
 <!-- 문의 등록 -->
@@ -28,7 +48,7 @@
 			   order="BEFORE">
 		<!-- 1001부터 시작 -->
 		SELECT NVL(MAX(complain_no), 1) + 1
-		FROM   companys
+		FROM   complains
 	</selectKey>
 	
 	INSERT INTO complains(complain_no
@@ -45,8 +65,8 @@
 						 ,#{complainTitle}
 						 ,#{complainContent}
 						 ,#{complainRequest}
-						 ,#{uploadDt}
-						 ,#{progress}
+						 ,sysdate
+						 ,0
 						 ,#{complainType}
 						 ,#{companyNo})
 </insert>

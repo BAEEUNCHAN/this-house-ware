@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.board.mapper.BoardMapper">
+	<!-- 전체조회 -->
+	<select id="selectBoardAll" resultType="BoardsVO">
+		SELECT BOARDS_NO,
+			   BOARDS_TYPE,
+			   BOARDS_NAME,
+    		   ANONY_CHK,
+ 			   TITLE,
+			   DESCRIPTION,
+			   AUTHORITY
+	    FROM   boards
+	    ORDER BY boards_no
+	</select>
+</mapper>

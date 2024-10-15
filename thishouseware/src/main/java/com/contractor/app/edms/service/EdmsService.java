@@ -4,9 +4,20 @@ import java.util.List;
 
 public interface EdmsService { // 전자결재
 	
-	// 결재 문서함 전체 출력
+	// 결재문서함 전체조회
 	public List<EdmsDocVO> edmsDocList();
+	// 결재문서함 단건조회
+	public EdmsDocVO edmsDocInfo(EdmsDocVO edmsDocVO);
 	
-	// 결재 양식 전체 출력
+	
+	
+	
+	
+	
+	// 결재양식 전체조회
 	public List<EdmsFormVO> edmsFormList();
+	// 결재양식 단건조회
+	public EdmsFormVO edmsFormInfo(EdmsFormVO edmsFormVO);
+	
+	
 }

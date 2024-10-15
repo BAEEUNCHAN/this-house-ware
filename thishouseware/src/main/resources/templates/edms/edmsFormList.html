@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<body>
+<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">결재양식 목록</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>번호</th>
+											<th>양식이름</th>
+											<th>양식분류</th>
+											<th>생성일시</th>
+											<th>선택</th>
+										</tr>
+									</thead>
+									<tbody class = "edmsForm">
+										<th:block th:each="info : ${edmsForms}">
+											<tr>
+												<td>[[${info.edmsFormNo}]]</td>
+												<td>[[${info.edmsFormName}]]</td>
+												<td>[[${info.edmsFormType}]]</td>
+												<td>[[ ${ #dates.format(info.createDt, "yyyy-MM-dd" )}]]</td>
+												<td>
+												<input type="checkbox" name="selectedForms" th:value="${info.edmsFormNo}"/>
+											</tr>
+										</th:block>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('.edmsForm > tr').on('click', function(event){
+			let trTag = event.currentTarget;
+			let fno = $(trTag).children().eq(0).text();
+			let url ='edmsFormInfo?edmsFormNo=' + fno;
+			location.href=url;
+		});
+	</script>
+</body>
+</html>

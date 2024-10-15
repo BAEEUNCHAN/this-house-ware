@@ -1,5 +1,5 @@
 package com.contractor.app.appr.service;
 
-public class apprLineVO {
+public interface ApprService {
 
 }

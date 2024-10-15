@@ -5,7 +5,7 @@
 	<select id="selectBoardAll" resultType="BoardsVO">
 		SELECT BOARDS_NO,
 			   BOARDS_TYPE,
-			   BOARDS_NAME,
+			   DEPARTMENT_NAME,
     		   ANONY_CHK,
  			   TITLE,
 			   DESCRIPTION,
@@ -13,4 +13,31 @@
 	    FROM   boards
 	    ORDER BY boards_no
 	</select>
+	
+	<!-- 등록 -->
+	<insert id="insertBoardInfo" parameterType="BoardsVO">
+		<selectKey keyProperty="boardsNo"
+				   resultType="Integer"
+				   order="BEFORE">
+			SELECT NVL(MAX(BOARDS_NO), 10000) + 1
+			FROM board
+		</selectKey>
+		INSERT INTO boards
+				(   BOARDS_NO,
+			   		BOARDS_TYPE,
+			   		DEPARTMENT_NAME,
+    		   		ANONY_CHK,
+ 			   		TITLE,
+			   		DESCRIPTION,
+			   		AUTHORITY
+				)
+		VALUES  (   #{boardsNo}
+			       ,#{boardsType}
+			       ,#{departmentName}
+			       ,#{anonyChk}
+			       ,#{title}
+			       ,#{description}
+			       ,#{authority}
+				)
+	</insert>
 </mapper>

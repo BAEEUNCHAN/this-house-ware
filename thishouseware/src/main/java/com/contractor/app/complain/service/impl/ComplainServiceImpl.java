@@ -26,8 +26,9 @@ public class ComplainServiceImpl implements ComplainService {
 	
 	
 	 // 문의 단건조회
-	 //@Override public ComplainsVO complainInfo(ComplainsVO complainVO) { return
-	 //complainMapper.selectComplainInfo(complainVO); }
+	 @Override public ComplainsVO complainInfo(ComplainsVO complainVO) {
+		 return  complainMapper.selectComplainInfo(complainVO);
+	}
 	 
 	
 	 // 문의 등록

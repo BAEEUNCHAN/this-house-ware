@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class AuthenticationVO {
 	
-	String id;
-	String authenticationsValue;
-	Date authenticationsTime;
+	String id; // 직원 아이디
+	String authenticationsValue; // 인증값
+	Date authenticationsTime;// 인증값 발행 시간
 
 }

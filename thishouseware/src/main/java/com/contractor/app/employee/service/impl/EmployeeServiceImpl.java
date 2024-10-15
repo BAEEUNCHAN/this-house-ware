@@ -8,6 +8,7 @@ import com.contractor.app.employee.mapper.DepartmentMapper;
 import com.contractor.app.employee.mapper.EmployeeMapper;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
+import com.contractor.app.employee.service.EmployeeVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<DepartmentVO> getDepartmentList() {
 		return departmentMapper.selectDepartmentAll();
+	}
+
+	@Override
+	public int addUser(EmployeeVO empVO) {
+		return employeeMapper.insertUser(empVO);
 	}
 
 }

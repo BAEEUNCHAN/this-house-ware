@@ -80,6 +80,12 @@
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
+		<!--query 수행 로깅을 위한 라이브러리-->         
+         <dependency>
+		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
+		    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+		    <version>1.16</version>
+		</dependency>
 		
 	</dependencies>
 
@@ -98,6 +104,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 

@@ -5,7 +5,7 @@
 	<select id="selectBoardAll" resultType="BoardsVO">
 		SELECT BOARDS_NO,
 			   BOARDS_TYPE,
-			   BOARDS_NAME,
+			   DEPARTMENT_NAME,
     		   ANONY_CHK,
  			   TITLE,
 			   DESCRIPTION,

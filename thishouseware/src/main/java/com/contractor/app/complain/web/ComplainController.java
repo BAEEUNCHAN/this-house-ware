@@ -16,12 +16,18 @@ import com.contractor.app.complain.service.ComplainService;
 @Controller
 public class ComplainController {
 	private ComplainService complainService;
-	private CompanyService companyService;
 	
 	@Autowired
 	public ComplainController(ComplainService complainService, CompanyService companyService) {
 		this.complainService = complainService;
-		this.companyService = companyService;
+	}
+	
+	// 문의 단건조회
+	@GetMapping("complainInfo")
+	public String complainInfo(ComplainsVO complainVO, Model model) {
+		ComplainsVO findVO = complainService.complainInfo(complainVO);
+		model.addAttribute("complain", findVO);
+		return "complain/complainInsert";
 	}
 	
 	
@@ -35,15 +41,18 @@ public class ComplainController {
 	
 	// 문의 등록 : URI - insertComplain / RETURN - complain/insertComplain
 	@GetMapping("insertComplain")
-	public String insertComplainForm(ComplainsVO complainsVO, Model model) {
-		List<CompanysVO> list = companyService.companyList();
-		model.addAttribute("companys", list);
+	public String insertComplainForm(ComplainsVO complainVO, Model model) {
+		List<ComplainsVO> list = complainService.complainList();
+		model.addAttribute("complains", list);
+		ComplainsVO findVO = complainService.complainInfo(complainVO);
+		model.addAttribute("complain", findVO);
 		return "complain/insertComplain";
 	}
 	
 	// 문의 등록 : 문의 등록 처리
 	@PostMapping("insertComplain")
 	public String insertComplainProcess(ComplainsVO complainVO) {
+		
 		int complainNo = complainService.insertComplain(complainVO);
 		return "redirect:complainList";
 	}

@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<div class="row">
 	  <div class="col-md-12">
 	    <form class="card">
@@ -14,25 +14,25 @@
 	        <div class="row">
 	          <div class="col-md-8">
 	            <div class="form-group">
-	              <label for="email2">이메일</label>
-	              <input type="email" class="form-control" id="email2" placeholder="이메일">
+	              <label for="email">이메일</label>
+	              <input type="email" class="form-control" id="email" name="email" placeholder="이메일">
 	            </div>
 	            <!-- inline -->
 	            <div class="form-group">
-	              <label for="inlineinput" class="col-md-3 col-form-label">이름</label>
-	              <input type="text" class="form-control input-full" id="inlineinput" placeholder="이름입력">
+	              <label for="name" class="col-md-3 col-form-label">이름</label>
+	              <input type="text" class="form-control input-full" id="name" name="name" placeholder="이름입력">
 	            </div>                        
 	            <div class="form-group">
 	              <label for="password">제공 비밀번호</label>
-	              <input type="password" class="form-control" id="password" placeholder="비밀번호">
+	              <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" autoComplete="off" >
 	            </div>
 	            <div class="form-group">
-	              <label for="inlineinput" class="col-md-3 col-form-label">연락처</label>
-	              <input type="text" class="form-control input-full" id="inlineinput" placeholder="연락처">
+	              <label for="phone" class="col-md-3 col-form-label">연락처</label>
+	              <input type="text" class="form-control input-full" id="phone" placeholder="연락처">
 	            </div>  
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">직급</label>
-	              <select class="form-select" id="exampleFormControlSelect1">
+	              <select class="form-select" id="positionCode" name="positionCode">
 	                <option value="a1">사장</option>
 	                <option value="a2">관리자</option>
 	                <option value="a3">본부장</option>
@@ -43,29 +43,74 @@
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">부서</label>
-	              <select class="form-select" id="exampleFormControlSelect1">
-	                <option>1</option>
+	              <select class="form-select" id="departemntNo" name="departemntNo">
+	                <th:block th:each="info : ${departments}">
+	                	<option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
+	                </th:block> 
 	              </select>
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">입사일</label>
 	              <input type="date"
-	                id="date"
+	                id="hireDt"
+									name="hireDt"
 	                max="2050-01-01"
 	                min="2000-01-01"
-	                value="2020-01-01">
+	                value="2025-01-01">
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlFile1">사진입력</label>
-	              <input type="file" class="form-control-file" id="exampleFormControlFile1">
+	              <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
 	            </div>
 	          </div>
 	        </div>
 	      </div>
 	      <div class="card-action">
-	        <button class="btn btn-success">추가하기</button>
+	        <button type="button" id="addEmployee" class="btn btn-success">추가하기</button>
 	        <input type="reset" class="btn btn-danger">초기화하기</button>
 	      </div>
 	    </form>
 	  </div>
 	</div>
+<script>
+$('#addEmployee').on('click', function(event){
+	let formData = new FormData(); 
+	// 유사) jQuery.serializeArray();
+	// 1) <from/>태그 내부의 입력태그 정보를 한번에 받음
+	// 2) AJAX를 이용하여 'Content-type:multipart/form-data'를 보내는 경우
+	
+	formData.append("email", $('#email').val());
+	formData.append("password", $('#password').val());
+	formData.append("name", $('#name').val());
+	formData.append("hireDt", $('#hireDt').val());
+	formData.append("phone", $('#phone').val());
+	formData.append("departemntNo", $('#departemntNo').val());
+	formData.append("positionCode", $('#positionCode').val());
+	formData.append("uploadFile",$('#uploadFile')[0].files[0]);
+
+	for (const x of formData) {
+ 		console.log(x);
+	};
+	// $.Ajax 방식 
+	$.ajax('/manager/addUser',{
+		type : 'post',				
+		data : formData,     // data 속성의 값(객체 타입)을
+		processData : false, // QueryString으로 변환하는 설정
+		contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
+	})
+	.done(result => {
+		if(result == 'error1'){
+			alert("이미지 파일이 아닙니다.");
+		}else if(result == 'error2'){
+			alert("파일업로드가 실패하였습니다.");
+		}else if(result == 'error3'){
+			alert("날짜 타입이 잘못되셨습니다.");
+		}else if(result == 'error4'){
+			alert("서버문제로 회원추가가 실패하였습니다.");
+		}else{
+			alert("회원 정보 추가가 성공하셧습니다.")
+		}
+	})
+	.fail(err => console.log(err));
+	});
+</script>

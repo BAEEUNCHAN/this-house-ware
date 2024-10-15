@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
-
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-  <meta charset='utf-8'>
-  <title>레이아웃 테스트</title>
+<meta charset="UTF-8">
+<title></title>
 </head>
 <body>
-	<h1>익명 게시판 입니다.</h1>
-
-	<button type="button" th:onclick='|location.href="@{/board/boardList}"|'>게시판목록</button>
-
+	<div class="text-center">
+		<h3>게시판 목록</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>게시판 번호</th>
+					<th>게시판 유형</th>
+					<th>익명 여부</th>
+					<th>제목</th>
+					<th>설명</th>
+					<th>권한</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="info : ${boards}">
+				<!--  BoardsVO => <tr/> -->
+				<tr>
+					<td>[[ ${info.boardsNo}]]</td>
+					<td>[[ ${info.boardsType}]]</td>
+					<td>[[ ${info.anonyChk}]]</td>
+					<td>[[ ${info.title}]]</td>
+					<td>[[ ${info.description}]]</td>
+					<td>[[ ${info.authority}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- <script>
+		// 제이쿼리 객체 생성
+		$('tbody > tr').on('click', function(event) {
+			let trTag = event.currentTarget;
+			let bno = $(trTag).children().eq(0).text();
+			let url = 'boardInfo?bno=' + bno;
+			location.href=url;
+		});
+	</script> -->
 </body>
 </html>

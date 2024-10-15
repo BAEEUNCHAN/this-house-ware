@@ -8,7 +8,14 @@ import com.contractor.app.edms.service.EdmsFormVO;
 public interface EdmsMapper {
 	// 결재문서 전체조회
 	public List<EdmsDocVO> selectDocAllList();
+	// 결재문서 단건조회
+	public EdmsDocVO selectEdmsDocInfo(EdmsDocVO edmsDocVO);
+	
+	
 
 	// 결재양식 전체조회
 	public List<EdmsFormVO> selectFormAllList();
+	// 결재양식 단건조회
+	public EdmsFormVO selectEdmsFormInfo(EdmsFormVO edmsFormVO);
+	
 }

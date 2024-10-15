@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.edms.mapper.EdmsMapper">
+<!-- 전체조회 -->
+<select id="selectFormAllList" resultType="EdmsFormVO">
+		SELECT edms_form_no
+        	, edms_form_name
+        	, edms_form_type
+        	, edms_form_path
+        	, description
+        	, create_dt
+	        
+		FROM edms_form
+		<where>
+			<if test="edmsFormNo != null and !edmsFormNo.equals('')">
+				edms_form_no = #{edmsFormNo}
+			</if>
+			<if test="edmsFormName != null and !edmsFormName.equals('')">
+				edms_form_name = #{edmsFormName}
+			</if>
+		</where>
+		ORDER BY create_dt
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="selectEdmsFormInfo" resultType="EdmsFormVO">
+		SELECT edms_form_no
+        	, edms_form_name
+        	, edms_form_type
+        	, edms_form_path
+        	, description
+        	, create_dt
+	        
+		FROM edms_form
+		WHERE edms_form_no = #{edmsFormNo}
+	</select>
+
+</mapper>

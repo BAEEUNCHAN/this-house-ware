@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <meta charset='utf-8'>
+  <title>레이아웃 테스트</title>
 </head>
 <body>
+	<h1>익명 게시판 입니다.</h1>
+
+	<button type="button" th:onclick='|location.href="@{/board/boardList}"|'>게시판목록</button>
 
 </body>
 </html>

@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
 
 @Controller
+@RequestMapping("/board")
 public class BoardController {
 	private BoardService boardService;
 	
@@ -20,7 +22,7 @@ public class BoardController {
 	}
 	
 	// 전체조회 : URI - boardList / RETURN - board/boardList
-	@GetMapping("boardList")
+	@GetMapping("/boardList")
 	public String boardList(Model model) {
 		List<BoardsVO> list = boardService.boardList();
 		// 페이지에 전달

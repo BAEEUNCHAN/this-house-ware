@@ -1,5 +1,5 @@
 package com.contractor.app.share.mapper;
 
-public interface shareMapper {
+public interface ShareMapper {
 
 }

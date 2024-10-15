@@ -99,7 +99,17 @@ $('#addEmployee').on('click', function(event){
 		contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
 	})
 	.done(result => {
-		alert(result);
+		if(result == 'error1'){
+			alert("이미지 파일이 아닙니다.");
+		}else if(result == 'error2'){
+			alert("파일업로드가 실패하였습니다.");
+		}else if(result == 'error3'){
+			alert("날짜 타입이 잘못되셨습니다.");
+		}else if(result == 'error4'){
+			alert("서버문제로 회원추가가 실패하였습니다.");
+		}else{
+			alert("회원 정보 추가가 성공하셧습니다.")
+		}
 	})
 	.fail(err => console.log(err));
 	});

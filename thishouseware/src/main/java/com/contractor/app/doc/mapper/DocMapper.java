@@ -1,5 +1,5 @@
 package com.contractor.app.doc.mapper;
 
-public interface docMapper {
+public interface DocMapper {
 
 }

@@ -1,5 +1,5 @@
 package com.contractor.app.share.service;
 
-public interface shareService {
+public interface ShareService {
 
 }

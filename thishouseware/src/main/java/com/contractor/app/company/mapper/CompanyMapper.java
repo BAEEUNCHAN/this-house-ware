@@ -8,4 +8,7 @@ public interface CompanyMapper {
 	
 	// 회사(고객)정보 전체조회
 	public List<CompanysVO> selectCompanyAll();
+	
+	// 회사(고객)정보 등록
+	public int insertCompanyInfo(CompanysVO companyVO);
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ScheduleController {
 	// 테스트용
-	@GetMapping("scheduleList")
+	@GetMapping("schedule/scheduleList")
 	public String scheduleList(Model model) {
 		return "schedule/scheduleList";
 	}

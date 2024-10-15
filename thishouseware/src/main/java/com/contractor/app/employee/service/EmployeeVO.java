@@ -9,17 +9,17 @@ import lombok.Data;
 
 @Data
 public class EmployeeVO {
-	String id;
-	String password;
-	String name;
+	String id; // 직원 아이디
+	String password; // 비밀번호
+	String name; // 이름
 	@DateTimeFormat(pattern = "yyyy-mm-dd")
-	Date hireDt;
-	String phone;
-	String email;
-	String imageLink;
+	Date hireDt; // 입사 날짜
+	String phone; // 전화번호
+	String email; // 이메일
+	String imageLink; // 이미지 링크
 	@DateTimeFormat(pattern = "yyyy-mm-dd")
-	Date resignDt;
-	int departmentNo;
-	String positionCode;
-	Image dSignature;
+	Date resignDt; // 퇴사 날짜
+	int departmentNo; // 부서 번호
+	String positionCode; // 직급 코드
+	Image dSignature; // 전자 서명
 }

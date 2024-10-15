@@ -42,8 +42,8 @@ public class ManagerController {
 	private final ManagerService managerService; 
 	private final EmployeeService employeeService;
 	
-	@GetMapping("manager/addUser")
-	public String addUser(Model model ) {
+	@GetMapping("manager/addEmp")
+	public String addEmp(Model model ) {
 		
 		List<DepartmentVO> departments = employeeService.getDepartmentList();
 		// 확인용 주석!
@@ -62,7 +62,7 @@ public class ManagerController {
 	 */
 	@PostMapping("manager/addUser")
 	@ResponseBody
-	public String uploadFile( 
+	public String addEmp( 
 			@RequestParam("email") String email,
 			@RequestParam("password") String password,
 			@RequestParam("name") String name,
@@ -78,6 +78,7 @@ public class ManagerController {
     	// 이미지 파일이 아니면은 처리하지 않는다.(콘텐츠 타입으로 확인)
 	    if(uploadFile.getContentType().startsWith("image") == false){
 	    	System.err.println("this file is not image type");
+	    	answer = "error1";
 	    	return answer;
 	    }
 	  
@@ -98,7 +99,8 @@ public class ManagerController {
         	//uploadFile에 파일을 업로드 하는 메서드 transferTo(file)
         	uploadFile.transferTo(savePath);  
         } catch (IOException e) {
-             e.printStackTrace();             
+        	answer = "error2";
+            return answer;        
         }
 
         EmployeeVO empVO = new EmployeeVO();
@@ -113,6 +115,7 @@ public class ManagerController {
         try {
 			empVO.setHireDt(formatter.parse(hireDt));
 		} catch (ParseException e) {
+			answer = "error3";
 			return answer;
 		}
         // DB 에 저장하기위한 파일의 경로는 추출한다.
@@ -120,8 +123,9 @@ public class ManagerController {
         empVO.setImageLink(imageLink);
         System.out.println(empVO);
         
-        // 서버입력 조건
+        // 서버입력 성공 여부
         if(employeeService.addUser(empVO) != 1 ) {
+        	answer = "error4";
         	return answer;
         }
         
@@ -155,5 +159,10 @@ public class ManagerController {
 	 */
 	private String setImagePath(String uploadFileName) {
 		return uploadFileName.replace(File.separator, "/");
+	}
+
+	@GetMapping("manager/modifyEmp")
+	public void modifyEmp() {
+		
 	}
 }

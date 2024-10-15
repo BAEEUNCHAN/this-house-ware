@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<style>
+/* 테이블 스타일 */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 16px;
+	text-align: left;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 테이블 헤더 스타일 */
+th, td {
+	padding: 12px;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+/* 라벨 스타일 */
+label {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+/* 테이블 데이터 스타일 */
+td span {
+	display: block;
+	color: #333;
+}
+
+/* 테이블 행 배경색 (홀수 행 스타일) */
+tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+/* 버튼을 가운데 정렬 */
+.button-container {
+	text-align: center; /* 컨테이너를 가운데 정렬 */
+	margin-top: 20px; /* 버튼 상단에 여백 추가 */
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+</style>
+<div class="page-inner">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div class="card-title">결재양식 목록</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="text-center">
+							<table class="table">
+								<div>
+									<table class="table">
+										<tr>
+											<td><label for="fno">양식번호</label></td>
+											<td><span th:text="${edmsForms.edmsFormNo}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="fname">양식이름</label></td>
+											<td><span th:text="${edmsForms.edmsFormName}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="ftype">양식분류</label></td>
+											<td><span th:text="${edmsForms.edmsFormType}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="fdesc">설명</label></td>
+											<td><span th:text="${edmsForms.description}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="fcreate">생성일시</label></td>
+											<td><span
+												th:text="${#dates.format(edmsForms.createDt, 'yyyy-MM-dd')}"></span></td>
+										</tr>
+									</table>
+								</div>
+								<div class="button-container">
+									<button type="button"
+										th:onclick="|location.href='@{/edms/edmsFormList}'|">목록</button>
+									<!-- 추후 추가예정
+									<button type="button"
+										th:onclick="|location.href='@{/edms/}'|">작성</button> -->
+								</div>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

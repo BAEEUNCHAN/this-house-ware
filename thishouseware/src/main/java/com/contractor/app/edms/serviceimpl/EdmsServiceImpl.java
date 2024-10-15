@@ -19,14 +19,31 @@ public class EdmsServiceImpl implements EdmsService {
 		this.edmsMapper = edmsMapper;
 	}
 	
+
 	@Override
 	public List<EdmsDocVO> edmsDocList() { 
 		return edmsMapper.selectDocAllList();
-	} // 결재문서 전체 출력
+	} // 결재문서 전체조회
+	
+	@Override
+	public EdmsDocVO edmsDocInfo(EdmsDocVO edmsDocVO) {
+		return edmsMapper.selectEdmsDocInfo(edmsDocVO);
+	} // 결재문서 단건조회
+	
+	
+	
+	
+	
+	
 	
 	@Override
 	public List<EdmsFormVO> edmsFormList() { 
 		return edmsMapper.selectFormAllList();
-	} // 결재영식 전체 출력
+	} // 결재양식 전체조회
+	
+	@Override
+	public EdmsFormVO edmsFormInfo(EdmsFormVO edmsFormVO) {
+		return edmsMapper.selectEdmsFormInfo(edmsFormVO);
+	} // 결재문서 단건조회
 
 }// 끝

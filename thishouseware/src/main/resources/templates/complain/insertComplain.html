@@ -12,16 +12,19 @@
 						<div class="card-title">불편/장애사항 등록</div>
 					</div>
 					<div class="card-body">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<button type="submit" class="btn btn-search pe-1">
-									<i class="fa fa-search search-icon"></i>
-								</button>
-							</div>
-							<input type="text" placeholder="Search ..." class="form-control" />
+					<div class="col-md-12">
+						<div class="form-group">
+							<h5>회사명</h5>
+							<label for="exampleFormControlSelect2">회사명을 선택해주세요.</label>
+								<select multiple class="form-control" id="exampleFormControlSelect2">
+									<th:block th:each="info : ${companys}">
+										<option value="info.companyNo">[[${info.companyName}]]</option>
+									</th:block>
+								</select>
 						</div>
 					</div>
 					<div class="card-body"></div>
+					</div>
 				</div>
 			</div>
 		</div>

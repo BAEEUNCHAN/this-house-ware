@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<div class="text-center">
+		<form name="insertForm" th:action="@{/postInsert}" method="post">
+		<h3>게시글 등록</h3>
+		<table class="table">
+			<tr>
+				<th>게시글 유형</th>
+				<td><input type="text" name="postsType"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td><input type="text" name="title"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea name="content"></textarea></td>
+			</tr>
+			<tr>
+				<th>게시 기간여부</th>
+				<td><input type="text" name="postSetting"></td>
+			</tr>
+			<tr>
+				<th>게시 시작시간</th>
+				<td><input type="text" name="postStartTime" placeholder="yyyy/MM/dd"></td>
+			</tr>
+			<tr>
+				<th>게시 종료시간</th>
+				<td><input type="text" name="postEndTime" placeholder="yyyy/MM/dd"></td>
+			</tr>
+		</table>
+		<button type="submit">등록</button>
+		</form>
+	</div>
+	<script>
+		// submit을 하기 전 게시판 유형, 익명 여부, 제목, 권한 확인
+		$(insertForm).on('submit', postInsertHandler);
+		
+		 function postInsertHandler(event) {
+			 event.preventDefault();
+			 
+			 let postsType = $('form [name="postsType"]');
+			 if(postsType.val() == '') {
+				 alert('게시글 유형이 입력되지 않았습니다.');
+				 postsType.focus();
+				 return;
+			 }
+			 
+			 let title = $('form [name="title"]');
+			 if(title.val() == '') {
+				 alert('제목이 입력되지 않았습니다.');
+				 title.focus();
+				 return;
+			 }
+			 
+			 let content = $('form [name="content"]');
+			 if(content.val() == '') {
+				 alert('내용이 입력되지 않았습니다.');
+				 content.focus();
+				 return;
+			 }
+			 
+			 let postSetting = $('form [name="postSetting"]');
+			 if(postSetting.val() == '') {
+				 alert('게시 기간여부가 입력되지 않았습니다.');
+				 postSetting.focus();
+				 return;
+			 }
+			 
+			 alert('게시글이 등록되었습니다.');
+			 insertForm.submit();
+		 }
+	</script>
+</body>
+</html>

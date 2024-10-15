@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.complain.mapper.ComplainMapper">
+
+<!-- 문의 전체조회 -->
+<select id="selectComplainAll" resultType="ComplainsVO">
+	
+	SELECT		complain_no
+				,complain_dt
+				,complain_content
+				,complain_request
+				,upload_dt
+				,progress
+				,complain_type
+				,company_no
+	FROM		complains
+	ORDER BY   company_no
+
+</select>
+
+</mapper>

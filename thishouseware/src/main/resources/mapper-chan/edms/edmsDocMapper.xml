@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper-chan.edms.edmsDocMapper">
+
+<!-- 전체조회 -->
+<select id="selectDocAllList" resultType="EdmsDocVO">
+		SELECT edms_doc_no
+        	, id
+        	, title
+        	, content
+        	, file_name
+        	, attatch
+        	, submit_dt
+        	, approval_dt
+        	, approval_status
+        	, edms_form_No
+        	, share_status
+        	, share_folder_no
+		FROM edms_doc
+		<where>
+			<if test="edmsDocNo != null and !edmsDocNo.equals('')">
+				edms_doc_no = #{edmsDocNo}
+			</if>
+			<if test="id != null and !id.equals('')">
+				id = #{id}
+			</if>
+			<if test="edmsFormNo != null and !edmsFormNo.equals('')">
+				edms_form_No = #{edmsFormNo}
+			</if>
+			<if test="shareStatus != null and !shareStatus.equals('')">
+				share_status = #{shareStatus}
+			</if>
+			<if test="shareFolderNo != null and !shareFolderNo.equals('')">
+				share_folder_no = #{shareFolderNo}
+			</if>
+		</where>
+		ORDER BY edms_doc_no
+	</select>
+
+
+
+</mapper>

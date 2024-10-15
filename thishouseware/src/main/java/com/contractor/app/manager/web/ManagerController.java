@@ -25,13 +25,14 @@ public class ManagerController {
 	public String addUser(Model model ) {
 		
 		List<DepartmentVO> departments = employeeService.getDepartmentList();
-		departments.forEach(obj ->{
-			System.out.println(obj);
-		});
+		// 확인용 주석!
+		//		departments.forEach(obj ->{
+		//			System.out.println(obj);
+		//		});
 		
 		model.addAttribute("departments" , departments);
 		
-		return "home";
+		return "manager/addEmployee";
 		
 	}
 }

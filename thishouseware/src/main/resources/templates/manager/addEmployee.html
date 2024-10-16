@@ -92,7 +92,7 @@ $('#addEmployee').on('click', function(event){
  		console.log(x);
 	};
 	// $.Ajax 방식 
-	$.ajax('/manager/addUser',{
+	$.ajax('/manager/addEmp',{
 		type : 'post',				
 		data : formData,     // data 속성의 값(객체 타입)을
 		processData : false, // QueryString으로 변환하는 설정
@@ -108,7 +108,8 @@ $('#addEmployee').on('click', function(event){
 		}else if(result == 'error4'){
 			alert("서버문제로 회원추가가 실패하였습니다.");
 		}else{
-			alert("회원 정보 추가가 성공하셧습니다.")
+			alert("회원 정보 추가가 성공하셧습니다.");
+			
 		}
 	})
 	.fail(err => console.log(err));

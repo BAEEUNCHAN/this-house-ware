@@ -4,6 +4,8 @@ import com.contractor.app.employee.service.EmployeeVO;
 
 public interface EmployeeMapper {
 
-	int insertUser(EmployeeVO empVO);
+	int insertEmployee(EmployeeVO empVO);
+
+	EmployeeVO selectEmployee(EmployeeVO empVO);
 
 }

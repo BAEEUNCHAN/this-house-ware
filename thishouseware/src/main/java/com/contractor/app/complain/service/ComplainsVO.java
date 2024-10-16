@@ -1,4 +1,4 @@
-package com.contractor.app.company.service;
+package com.contractor.app.complain.service;
 
 import java.util.Date;
 

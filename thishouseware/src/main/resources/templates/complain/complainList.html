@@ -46,5 +46,14 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		//제이쿼리 객체 생성
+		$('tbody > tr').on('click', function(event){
+			let trTag = event.currentTarget;
+			let complainNo = $(trTag).children().first().text();
+			let url = `/complainInfo?complainNo=${complainNo}`;
+			location.href=url;
+		});
+	</script>
 </body>
 </html>

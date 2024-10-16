@@ -8,16 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.contractor.app.company.service.CompanyService;
+import com.contractor.app.company.service.CompanysVO;
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
 
 @Controller
 public class ComplainController {
 	private ComplainService complainService;
+	private CompanyService companyService;
 	
 	@Autowired
-	public ComplainController(ComplainService complainService) {
+	public ComplainController(ComplainService complainService, CompanyService companyService) {
 		this.complainService = complainService;
+		this.companyService = companyService;
 	}
 	
 	// 문의 단건조회
@@ -25,7 +29,7 @@ public class ComplainController {
 	public String complainInfo(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
-		return "complain/complainInsert";
+		return "complain/complainInfo";
 	}
 	
 	
@@ -39,11 +43,11 @@ public class ComplainController {
 	
 	// 문의 등록 : URI - insertComplain / RETURN - complain/insertComplain
 	@GetMapping("insertComplain")
-	public String insertComplainForm(ComplainsVO complainVO, Model model) {
+	public String insertComplainForm(ComplainsVO complainVO, Model model, CompanysVO companyVO) {
 		List<ComplainsVO> list = complainService.complainList();
+		List<CompanysVO> companyList = companyService.companyList();
 		model.addAttribute("complains", list);
-		ComplainsVO findVO = complainService.complainInfo(complainVO);
-		model.addAttribute("complain", findVO);
+		model.addAttribute("companys", companyList);
 		return "complain/insertComplain";
 	}
 	
@@ -52,7 +56,7 @@ public class ComplainController {
 	public String insertComplainProcess(ComplainsVO complainVO) {
 		
 		int complainNo = complainService.insertComplain(complainVO);
-		return "redirect:complainList";
+		return "redirect:complainInfo?cno="+ complainNo;
 	}
 	
 }

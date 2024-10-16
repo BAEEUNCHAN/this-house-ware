@@ -8,6 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.contractor.app.company.service.CompanyService;
+import com.contractor.app.company.service.CompanysVO;
+import com.contractor.app.company.service.ComplainsVO;
+import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
 
@@ -16,6 +20,7 @@ public class ComplainController {
 	private ComplainService complainService;
 	
 	@Autowired
+	public ComplainController(ComplainService complainService, CompanyService companyService) {
 	public ComplainController(ComplainService complainService) {
 		this.complainService = complainService;
 	}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+	
+<body>
+
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">불편/장애사항 등록</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<!-- 왼쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+
+									<label for="companyName">회사명 :
+										[[${complain.companyName}]]</label> <br />
+									<br /> <label for="customerName">고객명 :
+										[[${complain.customerName}]]</label> <br />
+									<br /> <label for="phone">연락처 : [[${complain.phone}]]</label>
+									<br/><br/>
+
+								</div>
+							<!-- 왼쪽화면 끝-->
+							<!-- 오른쪽화면 -->
+							<div class="col-md-6 col-lg-30">
+								<label for="uploadDt">문제발생일 :
+									[[${#dates.format(complain.complainDt, 'yyyy/MM/dd')}]]</label> <br />
+								<br /> <label for="customerName">문의구분 :
+									[[${complain.complainType}]]</label> <br />
+								<br /> <label for="phone">작성일 : [[${#dates.format(complain.uploadDt, 'yyyy/MM/dd')}]]</label>
+								<br/><br/>
+							</div>
+							</div>
+							<div class="card-action">
+								<label for="companyName">제목 :
+										[[${complain.complainTitle}]]</label> <br />
+									<br /> <label for="customerName">문의내용 :
+										[[${complain.complainContent}]]</label> <br />
+									<br /> <label for="phone">요구사항 : [[${complain.complainRequest}]]</label>
+									<br/><br/>
+								<button class="btn btn-success">수정</button>
+								<button class="btn btn-danger">삭제</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <title>휴가 신청서</title>
 <style>
@@ -106,7 +107,7 @@ th {
 				<th>휴가기간</th>
 				<td>시작</td>
 				<td>종료</td>
-				
+
 			</tr>
 			<tr>
 				<th>휴가사유</th>
@@ -126,12 +127,9 @@ th {
 			<button class="delete" type="reset">삭제</button>
 		</div>
 	</form>
+	<div id="leaveForm">
+	</div>
 
-	<div id="leaveForm"></div>
-	<script>
-	$("#leaveForm").load("")
-	</script>
-	
 </body>
 </html>
 

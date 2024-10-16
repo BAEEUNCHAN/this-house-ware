@@ -22,4 +22,7 @@ public class EmployeeVO {
 	int departmentNo; // 부서 번호
 	String positionCode; // 직급 코드
 	Image dSignature; // 전자 서명
+	
+	// Join 을위한 변수
+	String departmentName;
 }

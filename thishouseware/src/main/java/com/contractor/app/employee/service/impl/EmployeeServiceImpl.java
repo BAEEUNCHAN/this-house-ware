@@ -1,6 +1,7 @@
 package com.contractor.app.employee.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int addEmployee(EmployeeVO empVO) {
-		return employeeMapper.insertEmployee(empVO);
+	public Map<String, Object> addEmployee(EmployeeVO empVO) {
+		Map<String, Object> map = employeeMapper.insertEmployee(empVO);
+		
+		System.out.println("map"+map);
+		return map;
 	}
 
 	@Override

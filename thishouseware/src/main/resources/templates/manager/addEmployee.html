@@ -3,7 +3,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<div class="row">
 	  <div class="col-md-12">
 	    <form class="card">
@@ -109,7 +108,7 @@ $('#addEmployee').on('click', function(event){
 			alert("서버문제로 회원추가가 실패하였습니다.");
 		}else{
 			alert("회원 정보 추가가 성공하셧습니다.");
-			
+			location.replace("/manager/modifyEmp?id="+result);
 		}
 	})
 	.fail(err => console.log(err));

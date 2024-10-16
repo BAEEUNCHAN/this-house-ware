@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.contractor.app.employee.EmployeeUtil;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
@@ -141,9 +142,9 @@ public class ManagerController {
 	 */
 	private String makeFolder() {
 		String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		
+		String folderPath = "img/"; // img를 저장할 것이기에 img를 추가한다.
 		// LocalDate를 문자열로 포멧
-		String folderPath = str.replace("/", File.separator);
+		folderPath += str.replace("/", File.separator);
 		File uploadPathFoler = new File(uploadPath, folderPath);
 		
 		// File newFile= new File(dir,"파일명");
@@ -164,9 +165,15 @@ public class ManagerController {
 	}
 
 	@GetMapping("manager/modifyEmp")
-	public void modifyEmp(EmployeeVO empVO , Model model) {
+	public String modifyEmp(EmployeeVO empVO , Model model) {
 		EmployeeVO findVO = employeeService.getEmployee(empVO);
+		System.out.println(findVO);
 		model.addAttribute("employee",findVO);
-		return null;
+		String positionName = EmployeeUtil.getPostionName(findVO.getPositionCode());
+		model.addAttribute("employeePositionName",positionName);
+		List<DepartmentVO> departments = employeeService.getDepartmentList();
+		model.addAttribute("departments" , departments);
+		
+		return "manager/modifyEmployee";
 	}
 }

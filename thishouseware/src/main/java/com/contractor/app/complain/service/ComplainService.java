@@ -2,6 +2,8 @@ package com.contractor.app.complain.service;
 
 import java.util.List;
 
+
+import com.contractor.app.company.service.ComplainsVO;
 public interface ComplainService {
 
 	// 문의사항 조회

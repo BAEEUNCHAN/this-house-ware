@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.contractor.app.company.service.ComplainsVO;
 import com.contractor.app.complain.mapper.ComplainMapper;
 import com.contractor.app.complain.service.ComplainService;
+import com.contractor.app.complain.service.ComplainsVO;
 
 @Service
 public class ComplainServiceImpl implements ComplainService {

@@ -10,19 +10,19 @@
 <body>
 	<div class="text-center">
 		<form name="insertForm" th:action="@{/postInsert}" method="post">
-		<h3>게시글 등록</h3>
+		<h3>게시글 작성</h3>
 		<table class="table">
 			<tr>
-				<th>게시글 유형</th>
+				<th>게시판 선택</th>
+				<td><input type="text" name="board"></td>
+			</tr>
+			<tr>
+				<th>머리글</th>
 				<td><input type="text" name="postsType"></td>
 			</tr>
 			<tr>
 				<th>제목</th>
 				<td><input type="text" name="title"></td>
-			</tr>
-			<tr>
-				<th>내용</th>
-				<td><textarea name="content"></textarea></td>
 			</tr>
 			<tr>
 				<th>게시 기간여부</th>
@@ -35,6 +35,10 @@
 			<tr>
 				<th>게시 종료시간</th>
 				<td><input type="text" name="postEndTime" placeholder="yyyy/MM/dd"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td><textarea name="content"></textarea></td>
 			</tr>
 		</table>
 		<button type="submit">등록</button>

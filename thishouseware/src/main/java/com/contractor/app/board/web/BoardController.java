@@ -56,7 +56,11 @@ public class BoardController {
 
 	// 등록 - 페이지 : URI - postInsert / RETURN - board/postInsert
 	@GetMapping("/postInsert")
-	public String postInsertForm() {
+	public String postInsertForm(Model model) {
+		// 게시판 목록 조회
+		List<BoardsVO> list = boardService.boardList();
+		// 페이지에 전달
+		model.addAttribute("boards", list);
 		return "board/postInsert";
 		// classpath:/templates/board/postInsert.html => 실제 경로
 	}   

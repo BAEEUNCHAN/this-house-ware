@@ -60,9 +60,9 @@ public class ManagerController {
 	/**
 	 * 파일을 올리는 함수이다.
 	 */
-	@PostMapping("manager/addUser")
+	@PostMapping("manager/addEmp")
 	@ResponseBody
-	public String addEmp( 
+	public String addEmpProcess( 
 			@RequestParam("email") String email,
 			@RequestParam("password") String password,
 			@RequestParam("name") String name,
@@ -124,10 +124,12 @@ public class ManagerController {
         System.out.println(empVO);
         
         // 서버입력 성공 여부
-        if(employeeService.addUser(empVO) != 1 ) {
-        	answer = "error4";
+        try {
+        	employeeService.addEmployee(empVO);
+		} catch (Exception e) {
+			answer = "error4";
         	return answer;
-        }
+		}
         
 	    answer = "success";
 	    return answer;
@@ -162,7 +164,9 @@ public class ManagerController {
 	}
 
 	@GetMapping("manager/modifyEmp")
-	public void modifyEmp() {
-		
+	public void modifyEmp(EmployeeVO empVO , Model model) {
+		EmployeeVO findVO = employeeService.getEmployee(empVO);
+		model.addAttribute("employee",findVO);
+		return null;
 	}
 }

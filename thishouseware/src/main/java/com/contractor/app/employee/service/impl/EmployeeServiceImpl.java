@@ -25,8 +25,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int addUser(EmployeeVO empVO) {
-		return employeeMapper.insertUser(empVO);
+	public int addEmployee(EmployeeVO empVO) {
+		return employeeMapper.insertEmployee(empVO);
+	}
+
+	@Override
+	public EmployeeVO getEmployee(EmployeeVO empVO) {
+		return employeeMapper.selectEmployee(empVO);
 	}
 
 }

@@ -12,6 +12,8 @@ import com.contractor.app.company.service.CompanyService;
 import com.contractor.app.company.service.CompanysVO;
 import com.contractor.app.company.service.ComplainsVO;
 import com.contractor.app.complain.service.ComplainService;
+import com.contractor.app.complain.service.ComplainService;
+import com.contractor.app.complain.service.ComplainsVO;
 
 @Controller
 public class ComplainController {
@@ -19,6 +21,7 @@ public class ComplainController {
 	
 	@Autowired
 	public ComplainController(ComplainService complainService, CompanyService companyService) {
+	public ComplainController(ComplainService complainService) {
 		this.complainService = complainService;
 	}
 	

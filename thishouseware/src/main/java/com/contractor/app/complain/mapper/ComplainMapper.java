@@ -2,7 +2,7 @@ package com.contractor.app.complain.mapper;
 
 import java.util.List;
 
-import com.contractor.app.company.service.ComplainsVO;
+import com.contractor.app.complain.service.ComplainsVO;
 
 public interface ComplainMapper {
 	

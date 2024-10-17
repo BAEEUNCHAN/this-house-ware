@@ -16,9 +16,9 @@
 					<th>게시판 선택</th>
 					<td><select class="form-select"
 						aria-label="Default select example">
+							<option value="">선택</option>
 							<optgroup th:each="optgrp : ${boardsType}"
 								th:label="${optgrp.commonCodeName}">
-								<option value="">선택</option>
 								<option th:each="opt : ${boards}"
 									th:if="${optgrp.commonCodeName} == ${opt.boardsType}"
 									th:text="${opt.title}"></option>
@@ -35,10 +35,6 @@
 									th:text="${opt.commonCodeName}"></option>
 							
 					</select></td>
-				</tr>
-				<tr>
-					<th>머리글</th>
-					<td><input type="text" name="postsType"></td>
 				</tr>
 				<tr>
 					<th>제목</th>

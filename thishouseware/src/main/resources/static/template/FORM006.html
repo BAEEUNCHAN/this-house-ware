@@ -25,6 +25,7 @@ th {
 .buttons {
 	margin-top: 20px;
 }
+
 </style>
 </head>
 <body>
@@ -60,8 +61,78 @@ th {
 										</tr>
 									</table>
 									<!-- 여기까진 고정이어야함 -->
-									
-								</form>
+									<h2 style="text-align: center;">비밀유지 서약서</h2>
+									<form action="/submitConfidentialityAgreement" method="post">
+										<table border="1"
+										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
+											<tr>
+												<th>소속</th>
+												<td><input type="text" name="affiliation" required ></td>
+												<th>성명</th>
+												<td><input type="text" name="name" required ></td>
+											</tr>
+											<tr>
+												<th>생년월일</th>
+												<td><input type="date" name="birthdate" required ></td>
+												<th>주소</th>
+												<td><input type="text" name="address" required ></td>
+											</tr>
+										</table>
+										<br>
+										<br>
+										<br>
+										<p>위 근로자 본인은 귀사에 대하여 아래와 같은 내용을 준수할 것을 서약합니다.</p>
+										<br>
+										<br>
+										<br>
+										
+										<div style="text-align:left;">
+										<h2>제1조 [계약목적]</h2>
+										<p>본 계약은 <input type="text" name="compony" required > (이하 "갑" 이라 한다) 와 
+										<input type="text" name="employee" required >(이하 "을" 이라 한다) 외의 업무 과정에 대한 내용과
+											관련된 자료들을 상호 간의 비밀로 유지하고 준수사항을 합의하여 주요 정보를 보전하기 위함이다.</p>
+											<br>
+										<br>
+										<br>
+
+										<h2>제2조 [업무 비밀 정보]</h2>
+										<p>본인은 회사의 업무 비밀 정보와 제3자에게 공개해서는 안 되며, 업무와 직접적으로 관련되는 비밀
+											유지정보에는 내부 정책, 사업 계획, 영업 비밀, 연구 결과, 내부 문서, 업무 절차 등이 포함되며 이는
+											회사와의 사전 동의 없이는 제3자에게 제공 또는 유출할 수 없음을 명시한다.</p>
+											<br>
+										<br>
+										<br>
+
+										<h2>제3조 [보유 정보 사용 제한]</h2>
+										<p>"을"은 업무상 알게 된 정보와 회사의 정보를 반드시 "근"과 사업 외의 목적으로는 사용하지 않기로
+											한다. 계약이 종료된 이후에도 위 정보의 누설, 공개, 사용에 대하여 책임을 지며, "을"이 제3자와의 계약을
+											통해 얻은 정보 역시 회사의 동의 없이는 제3자에게 전달할 수 없다.</p>
+											<br>
+										<br>
+										<br>
+
+										<h2>제4조 [비밀 유지 기간]</h2>
+										<p>비밀 유지 사항은 계약 종료일로부터 5년간 유효하며, 종료일 1년 전부터 회사는 이를 갱신할 수
+											있다. "근"이나 "을"의 계약 위반 시에는 해당 제3자에게 금전적, 법적 책임이 부과될 수 있음을 명확히
+											인지하며 이에 따른 법적 책임을 진다.</p>
+										</div>
+
+										<div class="signature">
+											<div>
+												<p><input type="date" name="secretDate" required ></p>
+												<p>
+													(갑) 성명: <input type="text" name="sign1_name" required >
+												</p>
+											</div>
+											<div>
+												<p><input type="date" name="secretDate1" required ></p>
+												<p>
+													(을) 성명: <input type="text" name="sign2_name" required >
+												</p>
+											</div>
+										</div>
+
+									</form>
 							</div>
 						</div>
 					</div>

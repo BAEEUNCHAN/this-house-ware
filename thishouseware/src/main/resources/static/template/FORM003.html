@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>근태신청서 양식</title>
+<title>매출보고서 양식</title>
 <style>
 .table {
 	width: 100%;
@@ -33,7 +33,7 @@ th {
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">지출결의서 양식</div>
+						<div class="card-title">매출보고서 양식</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -60,28 +60,33 @@ th {
 										</tr>
 									</table>
 									<!-- 여기까진 고정이어야함 -->
-									<h2>휴가 신청서</h2>
-									<table>
+									<h2 style="text-align: center;">매출 보고서</h2>
+									<table border="1"
+										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
-											<th>휴가종류</th>
-											<td colspan="5"><select name="leaveType" required>
-													<option value="연차">연차</option>
-													<option value="병가">병가</option>
-													<option value="특별휴가">특별휴가</option>
+											<th>구매 항목</th>
+											<!--  수정해야됨
+											<td><select name="expenseType" required>
+													<option value="식비">식비</option>
+													<option value="교통비">교통비</option>
+													<option value="업무 관련 구매">업무 관련 구매</option>
+													<option value="기타">기타</option>
 											</select></td>
 										</tr>
 										<tr>
-											<th>휴가기간</th>
-											<td colspan="2">시작</td>
-											<td colspan="2">종료</td>
+											<th>지출 금액</th>
+											<td><input type="number" name="amount" required readonly></td>
 										</tr>
 										<tr>
-											<th>휴가사유</th>
-											<td colspan="5"></td>
+											<th>지출 내역</th>
+											<td></td>
 										</tr>
 										<tr>
 											<th>내용</th>
-											<td colspan="5">상기와 같이 휴가를 신청합니다.</td>
+											<td colspan="5"
+												style="height: 800px; vertical-align: center;">상기와 같이
+												지출을 신청합니다.</td>
+												-->
 										</tr>
 									</table>
 

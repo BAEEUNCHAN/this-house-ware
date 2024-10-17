@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.contractor.app.board.mapper.BoardMapper">
 	<!-- 전체조회 -->
-	<select id="selectBoardAll" resultType="BoardsVO">
+	<select id="selectBoardAll" parameterType="BoardsVO" resultType="BoardsVO">
 		SELECT BOARDS_NO,
-			   BOARDS_TYPE,
+			   FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
 			   DEPARTMENT_NAME,
     		   ANONY_CHK,
  			   TITLE,
 			   DESCRIPTION,
 			   AUTHORITY
 	    FROM   boards
-	    ORDER BY boards_no
+	    ORDER BY BOARDS_TYPE, boards_no
 	</select>
 	
 	<!-- 등록 -->
@@ -40,4 +40,21 @@
 			       ,#{authority}
 				)
 	</insert>
+	
+	<!-- 게시글 전체조회 -->
+	<select id="selectPostAll" parameterType="PostsVO" resultType="PostsVO">
+		SELECT POSTS_NO
+     		 , BOARDS_NO
+     		 , FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
+     		 , FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
+     		 , POST_STARTTIME 
+     		 , POST_ENDTIME
+     		 , TITLE
+     		 , CONTENT
+     		 , AUTHORITY
+     		 , ID
+		FROM posts
+		<!-- WHERE BOARDS_NO = #{boardsNo} -->
+	    ORDER BY POSTS_NO
+	</select>
 </mapper>

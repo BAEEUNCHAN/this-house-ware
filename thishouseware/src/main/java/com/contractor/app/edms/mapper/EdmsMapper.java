@@ -10,6 +10,9 @@ public interface EdmsMapper {
 	public List<EdmsDocVO> selectDocAllList();
 	// 결재문서 단건조회
 	public EdmsDocVO selectEdmsDocInfo(EdmsDocVO edmsDocVO);
+	// 결재문서 등록
+	public int insertEdmsInfo(EdmsDocVO edmsDocVO);
+	
 	
 	
 

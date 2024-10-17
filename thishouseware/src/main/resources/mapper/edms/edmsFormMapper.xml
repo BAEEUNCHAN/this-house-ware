@@ -19,7 +19,7 @@
 				edms_form_name = #{edmsFormName}
 			</if>
 		</where>
-		ORDER BY create_dt
+		ORDER BY edms_form_no
 	</select>
 	
 	<!-- 단건조회 -->

@@ -30,6 +30,13 @@ public class EdmsServiceImpl implements EdmsService {
 		return edmsMapper.selectEdmsDocInfo(edmsDocVO);
 	} // 결재문서 단건조회
 	
+	@Override
+	public String edmsInsert(EdmsDocVO edmsDocVO) {
+		int result = edmsMapper.insertEdmsInfo(edmsDocVO);
+		
+		return result == 1 ? edmsDocVO.getEdmsDocNo() : null ;
+	} // 결재문서 단건등록
+	
 	
 	
 	

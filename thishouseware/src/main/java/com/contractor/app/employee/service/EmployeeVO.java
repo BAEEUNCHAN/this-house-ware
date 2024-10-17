@@ -24,8 +24,8 @@ public class EmployeeVO {
 	Image dSignature; // 전자 서명
 	
 	// DepartmentVO
-	String departmentName;
+	String departmentName; // 부서 이름
 	
 	// 직급 이름
-	String positionName;
+	String positionName; // 포지션 이름
 }

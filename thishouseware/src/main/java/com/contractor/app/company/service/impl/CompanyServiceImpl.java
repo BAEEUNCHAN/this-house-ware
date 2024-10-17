@@ -23,6 +23,7 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyMapper.selectCompanyAll();
 	}
 	
+	
 	@Override
 	public int insertCompany(CompanysVO companyVO) {
 		int result = companyMapper.insertCompanyInfo(companyVO);

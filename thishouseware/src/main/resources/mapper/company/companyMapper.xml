@@ -7,12 +7,11 @@
 	
 	SELECT	 company_no
 			 ,company_name
-			 ,customer_name
-			 ,phone
 	FROM	 companys
 	ORDER BY company_no
 	
 </select>
+
 
 <!-- 회사 등록 -->
 <insert id="insertCompanyInfo" parameterType="CompanysVO">
@@ -20,17 +19,13 @@
 			   resultType="Integer"
 			   order="BEFORE">
 		<!-- 1001부터 시작 -->
-		SELECT NVL(MAX(company_no), 2) + 1
+		SELECT NVL(MAX(company_no), 0) + 1
 		FROM   companys
 	</selectKey>
 	INSERT INTO companys(company_no
-						,company_name
-						,customer_name
-						,phone)
+						,company_name)
 	VALUES				(#{companyNo}
-						,#{companyName}
-						,#{customerName}
-						,#{phone})
+						,#{companyName})
 	
 </insert>
 

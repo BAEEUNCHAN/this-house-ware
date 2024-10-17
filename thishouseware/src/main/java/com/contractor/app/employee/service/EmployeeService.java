@@ -7,7 +7,7 @@ public interface EmployeeService {
 
 	List<DepartmentVO> getDepartmentList();
 
-	Map<String, Object> addEmployee(EmployeeVO empVO);
+	void addEmployee(EmployeeVO empVO);
 
 	EmployeeVO getEmployee(EmployeeVO empVO);
 

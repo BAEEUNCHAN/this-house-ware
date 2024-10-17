@@ -26,11 +26,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Map<String, Object> addEmployee(EmployeeVO empVO) {
-		Map<String, Object> map = employeeMapper.insertEmployee(empVO);
+	public void addEmployee(EmployeeVO empVO) {
+		employeeMapper.insertEmployee(empVO);
 		
-		System.out.println("map"+map);
-		return map;
+		// System.out.println(empVO);
 	}
 
 	@Override

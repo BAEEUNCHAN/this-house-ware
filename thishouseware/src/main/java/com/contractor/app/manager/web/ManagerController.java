@@ -105,6 +105,7 @@ public class ManagerController {
         }
 
         EmployeeVO empVO = new EmployeeVO();
+        // empVO.setId("emp");
         empVO.setEmail(email);
         empVO.setPassword(password);
         empVO.setName(name);
@@ -126,13 +127,12 @@ public class ManagerController {
         
         // 서버입력 성공 여부
         try {
-        	employeeService.addEmployee(empVO);
+        	 employeeService.addEmployee(empVO);
 		} catch (Exception e) {
 			answer = "error4";
         	return answer;
 		}
-        
-	    answer = "success";
+	    answer = empVO.getId();
 	    return answer;
 	}
 

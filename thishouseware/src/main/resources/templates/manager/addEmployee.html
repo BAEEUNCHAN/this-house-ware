@@ -42,7 +42,7 @@
 	            </div>
 	            <div class="form-group">
 	              <label for="exampleFormControlSelect1">부서</label>
-	              <select class="form-select" id="departemntNo" name="departemntNo">
+	              <select class="form-select" id="departmentNo" name="departmentNo">
 	                <th:block th:each="info : ${departments}">
 	                	<option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
 	                </th:block> 
@@ -109,7 +109,7 @@ $('#addEmployee').on('click', function(event){
 	formData.append("name", $('#name').val());
 	formData.append("hireDt", $('#hireDt').val());
 	formData.append("phone", $('#phone').val());
-	formData.append("departemntNo", $('#departemntNo').val());
+	formData.append("departmentNo", $('#departmentNo').val());
 	formData.append("positionCode", $('#positionCode').val());
 	formData.append("uploadFile",$('#uploadFile')[0].files[0]);
 

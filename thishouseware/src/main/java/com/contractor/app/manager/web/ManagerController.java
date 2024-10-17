@@ -75,13 +75,7 @@ public class ManagerController {
 	@PostMapping("manager/addEmp")
 	@ResponseBody
 	public String addEmpProcess( 
-			@RequestParam("email") String email,
-			@RequestParam("password") String password,
-			@RequestParam("name") String name,
-			@RequestParam("hireDt") String hireDt,
-			@RequestParam("phone") String phone,
-			@RequestParam("departemntNo") String departemntNo,
-			@RequestParam("positionCode") String positionCode,
+			EmployeeVO empVO,
 			@RequestPart(required = false) MultipartFile uploadFile ) {
 		
 		String imageLink = null;
@@ -114,23 +108,7 @@ public class ManagerController {
         	answer = "error2";
             return answer;        
         }
-
-        EmployeeVO empVO = new EmployeeVO();
-        // empVO.setId("emp");
-        empVO.setEmail(email);
-        empVO.setPassword(password);
-        empVO.setName(name);
-        empVO.setPhone(phone);
-        empVO.setDepartmentNo(Integer.parseInt(departemntNo));
-        empVO.setPositionCode(positionCode);
-        // 날자 타입
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-			empVO.setHireDt(formatter.parse(hireDt));
-		} catch (ParseException e) {
-			answer = "error3";
-			return answer;
-		}
+        
         // DB 에 저장하기위한 파일의 경로는 추출한다.
         imageLink = setImagePath(uploadFileName);
         empVO.setImageLink(imageLink);
@@ -153,21 +131,14 @@ public class ManagerController {
 	@PostMapping("manager/modifyEmp")
 	@ResponseBody
 	public String modifyEmpProcess( 
-			@RequestParam("id") String id,
-			@RequestParam("imageLink") String beforeImageLink,
-			@RequestParam("email") String email,
-			@RequestParam("name") String name,
-			@RequestParam("hireDt") String hireDt,
-			@RequestParam("phone") String phone,
-			@RequestParam("departemntNo") String departemntNo,
-			@RequestParam("positionCode") String positionCode,
+			EmployeeVO empVO,
 			@RequestPart(required = false) MultipartFile uploadFile ) {
 
 		String answer = null;
 	    String uploadFileName = null;
 	    if(uploadFile !=null) {
 	    	// 기존 파일 삭제하기
-	        System.out.println(deleteFile(beforeImageLink));
+	        System.out.println(deleteFile(empVO.getImageLink()));
 	    	
 	    	// 이미지 파일이 아니면은 처리하지 않는다.(콘텐츠 타입으로 확인)
 		    if(uploadFile.getContentType().startsWith("image") == false){
@@ -191,27 +162,9 @@ public class ManagerController {
 	        }
 	    }
         
-        // 직원 정보를 수정하기위한 객체 준비
-        EmployeeVO empVO = new EmployeeVO();
-        empVO.setId(id);
-        empVO.setEmail(email);
-        empVO.setName(name);
-        empVO.setPhone(phone);
-        empVO.setDepartmentNo(Integer.parseInt(departemntNo));
-        empVO.setPositionCode(positionCode);
-        // 날자 타입
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-			empVO.setHireDt(formatter.parse(hireDt));
-		} catch (ParseException e) {
-			answer = "error3";
-			return answer;
-		}
         // DB 에 저장하기위한 파일의 경로는 추출한다.
         if(uploadFileName !=null) {
         	empVO.setImageLink(setImagePath(uploadFileName));
-        }else {
-        	empVO.setImageLink(beforeImageLink);
         }
         
         // 서버입력 성공 여부

@@ -57,9 +57,20 @@ public class ManagerController {
 		return "manager/addEmployee";
 		
 	}
-	
+	@GetMapping("manager/modifyEmp")
+	public String modifyEmp(EmployeeVO empVO , Model model) {
+		EmployeeVO findVO = employeeService.getEmployee(empVO);
+		System.out.println(findVO);
+		model.addAttribute("employee",findVO);
+		String positionName = EmployeeUtil.getPostionName(findVO.getPositionCode());
+		model.addAttribute("employeePositionName",positionName);
+		List<DepartmentVO> departments = employeeService.getDepartmentList();
+		model.addAttribute("departments" , departments);
+		
+		return "manager/modifyEmployee";
+	}
 	/**
-	 * 파일을 올리는 함수이다.
+	 * 직원을 추가한다.
 	 */
 	@PostMapping("manager/addEmp")
 	@ResponseBody
@@ -71,7 +82,7 @@ public class ManagerController {
 			@RequestParam("phone") String phone,
 			@RequestParam("departemntNo") String departemntNo,
 			@RequestParam("positionCode") String positionCode,
-			@RequestPart MultipartFile uploadFile ) {
+			@RequestPart(required = false) MultipartFile uploadFile ) {
 		
 		String imageLink = null;
 		String answer = "failed";
@@ -82,7 +93,7 @@ public class ManagerController {
 	    	answer = "error1";
 	    	return answer;
 	    }
-	  
+	    
         String fileName = uploadFile.getOriginalFilename();
         // System.out.println("fileName : " + fileName);
         // 충돌방지를 위해 날짜 폴더와 UUID를 통한 고유식별자를 활용한다.
@@ -137,12 +148,104 @@ public class ManagerController {
 	}
 
 	/**
+	 * 직원을 수정한다.
+	 */
+	@PostMapping("manager/modifyEmp")
+	@ResponseBody
+	public String modifyEmpProcess( 
+			@RequestParam("id") String id,
+			@RequestParam("imageLink") String beforeImageLink,
+			@RequestParam("email") String email,
+			@RequestParam("name") String name,
+			@RequestParam("hireDt") String hireDt,
+			@RequestParam("phone") String phone,
+			@RequestParam("departemntNo") String departemntNo,
+			@RequestParam("positionCode") String positionCode,
+			@RequestPart(required = false) MultipartFile uploadFile ) {
+
+		String answer = null;
+	    String uploadFileName = null;
+	    if(uploadFile !=null) {
+	    	// 기존 파일 삭제하기
+	        System.out.println(deleteFile(beforeImageLink));
+	    	
+	    	// 이미지 파일이 아니면은 처리하지 않는다.(콘텐츠 타입으로 확인)
+		    if(uploadFile.getContentType().startsWith("image") == false){
+		    	System.err.println("this file is not image type");
+		    	answer = "error1";
+		    	return answer;
+		    }
+		    
+	    	String fileName = uploadFile.getOriginalFilename();
+	        String folderPath = makeFolder();
+	        String uuid = UUID.randomUUID().toString();
+	        uploadFileName = folderPath +File.separator + uuid + "_" + fileName;
+	        String saveName = uploadPath + File.separator + uploadFileName;
+	        Path savePath = Paths.get(saveName);
+	        System.out.println("path : " + saveName);
+	        try{
+	        	uploadFile.transferTo(savePath);  
+	        } catch (IOException e) {
+	        	answer = "error2";
+	            return answer;        
+	        }
+	    }
+        
+        // 직원 정보를 수정하기위한 객체 준비
+        EmployeeVO empVO = new EmployeeVO();
+        empVO.setId(id);
+        empVO.setEmail(email);
+        empVO.setName(name);
+        empVO.setPhone(phone);
+        empVO.setDepartmentNo(Integer.parseInt(departemntNo));
+        empVO.setPositionCode(positionCode);
+        // 날자 타입
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+			empVO.setHireDt(formatter.parse(hireDt));
+		} catch (ParseException e) {
+			answer = "error3";
+			return answer;
+		}
+        // DB 에 저장하기위한 파일의 경로는 추출한다.
+        if(uploadFileName !=null) {
+        	empVO.setImageLink(setImagePath(uploadFileName));
+        }else {
+        	empVO.setImageLink(beforeImageLink);
+        }
+        
+        // 서버입력 성공 여부
+        try {
+        	employeeService.modifyEmployee(empVO);
+		} catch (Exception e) {
+			answer = "error4";
+        	return answer;
+		}
+	    answer = empVO.getId();
+	    return answer;
+	}
+	
+	private String deleteFile(String beforeImageLink){
+		
+		String filePath = uploadPath + beforeImageLink;
+	    File file = new File(filePath);	
+	    if(file.exists()) {
+	    	if(file.delete()){
+	    		return "파일삭제 성공";
+    		}else{
+    			return "파일삭제 실패";
+    		}
+	    }
+	    return "파일이 없습니다.";
+	}
+
+	/**
 	 * 현재 날짜 값을 토대로 폴더를 만들어주는 메서드이다.
 	 * @return 폴더 경로 내용
 	 */
 	private String makeFolder() {
 		String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-		String folderPath = "img/"; // img를 저장할 것이기에 img를 추가한다.
+		String folderPath = "img/emp/"; // img를 저장할 것이기에 img를 추가한다.
 		// LocalDate를 문자열로 포멧
 		folderPath += str.replace("/", File.separator);
 		File uploadPathFoler = new File(uploadPath, folderPath);
@@ -164,16 +267,5 @@ public class ManagerController {
 		return uploadFileName.replace(File.separator, "/");
 	}
 
-	@GetMapping("manager/modifyEmp")
-	public String modifyEmp(EmployeeVO empVO , Model model) {
-		EmployeeVO findVO = employeeService.getEmployee(empVO);
-		System.out.println(findVO);
-		model.addAttribute("employee",findVO);
-		String positionName = EmployeeUtil.getPostionName(findVO.getPositionCode());
-		model.addAttribute("employeePositionName",positionName);
-		List<DepartmentVO> departments = employeeService.getDepartmentList();
-		model.addAttribute("departments" , departments);
-		
-		return "manager/modifyEmployee";
-	}
+
 }

@@ -16,7 +16,8 @@
                           <label for="email">이메일 변경</label>
                           <input type="text" class="form-control" th:field="*{email}">
                         </div>
-                        <input type="hidden" name="imageLink" th:value="${employee.imageLink}">
+                        <input type="hidden"  th:field="*{id}" >
+                        <input type="hidden"  th:field="*{imageLink}" >
                         <!-- inline -->
                         <div class="form-group">
                           <label for="name" class="col-md-3 col-form-label">이름 변경</label>
@@ -39,7 +40,7 @@
                         </div>
                         <div class="form-group">
                           <label for="exampleFormControlSelect1">부서 변경</label>
-                          <select class="form-select" th:field="*{departmentNo}">
+                          <select class="form-select" id="departemntNo" name="departemntNo" th:field="*{departmentNo}">
                             <th:block th:each="info : ${departments}">
                               <option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
                             </th:block> 
@@ -84,13 +85,74 @@
                     </div>
                   </div>
                   <div class="card-action">
-                    <button type="button" id="addEmployee" class="btn btn-success">수정하기</button>
+                    <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
                   </div>
                 </form>
               </div>
             </div>
 <script>
-
+let emailInput = document.querySelector("#email");
+let nameInput = document.querySelector("#name");
+let phoneInput = document.querySelector("#phone");
+// 입력값 확인
+function valueCheck(){
+    // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
+    if(
+        emailInput.value.length > 0 &&
+        nameInput.value.length > 0 &&
+        phoneInput.value.length > 0
+    ){
+        return true;
+    }else{
+        return false;
+    }
+}
+// 이미지 링크용 스크립트
 const imgLink = $('input[name=imageLink]').val();
 $('#empImg').attr({src: "/upload/"+imgLink});
+
+// 회원 정보 수정하기
+$('#modifyEmployee').on('click', function(event){
+
+	if(!valueCheck()){
+		alert("수정값이 잘못되었습니다.");
+		return null;
+	}
+	let formData = new FormData(); 
+  formData.append("id", $('#id').val());
+  formData.append("imageLink", $('#imageLink').val());
+	formData.append("email", $('#email').val());
+	formData.append("name", $('#name').val());
+	formData.append("hireDt", $('#hireDt').val());
+	formData.append("phone", $('#phone').val());
+	formData.append("departemntNo", $('#departemntNo').val());
+	formData.append("positionCode", $('#positionCode').val());
+	formData.append("uploadFile",$('#uploadFile')[0].files[0]);
+
+	for (const x of formData) {
+ 		console.log(x);
+	};
+	// $.Ajax 방식 
+	$.ajax('/manager/modifyEmp',{
+		type : 'post',				
+		data : formData,     // data 속성의 값(객체 타입)을
+		processData : false, // QueryString으로 변환하는 설정
+		contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
+	})
+	.done(result => {
+		if(result == 'error1'){
+			alert("이미지 파일이 아닙니다.");
+		}else if(result == 'error2'){
+			alert("파일업로드가 실패하였습니다.");
+		}else if(result == 'error3'){
+			alert("날짜 타입이 잘못되셨습니다.");
+		}else if(result == 'error4'){
+			alert("서버문제로 회원수정이 실패하였습니다.");
+		}else{
+			alert("회원 정보 수정이 성공하셧습니다.");
+			location.href = "/manager/modifyEmp?id="+result;
+		}
+	})
+	.fail(err => console.log(err));
+	});
 </script>

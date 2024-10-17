@@ -37,7 +37,7 @@
 	                <option value="a3">본부장</option>
 	                <option value="a4">팀장</option>
 	                <option value="a5">사원</option>
-	                <option value="a6">인턴</option>
+	                <option value="a6" selected="selected">인턴</option>
 	              </select>
 	            </div>
 	            <div class="form-group">
@@ -72,7 +72,33 @@
 	  </div>
 	</div>
 <script>
+let emailInput = document.querySelector("#email");
+let nameInput = document.querySelector("#name");
+let passwordInput = document.querySelector("#password");
+let phoneInput = document.querySelector("#phone");
+let uploadFileInput = document.querySelector("#uploadFile");
+// 입력값 확인
+function valueCheck(){
+    // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
+    if(
+        emailInput.value.length > 0 
+        && nameInput.value.length > 0 
+        && passwordInput.value.length > 0 
+        && phoneInput.value.length > 0 
+        && uploadFileInput.value  
+    ){
+        return true;
+    }else{
+        return false;
+    }
+}
 $('#addEmployee').on('click', function(event){
+	
+	if(!valueCheck()){
+		alert("입력값이 부족합니다.");
+		return null;
+	}
+	
 	let formData = new FormData(); 
 	// 유사) jQuery.serializeArray();
 	// 1) <from/>태그 내부의 입력태그 정보를 한번에 받음
@@ -108,7 +134,7 @@ $('#addEmployee').on('click', function(event){
 			alert("서버문제로 회원추가가 실패하였습니다.");
 		}else{
 			alert("회원 정보 추가가 성공하셧습니다.");
-			location.replace("/manager/modifyEmp?id="+result);
+			location.href = "/manager/modifyEmp?id="+result;
 		}
 	})
 	.fail(err => console.log(err));

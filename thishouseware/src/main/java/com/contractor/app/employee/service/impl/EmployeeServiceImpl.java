@@ -28,13 +28,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void addEmployee(EmployeeVO empVO) {
 		employeeMapper.insertEmployee(empVO);
-		
-		// System.out.println(empVO);
 	}
 
 	@Override
 	public EmployeeVO getEmployee(EmployeeVO empVO) {
 		return employeeMapper.selectEmployee(empVO);
+	}
+
+	@Override
+	public boolean modifyEmployee(EmployeeVO empVO) {
+		return employeeMapper.modifyEmployee(empVO) == 1;
 	}
 
 }

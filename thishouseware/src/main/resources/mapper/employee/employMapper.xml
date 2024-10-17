@@ -37,4 +37,15 @@
         on (e.department_no = d.department_no)
 		WHERE id = #{id}
 	</select>
+	<update id="modifyEmployee" parameterType="EmployeeVO">
+		UPDATE employees 
+		SET HIRE_DT = #{hireDt},
+		    PHONE = #{phone}, 
+		    EMAIL = #{email}, 
+		    IMAGE_LINK = #{imageLink}, 
+		    DEPARTMENT_NO = #{departmentNo}, 
+		    POSITION_CODE = #{positionCode}, 
+		    NAME = #{name} 
+		WHERE id = #{id}
+	</update>
 </mapper>

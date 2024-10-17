@@ -11,4 +11,6 @@ public interface EmployeeService {
 
 	EmployeeVO getEmployee(EmployeeVO empVO);
 
+	boolean modifyEmployee(EmployeeVO empVO);
+
 }

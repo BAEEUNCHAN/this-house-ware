@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,20 @@ public class ManagerController {
 
 	private final ManagerService managerService; 
 	private final EmployeeService employeeService;
+	
+	@GetMapping("manager/emps")
+	public String emps( Model model) {
+		List<EmployeeVO> emps = new ArrayList<EmployeeVO>();
+		emps = employeeService.getEmployees();
+		emps.forEach(obj ->{
+			String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
+			obj.setPositionName(positionName);
+		});
+		model.addAttribute("employees" , emps);
+		List<DepartmentVO> departments = employeeService.getDepartmentList();
+		model.addAttribute("departments" , departments);
+		return "manager/employeeList";
+	}
 	
 	@GetMapping("manager/addEmp")
 	public String addEmp(Model model ) {

@@ -13,4 +13,6 @@ public interface EmployeeService {
 
 	boolean modifyEmployee(EmployeeVO empVO);
 
+	List<EmployeeVO> getEmployees();
+
 }

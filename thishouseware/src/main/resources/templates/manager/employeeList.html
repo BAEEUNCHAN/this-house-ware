@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+  <link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+  <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<table class="display" id="example">
+  <thead>
+    <tr>
+      <th>회원 아이디 </th>
+      <th>이름 </th>
+      <th>직급 </th>
+      <th>부서이름 </th>
+      <th>입사일 </th>
+    </tr>
+  </thead>
+  <tbody>
+  <th:block th:each="info : ${employees}">
+    <tr th:onclick="|location.href='@{/manager/modifyEmp(id=${info.id})}'|">
+      <td>[[${info.id}]]</td>
+      <td>[[${info.name}]]</td>
+      <td>[[${info.positionName}]]</td>
+      <td>[[${info.departmentName}]]</td>
+      <td>[[${#dates.format(info.hireDt, 'yyyy-MM-dd')}]]</td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+<script>
+  $('#example').DataTable();
+  
+</script>

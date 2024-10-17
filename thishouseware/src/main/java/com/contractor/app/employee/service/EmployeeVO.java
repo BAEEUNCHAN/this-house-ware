@@ -23,6 +23,9 @@ public class EmployeeVO {
 	String positionCode; // 직급 코드
 	Image dSignature; // 전자 서명
 	
-	// Join 을위한 변수
+	// DepartmentVO
 	String departmentName;
+	
+	// 직급 이름
+	String positionName;
 }

@@ -40,4 +40,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.modifyEmployee(empVO) == 1;
 	}
 
+	@Override
+	public List<EmployeeVO> getEmployees() {
+		return employeeMapper.selectEmployees();
+	}
+
 }

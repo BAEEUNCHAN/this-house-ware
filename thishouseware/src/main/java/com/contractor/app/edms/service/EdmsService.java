@@ -8,6 +8,8 @@ public interface EdmsService { // 전자결재
 	public List<EdmsDocVO> edmsDocList();
 	// 결재문서함 단건조회
 	public EdmsDocVO edmsDocInfo(EdmsDocVO edmsDocVO);
+	// 결재문서 등록
+	public String edmsInsert(EdmsDocVO edmsDocVO);
 	
 	
 	

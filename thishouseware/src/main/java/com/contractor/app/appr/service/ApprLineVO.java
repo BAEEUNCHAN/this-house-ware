@@ -19,7 +19,7 @@ public class ApprLineVO {
 	private String id; // 아이디 Foreign Key
 	private String approvalLineName; // 결재선 이름 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date createDT; // 생성일시
+	private Date createDt; // 생성일시
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date resentUserDt; // 최근 사용일시
 	private String referrer; // 참조자

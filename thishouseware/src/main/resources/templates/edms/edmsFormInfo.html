@@ -66,49 +66,47 @@ button:hover {
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<div class="card-title">결재양식 목록</div>
+					<div class="card-title">결재양식</div>
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="text-center">
 							<table class="table">
-								<div>
-									<table class="table">
-										<tr>
-											<td><label for="fno">양식번호</label></td>
-											<td><span th:text="${edmsForms.edmsFormNo}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="fname">양식이름</label></td>
-											<td><span th:text="${edmsForms.edmsFormName}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="ftype">양식분류</label></td>
-											<td><span th:text="${edmsForms.edmsFormType}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="fdesc">설명</label></td>
-											<td><span th:text="${edmsForms.description}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="fcreate">생성일시</label></td>
-											<td><span
-												th:text="${#dates.format(edmsForms.createDt, 'yyyy-MM-dd')}"></span></td>
-										</tr>
-									</table>
-								</div>
-								<div class="button-container">
-									<button type="button"
-										th:onclick="|location.href='@{/edms/edmsFormList}'|">목록</button>
-									<!-- 추후 추가예정
-									<button type="button"
-										th:onclick="|location.href='@{/edms/}'|">작성</button> -->
-								</div>
+								<tr>
+									<td><label for="fno">양식번호</label></td>
+									<td><span th:text="${edmsForms.edmsFormNo}"></span></td>
+								</tr>
+								<tr>
+									<td><label for="fname">양식이름</label></td>
+									<td><span th:text="${edmsForms.edmsFormName}"></span></td>
+								</tr>
+								<tr>
+									<td><label for="ftype">양식분류</label></td>
+									<td><span th:text="${edmsForms.edmsFormType}"></span></td>
+								</tr>
+								<tr>
+									<td><label for="fdesc">설명</label></td>
+									<td><span th:text="${edmsForms.description}"></span></td>
+								</tr>
+								<tr>
+									<td><label for="fcreate">생성일시</label></td>
+									<td><span
+										th:text="${#dates.format(edmsForms.createDt, 'yyyy-MM-dd')}"></span></td>
+								</tr>
 							</table>
 						</div>
 					</div>
+					<div class="edmsForm"></div>
+					<script th:inline="javascript">
+					let url= '/template/'+[[${edmsForms.edmsFormNo}]] +'.html'
+					$('.edmsForm').load(url)
+					</script>
 				</div>
 			</div>
+		</div>
+		<div class="button-container">
+			<button type="button"
+				th:onclick="|location.href='@{/edms/edmsFormList}'|">목록</button>
 		</div>
 	</div>
 </div>

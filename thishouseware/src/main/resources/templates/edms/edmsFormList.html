@@ -4,7 +4,7 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <body>
-<div class="page-inner">
+	<div class="page-inner">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card">
@@ -21,18 +21,18 @@
 											<th>양식이름</th>
 											<th>양식분류</th>
 											<th>생성일시</th>
-											<th>선택</th>
 										</tr>
 									</thead>
-									<tbody class = "edmsForm">
+									<tbody class="edmsForm">
 										<th:block th:each="info : ${edmsForms}">
 											<tr>
 												<td>[[${info.edmsFormNo}]]</td>
 												<td>[[${info.edmsFormName}]]</td>
 												<td>[[${info.edmsFormType}]]</td>
-												<td>[[ ${ #dates.format(info.createDt, "yyyy-MM-dd" )}]]</td>
-												<td>
-												<input type="checkbox" name="selectedForms" th:value="${info.edmsFormNo}"/>
+												<td>[[ ${ #dates.format(info.createDt, "yyyy-MM-dd"
+													)}]]</td>
+														<!-- <td><input type="checkbox" name="selectedForms"
+													th:value="${info.edmsFormNo}" /> -->
 											</tr>
 										</th:block>
 									</tbody>
@@ -44,12 +44,22 @@
 			</div>
 		</div>
 	</div>
+	<!-- <div style="text-align: center;">
+		<button class="btn btn-secondary" th:onclick="|location.href='@{/}'|">
+			<span class="btn-label"><i class="fa fa-plus"></i></span> 등록
+		</button>
+	</div> -->
+
 	<script>
-		$('.edmsForm > tr').on('click', function(event){
+		$('.edmsForm > tr').on('click', function(event) {
+			/*
+			if (event.target.tagName == 'INPUT')
+				return;
+			 */
 			let trTag = event.currentTarget;
 			let fno = $(trTag).children().eq(0).text();
-			let url ='edmsFormInfo?edmsFormNo=' + fno;
-			location.href=url;
+			let url = 'edmsFormInfo?edmsFormNo=' + fno;
+			location.href = url;
 		});
 	</script>
 </body>

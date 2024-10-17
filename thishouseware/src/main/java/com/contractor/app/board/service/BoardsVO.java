@@ -1,7 +1,5 @@
 package com.contractor.app.board.service;
 
-import java.util.List;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

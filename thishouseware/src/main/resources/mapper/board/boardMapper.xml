@@ -14,38 +14,13 @@
 	    ORDER BY BOARDS_TYPE, boards_no
 	</select>
 	
-	<!-- 등록 -->
-	<insert id="insertBoardInfo" parameterType="BoardsVO">
-		<selectKey keyProperty="boardsNo"
-				   resultType="Integer"
-				   order="BEFORE">
-			SELECT NVL(MAX(BOARDS_NO), 10000) + 1
-			FROM board
-		</selectKey>
-		INSERT INTO boards
-				(   BOARDS_NO,
-			   		BOARDS_TYPE,
-			   		DEPARTMENT_NAME,
-    		   		ANONY_CHK,
- 			   		TITLE,
-			   		DESCRIPTION,
-			   		AUTHORITY
-				)
-		VALUES  (   #{boardsNo}
-			       ,#{boardsType}
-			       ,#{departmentName}
-			       ,#{anonyChk}
-			       ,#{title}
-			       ,#{description}
-			       ,#{authority}
-				)
-	</insert>
 	
 	<!-- 게시글 전체조회 -->
 	<select id="selectPostAll" parameterType="PostsVO" resultType="PostsVO">
 		SELECT POSTS_NO
      		 , BOARDS_NO
      		 , FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
+     		 , SUBMIT_DT
      		 , FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
      		 , POST_STARTTIME 
      		 , POST_ENDTIME
@@ -57,4 +32,62 @@
 		<!-- WHERE BOARDS_NO = #{boardsNo} -->
 	    ORDER BY POSTS_NO
 	</select>
+	
+	<!-- 게시글 단건조회 -->
+	<select id="selectPostInfo" resultType="PostsVO">
+		SELECT p.POSTS_NO
+     		 , b.BOARDS_NO
+     		 , b.TITLE as board_title
+     		 , FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+     		 , FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+     		 , p.SUBMIT_DT
+     		 , p.POST_STARTTIME 
+     		 , p.POST_ENDTIME
+     		 , p.TITLE
+     		 , p.CONTENT
+     		 , p.AUTHORITY
+     		 , p.ID
+		FROM posts p JOIN boards b
+		ON   p.BOARDS_NO = b.BOARDS_NO
+		WHERE POSTS_NO = #{postsNo}
+	</select>
+	
+	<!-- 게시글 등록 -->
+	<insert id="insertPostInfo" parameterType="PostsVO">
+		<selectKey keyProperty="postsNo"
+				   resultType="Integer"
+				   order="BEFORE">
+			SELECT NVL(MAX(POSTS_NO), 1) + 1
+			FROM posts
+		</selectKey>
+		INSERT INTO posts
+				(   POSTS_NO
+     		 	  , BOARDS_NO
+     		 	  , POSTS_TYPE
+     		 	  , POST_SETTING
+     		 	  <if test="postSetting == 'q1'">
+     		 	  , POST_STARTTIME 
+     		 	  , POST_ENDTIME
+     		 	  </if>
+     		 	  , TITLE
+     		 	  , CONTENT
+     		 	  <!-- 기본값 admin 설정 -->
+     		 	  <!-- , AUTHORITY
+     		 	  , ID -->
+				)
+		VALUES  (   #{postsNo}
+				   ,#{boardsNo}
+			       ,#{postsType}
+			       ,#{postSetting}
+			       <if test="postSetting == 'q1'">
+			       ,#{postStartTime}
+			       ,#{postEndTime}			       
+			       </if>
+			       ,#{title}
+			       ,#{content}
+			       <!-- 기본값 admin 설정 -->
+			       <!-- ,#{authority}
+			       ,#{id} -->
+				)
+	</insert>
 </mapper>

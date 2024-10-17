@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<div class="text-center">
+		<h3>게시글 정보</h3>
+		<table class="table">
+			<tr>
+				<th>게시판 이름</th>
+				<td>[[ ${post.boardTitle} ]]</td>
+			</tr>
+			<tr>
+				<th>작성일자</th>
+				<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd")} ]]</td>
+			</tr>
+			<tr>
+				<th>게시글 제목</th>
+				<td>[[ ${post.title} ]]</td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td height="100px" width="200px">[[ ${post.content} ]]</td>
+			</tr>
+		</table>
+		<!-- <button type="button" th:onclick="|location.href='@{/boardUpdate(bno=${board.bno})}'|">수정</button>
+		<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
+		<button type="button" th:onclick="|location.href='@{/boardDelete(no=${board.bno})}'|">삭제</button> -->
+	</div>
+</body>
+</html>

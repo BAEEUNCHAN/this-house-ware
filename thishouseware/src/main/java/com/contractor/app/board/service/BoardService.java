@@ -6,9 +6,12 @@ public interface BoardService {
 	// 게시판 전체 조회
 	public List<BoardsVO> boardList(BoardsVO boardsVO);
 
-	// 등록
-	public int insertBoard(BoardsVO boardsVO);
-
 	// 게시글 전체 조회
 	public List<PostsVO> postList(PostsVO postsVO);
+	
+	// 게시글 단건 조회
+	public PostsVO postInfo(PostsVO postsVO);
+	
+	// 게시글 등록
+	public int insertPost(PostsVO postsVO);
 }

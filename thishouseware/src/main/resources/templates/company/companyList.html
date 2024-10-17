@@ -3,22 +3,45 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	
+
+
 <body>
+
+<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">거래처</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">거래처목록</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">회사목록</a></li>
+				</ul>
+			</div>
+
+
 	<div class="page-inner">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">회사리스트</div>
+						<div class="card-title">
+							회사목록 <a href="/insertCompany" class="float-end"><button class="btn btn-primary">회사등록</button></a>
+						</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
+						
 							<div class="text-center">
 								<table class="table">
 									<thead>
 										<tr>
-											<th>번호</th>
-											<th>회사명</th>
+											<th class="col-md-3">회사번호</th>
+											<th class="col-md-6">회사명</th>
+											<th class="col-md-3"></th>
 											<!-- yyyy년MM월dd일 -->
 										</tr>
 									</thead>
@@ -29,6 +52,12 @@
 												<!-- 여기 onclick 넣어도 됨. -->
 												<td>[[${info.companyNo}]]</td>
 												<td>[[${info.companyName}]]</td>
+												<td>
+													<button type="button" class="btn btn-danger"
+															data-toggle="modal" data-target="#exampleModal" onclick="event.stopPropagation()">
+																<i class="icon-trash"></i>
+													</button>
+												</td>
 											</tr>
 										</th:block>
 									</tbody>
@@ -40,5 +69,43 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        게시물을 정말 삭제하시겠습니까?
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-primary">삭제하기</button>
+	       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	</div>
+	</div>
+	
+	<script>
+	
+	
+		// 제이쿼리 객체 생성(tr 클릭하면 단건정보 조회)
+		$('tbody > tr').on('click', function(event) {
+			let trTag = event.currentTarget;
+			let companyNo = $(trTag).children().first().text();
+			let url = `/companyInfo?companyNo=${companyNo}`;
+			location.href = url;
+		});
+		
+		
+		
+	</script>
 </body>
 </html>

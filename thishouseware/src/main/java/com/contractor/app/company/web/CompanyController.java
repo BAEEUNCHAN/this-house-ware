@@ -20,7 +20,7 @@ public class CompanyController {
 		this.companyService = companyService;
 	}
 	
-	// 회사(고객)정보 전체조회 : URI - companyLlist / return - company/companyList
+	// 회사정보 전체조회 : URI - companyLlist / return - company/companyList
 	@GetMapping("companyList")
 	public String companyList(Model model) {
 		List<CompanysVO> list = companyService.companyList();
@@ -28,13 +28,21 @@ public class CompanyController {
 		return "company/companyList";
 	}
 	
-	// 회사(고객)정보 등록 : URI - insertCompany / RETURN - company/insertCompany
+	// 회사(고객)정보 단건조회(고객명+연락처)
+	@GetMapping("companyInfo")
+	public String companyInfo(CompanysVO companyVO, Model model) {
+		List<CompanysVO> list = companyService.companyInfoList(companyVO);
+		model.addAttribute("companys", list);
+		return "company/companyInfo";
+	}
+	
+	// 회사정보 등록 : URI - insertCompany / RETURN - company/insertCompany
 	@GetMapping("insertCompany")
 	public String insertCompanyForm(CompanysVO companyVO) {
 		return "company/insertCompany";
 	}
 	
-	// 회사(고객)정보 등록 처리
+	// 회사정보 등록 처리
 	@PostMapping("insertCompany")
 	public String insertCompanyProcess(CompanysVO companyVO) {
 		int companyNo = companyService.insertCompany(companyVO);

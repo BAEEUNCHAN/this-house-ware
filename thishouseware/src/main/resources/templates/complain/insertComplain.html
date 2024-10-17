@@ -50,10 +50,10 @@
 										<br /> <label for="customerName">고객명 : </label> <input
 											type="text" name="customerName" aria-label="Username"
 											id="customerName" aria-describedby="basic-addon1"
-											placeholder="고객 이름을 입력하세요."><br /> <br />
+											placeholder="고객 이름을 입력하세요." ><br /> <br />
 										<!-- <div class="card-title">연락처</div> -->
-										<label for="phone">연락처 : </label> <input type="number"
-											name="phone" aria-label="Username" id="phone"
+										<label for="phone">연락처 : </label> <input type="text"
+											name="phone" aria-label="Username" id="phone" maxlength="13" oninput="autoHyphen(this)"
 											aria-describedby="basic-addon1" placeholder="'-'없이 숫자만 입력."><br />
 
 
@@ -99,7 +99,7 @@
 								<div class="card-action">
 
 									<label for="complainTitle">제목 : </label> <input type="text"
-										name="complainTitle" aria-label="Username" size=90
+										name="complainTitle" aria-label="Username" size=70
 										maxlength=70 id="complainTitle"
 										aria-describedby="basic-addon1" placeholder="제목을 입력하세요."><br />
 									<br /> <label for="complainContent">문의내용</label>
@@ -110,9 +110,10 @@
 									<textarea class="form-control" name="complainRequest"
 										id="complainRequest" rows="5" placeholder="600자 이내로 입력하세요."></textarea>
 									<br />
-
-									<button type="submit" class="btn btn-success">등록</button>
-									<button class="btn btn-danger">취소</button>
+									<div class="text-center">
+									<a><button type="submit" class="btn btn-success">등록</button></a>
+									<a href="/complainList"><button type="button" class="btn btn-danger" onclick="window.location.href='/complainList'">취소</button></a>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -127,6 +128,16 @@
 		// Form 태그 네임속성 활용해서 이벤트 걸기
 		$(insertForm2).on('submit', complainInsertHandler)
 
+		const autoHyphen = (target) => {
+				target.value = target.value
+					  .replace(/[^0-9]/g, '')
+					  .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/g, "$1-$2-$3")
+					  .replace(/(\-{1,2})$/g, "");
+			}
+		 document.getElementById('complainDt').value
+		 		= new Date().toISOString().substring(0, 10);;
+		
+		
 		function complainInsertHandler(event) {
 			event.preventDefault(); // submit stop
 			
@@ -155,6 +166,8 @@
 				phone.focus();
 				return;
 			}
+			
+			
 
 			alert('게시글이 등록되었습니다.');
 			insertForm2.submit();

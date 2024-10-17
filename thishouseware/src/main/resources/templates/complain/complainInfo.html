@@ -3,7 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-	
+
 <body>
 
 	<div class="container">
@@ -23,7 +23,7 @@
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<div class="card-title">불편/장애사항 등록</div>
+							<div class="card-title">불편/장애사항 단건조회</div>
 						</div>
 						<div class="card-body">
 							<div class="row">
@@ -31,33 +31,43 @@
 								<div class="col-md-6 col-lg-30">
 
 									<label for="companyName">회사명 :
-										[[${complain.companyName}]]</label> <br />
-									<br /> <label for="customerName">고객명 :
-										[[${complain.customerName}]]</label> <br />
-									<br /> <label for="phone">연락처 : [[${complain.phone}]]</label>
-									<br/><br/>
+										[[${complain.companyName}]]</label> <br /> <br /> <label
+										for="customerName">고객명 : [[${complain.customerName}]]</label>
+									<br /> <br /> <label for="phone">연락처 :
+										[[${complain.phone}]]</label> <br /> <br />
 
 								</div>
-							<!-- 왼쪽화면 끝-->
-							<!-- 오른쪽화면 -->
-							<div class="col-md-6 col-lg-30">
-								<label for="uploadDt">문제발생일 :
-									[[${#dates.format(complain.complainDt, 'yyyy/MM/dd')}]]</label> <br />
-								<br /> <label for="customerName">문의구분 :
-									[[${complain.complainType}]]</label> <br />
-								<br /> <label for="phone">작성일 : [[${#dates.format(complain.uploadDt, 'yyyy/MM/dd')}]]</label>
-								<br/><br/>
-							</div>
+								<!-- 왼쪽화면 끝-->
+								<!-- 오른쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+									<label for="uploadDt">문제발생일 :
+										[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+									<br /> <label for="customerName"> <span>문의구분 :
+											[[${complain.complainType == 0 ? '고객불편' :
+											(complain.complainType == 1 ? '운영장애' : '')}]] / 처리상황 : </span> <span
+										th:switch="${complain.progress}"> <span th:case="0">대기</span>
+											<span th:case="1">접수</span> <span th:case="2">진행</span> <span
+											th:case="3">상황완료</span> <span th:case="4">보고완료</span>
+									</span>
+
+
+
+									</label> <br /> <br /> <label for="phone">작성일 :
+										[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+									<br />
+								</div>
 							</div>
 							<div class="card-action">
-								<label for="companyName">제목 :
-										[[${complain.complainTitle}]]</label> <br />
-									<br /> <label for="customerName">문의내용 :
-										[[${complain.complainContent}]]</label> <br />
-									<br /> <label for="phone">요구사항 : [[${complain.complainRequest}]]</label>
-									<br/><br/>
-								<button class="btn btn-success">수정</button>
-								<button class="btn btn-danger">삭제</button>
+								<label for="companyName"><h3>[[${complain.complainTitle}]]</h3>
+								</label> <br /> <br /> <label for="customerName">문의내용 :
+									[[${complain.complainContent}]]</label> <br /> <br /> <label
+									for="phone">요구사항 : [[${complain.complainRequest}]]</label> <br />
+								<br /> <br />
+								<div class="text-center">
+									<button class="btn btn-success" th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+									<button class="btn btn-primary" th:onclick='|location.href="@{/complainList}"|'>목록</button>
+									<button class="btn btn-danger" th:onclick='|location.href="@{/complainDelete(complainNo=${complain.complainNo})}"|'>삭제</button>
+								</div>
 							</div>
 						</div>
 					</div>

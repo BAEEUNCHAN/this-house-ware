@@ -12,6 +12,19 @@
 	
 </select>
 
+<!-- 회사 join 단건조회 -->
+<select id="selectCompanyInfoList" resultType="CompanysVO">
+	
+	SELECT 	p.company_no
+			,p.company_name
+			,c.customer_name
+			,c.phone
+	FROM	companys p JOIN complains c
+	ON		p.company_no = c.company_no
+	WHERE	p.company_no = #{companyNo}
+	
+</select>
+
 
 <!-- 회사 등록 -->
 <insert id="insertCompanyInfo" parameterType="CompanysVO">

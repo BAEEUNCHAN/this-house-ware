@@ -80,5 +80,24 @@
 						 ,#{phone}
 						 ,#{companyNo})
 </insert>
- 
+
+
+<!-- 문의 수정 -->
+<update id="updateComplainInfo" parameterType="ComplainsVO">
+	UPDATE  complains
+	SET		
+			complain_title		= #{complainTitle}
+			,complain_content	= #{complainContent}
+			,complain_request	= #{complainRequest}
+	WHERE 	complain_no			= #{complainNo}
+</update>
+
+
+<!-- 문의 삭제 -->
+<delete id="deleteComplainInfo" parameterType="int">
+	DELETE FROM complains
+	WHERE		complain_no = #{complainNo}
+</delete>
+
+
 </mapper>

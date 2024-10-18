@@ -47,11 +47,11 @@
 							th:text="${radio.commonCodeName}"></label>
 					</span></td>
 				</tr>
-				<tr>
+				<!-- <tr>
 					<th>게시 시작시간</th>
 					<td><input type="date" name="postStartTime" id="postStartTime"
 						disabled></td>
-				</tr>
+				</tr> -->
 				<tr>
 					<th>게시 종료시간</th>
 					<td><input type="date" name="postEndTime" id="postEndTime"
@@ -72,11 +72,18 @@
 		function checkPostSetting(event) {
 			event.preventDefault();
 
-			if (event.target.value == 'q2') {
+			/* if (event.target.value == 'q2') {
 				$('form [name="postStartTime"], form [name="postEndTime"]')
 						.attr("disabled", true);
 			} else if (event.target.value == 'q1') {
 				$('form [name="postStartTime"], form [name="postEndTime"]')
+						.attr("disabled", false);
+			} */
+			if (event.target.value == 'q2') {
+				$('form [name="postEndTime"]')
+						.attr("disabled", true);
+			} else if (event.target.value == 'q1') {
+				$('form [name="postEndTime"]')
 						.attr("disabled", false);
 			}
 		}
@@ -120,12 +127,12 @@
 		}
 		
 		// 게시 기간설정 - 오늘, 이전 날짜 선택 X
-		document.getElementById('postStartTime').setAttribute("min", getTodayDate());
-		document.getElementById('postEndTime').setAttribute("min", getTodayDate());
+		//document.getElementById('postStartTime').setAttribute("min", getTodayDate());
+		document.getElementById('postEndTime').setAttribute("min", getTomorrowDate() );
 		
 		// 게시 시작/종료시간 - 오늘 날짜 설정
-		document.getElementById('postStartTime').value = new Date().toISOString().substring(0, 10);
-		document.getElementById('postEndTime').value = new Date().toISOString().substring(0, 10);
+		//document.getElementById('postStartTime').value = new Date().toISOString().substring(0, 10);
+		document.getElementById('postEndTime').value = getTomorrowDate();
 	</script>
 </body>
 </html>

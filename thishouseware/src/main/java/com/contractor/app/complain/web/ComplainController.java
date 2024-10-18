@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.company.service.CompanyService;
 import com.contractor.app.company.service.CompanysVO;
@@ -83,6 +84,7 @@ public class ComplainController {
 	
 	// 삭제 - 처리 : URI - complainDelete / PARAMETER - Integer
 	//             RETURN - 전체조회 다시 호출
+	@ResponseBody
 	@DeleteMapping("complainDelete") // QueryString : @RequestParam
 	public String complainDelete(@RequestParam Integer complainNo) {
 		complainService.deleteComplain(complainNo);

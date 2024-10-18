@@ -59,8 +59,8 @@ public class ComplainServiceImpl implements ComplainService {
 	}
 	 
 	 // 문의 삭제
-	 @Override public int deleteComplain(int ComplainNo) { return
-	 complainMapper.deleteComplainInfo(ComplainNo); }
+	 @Override public int deleteComplain(int ComplainNo) {
+		 return complainMapper.deleteComplainInfo(ComplainNo); }
 	 
 	
 }

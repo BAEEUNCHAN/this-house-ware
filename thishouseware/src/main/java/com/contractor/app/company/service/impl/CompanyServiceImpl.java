@@ -36,4 +36,10 @@ public class CompanyServiceImpl implements CompanyService {
 		int result = companyMapper.insertCompanyInfo(companyVO);
 		return result == 1 ? companyVO.getCompanyNo() : -1;
 	}
+	
+	// 회사 삭제
+	@Override
+	public int deleteCompany(int companyNo) {
+		return companyMapper.deleteCompany(companyNo);
+	}
 }

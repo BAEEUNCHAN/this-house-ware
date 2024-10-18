@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>근로계약서 양식</title>
+<title>구매신청서 양식</title>
 <style>
 .table {
 	width: 100%;
@@ -33,7 +33,7 @@ th {
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">근로계약서 양식</div>
+						<div class="card-title">구매신청서 양식</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -59,14 +59,69 @@ th {
 											<td></td>
 										</tr>
 									</table>
-									<!-- 여기까진 고정이어야함 -->
-									
+
+									<h2 style="text-align: center;">구매 신청서</h2>
+
+									<table id="purchaseTable">
+										<tr>
+											<th>품명</th>
+											<th>규격</th>
+											<th>수량</th>
+											<th>단가</th>
+											<th>금액</th>
+											<th>비고</th>
+									</table>
+									<button id="addRowBtn">행 추가하기</button>
+									<br>
+									<br>
+									<br>
+									<br>
+									<p>상기와 같이 구매를 신청합니다.</p>
 								</form>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<script>
+				document
+						.getElementById('addRowBtn')
+						.addEventListener(
+								'click',
+								function() {
+									// 새로운 행 생성
+									const table = document
+											.getElementById('purchaseTable');
+									const newRow = table.insertRow(-1); // 마지막에 새로운 행 추가
+
+									// 각 열에 대한 셀 생성
+									const itemNameCell = newRow.insertCell(0);
+									const specificationCell = newRow
+											.insertCell(1);
+									const quantityCell = newRow.insertCell(2);
+									const unitPriceCell = newRow.insertCell(3);
+									const amountCell = newRow.insertCell(4);
+									const notesCell = newRow.insertCell(5);
+
+									// 셀에 인풋 추가
+									itemNameCell.innerHTML = '<input type="text" name="itemName" required>';
+									specificationCell.innerHTML = '<input type="text" name="specification" required>';
+									quantityCell.innerHTML = '<input type="number" name="quantity" required oninput="calculateAmount(this)">';
+									unitPriceCell.innerHTML = '<input type="number" name="unitPrice" required oninput="calculateAmount(this)">';
+									amountCell.innerHTML = '<input type="number" name="amount" required readonly>';
+									notesCell.innerHTML = '<input type="text" name="notes">';
+								});
+
+				function calculateAmount(element) {
+					const row = element.closest('tr');
+					const quantity = row
+							.querySelector('input[name="quantity"]').value;
+					const unitPrice = row
+							.querySelector('input[name="unitPrice"]').value;
+					const amount = row.querySelector('input[name="amount"]');
+					amount.value = (quantity * unitPrice) || 0; // 금액 계산
+				}
+			</script>
 		</div>
 	</div>
 </body>

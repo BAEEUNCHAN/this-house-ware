@@ -22,16 +22,16 @@
 				edms_doc_no = #{edmsDocNo}
 			</if>
 			<if test="id != null and !id.equals('')">
-				id = #{id}
+				and id = #{id}
 			</if>
 			<if test="edmsFormNo != null and !edmsFormNo.equals('')">
-				edms_form_No = #{edmsFormNo}
+				and edms_form_No = #{edmsFormNo}
 			</if>
 			<if test="shareStatus != null and !shareStatus.equals('')">
-				share_status = #{shareStatus}
+				and share_status = #{shareStatus}
 			</if>
 			<if test="shareFolderNo != null and !shareFolderNo.equals('')">
-				share_folder_no = #{shareFolderNo}
+				and share_folder_no = #{shareFolderNo}
 			</if>
 		</where>
 		ORDER BY submit_dt
@@ -54,7 +54,42 @@
 		FROM edms_doc
 		WHERE edms_doc_no = #{edmsDocNo}
 	</select>
-	
+	<!-- 등록 -->
+	<insert id="insertEdmsInfo" parameterType="EdmsDocVO">
+		<selectKey keyProperty="edmsDocNo"
+				   resultType="String"
+				   order="BEFORE">
+			SELECT NVL(MAX(edms_doc_no), 100) + 1
+			FROM edms_doc
+		</selectKey>
+		INSERT INTO edms_doc
+				(	
+					edms_doc_no
+					, id
+					, title
+					, edms_form_no
+					, file_name
+					, attatch
+					, approval_status
+					, share_status
+					, submit_dt	
+					, share_folder_no
+				)
+			VALUES
+				(
+					#{edmsDocNo}
+					<!-- employees_seq.NEXTVAL -->
+					, #{id}
+					, #{title}
+					, #{edmsFormNo}
+					, #{fileName}
+					, #{attatch}
+					, 'c1'					
+					, #{shareStatus}
+					, sysdate					
+					, #{shareFolderNo}
+				)
+	</insert>
 	
 	
 	

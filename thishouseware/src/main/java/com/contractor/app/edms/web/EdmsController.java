@@ -1,6 +1,11 @@
 package com.contractor.app.edms.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.contractor.app.common.service.Base64ToImgDecodeUtil;
 import com.contractor.app.edms.service.EdmsDocVO;
 import com.contractor.app.edms.service.EdmsFormVO;
 import com.contractor.app.edms.service.EdmsService;
@@ -48,7 +55,11 @@ public class EdmsController {
 
 	// 결재문서 등록 - 처리
 	@PostMapping("/edmsInsert")
-	public String edmsInsertProcess(EdmsDocVO edmsDocVO) {
+	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam String screenshot) {
+		// 이미지 처리
+		Map<String, Object> object = SaveImage(screenshot);
+		edmsDocVO.setFileName((String) object.get("fileName"));
+
 		String edn = edmsService.edmsInsert(edmsDocVO);
 
 		String url = null;
@@ -62,6 +73,38 @@ public class EdmsController {
 			url = "redirect:edmsDocList";
 		}
 		return url;
+	}
+
+	// 결재문서 등록시 작성된 폼(html)을 이미지화
+	public Map<String, Object> SaveImage(String file) {
+
+		Map<String, Object> object = new HashMap<String, Object>();
+
+		try {
+			String result = "success";
+			String message = "completed images save!";
+			Date createDate = new Date();
+			String year = (new SimpleDateFormat("yyyy").format(createDate)); // 년도
+			String month = (new SimpleDateFormat("MM").format(createDate)); // 월
+			String day = (new SimpleDateFormat("dd").format(createDate)); // 일
+			// Path를 설정한다.
+			String path = "/d:/upload/screenshot/" + year + month + day + "/";
+			// 이미지로 저장
+			UUID uuid = UUID.randomUUID();
+			String my_screenshot_image = uuid+".png";
+			
+			if (file != null) {
+				Base64ToImgDecodeUtil.decoder(file, path, my_screenshot_image);
+			} else {
+				result = "failed";
+				message = "not found image!!!";
+			}
+			object.put("path", path);
+			object.put("fileName", my_screenshot_image);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return object;
 	}
 
 	// 결재양식 전체조회

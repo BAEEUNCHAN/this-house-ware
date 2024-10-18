@@ -67,26 +67,28 @@
 					edms_doc_no
 					, id
 					, title
-					, edms_form_no
+					, content
 					, file_name
 					, attatch
-					, approval_status
-					, share_status
 					, submit_dt	
+					, approval_status
+					, edms_form_no
+					, share_status
 					, share_folder_no
 				)
 			VALUES
 				(
 					#{edmsDocNo}
 					<!-- employees_seq.NEXTVAL -->
-					, #{id}
+					, 'emp101'
 					, #{title}
-					, #{edmsFormNo}
+					, #{content}
 					, #{fileName}
 					, #{attatch}
-					, 'c1'					
-					, #{shareStatus}
 					, sysdate					
+					, '대기'					
+					, #{edmsFormNo}
+					, #{shareStatus}
 					, #{shareFolderNo}
 				)
 	</insert>

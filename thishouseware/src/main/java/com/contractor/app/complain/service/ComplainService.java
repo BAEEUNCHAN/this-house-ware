@@ -2,6 +2,7 @@ package com.contractor.app.complain.service;
 
 import java.util.List;
 import java.util.Map;
+
 public interface ComplainService {
 
 	// 문의사항 조회

@@ -23,6 +23,7 @@ th {
 	margin-top: 20px;
 }
 </style>
+
 <div class="page-inner">
 	<div class="row">
 		<div class="col-md-12">
@@ -73,6 +74,61 @@ th {
 												<td>시작</td>
 												<td>종료</td>
 
+</head>
+<body>
+	<h1>휴가 신청서</h1>
+	<form action="/submitLeave" method="post">
+		<table>
+			<tr>
+				<th>휴가 신청서 번호</th>
+				<td>$1</td>
+				<td></td>
+				<th>결재선 지정</th>
+				<td></td>
+			</tr>
+			<tr>
+				<th>기안자</th>
+				<td></td>
+				<th>기안일</th>
+				<td></td>
+			</tr>
+			<tr>
+				<th>부서이름</th>
+				<td></td>
+				<th>직책</th>
+				<td></td>
+			</tr>
+		</table>
+
+		<h2>휴가 정보</h2>
+		<table>
+			<tr>
+				<th>휴가종류</th>
+				<td><select name="leaveType" required>
+						<option value="연차">연차</option>
+						<option value="병가">병가</option>
+						<option value="특별휴가">특별휴가</option>
+				</select></td>
+			</tr>
+			<tr>
+				<th>휴가기간</th>
+				<td>시작</td>
+				<td>종료</td>
+
+			</tr>
+			<tr>
+				<th>휴가사유</th>
+				<td></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<th>내용</th>
+				<td>상기와 같이 휴가를 신청합니다.</td>
+			</tr>
+		</table>
+
+
 											</tr>
 											<tr>
 												<th>휴가사유</th>
@@ -92,7 +148,14 @@ th {
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>
+
+	</form>
+	<div id="leaveForm">
+	</div>
+
+
 </body>
 </html>

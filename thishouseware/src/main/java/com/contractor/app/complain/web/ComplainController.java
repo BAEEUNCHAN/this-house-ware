@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import com.contractor.app.company.service.CompanyService;
 import com.contractor.app.company.service.CompanysVO;
+
+
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
 
@@ -21,7 +24,7 @@ public class ComplainController {
 	private CompanyService companyService;
 	
 	@Autowired
-	public ComplainController(ComplainService complainService, CompanyService companyService) {
+	public ComplainController(ComplainService complainService) {
 		this.complainService = complainService;
 		this.companyService = companyService;
 	}

@@ -13,11 +13,13 @@
 				,c.upload_dt
 				,c.progress
 				,c.complain_type
+				,c.customer_name
+				,c.phone
 				,p.company_no
                 ,p.company_name
 	FROM		complains c JOIN companys p
     ON          c.company_no = p.company_no
-	ORDER BY    company_no
+	ORDER BY    c.company_no
 
 </select>
 
@@ -32,24 +34,28 @@
 				,c.upload_dt
 				,c.progress
 				,c.complain_type
+				,c.customer_name
+				,c.phone
 				,p.company_no
                 ,p.company_name
-	FROM		complains c RIGHT JOIN companys p
+	FROM		complains c JOIN companys p
     ON          c.company_no = p.company_no
-	WHERE		c.complain_no = #{complainNo}
+	WHERE		complain_no = #{complainNo}
 	
 </select>
 
 <!-- 문의 등록 -->
+
 <insert id="insertComplainInfo" parameterType="ComplainsVO">
 	
 	<selectKey keyProperty="complainNo"
 			   resultType="Integer"
 			   order="BEFORE">
-		<!-- 1001부터 시작 -->
-		SELECT NVL(MAX(complain_no), 1) + 1
-		FROM   complains
+		SELECT NVL(MAX(complain_no), 0) + 1
+		FROM complains
 	</selectKey>
+	
+	
 	
 	INSERT INTO complains(complain_no
 						 ,complain_dt
@@ -57,8 +63,10 @@
 						 ,complain_content
 						 ,complain_request
 						 ,upload_dt
-						 .progress
+						 ,progress
 						 ,complain_type
+						 ,customer_name
+						 ,phone
 						 ,company_no)
 	VALUES				 (#{complainNo}
 						 ,#{complainDt}
@@ -68,7 +76,28 @@
 						 ,sysdate
 						 ,0
 						 ,#{complainType}
+						 ,#{customerName}
+						 ,#{phone}
 						 ,#{companyNo})
 </insert>
+
+
+<!-- 문의 수정 -->
+<update id="updateComplainInfo" parameterType="ComplainsVO">
+	UPDATE  complains
+	SET		
+			complain_title		= #{complainTitle}
+			,complain_content	= #{complainContent}
+			,complain_request	= #{complainRequest}
+	WHERE 	complain_no			= #{complainNo}
+</update>
+
+
+<!-- 문의 삭제 -->
+<delete id="deleteComplainInfo" parameterType="int">
+	DELETE FROM complains
+	WHERE		complain_no = #{complainNo}
+</delete>
+
 
 </mapper>

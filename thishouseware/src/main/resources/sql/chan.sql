@@ -14,6 +14,9 @@ VALUES ('FORM004', '교육 결재 양식', '교육', '/forms/education_form.pdf'
 INSERT INTO edms_form (edms_form_no, edms_form_name, edms_form_type, edms_form_path, description, create_dt)
 VALUES ('FORM005', '일반 결재 양식', '일반', '/forms/general_form.pdf', '일반적인 결재 양식입니다.', TO_DATE('2023-05-05', 'YYYY-MM-DD'));
 
+INSERT INTO edms_form (edms_form_no, edms_form_name, edms_form_type, edms_form_path, description, create_dt)
+VALUES ('FORM006', '비밀서약서 양식', '회계/인사', '/forms/confidentiality_agreement.pdf', '비밀 유지에 관한 서약서 양식입니다.', TO_DATE('2023-01-15', 'YYYY-MM-DD'));
+
 ALTER TABLE edms_doc MODIFY approval_status VARCHAR2(6);
 
 -- edms_doc 

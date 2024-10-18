@@ -1,6 +1,8 @@
 package com.contractor.app.complain.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +41,26 @@ public class ComplainServiceImpl implements ComplainService {
 		 return result == 1 ? complainVO.getComplainNo() : -1;
 	 }
 	 
+	 // 문의 수정
+	 @Override
+	public Map<String, Object> updateComplain(ComplainsVO complainVO) {
+		 Map<String, Object> map = new HashMap<>();
+		 boolean isSuccessed = false;
+		 
+		 int result = complainMapper.updateComplainInfo(complainVO);
+		 if(result == 1) {
+			 isSuccessed = true;
+		 }
+		 
+		 map.put("result", isSuccessed);
+		 map.put("target", complainVO);
+		 return map;
+		 
+	}
+	 
 	 // 문의 삭제
-	 //@Override public int deleteComplain(int ComplainNo) { return
-	 //complainMapper.deleteComplainInfo(ComplainNo); }
+	 @Override public int deleteComplain(int ComplainNo) { return
+	 complainMapper.deleteComplainInfo(ComplainNo); }
 	 
 	
 }

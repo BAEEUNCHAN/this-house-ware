@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.contractor.app.board.mapper.BoardMapper;
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
+import com.contractor.app.board.service.PostsVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -19,13 +20,18 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
-	public List<BoardsVO> boardList() {
-		return boardMapper.selectBoardAll();
+	public List<BoardsVO> boardList(BoardsVO boardsVO) {
+		return boardMapper.selectBoardAll(boardsVO);
 	}
 
 	@Override
 	public int insertBoard(BoardsVO boardsVO) {
 		return boardMapper.insertBoardInfo(boardsVO);
+	}
+
+	@Override
+	public List<PostsVO> postList(PostsVO postsVO) {
+		return boardMapper.selectPostAll(postsVO);
 	}
 	
 }

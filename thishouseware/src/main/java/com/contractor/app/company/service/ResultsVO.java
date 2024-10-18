@@ -2,6 +2,8 @@ package com.contractor.app.company.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -10,6 +12,7 @@ public class ResultsVO {
 	private Integer resultCost;		// 소모비용		
 	private Integer resultPeople;	// 투입인원
 	private Integer departmentNo;	// 담당부서		, Not Null
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
 	private Date receiveDt;			// 글접수일시
 	private Date completeDt;		// 해결완료일시
 	private Date resultDt;			// 해결기간

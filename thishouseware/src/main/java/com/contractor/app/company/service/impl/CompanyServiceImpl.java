@@ -18,11 +18,19 @@ public class CompanyServiceImpl implements CompanyService {
 		this.companyMapper = companyMapper;
 	}
 	
+	// 회사리스트 전체조회
 	@Override
 	public List<CompanysVO> companyList() {
 		return companyMapper.selectCompanyAll();
 	}
 	
+	// 회사리스트(join)
+	@Override
+	public List<CompanysVO> companyInfoList(CompanysVO companyVO) {
+		return companyMapper.selectCompanyInfoList(companyVO);
+	}
+	
+	// 회사 등록
 	@Override
 	public int insertCompany(CompanysVO companyVO) {
 		int result = companyMapper.insertCompanyInfo(companyVO);

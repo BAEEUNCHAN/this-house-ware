@@ -42,4 +42,10 @@
 	
 </insert>
 
+<!-- 회사 삭제 -->
+<delete id="deleteCompany" parameterType="int">
+	DELETE FROM companys
+	WHERE		company_no = #{companyNo}
+</delete>
+
 </mapper>

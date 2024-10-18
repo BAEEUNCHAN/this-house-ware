@@ -2,7 +2,6 @@ package com.contractor.app.complain.service;
 
 import java.util.Date;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -13,10 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-import lombok.Data;
-
-
 @Data
 public class ComplainsVO {
 	private Integer complainNo;		// 문의번호(PK)		, Not Null
@@ -41,10 +36,6 @@ public class ComplainsVO {
 	private String companyName;
 	
 
-	private Date uploadDt;			// 등록일				, Default sysdate
-	private Integer progress;		// 처리상황			, Not Null
-	private Integer companyNo;		// 회사번호(FK)		, Not Null
 	
-	private String companyName; 
 
 }

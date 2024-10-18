@@ -1,6 +1,7 @@
 package com.contractor.app.employee.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int addUser(EmployeeVO empVO) {
-		return employeeMapper.insertUser(empVO);
+	public void addEmployee(EmployeeVO empVO) {
+		employeeMapper.insertEmployee(empVO);
+	}
+
+	@Override
+	public EmployeeVO getEmployee(EmployeeVO empVO) {
+		return employeeMapper.selectEmployee(empVO);
+	}
+
+	@Override
+	public boolean modifyEmployee(EmployeeVO empVO) {
+		return employeeMapper.modifyEmployee(empVO) == 1;
+	}
+
+	@Override
+	public List<EmployeeVO> getEmployees() {
+		return employeeMapper.selectEmployees();
 	}
 
 }

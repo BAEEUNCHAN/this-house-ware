@@ -39,5 +39,10 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.insertPostInfo(postsVO);
 	}
 
+	@Override
+	public int deletePost(int postsNo) {
+		return boardMapper.deleteBoradInfo(postsNo);
+	}
+
 	
 }

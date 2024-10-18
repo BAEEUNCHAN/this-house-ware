@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import com.contractor.app.company.service.CompanyService;
 import com.contractor.app.company.service.CompanysVO;
-
-
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
 
@@ -93,5 +90,38 @@ public class ComplainController {
 		complainService.deleteComplain(complainNo);
 		return "redirect:complainList";
 	}
+	
+	
+	/************************************************************************/
+	
+	// 문의 타입 구분(0:고객불편, 1:운영장애)
+	@GetMapping("complainListType0")
+	public String complainListType0(ComplainsVO complainsVO, Model model) {
+		List<ComplainsVO> list = complainService.complainType0();
+		model.addAttribute("type0", list);
+		return "complain/complainListType0";
+	}
+	
+	
+	//(0:대기, 1:접수, 2:진행, 3:상황완료, 4:보고완료)
+	// 전체조회(0:대기)
+	@GetMapping("complainListProgress0")
+	public String complainList0(ComplainsVO complainVO, Model model) {
+		List<ComplainsVO> list0 = complainService.complainList0();
+		model.addAttribute("0complains", list0);
+		ComplainsVO findVO = complainService.complainInfo(complainVO);
+		model.addAttribute("complain", findVO);
+		return "complain/complainListProgress0";
+	}
+	// 전체조회(1:접수)
+		@GetMapping("complainListProgress1")
+		public String complainList1(ComplainsVO complainVO, Model model) {
+			List<ComplainsVO> list1 = complainService.complainList1();
+			model.addAttribute("1complains", list1);
+			ComplainsVO findVO = complainService.complainInfo(complainVO);
+			model.addAttribute("complain", findVO);
+			return "complain/complainListProgress1";
+		}
+	
 	
 }

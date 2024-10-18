@@ -14,4 +14,7 @@ public interface BoardService {
 	
 	// 게시글 등록
 	public int insertPost(PostsVO postsVO);
+	
+	// 게시글 삭제
+	public int deletePost(int postsNo);
 }

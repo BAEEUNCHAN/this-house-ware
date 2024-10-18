@@ -50,5 +50,10 @@ UPDATE employees
 		    NAME = 'Park' 
 		WHERE id = 'emp106';
 
+-- 비밀번호 암호화 인코딩 
+UPDATE employees
+    SET 
+        password = '$2a$10$/9OOLt.FG1BWEhKGX1p7qOzYoq6MvD.OO7NnctbZ9nz6lpw2IpSU2';
+
 -- 수정문 실행후 commit 하자
 commit;

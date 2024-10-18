@@ -44,41 +44,6 @@
 											</th:block>
 										</select>
 
-			<form name="insertForm" th:action="@{/insertCompany}"
-			<form name="insertForm" th:action="@{/insertComplain}"
-					method="post">
-				<div class="col-md-12">
-					<div class="card">
-						<div class="card-header">
-							<div class="card-title">불편/장애사항 등록</div>
-						</div>
-						<div class="card-body">
-							<div class="row">
-								<!-- 왼쪽화면 -->
-								<div class="col-md-6 col-lg-30">
-									<!-- <div class="card-title">회사명</div> -->
-									<label for="companyName">회사명 : </label> <label
-										for="exampleFormControlSelect2"></label> 
-									<select multiple name="companyName"
-										class="form-control" id="companyName"
-										style="width: 179px; font-size: 12px;">
-										<th:block th:each="info : ${complains}">
-											<option th:value="${info.companyName}">[[${info.companyName}]]</option>
-										</th:block>
-									</select>
-
-									
-									<!-- <button class="btn btn-primary" width="120px">회사등록</button> -->
-
-									<!-- <div class="card-title">고객명</div> -->
-									<br /> <label for="customerName">고객명 : </label> <input type="text"
-										name="customerName" aria-label="Username" id="customerName"
-										aria-describedby="basic-addon1" placeholder="고객 이름을 입력하세요."><br />
-									<br />
-									<!-- <div class="card-title">연락처</div> -->
-									<label for="phone">연락처 : </label> <input type="number"
-										name="phone" aria-label="Username" id="phone"
-										aria-describedby="basic-addon1" placeholder="'-'없이 숫자만 입력."><br />
 
 
 

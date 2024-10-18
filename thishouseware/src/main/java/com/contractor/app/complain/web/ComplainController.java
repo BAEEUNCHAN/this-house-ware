@@ -25,7 +25,7 @@ public class ComplainController {
 	private CompanyService companyService;
 	
 	@Autowired
-	public ComplainController(ComplainService complainService) {
+	public ComplainController(ComplainService complainService, CompanyService companyService) {
 		this.complainService = complainService;
 		this.companyService = companyService;
 	}

@@ -25,13 +25,19 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int insertBoard(BoardsVO boardsVO) {
-		return boardMapper.insertBoardInfo(boardsVO);
-	}
-
-	@Override
 	public List<PostsVO> postList(PostsVO postsVO) {
 		return boardMapper.selectPostAll(postsVO);
 	}
+
+	@Override
+	public PostsVO postInfo(PostsVO postsVO) {
+		return boardMapper.selectPostInfo(postsVO);
+	}
+	
+	@Override
+	public int insertPost(PostsVO postsVO) {
+		return boardMapper.insertPostInfo(postsVO);
+	}
+
 	
 }

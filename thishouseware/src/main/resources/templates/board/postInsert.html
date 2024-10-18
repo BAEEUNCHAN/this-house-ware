@@ -9,31 +9,29 @@
 </head>
 <body>
 	<div class="text-center">
-		<form name="insertForm" th:action="@{/postInsert}" method="post">
+		<form name="insertForm" th:action="@{/board/postInsert}" method="post">
 			<h3>게시글 작성</h3>
 			<table class="table">
 				<tr>
 					<th>게시판 선택</th>
-					<td><select class="form-select"
+					<td><select class="form-select" name="boardsNo"
 						aria-label="Default select example">
 							<option value="">선택</option>
 							<optgroup th:each="optgrp : ${boardsType}"
 								th:label="${optgrp.commonCodeName}">
 								<option th:each="opt : ${boards}"
 									th:if="${optgrp.commonCodeName} == ${opt.boardsType}"
-									th:text="${opt.title}"></option>
+									th:text="${opt.title}" th:value="${opt.boardsNo}"></option>
 							</optgroup>
 					</select></td>
 				</tr>
 				<tr>
 					<th>머리글</th>
 					<td><select class="form-select"
-						aria-label="Default select example">
+						aria-label="Default select example" name="postsType">
 							<option value="">선택</option>
 							<option th:each="opt : ${postsType}"
-									th:value="${opt.commonCodeId}"
-									th:text="${opt.commonCodeName}"></option>
-							
+								th:value="${opt.commonCodeId}" th:text="${opt.commonCodeName}"></option>
 					</select></td>
 				</tr>
 				<tr>
@@ -42,17 +40,22 @@
 				</tr>
 				<tr>
 					<th>게시 기간여부</th>
-					<td><input type="text" name="postSetting"></td>
+					<td><span th:each="radio : ${postSetting}"> <input
+							class="form-check-input" type="radio" name="postSetting"
+							id="postSetting" th:value="${radio.commonCodeId}" /> <label
+							class="form-check-label" for="postSetting"
+							th:text="${radio.commonCodeName}"></label>
+					</span></td>
 				</tr>
 				<tr>
 					<th>게시 시작시간</th>
-					<td><input type="text" name="postStartTime"
-						placeholder="yyyy/MM/dd"></td>
+					<td><input type="date" name="postStartTime" id="postStartTime"
+						disabled></td>
 				</tr>
 				<tr>
 					<th>게시 종료시간</th>
-					<td><input type="text" name="postEndTime"
-						placeholder="yyyy/MM/dd"></td>
+					<td><input type="date" name="postEndTime" id="postEndTime"
+						disabled></td>
 				</tr>
 				<tr>
 					<th>내용</th>
@@ -63,6 +66,21 @@
 		</form>
 	</div>
 	<script>
+		// postSetting 값 확인 -- q1:O q2:X 
+		$('form [name="postSetting"]').on('change', checkPostSetting);
+
+		function checkPostSetting(event) {
+			event.preventDefault();
+
+			if (event.target.value == 'q2') {
+				$('form [name="postStartTime"], form [name="postEndTime"]')
+						.attr("disabled", true);
+			} else if (event.target.value == 'q1') {
+				$('form [name="postStartTime"], form [name="postEndTime"]')
+						.attr("disabled", false);
+			}
+		}
+
 		// submit을 하기 전 게시판 유형, 익명 여부, 제목, 권한 확인
 		$(insertForm).on('submit', postInsertHandler);
 
@@ -100,6 +118,14 @@
 			alert('게시글이 등록되었습니다.');
 			insertForm.submit();
 		}
+		
+		// 게시 기간설정 - 오늘, 이전 날짜 선택 X
+		document.getElementById('postStartTime').setAttribute("min", getTodayDate());
+		document.getElementById('postEndTime').setAttribute("min", getTodayDate());
+		
+		// 게시 시작/종료시간 - 오늘 날짜 설정
+		document.getElementById('postStartTime').value = new Date().toISOString().substring(0, 10);
+		document.getElementById('postEndTime').value = new Date().toISOString().substring(0, 10);
 	</script>
 </body>
 </html>

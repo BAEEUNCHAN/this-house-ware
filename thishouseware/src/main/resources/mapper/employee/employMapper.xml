@@ -1,36 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.contractor.app.employee.mapper.EmployeeMapper">
-	<insert id="insertUser" parameterType="EmployeeVO">
-		<selectKey keyProperty="id" 
-			resultType="String" 
-			order="BEFORE">
-			SELECT  'emp'
-				||TO_CHAR(SUBSTR(NVL( MAX(id),'emp99'),4)+1) 
-			FROM employees
-		</selectKey>
-		INSERT INTO EMPLOYEES 
-		(id, 
-		PASSWORD, 
-		PHONE, 
-		EMAIL, 
-		IMAGE_LINK, 
-		DEPARTMENT_NO,
-		hire_dt,
-		position_code,
-		name
-		) 
-		VALUES 
-		(
-		#{id},
-		#{password}, 
-		#{phone}, 
-		#{email}, 
-		#{imageLink}, 
-		#{departmentNo},
-		#{hireDt},
-		#{positionCode},
-		#{name}
-		)
-	</insert>	
+	<select id="selectEmployees" resultType="EmployeeVO">
+		select 
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		order by id
+	</select>
+	<select id="insertEmployee" statementType="CALLABLE" parameterType="EmployeeVO">
+		{
+			call ADD_NEW_EMP(
+				#{password}, 
+				#{phone}, 
+				#{email}, 
+				#{imageLink}, 
+				#{departmentNo},
+				#{hireDt},
+				#{positionCode},
+				#{name},
+				#{id, mode=OUT, jdbcType=VARCHAR}
+			)
+		}
+	</select>	
+	<select id="selectEmployee" parameterType="EmployeeVO">
+		SELECT
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		WHERE id = #{id}
+	</select>
+	<update id="modifyEmployee" parameterType="EmployeeVO">
+		UPDATE employees 
+		SET HIRE_DT = #{hireDt},
+		    PHONE = #{phone}, 
+		    EMAIL = #{email}, 
+		    IMAGE_LINK = #{imageLink}, 
+		    DEPARTMENT_NO = #{departmentNo}, 
+		    POSITION_CODE = #{positionCode}, 
+		    NAME = #{name} 
+		WHERE id = #{id}
+	</update>
 </mapper>

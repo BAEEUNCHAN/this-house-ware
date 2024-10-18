@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>지출결의서 양식</title>
+<title>교육 신청서 양식</title>
 <style>
 .table {
 	width: 100%;
@@ -33,7 +33,7 @@ th {
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">지출결의서 양식</div>
+						<div class="card-title">교육신청서 양식</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -60,33 +60,35 @@ th {
 										</tr>
 									</table>
 
-									<h2 style="text-align: center;">지출 결의서</h2>
+									<h2 style="text-align: center;">교육 신청서</h2>
 									<table border="1"
 										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
-											<th>지출 항목</th>
-											<td><select name="expenseType" required>
-													<option value="식비">식비</option>
-													<option value="교통비">교통비</option>
-													<option value="업무 관련 구매">업무 관련 구매</option>
-													<option value="기타">기타</option>
+											<th>교육종류</th>
+											<td colspan="3"><select name="educationType" required>
+													<option value="사내">사내 교육</option>
+													<option value="사외">사외 교육</option>
 											</select></td>
 										</tr>
 										<tr>
-											<th>지출 금액</th>
-											<td><input type="number" name="amount" required></td>
+											<th>교육기간</th>
+											<td>시작 <input type="date" name="startDate" required></td>
+											<td colspan="2">종료 <input type="date" name="endDate"
+												required></td>
 										</tr>
 										<tr>
-											<th>지출 내역</th>
-											<td><input type="text" name="amount" required></td>
+											<th>교육사유</th>
+											<td colspan="3"><input type="text"
+												name="educationReason"></td>
 										</tr>
 										<tr>
 											<th>내용</th>
 											<td colspan="5"
 												style="height: 800px; vertical-align: center;">상기와 같이
-												지출을 신청합니다.</td>
+												교육을 신청합니다.</td>
 										</tr>
 									</table>
+
 								</form>
 							</div>
 						</div>

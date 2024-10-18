@@ -33,8 +33,6 @@
 							회사목록 <a href="/insertCompany" class="float-end"><button class="btn btn-primary">회사등록</button></a>
 						</div>
 
-						<div class="card-title">회사리스트</div>
-						<div class="card-title">회사/고객리스트</div>
 
 					</div>
 					<div class="card-body">
@@ -58,8 +56,8 @@
 												<td>[[${info.companyNo}]]</td>
 												<td>[[${info.companyName}]]</td>
 												<td>
-													<button type="button" class="btn btn-danger"
-															data-toggle="modal" data-target="#exampleModal" onclick="event.stopPropagation()">
+													<button type="button" class="btn btn-danger alert_demo_7"
+																data-toggle="modal" data-target="#exampleModal" th:value="info.companyNo">
 																<i class="icon-trash"></i>
 													</button>
 												</td>
@@ -99,7 +97,89 @@
 	</div>
 	
 	<script>
-	
+	// 삭제모달
+	 //== Class definition
+         var SweetAlert2Demo = (function () {
+           //== Demos
+           var initDemos = function () {
+             $(".alert_demo_7").click(function (e) {
+           	  event.stopPropagation();
+           	  let companyNo = $(e.currentTarget).closest('tr').children().first().text();
+               swal({
+                 title: "회사정보 삭제",
+                 text: "해당 회사를 삭제하시겠습니까?",
+                 type: "warning",
+                 buttons: {
+                   confirm: {
+                     text: "삭제",
+                     className: "btn btn-danger",
+                   },
+                   cancel: {
+                   	text: "취소",
+                     visible: true,
+                     className: "btn btn-black",
+                   },
+                 },
+               }).then((Delete) => {
+                 if (Delete) {
+               	  
+               	  $.ajax({
+                         url: `/companyDelete?companyNo=${companyNo}`, 
+                         type: 'DELETE',
+                         success: function (response) {
+                             swal({
+                                 title: "삭제완료!",
+                                 text: "해당 회사가 목록에서 삭제되었습니다.",
+                                 icon: "success",
+                                 buttons: {
+                                     confirm: {
+                                         text: "확인",
+                                         className: "btn btn-success",
+                                     },
+                                 },
+                             }).then(() => {
+                                 location.reload();
+                             });
+                         },
+                         error: function (error) {
+								swal(
+										 {
+									title: "오류!",
+									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
+									icon: "error",
+									buttons: {
+										confirm: {
+											text: "확인",
+											className: "btn btn-danger",
+										},
+									},
+								} 
+										).then(() => {
+									//location.reload();
+								});
+							}  
+                     });
+                 } else {
+                     swal.close();
+                 }
+             });
+         });
+   
+           };
+   
+           return {
+             //== Init
+             init: function () {
+               initDemos();
+             },
+           };
+         })();
+   
+         //== Class Initialization
+         jQuery(document).ready(function () {
+           SweetAlert2Demo.init();
+         });
+
 	
 		// 제이쿼리 객체 생성(tr 클릭하면 단건정보 조회)
 		$('tbody > tr').on('click', function(event) {

@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.company.service.CompanyService;
 import com.contractor.app.company.service.CompanysVO;
@@ -46,6 +49,14 @@ public class CompanyController {
 	@PostMapping("insertCompany")
 	public String insertCompanyProcess(CompanysVO companyVO) {
 		int companyNo = companyService.insertCompany(companyVO);
+		return "redirect:companyList";
+	}
+	
+	// 회사 삭제
+	@ResponseBody
+	@DeleteMapping("companyDelete")
+	public String companyDelete(@RequestParam Integer companyNo) {
+		companyService.deleteCompany(companyNo);
 		return "redirect:companyList";
 	}
 	

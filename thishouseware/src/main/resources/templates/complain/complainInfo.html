@@ -58,15 +58,23 @@
 								</div>
 							</div>
 							<div class="card-action">
+								<label for="complainNo">No.[[${complain.complainNo}]]</label> <br/>
+								<div class="text-center">
 								<label for="companyName"><h3>[[${complain.complainTitle}]]</h3>
-								</label> <br /> <br /> <label for="customerName">문의내용 :
-									[[${complain.complainContent}]]</label> <br /> <br /> <label
-									for="phone">요구사항 : [[${complain.complainRequest}]]</label> <br />
+								</label> <br /> <br />
+								</div>
+								
+								<p>*문의내용</p>
+								<label for="customerName">[[${complain.complainContent}]]</label> <br /> <br /> 
+								<p>*요구사항</p>
+								<label
+									for="phone">[[${complain.complainRequest}]]</label> <br />
 								<br /> <br />
 								<div class="text-center">
 									<button class="btn btn-success" th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
 									<button class="btn btn-primary" th:onclick='|location.href="@{/complainList}"|'>목록</button>
-									<button class="btn btn-danger" th:onclick='|location.href="@{/complainDelete(complainNo=${complain.complainNo})}"|'>삭제</button>
+									<button type="button" class="btn btn-danger alert_demo_7"
+																data-toggle="modal" data-target="#exampleModal" th:value="${complain.complainNo}">삭제</button>
 								</div>
 							</div>
 						</div>
@@ -75,6 +83,92 @@
 			</div>
 		</div>
 	</div>
-
+	<script>
+	
+		// 삭제모달
+		 //== Class definition
+              var SweetAlert2Demo = (function () {
+                //== Demos
+                var initDemos = function () {
+                  $(".alert_demo_7").click(function (e) {
+                	  event.stopPropagation();
+                	  let complainNo = $(this).val();
+                    swal({
+                      title: "불편/장애사항 삭제",
+                      text: "문의사항을 삭제하시겠습니까?",
+                      type: "warning",
+                      buttons: {
+                        confirm: {
+                          text: "삭제",
+                          className: "btn btn-danger",
+                        },
+                        cancel: {
+                        	text: "취소",
+                          visible: true,
+                          className: "btn btn-black",
+                        },
+                      },
+                    }).then((Delete) => {
+                      if (Delete) {
+                    	  
+                    	  $.ajax({
+                              url: `/complainDelete?complainNo=${complainNo}`, 
+                              type: 'DELETE',
+                              success: function (response) {
+                                  swal({
+                                      title: "삭제완료!",
+                                      text: "해당 문의사항이 삭제되었습니다.",
+                                      icon: "success",
+                                      buttons: {
+                                          confirm: {
+                                              text: "확인",
+                                              className: "btn btn-success",
+                                          },
+                                      },
+                                  }).then(() => {
+                                	  window.location.href = '/complainList';
+                                  });
+                              },
+                              error: function (error) {
+  								swal(
+  										 {
+  									title: "오류!",
+  									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
+  									icon: "error",
+  									buttons: {
+  										confirm: {
+  											text: "확인",
+  											className: "btn btn-danger",
+  										},
+  									},
+  								} 
+  										).then(() => {
+  									//location.reload();
+  								});
+  							}  
+                          });
+                      } else {
+                          swal.close();
+                      }
+                  });
+              });
+        
+                };
+        
+                return {
+                  //== Init
+                  init: function () {
+                    initDemos();
+                  },
+                };
+              })();
+        
+              //== Class Initialization
+              jQuery(document).ready(function () {
+                SweetAlert2Demo.init();
+              });
+	
+	
+	</script>
 </body>
 </html>

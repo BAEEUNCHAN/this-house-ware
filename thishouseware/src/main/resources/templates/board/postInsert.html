@@ -40,24 +40,21 @@
 				</tr>
 				<tr>
 					<th>게시 기간여부</th>
-					<td>
-					<div th:each="radio : ${postSetting}">
-					<input class="form-check-input" type="radio" name="postSetting" id="postSetting" th:value="${radio.commonCodeId}" /> 
-					<label class="form-check-label" for="postSetting" th:text="${radio.commonCodeName}"></label>
-					</div>
-<!-- 					<input class="form-check-input" type="radio" name="postSetting" id="postSettingO" value="q1" /> 
-					<label class="form-check-label" for="postSetting" >O</label>
-					<input class="form-check-input" type="radio" name="postSetting" id="postSettingX" value="q2" checked />
-					<label class="form-check-label" for="postSetting" >X</label> -->
-					</td>
+					<td><span th:each="radio : ${postSetting}"> <input
+							class="form-check-input" type="radio" name="postSetting"
+							id="postSetting" th:value="${radio.commonCodeId}" /> <label
+							class="form-check-label" for="postSetting"
+							th:text="${radio.commonCodeName}"></label>
+					</span></td>
 				</tr>
 				<tr>
 					<th>게시 시작시간</th>
-					<td><input type="date" name="postStartTime" disabled></td>
+					<td><input type="date" name="postStartTime" id="postStartTime"
+						disabled></td>
 				</tr>
 				<tr>
 					<th>게시 종료시간</th>
-					<td><input type="date" name="postEndTime"
+					<td><input type="date" name="postEndTime" id="postEndTime"
 						disabled></td>
 				</tr>
 				<tr>
@@ -71,18 +68,19 @@
 	<script>
 		// postSetting 값 확인 -- q1:O q2:X 
 		$('form [name="postSetting"]').on('change', checkPostSetting);
-		
+
 		function checkPostSetting(event) {
 			event.preventDefault();
-			
-			if(event.target.value == 'q2') {
-				$('form [name="postStartTime"], form [name="postEndTime"]').attr("disabled", true);
-			}
-			else if(event.target.value == 'q1') {
-				$('form [name="postStartTime"], form [name="postEndTime"]').attr("disabled", false);
+
+			if (event.target.value == 'q2') {
+				$('form [name="postStartTime"], form [name="postEndTime"]')
+						.attr("disabled", true);
+			} else if (event.target.value == 'q1') {
+				$('form [name="postStartTime"], form [name="postEndTime"]')
+						.attr("disabled", false);
 			}
 		}
-	
+
 		// submit을 하기 전 게시판 유형, 익명 여부, 제목, 권한 확인
 		$(insertForm).on('submit', postInsertHandler);
 
@@ -120,6 +118,14 @@
 			alert('게시글이 등록되었습니다.');
 			insertForm.submit();
 		}
+		
+		// 게시 기간설정 - 오늘, 이전 날짜 선택 X
+		document.getElementById('postStartTime').setAttribute("min", getTodayDate());
+		document.getElementById('postEndTime').setAttribute("min", getTodayDate());
+		
+		// 게시 시작/종료시간 - 오늘 날짜 설정
+		document.getElementById('postStartTime').value = new Date().toISOString().substring(0, 10);
+		document.getElementById('postEndTime').value = new Date().toISOString().substring(0, 10);
 	</script>
 </body>
 </html>

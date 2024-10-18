@@ -4,7 +4,8 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 	
-
+<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+ <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 
 <body>
 
@@ -39,10 +40,10 @@
 						<div class="row">
 						
 							<div class="text-center">
-								<table class="table">
+								<table class="display" id="example">
 									<thead>
 										<tr>
-											<th class="col-md-3">회사번호</th>
+											<th class="col-md-2">회사번호</th>
 											<th class="col-md-6">회사명</th>
 											<th class="col-md-3"></th>
 											<!-- yyyy년MM월dd일 -->
@@ -189,7 +190,7 @@
 			location.href = url;
 		});
 		
-		
+		$('#example').DataTable();
 		
 	</script>
 </body>

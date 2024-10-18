@@ -62,5 +62,35 @@ public class ComplainServiceImpl implements ComplainService {
 	 @Override public int deleteComplain(int ComplainNo) {
 		 return complainMapper.deleteComplainInfo(ComplainNo); }
 	 
+	 /***********************************************************/
+	 // 문의타입
+	 @Override
+	public List<ComplainsVO> complainType0() {
+		return complainMapper.selectComplainType0();
+	}
+	 
+	 /***********************************************************/
+	 
+	 // 진행상황 : 0 조회
+	 @Override
+	public List<ComplainsVO> complainList0() {
+		return complainMapper.selectComplainAll0();
+	}
+	@Override
+	public List<ComplainsVO> complainList1() {
+		return complainMapper.selectComplainAll1();
+	}
+	@Override
+	public List<ComplainsVO> complainList2() {
+		return complainMapper.selectComplainAll2();
+	}
+	@Override
+	public List<ComplainsVO> complainList3() {
+		return complainMapper.selectComplainAll3();
+	}
+	@Override
+	public List<ComplainsVO> complainList4() {
+		return complainMapper.selectComplainAll4();
+	}
 	
 }

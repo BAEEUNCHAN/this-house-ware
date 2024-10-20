@@ -11,7 +11,7 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="#">고객관리</a></li>
@@ -48,7 +48,7 @@
 										th:switch="${complain.progress}"> <span th:case="0">대기</span>
 											<span th:case="1">접수</span> <span th:case="2">진행</span> <span
 											th:case="3">상황완료</span> <span th:case="4">보고완료</span>
-									</span>
+									</span> 처리상황부분 드롭다운으로 선택할 수 있도록 하기
 
 
 
@@ -59,27 +59,54 @@
 							</div>
 							<div class="card-action">
 								<div class="text-center">
-								<label for="companyName"><h3>[[${complain.complainTitle}]]</h3>
-								</label> 
+									<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
 								</div>
-								
-								<p>*문의내용</p>
-								<label for="customerName">[[${complain.complainContent}]]</label> 
-								<p>*요구사항</p>
-								<label
-									for="phone">[[${complain.complainRequest}]]</label> <br />
-								
+
+								<p style="font-weight: bold; font-size: 16px;">◎문의내용◎</p>
+								<label for="customerName">[[${complain.complainContent}]]</label>
+								<br /> <br />
+								<p style="font-weight: bold; font-size: 16px;">◎요구사항◎</p>
+								<label for="phone">[[${complain.complainRequest}]]</label> <br />
+								<br /> <br />
 								<div class="text-center">
-									<button class="btn btn-success" th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
-									<button class="btn btn-primary" th:onclick='|location.href="@{/complainList}"|'>목록</button>
+									<button class="btn btn-success"
+										th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+									<button class="btn btn-primary"
+										th:onclick='|location.href="@{/replyList}"|'>목록</button>
 									<button type="button" class="btn btn-danger alert_demo_7"
-																data-toggle="modal" data-target="#exampleModal" th:value="${complain.complainNo}">삭제</button>
+										data-toggle="modal" data-target="#exampleModal"
+										th:value="${complain.complainNo}">삭제</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">문의답변/조치사항</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-20 col-lg-30">
+									<label for="complainRequest">문의답변</label>
+									<textarea class="form-control" name="replyContent"
+										id="replyContent" rows="5" maxlength="500"
+										style="background-color: lightyellow;"></textarea><br/>
+										부서 :  <input type="text" placeholder="drop다운 부서목록">
+										담당자 :  <input type="text" placeholder="해당부서 이름 검색/선택">
+										<button type="submit" class="btn btn-primary" style="float:right;">등록</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
 		</div>
 	</div>
 	<script>

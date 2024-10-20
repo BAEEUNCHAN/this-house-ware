@@ -4,16 +4,19 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 
-<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
-<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>	
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <style>
 .dataTables_length {
-    float: left; 
+	float: left; 
 }
 
 .dataTables_info {
-    float: left; 
+	float: left; 
 }
+
 .progress-0 {
 	color: red;
 }
@@ -33,7 +36,6 @@
 .progress-4 {
 	color: black;
 }
-
 </style>
 
 
@@ -53,11 +55,22 @@
 					<li class="nav-item"><a href="#">불편/장애사항 목록</a></li>
 				</ul>
 			</div>
-			<div>
-			
-			</div>
-				<button class="btn btn-info" id="customerIssueBtn">고객불편</button>
-				<button class="btn btn-info" id="operationIssueBtn">운영장애</button>
+			<div></div>
+			<!-- <button class="btn btn-outline-danger" id="progress0Btn">대기</button>
+				<button class="btn btn-outline-warning" id="progress1Btn">접수</button>
+				<button class="btn btn-outline-success" id="progress2Btn">진행</button>
+				<button class="btn btn-outline-secondary" id="progress3Btn">상황완료</button>
+				<button class="btn btn-outline-dark" id="progress4Btn">보고완료</button> -->
+			<!-- 처리상황 드롭다운 메뉴 -->
+			<select class="form-select" id="progressDropdown"
+				aria-label="Progress Dropdown" style="width:100px;">
+				<option value="">선택</option>
+				<option value="0">대기</option>
+				<option value="1">접수</option>
+				<option value="2">진행</option>
+				<option value="3">상황완료</option>
+				<option value="4">보고완료</option>
+			</select>
 			<div class="page-inner">
 				<div class="row">
 					<div class="col-md-12">
@@ -107,7 +120,8 @@
 
 														<td>
 															<button type="button" class="btn btn-danger alert_demo_7"
-																data-toggle="modal" data-target="#exampleModal" th:value="info">
+																data-toggle="modal" data-target="#exampleModal"
+																th:value="info">
 																<i class="icon-trash"></i>
 															</button>
 														</td>
@@ -118,9 +132,15 @@
 									</div>
 								</div>
 
-</div></div></div></div></div></div></div>
-           
-            
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 
 
@@ -216,31 +236,48 @@
 			//event.target
 			let trTag = event.currentTarget;
 			let complainNo = $(trTag).children().first().text().trim();
-			let url = `/complainInfo?complainNo=${complainNo}`;
+			let url = `/replyInfo?complainNo=${complainNo}`;
 			location.href = url;
 		});
 		
-		//$('#example').DataTable();
-		$(document).ready(function () {
-        var table = $('#example').DataTable();
+		
+		
+	$(document).ready(function () {
+		var table = $('#example').DataTable();
 
-        // 고객불편
-        $('#customerIssueBtn').on('click', function () {
-            table.column(4).search('고객불편').draw(); 
-        });
-
-        // 운영장애
-        $('#operationIssueBtn').on('click', function () {
-            table.column(4).search('운영장애').draw();
-        });
-        
-    });
-	
+		$('#progressDropdown').on('change', function () {
+			var selectedProgress = $(this).val();
+		        if (selectedProgress !== "") {
+		            var statusText = "";
+		            switch (selectedProgress) {
+		                case "0":
+		                    statusText = "대기";
+		                    break;
+		                case "1":
+		                    statusText = "접수";
+		                    break;
+		                case "2":
+		                    statusText = "진행";
+		                    break;
+		                case "3":
+		                    statusText = "상황완료";
+		                    break;
+		                case "4":
+		                    statusText = "보고완료";
+		                    break;
+		            }
+		            table.column(5).search(statusText).draw();
+		        } else {
+		            table.column(5).search('').draw(); 
+		        }
+		    });
+		});
+		
 	</script>
 
-		
-		
-		
-		
+
+
+
+
 </body>
 </html>

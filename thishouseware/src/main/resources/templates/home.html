@@ -19,11 +19,12 @@
 	<button type="button" th:onclick='|location.href="@{board/postInsert}"|'>게시글등록</button>
 	
 	<h1>예림</h1>
-	<button type="button" th:onclick='|location.href="@{/companyList}"|'>회사목록</button>
-	<button type="button" th:onclick='|location.href="@{/insertCompany}"|'>회사등록</button>
-	<button type="button" th:onclick='|location.href="@{/complainList}"|'>문의목록</button>
-	<button type="button" th:onclick='|location.href="@{/insertComplain}"|'>문의등록</button>
-	<button type="button" th:onclick='|location.href="@{/complainInfo}"|'>문의단건</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/companyList}"|'>회사목록</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/insertCompany}"|'>회사등록</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/complainList}"|'>문의목록</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/insertComplain}"|'>문의등록</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/complainInfo}"|'>문의단건</button>
+	<button type="button" class="btn btn-warning" th:onclick='|location.href="@{/replyList}"|'>문의처리상황목록</button>
 	
 	<h1>은찬</h1>
 	<button type="button" th:onclick='|location.href="@{/edms/edmsDocList}"|'>결재문서</button>

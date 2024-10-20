@@ -26,7 +26,6 @@ import com.contractor.app.employee.EmployeeUtil;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
-import com.contractor.app.manager.service.ManagerService;
 
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,6 @@ public class ManagerController {
 	@Value("${file.upload.path}")
 	private String uploadPath;
 
-	private final ManagerService managerService; 
 	private final EmployeeService employeeService;
 	
 	@GetMapping("manager/emps")

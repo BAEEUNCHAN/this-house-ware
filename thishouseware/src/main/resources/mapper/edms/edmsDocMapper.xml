@@ -59,7 +59,7 @@
 		<selectKey keyProperty="edmsDocNo"
 				   resultType="String"
 				   order="BEFORE">
-			SELECT NVL(MAX(edms_doc_no), 100) + 1
+			SELECT NVL(MAX(edms_doc_no),1) + 1
 			FROM edms_doc
 		</selectKey>
 		INSERT INTO edms_doc

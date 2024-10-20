@@ -1,5 +1,6 @@
 package com.contractor.app.edms.web;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,8 +59,10 @@ public class EdmsController {
 	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam String screenshot) {
 		// 이미지 처리
 		Map<String, Object> object = SaveImage(screenshot);
+		
+		//파일 이름 VO에 저장
 		edmsDocVO.setFileName((String) object.get("fileName"));
-
+		//결재문서에 삽입 처리해서 결과 받아오기 
 		String edn = edmsService.edmsInsert(edmsDocVO);
 
 		String url = null;
@@ -83,27 +86,36 @@ public class EdmsController {
 		try {
 			String result = "success";
 			String message = "completed images save!";
-			Date createDate = new Date();
-			String year = (new SimpleDateFormat("yyyy").format(createDate)); // 년도
-			String month = (new SimpleDateFormat("MM").format(createDate)); // 월
-			String day = (new SimpleDateFormat("dd").format(createDate)); // 일
-			// Path를 설정한다.
-			String path = "/d:/upload/screenshot/" + year + month + day + "/";
-			// 이미지로 저장
-			UUID uuid = UUID.randomUUID();
-			String my_screenshot_image = uuid+".png";
-			
+
+			// 현재 날짜를 yyyy/MM/dd 형식으로 가져오기
+			String datePath = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+			String path = "d:/upload/edms/" + datePath.replace("/", File.separator) + "/"; // 경로를 d:/upload/edms/로 수정
+
+			// 이미지 저장을 위한 폴더 생성
+			File uploadPathFolder = new File(path);
+			if (!uploadPathFolder.exists()) {
+				uploadPathFolder.mkdirs(); // 폴더가 없으면 생성
+			}
+
+			// 이미지로 저장할 파일명 생성
+			UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 UUID
+			String my_screenshot_image = uuid + ".png";
+
 			if (file != null) {
+				// 이미지 디코딩 및 저장
 				Base64ToImgDecodeUtil.decoder(file, path, my_screenshot_image);
 			} else {
 				result = "failed";
 				message = "not found image!!!";
 			}
-			object.put("path", path);
-			object.put("fileName", my_screenshot_image);
+
+			// 결과 값을 반환
+			object.put("path", path); // 경로 저장 
+			object.put("fileName", my_screenshot_image); // 파일 이름 저장
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return object;
 	}
 

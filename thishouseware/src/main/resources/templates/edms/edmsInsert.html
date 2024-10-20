@@ -115,10 +115,11 @@ button:hover {
 												</optgroup>
 										</select></td>
 									<tr>
-										<td><label for="edmsContent">내용</label></td>
-										<td><div id="edmsContent"></div>
-										<img src="${upload\screenshot}" alt="폼">
-										</td>
+									    <td><label for="edmsContent">내용</label></td>
+									    <td>
+									        <div id="edmsContent"></div>
+									        <img src="/upload/edms/${path}/${fileName}" alt="폼">
+									    </td>
 									</tr>
 									<tr>
 									<tr>
@@ -145,49 +146,48 @@ button:hover {
 					</div>
 				</div>
 				<script th:inline="javascript">
-			document.querySelector('#edmsFormNo').addEventListener('change',function(e){
+				document.querySelector('#edmsFormNo').addEventListener('change',function(e){
 				let url= '/template/'+event.target.value +'.html'
 				$('#edmsContent').load(url)				
-			})
-			</script>
+				});
 
-				<script>
-		    const sendScreenshot = (img) => {
-		      let data = new FormData(document.insertForm);
-		      data.append('screenshot', img);
-		      fetch('/edms/edmsInsert', {
-		        method: "post",
-		        body: data
-		      })
-		      .then(res => {
-		    	    if (res.ok) {
-		    	      // 요청이 성공하면 페이지 이동
-		    	      location.href = '/edms/edmsDocList';
-		    	    } else {
-		    	        // 실패시 alert
-		    	        alert('스크린샷 업로드에 실패했습니다.');
-		    	      }
-		    	    })
-		    	    .catch(error => {
-		    	      alert('오류가 발생했습니다: ' + error.message);
-		    	    });
-		    	  }
-		    
-		    document.querySelector(".btnSubmit").addEventListener("click", function () {
-		
-		      const input = document.getElementById('edmsContent');
-		      html2canvas(input).then(canvas => {
-		        //document.body.appendChild(canvas);
-		        const imgData = canvas.toDataURL('image/png');
-		        sendScreenshot(imgData)
-		      })
-		      
-		      
-		    });
-		  </script>
+			    const sendScreenshot = (img) => {
+			      let data = new FormData(document.insertForm);
+			      data.append('screenshot', img);
+			      fetch('/edms/edmsInsert', {
+			        method: "post",
+			        body: data
+			      })
+			      .then(res => {
+			    	    if (res.ok) {
+			    	      // 요청이 성공하면 페이지 이동
+			    	      location.href = '/edms/edmsDocList';
+			    	    } else {
+			    	        // 실패시 alert
+			    	        alert('스크린샷 업로드에 실패했습니다.');
+			    	      }
+			    	    })
+			    	    .catch(error => {
+			    	      alert('오류가 발생했습니다: ' + error.message);
+			    	    });
+			    	  }
+			    
+			    document.querySelector(".btnSubmit").addEventListener("click", function () {
+			
+			      const input = document.getElementById('edmsContent');
+			      html2canvas(input).then(canvas => {
+			        //document.body.appendChild(canvas);
+			        const imgData = canvas.toDataURL('image/png');
+			        sendScreenshot(imgData)
+			      })
+			      
+			      
+			    });
+		  		</script>
+		  
 			</div>
 		</div>
 	</div>
-	</body>
+	</div>
 </html>
 

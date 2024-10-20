@@ -22,11 +22,15 @@ public class SpringSecurityConfig {
 		http
 			.authorizeHttpRequests(authorize 
 					-> authorize
-					.requestMatchers("/","/all").permitAll()
+					.requestMatchers("/login","/login/**").permitAll() // 로그인 관련 요청은 허가한다. 로그아웃도 추가할것!
+					.requestMatchers("/assets/**","/park/**","/templates/**").permitAll() // 정적파일 경로허가
 					.anyRequest().authenticated()
 			);
 		http
-			.formLogin(formlogin-> formlogin.defaultSuccessUrl("/"))
+			.formLogin(formlogin-> formlogin.defaultSuccessUrl("/")
+					.loginPage("/login") // 로그인 페이지 지정
+					.failureUrl("/login?login=failed") // 로그인 실패시 경로
+					)
 			.logout(logout -> logout.logoutSuccessUrl("/"));
 		// csrf 비활성화 (개발 동안만 사용)
 		http

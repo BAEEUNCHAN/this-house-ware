@@ -86,7 +86,6 @@
      		 , AUTHORITY
      		 , ID
 		FROM posts
-		<!-- WHERE BOARDS_NO = #{boardsNo} -->
 	    ORDER BY POSTS_NO
 	</select>
 	

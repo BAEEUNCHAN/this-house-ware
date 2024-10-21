@@ -69,23 +69,44 @@ body {
 		<div class="board-container">
 			<!-- 게시판 목록 출력 -->
 			<div th:each="board : ${boards}" class="board-item">
-				<div class="board-header">
-				<a th:href="@{/board/postList(boardsNo=${board.boardsNo})}">
-					<h4 th:text="${board.title}" >게시판 이름</h4>
-				</a>
+				<div class="board-header" id>
+					<a th:text="${board.boardsNo}" class="post-header" th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+					<h4 th:text="${board.title}">게시판 이름</h4>
 				</div>
 				<ul class="post-list">
 					<!-- 해당 게시판의 게시글 제목 출력 -->
-					<li th:each="post : ${board.posts}" class="post-item">
-						<strong	th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
+					<li th:each="post : ${board.posts}" class="post-item" id="posts">
+						<!-- <strong	th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
 							    th:text="${post.postsType}" class="post-header">[머리글]</strong>
 						<a th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
-						   th:text="${post.title}" class="post-title">게시글 제목</a>
+						   th:text="${post.title}" class="post-title">게시글 제목</a> --> <a
+						th:text="${post.postsNo}" class="post-header"
+						th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+						<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
+						<a th:text="${post.title}" class="post-title">게시글 제목</a>
 					</li>
 				</ul>
 			</div>
-			
 		</div>
 	</div>
+	<script>
+		// 제이쿼리 객체 생성
+		// 게시글 클릭 시 게시글 단건조회 페이지 이동
+		$('#posts.post-item').on('click', function(event) {
+			let liTag = event.currentTarget;
+			let postsNo = $(liTag).children().eq(0).text();
+			console.log(postsNo);
+			let url = '/board/postInfo?postsNo=' + postsNo;
+			location.href = url;
+		});
+
+		// 게시판 클릭 시 해당 게시판 이동
+		$('div.board-header').on('click', function(event) {
+			let hTag = event.currentTarget;
+			let boardsNo = $(hTag).children().eq(0).text();
+			let url = '/board/postList?boardsNo=' + boardsNo;
+			location.href = url;
+		});
+	</script>
 </body>
 </html>

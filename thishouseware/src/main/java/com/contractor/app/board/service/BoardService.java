@@ -9,7 +9,7 @@ public interface BoardService {
 	// 게시글 전체 조회
 	public List<PostsVO> postList(PostsVO postsVO);
 
-	// 게시글 전체 조회
+	// 게시판별 게시글 전체 조회
 	public List<PostsVO> postListBoard(PostsVO postsVO);
 
 	// 게시글 단건 조회

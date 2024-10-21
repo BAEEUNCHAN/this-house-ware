@@ -58,7 +58,7 @@ public class BoardController {
 		return "board/boardList";
 	}
 
-	// 게시글 전체조회 : URI - postList / RETURN - board/postList
+	// 게시판별 게시글 전체조회 : URI - postList / RETURN - board/postList
 	@GetMapping("/postList")
 	public String postList(Model model, PostsVO postsVO, BoardsVO boardsVO) {
 		BoardsVO board = boardService.selectBoard(boardsVO);
@@ -67,26 +67,6 @@ public class BoardController {
 		model.addAttribute("posts", list);
 		model.addAttribute("board", board);
 		return "board/postList";
-	}
-
-	// 게시판별 게시글 전체조회 : URI - postListBoard / RETURN - board/postListBoard
-	@GetMapping("/postListBoard")
-	public String postListBoard(Model model, PostsVO postsVO, BoardsVO boardsVO) {
-		// 게시판 목록 조회 - 게시판 이름
-		List<BoardsVO> boards = boardService.boardList(boardsVO);
-
-		// 게시판별 게시글 목록 조회 - 게시글 제목, 게시글 번호
-		List<PostsVO> posts = boardService.postListBoard(postsVO);
-
-		// 머리글 목록 조회
-		List<CommonCodeVO> postsType = commonCodeService.selectCommonCode("0P");
-
-		// 페이지에 전달
-		model.addAttribute("boards", boards);
-		model.addAttribute("posts", posts);
-		model.addAttribute("postsType", postsType);
-		
-		return "board/postListBoard";
 	}
 
 	// 게시글 단건조회 : URI - postInfo / PARAMETER - PostsVO(QueryString)

@@ -9,13 +9,11 @@
 </head>
 <body>
 	<div class="text-center">
-		<h3><span>[[${board.title}]]</span> </h3>
-		<span>게시글 수  [[${#lists.size(posts)}]]</span>
+		<h3>게시판별 게시글 목록</h3>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>게시글 번호</th>
-					<th>게시판 번호</th>
 					<th>머리글</th>
 					<th>작성일자</th>
 					<th>게시 기간여부</th>
@@ -32,7 +30,6 @@
 				<!--  PostsVO => <tr/> -->
 				<tr>
 					<td>[[ ${info.postsNo}]]</td>
-					<td>[[ ${info.boardsNo}]]</td>
 					<td>[[ ${info.postsType}]]</td>
 					<td>[[ ${info.submitDT}]]</td>
 					<td>[[ ${info.postSetting}]]</td>

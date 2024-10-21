@@ -5,44 +5,87 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>게시판 메인</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.board-container {
+	display: flex;
+	flex-wrap: wrap; /* 여러 줄로 표시 */
+	justify-content: space-between; /* 간격을 자동으로 조정 */
+	gap: 20px; /* 게시판 간 간격 */
+	max-width: 1200px; /* 최대 너비 설정 */
+	margin: 0 auto; /* 가운데 정렬 */
+	list-style-type: none; /* 리스트 점 제거 */
+}
+
+.board-item {
+	border: 1px solid #ccc; /* 테두리 */
+	border-radius: 8px; /* 모서리 둥글게 */
+	padding: 15px; /* 여백 */
+	width: calc(50% - 20px); /* 두 개씩 나란히 표시 */
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+	background-color: #f9f9f9; /* 배경 색상 */
+	box-sizing: border-box; /* 패딩과 테두리 포함 */
+}
+
+.board-header {
+	margin-bottom: 10px; /* 머리글과 게시글 사이 간격 */
+}
+
+.post-list {
+	list-style-type: none; /* 리스트 점 제거 */
+	padding: 0; /* 패딩 제거 */
+}
+
+.post-item {
+	margin: 5px 0; /* 게시글 간 간격 */
+}
+
+.post-header {
+	color: #007bff; /* 머리글 색상 */
+	margin-right: 10px; /* 머리글과 게시글 제목 사이 간격 */
+}
+
+.post-title {
+	text-decoration: none; /* 링크에 밑줄 제거 */
+	color: #333; /* 게시글 제목 색상 */
+}
+
+.post-title:hover {
+	text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+</style>
 </head>
 <body>
 	<div class="text-center">
-		<form name="mainPageForm" th:action="@{/boardMainPage}" method="post">
-			<h3>게시판 메인페이지</h3>
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th scope="col">#</th>
-						<th scope="col">First</th>
-						<th scope="col">Last</th>
-						<th scope="col">Handle</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>Jacob</td>
-						<td>Thornton</td>
-						<td>@fat</td>
-					</tr>
-					<tr>
-						<th scope="row">3</th>
-						<td colspan="2">Larry the Bird</td>
-						<td>@twitter</td>
-					</tr>
-				</tbody>
-			</table>
-		</form>
+		<h1>게시판 메인 페이지</h1>
+		<div class="board-container">
+			<!-- 게시판 목록 출력 -->
+			<div th:each="board : ${boards}" class="board-item">
+				<div class="board-header">
+				<a th:href="@{/board/postList(boardsNo=${board.boardsNo})}">
+					<h4 th:text="${board.title}" >게시판 이름</h4>
+				</a>
+				</div>
+				<ul class="post-list">
+					<!-- 해당 게시판의 게시글 제목 출력 -->
+					<li th:each="post : ${board.posts}" class="post-item">
+						<strong	th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
+							    th:text="${post.postsType}" class="post-header">[머리글]</strong>
+						<a th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
+						   th:text="${post.title}" class="post-title">게시글 제목</a>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
 	</div>
-	<script>
-	</script>
 </body>
 </html>

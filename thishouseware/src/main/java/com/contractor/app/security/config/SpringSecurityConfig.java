@@ -24,7 +24,7 @@ public class SpringSecurityConfig {
 					-> authorize
 					.requestMatchers("/login","/login/**").permitAll() // 로그인 관련 요청은 허가한다. 로그아웃도 추가할것!
 					.requestMatchers("/assets/**","/park/**","/templates/**").permitAll() // 정적파일 경로허가
-					.anyRequest().authenticated()
+					.anyRequest().permitAll()
 			);
 		http
 			.formLogin(formlogin-> formlogin.defaultSuccessUrl("/")

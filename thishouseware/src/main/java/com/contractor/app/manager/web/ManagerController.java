@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.contractor.app.employee.EmployeeUtil;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.util.EmployeeUtil;
 import com.contractor.app.util.FileUpload;
 
 import groovy.util.logging.Slf4j;

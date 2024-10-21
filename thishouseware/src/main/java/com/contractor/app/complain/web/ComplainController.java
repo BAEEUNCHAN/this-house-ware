@@ -84,7 +84,7 @@ public class ComplainController {
 		 complainService.updateComplain(complainVO);
 		 return "redirect:complainInfo?complainNo="+complainVO.getComplainNo();
 	}
-	
+	 
 	// 삭제 - 처리 : URI - complainDelete / PARAMETER - Integer
 	//             RETURN - 전체조회 다시 호출
 	@ResponseBody

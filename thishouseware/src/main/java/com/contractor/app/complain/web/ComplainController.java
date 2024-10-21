@@ -95,7 +95,7 @@ public class ComplainController {
 	}
 	
 	// 비밀번호 확인 - 페이지
-	@PostMapping("complainPwdCheck")
+	@PostMapping("complainPwdCheck") 
 	public String complainPwdCheck(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);

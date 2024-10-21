@@ -38,7 +38,7 @@ th {
 					<div class="card-body">
 						<div class="row">
 							<div class="text-center">
-								<form action="/submitEducation" method="post">
+								<form action="/submitProposal" method="post">
 									<table class="table">
 										<tr>
 											<th>신청서 번호</th>
@@ -59,20 +59,21 @@ th {
 											<td></td>
 										</tr>
 									</table>
-									<!-- 여기까진 고정이어야함 -->
+									<!-- 여기까진 고정 -->
 									<h2 style="text-align: center;">일반 기안서</h2>
 									<table border="1"
 										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
 											<th>제목</th>
-											<td><input type="text" name="basicTitle" style="width: 100%" required readonly></td>
+											<td><input type="text" name="basicTitle" style="width: 100%" required></td>
 										</tr>
 										<tr>
 											<th>내용</th>
 											<td>
-											<input type="text" name="basicContent" style="height: 800px; width: 100%; " required readonly></td>
+												<textarea name="basicContent" style="height: 500px; width: 100%;" required></textarea>
+											</td>
 										</tr>
-									</table>
+										</table>
 								</form>
 							</div>
 						</div>

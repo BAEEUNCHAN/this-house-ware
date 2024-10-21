@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Data 
 public class ComplainsVO {
 
 	private Integer complainNo;		// 문의번호(PK)		, Not Null

@@ -93,7 +93,7 @@ public class ComplainController {
 		complainService.deleteComplain(complainNo);
 		return "redirect:complainList";
 	}
-	
+	 
 	// 비밀번호 확인 - 페이지
 	@PostMapping("complainPwdCheck") 
 	public String complainPwdCheck(ComplainsVO complainVO, Model model) {

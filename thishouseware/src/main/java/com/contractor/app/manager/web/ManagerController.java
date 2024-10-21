@@ -74,10 +74,7 @@ public class ManagerController {
 	@GetMapping("manager/modifyEmp")
 	public String modifyEmp(EmployeeVO empVO , Model model) {
 		EmployeeVO findVO = employeeService.getEmployee(empVO);
-		System.out.println(findVO);
 		model.addAttribute("employee",findVO);
-		String positionName = EmployeeUtil.getPostionName(findVO.getPositionCode());
-		model.addAttribute("employeePositionName",positionName);
 		List<DepartmentVO> departments = employeeService.getDepartmentList();
 		model.addAttribute("departments" , departments);
 		

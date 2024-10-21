@@ -3,6 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+
+<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>	
+
 <body>
 
 
@@ -11,7 +15,7 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="#">고객관리</a></li>
@@ -19,8 +23,11 @@
 					<li class="nav-item"><a href="#">불편/장애사항 목록</a></li>
 				</ul>
 			</div>
-
-
+			<div>
+			
+			</div>
+				<button class="btn btn-info" id="customerIssueBtn">고객불편</button>
+				<button class="btn btn-info" id="operationIssueBtn">운영장애</button>
 			<div class="page-inner">
 				<div class="row">
 					<div class="col-md-12">
@@ -34,7 +41,7 @@
 							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
-										<table class="table" id="table">
+										<table class="display" id="example">
 											<thead>
 												<tr>
 													<th class="col-md-1">No</th>
@@ -177,6 +184,8 @@
 			let url = `/complainInfo?complainNo=${complainNo}`;
 			location.href = url;
 		});
+		
+		$('#example').DataTable();
 	</script>
 </body>
 </html>

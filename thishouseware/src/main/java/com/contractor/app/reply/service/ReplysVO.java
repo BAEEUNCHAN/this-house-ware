@@ -1,4 +1,4 @@
-package com.contractor.app.company.service;
+package com.contractor.app.reply.service;
 
 import java.util.Date;
 

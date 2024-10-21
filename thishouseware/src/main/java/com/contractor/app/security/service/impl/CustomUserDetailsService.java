@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerUserDetailsService implements UserDetailsService{
+public class CustomUserDetailsService implements UserDetailsService{
 
 	private final EmployeeMapper empMapper;
 

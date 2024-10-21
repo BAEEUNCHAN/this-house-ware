@@ -17,12 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.contractor.app.common.service.Base64ToImgDecodeUtil;
@@ -76,11 +74,14 @@ public class EdmsController {
 														 @RequestPart(required = false) MultipartFile uploadFile) {
 		// 이미지 처리
 		Map<String, Object> object = SaveImage(screenshot);
+		
+		//파일 이름 VO에 저장
 		edmsDocVO.setFileName((String) object.get("fileName"));
 
 		// 첨부파일 처리
 		String imageLink = null;
 		String answer = "failed";
+
 
 		// DB 에 저장하기위한 파일의 경로 추출과 파일 저장을 동시에한다.
 		imageLink = FileUpload.fileUpload(uploadFile, "upload/edms/", uploadPath);
@@ -113,43 +114,43 @@ public class EdmsController {
 			String month = (new SimpleDateFormat("MM").format(createDate)); // 월
 			String day = (new SimpleDateFormat("dd").format(createDate)); // 일
 			// Path를 설정한다.
-			String path = "/d:/upload/edms/" + year +"/"+ month + "/"+day + "/";
+			String path = "/d:/upload/edms/" + year + "/" + month + "/" + day + "/";
 			// 이미지로 저장
 			UUID uuid = UUID.randomUUID();
 			String image = uuid + ".png";
 
 			if (file != null) {
 				Base64ToImgDecodeUtil.decoder(file, path, image);
-			} 
+			}
 			object.put("path", path);
-			object.put("fileName", "edms/" + year +"/"+ month + "/"+day + "/"+image);
+			object.put("fileName", "edms/" + year + "/" + month + "/" + day + "/" + image);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return object;
 	}
-	
+
 	// 결재문서 첨부파일 다운로드
 	// 파일 다운로드 처리
-    @GetMapping("/fileDownload")
-    public void fileDownload(@RequestParam("fileLink") String file,
-                             HttpServletResponse response) throws IOException {
-    	File f = new File(uploadPath, file);
-    	
-        // file 다운로드 설정
-        response.setContentType("application/download");
-        response.setContentLength((int)f.length());
-        response.setHeader("Content-disposition", "attachment;filename=\"" + file + "\"");
-        // response 객체를 통해서 서버로부터 파일 다운로드
-        OutputStream os = response.getOutputStream();
-        // 파일 입력 객체 생성
-        FileInputStream fis = new FileInputStream(f);
-        FileCopyUtils.copy(fis, os);
-        fis.close();
-        os.close();
-        
-    }
-	
+	@GetMapping("/fileDownload")
+	public void fileDownload(@RequestParam("fileLink") String file, HttpServletResponse response) throws IOException {
+		File f = new File(uploadPath, file);
+
+		// file 다운로드 설정
+		response.setContentType("application/download");
+		response.setContentLength((int) f.length());
+		response.setHeader("Content-disposition", "attachment;filename=\"" + file + "\"");
+		// response 객체를 통해서 서버로부터 파일 다운로드
+		OutputStream os = response.getOutputStream();
+		// 파일 입력 객체 생성
+		FileInputStream fis = new FileInputStream(f);
+		FileCopyUtils.copy(fis, os);
+		fis.close();
+		os.close();
+
+	}
 
 	// 결재양식 전체조회
 	@GetMapping("/edmsFormList")

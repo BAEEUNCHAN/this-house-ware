@@ -1,6 +1,8 @@
 package com.contractor.app.complain.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -32,8 +35,8 @@ public class ComplainController {
 	public String complainList(ComplainsVO complainVO, Model model) {
 		List<ComplainsVO> list = complainService.complainList();
 		model.addAttribute("complains", list);
-		ComplainsVO findVO = complainService.complainInfo(complainVO);
-		model.addAttribute("complain", findVO);
+		//ComplainsVO findVO = complainService.complainInfo(complainVO);
+		//model.addAttribute("complain", findVO);
 		return "complain/complainList";
 	}
 	
@@ -48,9 +51,9 @@ public class ComplainController {
 	// 문의 등록 : URI - insertComplain / RETURN - complain/insertComplain
 	@GetMapping("insertComplain")
 	public String insertComplainForm(ComplainsVO complainVO, Model model, CompanysVO companyVO) {
-		List<ComplainsVO> list = complainService.complainList();
+		//List<ComplainsVO> list = complainService.complainList();
 		List<CompanysVO> companyList = companyService.companyList();
-		model.addAttribute("complains", list);
+		//model.addAttribute("complains", list);
 		model.addAttribute("companys", companyList);
 		return "complain/insertComplain";
 	}
@@ -91,37 +94,14 @@ public class ComplainController {
 		return "redirect:complainList";
 	}
 	
-	
-	/************************************************************************/
-	
-	// 문의 타입 구분(0:고객불편, 1:운영장애)
-	@GetMapping("complainListType0")
-	public String complainListType0(ComplainsVO complainsVO, Model model) {
-		List<ComplainsVO> list = complainService.complainType0();
-		model.addAttribute("type0", list);
-		return "complain/complainListType0";
-	}
-	
-	
-	//(0:대기, 1:접수, 2:진행, 3:상황완료, 4:보고완료)
-	// 전체조회(0:대기)
-	@GetMapping("complainListProgress0")
-	public String complainList0(ComplainsVO complainVO, Model model) {
-		List<ComplainsVO> list0 = complainService.complainList0();
-		model.addAttribute("0complains", list0);
+	// 비밀번호 확인 - 페이지
+	@PostMapping("complainPwdCheck")
+	public String complainPwdCheck(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
-		return "complain/complainListProgress0";
+		return "complain/complainPwdCheck";
 	}
-	// 전체조회(1:접수)
-		@GetMapping("complainListProgress1")
-		public String complainList1(ComplainsVO complainVO, Model model) {
-			List<ComplainsVO> list1 = complainService.complainList1();
-			model.addAttribute("1complains", list1);
-			ComplainsVO findVO = complainService.complainInfo(complainVO);
-			model.addAttribute("complain", findVO);
-			return "complain/complainListProgress1";
-		}
 	
+
 	
 }

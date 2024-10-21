@@ -6,6 +6,36 @@
 
 <link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>	
+<style>
+.dataTables_length {
+    float: left; 
+}
+
+.dataTables_info {
+    float: left; 
+}
+.progress-0 {
+	color: red;
+}
+
+.progress-1 {
+	color: yellow;
+}
+
+.progress-2 {
+	color: green;
+}
+
+.progress-3 {
+	color: gray;
+}
+
+.progress-4 {
+	color: black;
+}
+
+</style>
+
 
 <body>
 
@@ -44,13 +74,13 @@
 										<table class="display" id="example">
 											<thead>
 												<tr>
-													<th class="col-md-1">No</th>
-													<th class="col-md-3">제목</th>
-													<th class="col-md-2">고객명</th>
-													<th class="col-md-2">회사명</th>
-													<th class="col-md-2">처리상황</th>
-													<th class="col-md-2">작성날짜</th>
-													<th class="col-md-1"></th>
+													<th class="col-md-1" style="text-align: center;">No</th>
+													<th class="col-md-3" style="text-align: center;">제목</th>
+													<th class="col-md-1" style="text-align: center;">고객</th>
+													<th class="col-md-2" style="text-align: center;">회사명</th>
+													<th class="col-md-2" style="text-align: center;">유형</th>
+													<th class="col-md-1" style="text-align: center;">처리상황</th>
+													<th class="col-md-2" style="text-align: center;">작성날짜</th>
 													<!-- yyyy년MM월dd일 -->
 												</tr>
 											</thead>
@@ -63,19 +93,17 @@
 														<td>[[${info.complainTitle}]]</td>
 														<td>[[${info.customerName}]]</td>
 														<td>[[${info.companyName}]]</td>
+														<td><span th:switch="${info.complainType}"> <span
+																th:case="1">고객불편</span> <span th:case="2">운영장애</span></span>
 														<td><span th:switch="${info.progress}"> <span
-																th:case="0">대기</span> <span th:case="1">접수</span> <span
-																th:case="2">진행</span> <span th:case="3">상황완료</span> <span
-																th:case="4">보고완료</span>
+																th:case="0" th:class="'progress-0'">대기</span> <span
+																th:case="1" th:class="'progress-1'">접수</span> <span
+																th:case="2" th:class="'progress-2'">진행</span> <span
+																th:case="3" th:class="'progress-3'">상황완료</span> <span
+																th:case="4" th:class="'progress-4'">보고완료</span>
 														</span></td>
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
 
-														<td>
-															<button type="button" class="btn btn-danger alert_demo_7"
-																data-toggle="modal" data-target="#exampleModal" th:value="info">
-																<i class="icon-trash"></i>
-															</button>
-														</td>
 													</tr>
 												</th:block>
 											</tbody>
@@ -92,100 +120,84 @@
 
 	<script>
 	
-		// 삭제모달
-		 //== Class definition
-              var SweetAlert2Demo = (function () {
-                //== Demos
-                var initDemos = function () {
-                  $(".alert_demo_7").click(function (e) {
-                	  event.stopPropagation();
-                	  let complainNo = $(e.currentTarget).closest('tr').children().first().text();
-                    swal({
-                      title: "불편/장애사항 삭제",
-                      text: "문의사항을 삭제하시겠습니까?",
-                      type: "warning",
-                      buttons: {
-                        confirm: {
-                          text: "삭제",
-                          className: "btn btn-danger",
-                        },
-                        cancel: {
-                        	text: "취소",
-                          visible: true,
-                          className: "btn btn-black",
-                        },
-                      },
-                    }).then((Delete) => {
-                      if (Delete) {
-                    	  
-                    	  $.ajax({
-                              url: `/complainDelete?complainNo=${complainNo}`, 
-                              type: 'DELETE',
-                              success: function (response) {
-                                  swal({
-                                      title: "삭제완료!",
-                                      text: "해당 문의사항이 삭제되었습니다.",
-                                      icon: "success",
-                                      buttons: {
-                                          confirm: {
-                                              text: "확인",
-                                              className: "btn btn-success",
-                                          },
-                                      },
-                                  }).then(() => {
-                                      location.reload();
-                                  });
-                              },
-                              error: function (error) {
-  								swal(
-  										 {
-  									title: "오류!",
-  									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
-  									icon: "error",
-  									buttons: {
-  										confirm: {
-  											text: "확인",
-  											className: "btn btn-danger",
-  										},
-  									},
-  								} 
-  										).then(() => {
-  									//location.reload();
-  								});
-  							}  
-                          });
-                      } else {
-                          swal.close();
-                      }
-                  });
-              });
-        
-                };
-        
-                return {
-                  //== Init
-                  init: function () {
-                    initDemos();
-                  },
-                };
-              })();
-        
-              //== Class Initialization
-              jQuery(document).ready(function () {
-                SweetAlert2Demo.init();
-              });
-	
-	
+	// 비밀번호 검증 AJAX 요청 함수
+	function checkPassword(complainNo, complainPwd) {
+		return $.ajax({
+			type: 'POST',
+			url: '/checkPwd', // 비밀번호 검증 API 엔드포인트
+			data: JSON.stringify({ complainNo: complainNo, complainPwd: complainPwd }),
+			contentType: 'application/json',
+			dataType: 'json',
+		});
+	}
+              
 		//제이쿼리 객체 생성
 		$('tbody > tr').on('click', function(event) {
-			//event.target
 			let trTag = event.currentTarget;
-			let complainNo = $(trTag).children().first().text();
+			let complainNo = $(trTag).children().first().text().trim();
+			let complainPwd = $(trTag).children().first().text().trim();
+			/* //event.target
+			let trTag = event.currentTarget;
+			let complainNo = $(trTag).children().first().text().trim();
 			let url = `/complainInfo?complainNo=${complainNo}`;
-			location.href = url;
+			location.href = url; */
+		    swal({
+	              title: "비밀번호를 입력하세요",
+	              html: '<br><input class="form-control" placeholder="비밀번호 8자리를 입력하세요." id="input-field">',
+	              content: {
+	                element: "input",
+	                attributes: {
+	                  placeholder: "비밀번호 8자리를 입력하세요.",
+	                  type: "password",
+	                  id: "input-field",
+	                  className: "form-control",
+	                },
+	              },
+	              buttons: {
+	                confirm: {
+	                	text : "확인",
+	                  className: "btn btn-success",
+	                },
+	                cancel: {
+		                  text : "취소",
+		                  visible: true,
+		                  className: "btn btn-danger",
+		                },
+	              },
+	            }).then(function () {
+	              //swal("", "확인완료! ");
+	              if($('#input-field').val() == complainPwd){
+	    		  let url = `/complainInfo?complainNo=${complainNo}`;
+	    		  location.href = url;
+	              }else{
+	            	  alert('비밀번호를 다시 확인해주세요.')
+	              }
+	            });
 		});
 		
-		$('#example').DataTable();
+		//$('#example').DataTable();
+		$(document).ready(function () {
+        var table = $('#example').DataTable();
+
+        // 고객불편
+        $('#customerIssueBtn').on('click', function () {
+            table.column(4).search('고객불편').draw(); 
+        });
+
+        // 운영장애
+        $('#operationIssueBtn').on('click', function () {
+            table.column(4).search('운영장애').draw();
+        });
+        
+    });
+		
+		
+	
 	</script>
+
+		
+		
+		
+		
 </body>
 </html>

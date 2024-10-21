@@ -42,4 +42,10 @@ public class CompanyServiceImpl implements CompanyService {
 	public int deleteCompany(int companyNo) {
 		return companyMapper.deleteCompany(companyNo);
 	}
+	
+	// 회사이름 중복체크
+	@Override
+	public boolean companyCheckName(String companyName) {
+		return companyMapper.companyCheckName(companyName);
+	}
 }

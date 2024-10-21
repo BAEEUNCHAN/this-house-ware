@@ -2,6 +2,8 @@ package com.contractor.app.company.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.contractor.app.company.service.CompanysVO;
 
 public interface CompanyMapper {
@@ -17,4 +19,7 @@ public interface CompanyMapper {
 	
 	// 회사정보 삭제
 	public int deleteCompany(int companyNo);
+	
+	// 회사이름 중복체크
+	public boolean companyCheckName(@Param("companyName") String companyName);
 }

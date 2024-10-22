@@ -60,13 +60,16 @@
 	</select>
 	<update id="modifyEmployee" parameterType="EmployeeVO">
 		UPDATE employees 
-		SET HIRE_DT = #{hireDt},
-		    PHONE = #{phone}, 
-		    EMAIL = #{email}, 
-		    IMAGE_LINK = #{imageLink}, 
-		    DEPARTMENT_NO = #{departmentNo}, 
-		    POSITION_CODE = #{positionCode}, 
-		    NAME = #{name} 
+		SET HIRE_DT = #{hireDt}
+		    ,PHONE = #{phone}
+		    ,EMAIL = #{email}
+		    ,IMAGE_LINK = #{imageLink}
+		    ,DEPARTMENT_NO = #{departmentNo}
+		    ,POSITION_CODE = #{positionCode}
+		    ,NAME = #{name}
+		    <if test = "password != null">
+		    	,PASSWORD = #{password} 
+		    </if>
 		WHERE id = #{id}
 	</update>
 </mapper>

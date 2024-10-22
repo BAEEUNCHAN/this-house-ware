@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 import com.contractor.app.employee.mapper.EmployeeMapper;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.security.service.LoginUserVO;
+import com.contractor.app.util.EmployeeUtil;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerUserDetailsService implements UserDetailsService{
+public class CustomUserDetailsService implements UserDetailsService{
 
 	private final EmployeeMapper empMapper;
 
@@ -28,7 +29,8 @@ public class CustomerUserDetailsService implements UserDetailsService{
 		if(employeeVO == null) {
 			throw new UsernameNotFoundException(username);
 		}
-		
+		// 해당 유저가 있는 경우 
+		employeeVO.setPositionName(EmployeeUtil.getPostionName(employeeVO.getPositionCode()));
 		// 세션상으로 스프링시큐리티가 올릴 것이다.
 		return new LoginUserVO(employeeVO);
 	}

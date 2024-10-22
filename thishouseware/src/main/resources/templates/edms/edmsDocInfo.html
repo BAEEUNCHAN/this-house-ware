@@ -92,17 +92,11 @@ button:hover {
 											<td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px"></td>
 										</tr>
 										<tr>
-											<td><label for="dfile">문서파일명</label></td>
-											<td><span th:text="${edmsDocs.fileName}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="datt">첨부파일명</label></td>
-											<!--  <input name="downLoadLink" type="hidden"  th:value="${edmsDocs.attatch}" />-->
-											<td><span th:text="${edmsDocs.attatch}"></span>
-										       <a th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+										    <td><label for="datt">첨부파일명</label></td>
+										    <td>
+										        <a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
 										        <br>
-											</td>
-											
+										    </td>
 										</tr>
 										<tr>
 											<td><label for="dsub">상신일시</label></td>

@@ -72,23 +72,22 @@ public class EdmsController {
 	// 결재문서 등록 - 처리
 	@PostMapping("/edmsInsert")
 	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam String screenshot,
-														 @RequestPart(required = false) MultipartFile uploadFile) {
+			@RequestPart(required = false) MultipartFile uploadFile) {
 		// 이미지 처리
 		Map<String, Object> object = SaveImage(screenshot);
-		
-		//파일 이름 VO에 저장
+
+		// 파일 이름 VO에 저장
 		edmsDocVO.setFileName((String) object.get("fileName"));
 
 		// 첨부파일 처리
 		String imageLink = null;
 		String answer = "failed";
 
-
-		// DB 에 저장하기위한 파일의 경로 추출과 파일 저장을 동시에한다.
-		imageLink = FileUpload.fileUpload(uploadFile, "upload/edms/", uploadPath);
-		if (imageLink == null)
-			return "error2";
-		edmsDocVO.setAttatch(imageLink);
+		// 첨부파일이 없을경우 다운로드 파일을 보여주지 않는다
+		if (uploadFile != null && uploadFile.getSize() > 0) {
+			imageLink = FileUpload.fileUpload(uploadFile, "upload/edms/", uploadPath);
+			edmsDocVO.setAttatch(imageLink);
+		}
 
 		String edn = edmsService.edmsInsert(edmsDocVO);
 		String url = null;
@@ -122,9 +121,11 @@ public class EdmsController {
 
 			if (file != null) {
 				Base64ToImgDecodeUtil.decoder(file, path, image);
+				object.put("fileName", "edms/" + year + "/" + month + "/" + day + "/" + image);
+			} else {
+				object.put("fileName", "");
 			}
 			object.put("path", path);
-			object.put("fileName", "edms/" + year + "/" + month + "/" + day + "/" + image);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,22 +138,22 @@ public class EdmsController {
 	// 파일 다운로드 처리
 	@GetMapping("/fileDownload")
 	public void fileDownload(@RequestParam("fileLink") String file, HttpServletResponse response) throws IOException {
-		
-	    int lastIndex = file.lastIndexOf("/");
 
-	    // 파일 이름 추출
-	    String fileName = (lastIndex != -1) ? file.substring(lastIndex + 1) : file;
+		int lastIndex = file.lastIndexOf("/");
 
-	    // File 객체 생성
+		// 파일 이름 추출
+		String fileName = (lastIndex != -1) ? file.substring(lastIndex + 1) : file;
+
+		// File 객체 생성
 		File f = new File(uploadPath, file);
-		
+
 		// 파일 이름을 UTF-8로 인코딩 (특수문자, 공백 처리)
-	    String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+		String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
 
 		// file 다운로드 설정
 		response.setContentType("application/octet-stream");
 		response.setContentLength((int) f.length());
-		response.setHeader("Content-disposition",  "attachment; filename*=UTF-8''" + encodedFileName);
+		response.setHeader("Content-disposition", "attachment; filename*=UTF-8''" + encodedFileName);
 
 		// response 객체를 통해서 서버로부터 파일 다운로드
 		OutputStream os = response.getOutputStream();
@@ -181,4 +182,5 @@ public class EdmsController {
 	}
 
 }
+
 // 끝

@@ -26,13 +26,13 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     @Async
-    public void sendEmailNotice(String email){
+    public void sendEmailNotice(String email,String emailTitle, String content){
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(email); // 메일 수신자
-            mimeMessageHelper.setSubject("Today's Overview on NESS"); // 메일 제목
-            mimeMessageHelper.setText(setContext(todayDate()), true); // 메일 본문 내용, HTML 여부
+            mimeMessageHelper.setSubject(emailTitle); // 메일 제목
+            mimeMessageHelper.setText(setContext(content), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
             log.info("Succeeded to send Email");
@@ -42,16 +42,10 @@ public class EmailService {
         }
     }
 
-    public String todayDate(){
-        ZonedDateTime todayDate = LocalDateTime.now(ZoneId.of("Asia/Seoul")).atZone(ZoneId.of("Asia/Seoul"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일");
-        return todayDate.format(formatter);
-    }
-
-    //thymeleaf를 통한 html 적용
-    public String setContext(String date) {
+    //thymeleaf를 통한 html을 스트링형으로 만듬
+    public String setContext(String content) {
         Context context = new Context();
-        context.setVariable("date", date);
+        context.setVariable("content", content);
         return templateEngine.process("employee/sendIdEmail", context);
     }
 }

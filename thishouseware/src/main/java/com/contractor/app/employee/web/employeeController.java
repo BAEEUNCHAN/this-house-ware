@@ -46,8 +46,11 @@ public class employeeController {
 			return "error1";
 		}
 		
-		EmailVO emailVO = new EmailVO();
-		emailVO.setTo("");
+		try {
+			emailService.sendEmailNotice(email, "회원님의 아이디입니다.", empVO.getId());
+		} catch (Exception e) {
+			return "error2";
+		}
 		
 		
 		return email;

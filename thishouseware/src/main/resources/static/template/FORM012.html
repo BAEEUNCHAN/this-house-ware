@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>연장근무 신청서 양식</title>
+<title>협조문 양식</title>
 <style>
 .table {
 	width: 100%;
@@ -33,12 +33,12 @@ th {
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">연장근무 신청서 양식</div>
+						<div class="card-title">협조문 양식</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
 							<div class="text-center">
-								<form action="/submitOvertime" method="post">
+								<form action="/submitProposal" method="post">
 									<table class="table">
 										<tr>
 											<th>신청서 번호</th>
@@ -59,31 +59,41 @@ th {
 											<td></td>
 										</tr>
 									</table>
-
-									<h2 style="text-align: center;">연장근무 신청서</h2>
+									<!-- 여기까진 고정 -->
+									<h2 style="text-align: center;">협조문 </h2>
+									
+									<!-- 사내/사외 선택 박스 추가 -->
 									<table border="1" style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
-											<th>근무 일자</th>
-											<td colspan="5"><input type="date" name="workDate" required></td>
+											<th>구분</th>
+											<td>
+												<select name="division" required>
+													<option value="">선택하세요</option>
+													<option value="internal">사내</option>
+													<option value="external">사외</option>
+												</select>
+											</td>
+										</tr>
+
+										<tr>
+											<th>제목</th>
+											<td colspan="3"><input type="text" name="title" style="width: 100%;" required></td>
 										</tr>
 										<tr>
-											<th>연장근무 시간</th>
-											<td colspan="2">시작 시간:&nbsp;&nbsp;&nbsp;<input type="time" name="startTime" required></td>
-											<td colspan="2">종료 시간:&nbsp;&nbsp;&nbsp;<input type="time" name="endTime" required></td>
+											<th>발신일</th>
+											<td><input type="date" name="date" required></td>
+											<th>수신처</th>
+											<td><input type="text" name="recipient" required></td>
+											<!-- 나중에 부서 선택 할 수 있도록 변경 사외 선택시 해당 부분 비활성화-->
 										</tr>
 										<tr>
-											<th>근무 내용</th>
-											<td colspan="5"><input type="text" name="workContent" required></td>
+											<th>장소</th>
+											<td colspan="3"><input type="text" name="location" style="width: 100%;" required></td>
 										</tr>
-										<tr>
-											<th>연장근무 사유</th>
-											<td colspan="5"><input type="text" name="reason" required></td>
-										</tr>
+
 										<tr>
 											<th>내용</th>
-											<td colspan="5" style="height: 800px; vertical-align: center;">
-												상기와 같이 연장근무 신청을 제출합니다.
-											</td>
+											<td colspan="5" style="height: 800px; vertical-align: center;">상기와 같이 협조를 요청드립니다.</td>
 										</tr>
 									</table>
 								</form>

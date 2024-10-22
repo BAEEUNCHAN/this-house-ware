@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data 
 public class ComplainsVO {
+
 	private Integer complainNo;		// 문의번호(PK)		, Not Null
 	private Integer complainType;	// 불편구분			, Not Null
 
@@ -39,3 +40,4 @@ public class ComplainsVO {
 	
 
 }
+

@@ -88,15 +88,15 @@ button:hover {
 										</tr>
 										<tr>
 											<td><label for="dcontent">내용</label></td>
-											<td><span th:text="${edmsDocs.content}"></span></td>
+											<input name="imageLink" type="hidden"  th:value="${edmsDocs.fileName}" />
+											<td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px"></td>
 										</tr>
 										<tr>
-											<td><label for="dfile">문서파일명</label></td>
-											<td><span th:text="${edmsDocs.fileName}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="datt">첨부파일명</label></td>
-											<td><span th:text="${edmsDocs.attatch}"></span></td>
+										    <td><label for="datt">첨부파일명</label></td>
+										    <td>
+										        <a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+										        <br>
+										    </td>
 										</tr>
 										<tr>
 											<td><label for="dsub">상신일시</label></td>
@@ -138,5 +138,26 @@ button:hover {
 		</div>
 	</div>
 </div>
+			<script>
+			//이미지 링크용 스크립트
+			const imgLink = $('input[name=imageLink]').val();
+			$('#edmsImg').attr({src: "/upload/"+imgLink});
+			/*
+			*
+			// 다운로드 링크
+			const downLoadLink = $('input[name=downLoadLink]').val();
+			//다운로드 알림창
+			$('#downLoad').on('click', function(event){
+				//th:href="@{http://localhost:8099/edms/}+${edmsDocs.attatch}"
+				// $.Ajax 방식 
+				$.ajax('/edms/fileDownload?fileLink='+downLoadLink,{
+					type : 'get',
+				})
+				.done(result => {
+						alert("다운로드가 완료되었습니다");
+				});
+			});
+			*/
+			</script>
 </body>
 </html>

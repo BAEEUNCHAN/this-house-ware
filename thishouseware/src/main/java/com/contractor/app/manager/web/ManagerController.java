@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,7 @@ public class ManagerController {
 	private String uploadPath;
 
 	private final EmployeeService employeeService;
+	private final PasswordEncoder encoder;
 	
 	@GetMapping("manager/emps")
 	public String emps( Model model) {
@@ -98,13 +100,15 @@ public class ManagerController {
 	    	answer = "error1";
 	    	return answer;
 	    }
-        System.out.println(uploadPath);
+        // System.out.println(uploadPath);
         // DB 에 저장하기위한 파일의 경로 추출과 파일 저장을 동시에한다.
         imageLink = FileUpload.fileUpload(uploadFile,"img/emp/", uploadPath);
         if(imageLink == null)
         	return "error2";
         empVO.setImageLink(imageLink);
         
+        String encodedNewPassword = encoder.encode(empVO.getPassword());
+		empVO.setPassword(encodedNewPassword);
         // 서버입력 성공 여부
         try {
         	 employeeService.addEmployee(empVO);

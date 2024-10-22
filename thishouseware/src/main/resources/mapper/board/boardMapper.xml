@@ -93,7 +93,7 @@
 	<select id="selectPostBoard" parameterType="PostsVO" resultType="PostsVO">
 		SELECT p.POSTS_NO
      		 , b.BOARDS_NO
-     		 , p.POSTS_TYPE
+     		 <!-- , p.POSTS_TYPE -->
      		 , FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
      		 , p.SUBMIT_DT
      		 , FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING

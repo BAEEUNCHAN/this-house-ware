@@ -71,7 +71,7 @@ public class BoardController {
 
 	// 게시글 단건조회 : URI - postInfo / PARAMETER - PostsVO(QueryString)
 	// RETURN - board/postInfo
-	@GetMapping("postInfo") // postInfo?key=value
+	@GetMapping("/postInfo") // postInfo?key=value
 	public String postInfo(PostsVO postsVO, Model model) {
 		PostsVO findVO = boardService.postInfo(postsVO);
 

@@ -1,64 +1,57 @@
 package com.contractor.app.employee.service;
 
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.Random;
-
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
 public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-    
-    public String sendMail(EmailVO emailVO, String type) {
-    	String authenticationNum = createCode();
-    	
-    	MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-    	
-    	try {
-    		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage,false, "UTF-8" );
-    		mimeMessageHelper.setTo(emailVO.getTo());
-    		mimeMessageHelper.setSubject(emailVO.getSubject()); // 메일 제목
-            mimeMessageHelper.setText(setContext(authenticationNum, type), true); // 메일 본문 내용, HTML 여부
+    @Async
+    public void sendEmailNotice(String email){
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            mimeMessageHelper.setTo(email); // 메일 수신자
+            mimeMessageHelper.setSubject("Today's Overview on NESS"); // 메일 제목
+            mimeMessageHelper.setText(setContext(todayDate()), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
-            return authenticationNum;
-    	}catch(MessagingException e) {
-    		return "failed";
-    	}
-    }
-    
-    // 인증번호 및 임시 비밀번호 생성 메서드
-    public String createCode() {
-        Random random = new Random();
-        StringBuffer key = new StringBuffer();
 
-        for (int i = 0; i < 8; i++) {
-            int index = random.nextInt(4);
-
-            switch (index) {
-                case 0: key.append((char) ((int) random.nextInt(26) + 97)); break;
-                case 1: key.append((char) ((int) random.nextInt(26) + 65)); break;
-                default: key.append(random.nextInt(9));
-            }
+            log.info("Succeeded to send Email");
+        } catch (Exception e) {
+            log.info("Failed to send Email");
+            throw new RuntimeException(e);
         }
-        return key.toString();
     }
-    
-    // thymeleaf를 통한 html 적용
-    public String setContext(String code, String type) {
+
+    public String todayDate(){
+        ZonedDateTime todayDate = LocalDateTime.now(ZoneId.of("Asia/Seoul")).atZone(ZoneId.of("Asia/Seoul"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M월 d일");
+        return todayDate.format(formatter);
+    }
+
+    //thymeleaf를 통한 html 적용
+    public String setContext(String date) {
         Context context = new Context();
-        context.setVariable("code", code);
-        return templateEngine.process(type, context);
+        context.setVariable("date", date);
+        return templateEngine.process("employee/sendIdEmail", context);
     }
 }

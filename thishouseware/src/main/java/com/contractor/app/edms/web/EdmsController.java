@@ -135,17 +135,16 @@ public class EdmsController {
 
 	// 결재문서 첨부파일 다운로드
 	// 파일 다운로드 처리
-	@GetMapping("/fileDownload/{fileName}")
-	public void fileDownload(@RequestParam("fileName") String file, HttpServletResponse response) throws IOException {
+	@GetMapping("/fileDownload")
+	public void fileDownload(@RequestParam("fileLink") String file, HttpServletResponse response) throws IOException {
 		
 	    int lastIndex = file.lastIndexOf("/");
 
 	    // 파일 이름 추출
 	    String fileName = (lastIndex != -1) ? file.substring(lastIndex + 1) : file;
-	    System.out.println(fileName);
 
 	    // File 객체 생성
-		File f = new File(uploadPath, fileName);
+		File f = new File(uploadPath, file);
 		
 		// 파일 이름을 UTF-8로 인코딩 (특수문자, 공백 처리)
 	    String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");

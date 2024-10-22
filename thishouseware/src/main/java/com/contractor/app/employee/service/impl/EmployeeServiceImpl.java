@@ -48,4 +48,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.selectEmployees();
 	}
 
+	@Override
+	public EmployeeVO getEmployeeByEmail(EmployeeVO empVO) {
+		empVO = employeeMapper.selectEmployeeByEmail(empVO).get(0);
+		empVO.setPositionName(EmployeeUtil.getPostionName(empVO.getPositionCode()));
+		return empVO;
+	}
+
 }

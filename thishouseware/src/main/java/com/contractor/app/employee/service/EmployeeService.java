@@ -15,4 +15,6 @@ public interface EmployeeService {
 
 	List<EmployeeVO> getEmployees();
 
+	EmployeeVO getEmployeeByEmail(EmployeeVO empVO);
+
 }

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.contractor.app.employee.service.EmailService;
+import com.contractor.app.employee.service.EmailVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 
@@ -20,10 +22,40 @@ public class employeeController {
 	
 	private final EmployeeService employeeService;
 	private final PasswordEncoder encoder;
+	private final EmailService emailService;
 
 	@GetMapping("login")
 	public String loginForm() {
 		return "employee/login";
+	}
+	
+	@GetMapping("employee/findId")
+	public String findIdForm() {
+		return "employee/findId";
+	}
+	
+	@PostMapping("employee/findId")
+	@ResponseBody
+	public String findId(@RequestParam(required = false) String email ) {
+		EmployeeVO empVO = new EmployeeVO();
+		empVO.setEmail(email);
+		
+		try {
+			empVO = employeeService.getEmployeeByEmail(empVO);
+		} catch (Exception e) {
+			return "error1";
+		}
+		
+		EmailVO emailVO = new EmailVO();
+		emailVO.setTo("");
+		
+		
+		return email;
+	}
+	
+	@GetMapping("employee/findPassword")
+	public String findPasswordForm() {
+		return "employee/findPassword";
 	}
 	
 	@GetMapping("employee/info/{id}")

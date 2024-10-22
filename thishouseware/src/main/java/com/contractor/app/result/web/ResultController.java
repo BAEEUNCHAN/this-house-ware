@@ -1,4 +1,4 @@
-package com.contractor.app.reply.web;
+package com.contractor.app.result.web;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.contractor.app.company.service.ResultsVO;
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
 import com.contractor.app.employee.service.DepartmentVO;
@@ -15,56 +16,56 @@ import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.reply.service.ReplyService;
 import com.contractor.app.reply.service.ReplysVO;
+import com.contractor.app.result.service.ResultService;
 
 @Controller
-public class ReplyController {
+public class ResultController {
 	private ComplainService complainService;
 	private ReplyService replyService;
+	private ResultService resultService;
 	private EmployeeService employeeService;
 	
 	@Autowired
-	public ReplyController(ComplainService complainService, ReplyService replyService, EmployeeService employeeService) {
+	public ResultController(ComplainService complainService, ReplyService replyService, ResultService resultService, EmployeeService employeeService) {
 		this.complainService = complainService;
 		this.replyService = replyService;
+		this.resultService = resultService;
 		this.employeeService = employeeService;
 	}
 	
-	// 문의 전체조회 : URI - replyList / return - reply/replyList
-	@GetMapping("replyList")
-	public String replyList(ComplainsVO complainVO, Model model) {
-		List<ComplainsVO> list = complainService.complainList();
+	// 상황완료 전체조회 : URI - resultList / return - result/resultList
+	@GetMapping("resultList")
+	public String resultList(ComplainsVO complainVO, Model model) {
+		List<ComplainsVO> list = complainService.complainResultList();
 		model.addAttribute("complains", list);
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
-		return "reply/replyList";
+		return "result/resultList";
 	}
 	
-	// reply 단건 + 문의답변
-	// employees 테이블 List / reply + employees 등록
-	@GetMapping("replyInfo")
-	public String replyInfo(ComplainsVO complainVO, Model model, ReplysVO replyVO, DepartmentVO departmentVO, EmployeeVO employeeVO, int complainNo) {
+	// result 단건
+	@GetMapping("resultInfo")
+	public String resultInfo(ComplainsVO complainVO, Model model, ReplysVO replyVO, DepartmentVO departmentVO, EmployeeVO employeeVO, ResultsVO resultVO, int complainNo) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
+		ResultsVO findResultVO = resultService.resultInfo(resultVO);
+		model.addAttribute("result", findResultVO);
 		List<DepartmentVO> listDept = employeeService.getDepartmentList();
 		List<EmployeeVO> listEmp = employeeService.getEmployees();
 		List<ComplainsVO> list = complainService.complainDeptInfo(complainVO);
+		List<ResultsVO> listRes = resultService.resultList();
 
 		model.addAttribute("replys", list);
 		model.addAttribute("depts", listDept);
 		model.addAttribute("emps", listEmp);
-		return "reply/replyInfo";
+		model.addAttribute("results", listRes);
+		return "result/resultInfo";
 	}
-	
-	@PostMapping("replyInfo")
-	public String replyProcess(ComplainsVO complainVO, ReplysVO replyVO) {
-		// 처리과정업데이트
-		complainService.updateComplainProgress(complainVO);
-		// 댓글등록
-		int complainNo = replyService.insertReply(replyVO);
-		return "redirect:replyInfo?complainNo="+replyVO.getComplainNo();
+	@PostMapping("resultInfo")
+	public String resultInfoInsert(ComplainsVO complainVO, ResultsVO resultVO) {
+		
+		int complainNo = resultService.insertResult(resultVO);
+		return "redirect:result/resultInfo?complainNo="+complainNo;
 	}
-	
-	
-	
 	
 }

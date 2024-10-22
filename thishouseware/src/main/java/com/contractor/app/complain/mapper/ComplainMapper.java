@@ -10,6 +10,8 @@ public interface ComplainMapper {
 	
 	// 문의 전체조회
 	public List<ComplainsVO> selectComplainAll();
+	// 문의 전체조회(상황완료/보고완료만)
+	public List<ComplainsVO> complainResultList();
 	
 	// 문의 단건조회
 	public ComplainsVO selectComplainInfo(ComplainsVO complainVO);

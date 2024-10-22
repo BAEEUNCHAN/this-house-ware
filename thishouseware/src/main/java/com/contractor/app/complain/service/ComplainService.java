@@ -9,6 +9,7 @@ public interface ComplainService {
 
 	// 문의사항 조회
 	public List<ComplainsVO> complainList();
+	public List<ComplainsVO> complainResultList();
 	
 	// 문의사항 단건조회
 	public ComplainsVO complainInfo(ComplainsVO complainVO);

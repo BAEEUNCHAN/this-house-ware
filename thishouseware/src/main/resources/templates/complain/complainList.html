@@ -103,7 +103,6 @@
 																th:case="4" th:class="'progress-4'">보고완료</span>
 														</span></td>
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
-
 													</tr>
 												</th:block>
 											</tbody>
@@ -120,11 +119,11 @@
 
 	<script>
 	
-	// 비밀번호 검증 AJAX 요청 함수
+	
 	function checkPassword(complainNo, complainPwd) {
 		return $.ajax({
 			type: 'POST',
-			url: '/checkPwd', // 비밀번호 검증 API 엔드포인트
+			url: '/checkPwd', 
 			data: JSON.stringify({ complainNo: complainNo, complainPwd: complainPwd }),
 			contentType: 'application/json',
 			dataType: 'json',
@@ -133,47 +132,52 @@
               
 		//제이쿼리 객체 생성
 		$('tbody > tr').on('click', function(event) {
-			let trTag = event.currentTarget;
-			let complainNo = $(trTag).children().first().text().trim();
-			let complainPwd = $(trTag).children().first().text().trim();
-			/* //event.target
-			let trTag = event.currentTarget;
-			let complainNo = $(trTag).children().first().text().trim();
-			let url = `/complainInfo?complainNo=${complainNo}`;
-			location.href = url; */
-		    swal({
-	              title: "비밀번호를 입력하세요",
-	              html: '<br><input class="form-control" placeholder="비밀번호 8자리를 입력하세요." id="input-field">',
-	              content: {
-	                element: "input",
-	                attributes: {
-	                  placeholder: "비밀번호 8자리를 입력하세요.",
-	                  type: "password",
-	                  id: "input-field",
-	                  className: "form-control",
-	                },
-	              },
-	              buttons: {
-	                confirm: {
-	                	text : "확인",
-	                  className: "btn btn-success",
-	                },
-	                cancel: {
-		                  text : "취소",
-		                  visible: true,
-		                  className: "btn btn-danger",
-		                },
-	              },
-	            }).then(function () {
-	              //swal("", "확인완료! ");
-	              if($('#input-field').val() == complainPwd){
-	    		  let url = `/complainInfo?complainNo=${complainNo}`;
-	    		  location.href = url;
-	              }else{
-	            	  alert('비밀번호를 다시 확인해주세요.')
-	              }
-	            });
-		});
+    let trTag = event.currentTarget;
+    let complainNo = $(trTag).children().first().text().trim();
+    //let complainPwd = $(trTag).children().eq(7).text().trim(); 
+
+    swal({
+        title: "비밀번호를 입력하세요",
+        content: {
+            element: "input",
+            attributes: {
+                placeholder: "비밀번호 8자리를 입력하세요.",
+                type: "password",
+                id: "input-field",
+                className: "form-control",
+            },
+        },
+        buttons: {
+            confirm: {
+                text: "확인",
+                className: "btn btn-success",
+            },
+            cancel: {
+                text: "취소",
+                visible: true,
+                className: "btn btn-danger",
+            },
+        },
+    }).then(function(value) {
+        let inputPwd = document.getElementById("input-field").value;
+        
+        if (value && inputPwd === complainPwd) {
+            let url = `/complainInfo?complainNo=${complainNo}`;
+            location.href = url; 
+		console.log("Input Password: ", inputPwd); // 사용자가 입력한 비밀번호
+		console.log("Actual Password: ", complainPwd); // DB에서 가져온 비밀번호
+        } else {
+            if (value) { 
+                alert('비밀번호를 다시 확인해주세요.'); 
+		console.log("Input Password: ", inputPwd); // 사용자가 입력한 비밀번호
+		console.log("Actual Password: ", complainPwd); // DB에서 가져온 비밀번호
+            }
+        }
+    });
+});
+
+
+		
 		
 		//$('#example').DataTable();
 		$(document).ready(function () {
@@ -192,6 +196,7 @@
     });
 		
 		
+
 	
 	</script>
 

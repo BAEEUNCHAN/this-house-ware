@@ -86,7 +86,7 @@
 					, #{fileName}
 					, #{attatch}
 					, sysdate					
-					, '대기'					
+					, '대기'				
 					, #{edmsFormNo}
 					, #{shareStatus}
 					, #{shareFolderNo}

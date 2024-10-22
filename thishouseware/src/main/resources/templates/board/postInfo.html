@@ -28,9 +28,9 @@
 				<td height="100px" width="200px">[[ ${post.content} ]]</td>
 			</tr>
 		</table>
-		<!-- <button type="button" th:onclick="|location.href='@{/postUpdate(bno=${board.bno})}'|">수정</button> -->
-		<button type="button" th:onclick="|location.href='@{/board/postListBoard(boardsNo=${post.boardsNo})}'|">목록</button>
-		<button type="button" th:onclick="|location.href='@{/board/postDelete(postsNo=${post.postsNo}, boardsNo=${post.boardsNo})}'|">삭제</button>
+		<!-- <button type="button" th:onclick="|location.href='@{/boardUpdate(bno=${board.bno})}'|">수정</button>
+		<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
+		<button type="button" th:onclick="|location.href='@{/boardDelete(no=${board.bno})}'|">삭제</button> -->
 	</div>
 </body>
 </html>

@@ -30,11 +30,20 @@ public class ComplainsVO {
 	private Date uploadDt;			// 등록일				, Default sysdate
 	private Integer progress;		// 처리상황			, Not Null
 	private Integer companyNo;		// 회사번호(FK)		, Not Null
-	private String customerName;  // 고객명			, Not Null
-	private String phone; 		  // 연락처			, Not Null
+	private String customerName;    // 고객명			, Not Null
+	private String phone; 		    // 연락처			, Not Null
+	private String complainPwd; 	// 문의비밀번호
 	
 	// JOIN용 추가
 	private String companyName;
+	private String departmentName;
+	private String id;
+	private String name;
+	private String replyContent;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date replyDt;
+	private Integer replyNo;
+	
 	
 
 	

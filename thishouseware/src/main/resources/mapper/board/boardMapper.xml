@@ -156,7 +156,7 @@
 			       ,#{postsType}
 			       ,#{postSetting}
 			       <if test="postSetting == 'q1'">
-			       ,SYSDATE
+			       ,#{postStartTime}
 			       ,#{postEndTime}			       
 			       </if>
 			       ,#{title}
@@ -166,10 +166,4 @@
 			       ,#{id} -->
 				)
 	</insert>
-	
-	<!-- 게시글 삭제 -->
-	<delete id="deleteBoradInfo" parameterType="int">
-	 	DELETE FROM posts
-	 	WHERE POSTS_NO = #{postsNo}	 	
-	</delete>
 </mapper>

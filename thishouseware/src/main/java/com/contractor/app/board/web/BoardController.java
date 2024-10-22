@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
@@ -16,36 +15,21 @@ import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
 
-import lombok.RequiredArgsConstructor;
-/**
- * 게시판 관리
- */
-@RequiredArgsConstructor
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-	
-	private final BoardService boardService;
-	private final CommonCodeService commonCodeService;
+	private BoardService boardService;
+	private CommonCodeService commonCodeService;
 
-//	@Autowired
-//	public BoardController(BoardService boardService, CommonCodeService commonCodeService) {
-//		this.boardService = boardService;
-//		this.commonCodeService = commonCodeService;
-//	}
+	@Autowired
+	public BoardController(BoardService boardService, CommonCodeService commonCodeService) {
+		this.boardService = boardService;
+		this.commonCodeService = commonCodeService;
+	}
 
 	// 메인페이지 : URI - boardMainPage / RETURN - board/boardMainPage
 	@GetMapping("/boardMainPage")
-	public String boardMainPage(Model model, 
-			                    BoardsVO boardsVO, 
-			                    PostsVO postsVO) {
-		// 게시판 목록 조회
-		List<BoardsVO> boards = boardService.selectBoardMain(boardsVO);
-
-		// 페이지에 전달
-		model.addAttribute("boards", boards);
-
-
+	public String boardMainPage() {
 		return "board/boardMainPage";
 	}
 
@@ -58,14 +42,12 @@ public class BoardController {
 		return "board/boardList";
 	}
 
-	// 게시판별 게시글 전체조회 : URI - postList / RETURN - board/postList
+	// 게시글 전체조회 : URI - postList / RETURN - board/postList
 	@GetMapping("/postList")
-	public String postList(Model model, PostsVO postsVO, BoardsVO boardsVO) {
-		BoardsVO board = boardService.selectBoard(boardsVO);
-		List<PostsVO> list = boardService.postListBoard(postsVO);
+	public String postList(Model model, PostsVO postsVO) {
+		List<PostsVO> list = boardService.postList(postsVO);
 		// 페이지에 전달
 		model.addAttribute("posts", list);
-		model.addAttribute("board", board);
 		return "board/postList";
 	}
 
@@ -74,9 +56,9 @@ public class BoardController {
 	@GetMapping("postInfo") // postInfo?key=value
 	public String postInfo(PostsVO postsVO, Model model) {
 		PostsVO findVO = boardService.postInfo(postsVO);
-
+		
 		model.addAttribute("post", findVO);
-
+		
 		return "board/postInfo";
 		// classpath:/templates/board/postInfo.html => 실제 경로
 	}
@@ -112,14 +94,5 @@ public class BoardController {
 	public String postInsertProcess(PostsVO postsVO) { // <form/> 활용한 submit
 		int postsNo = boardService.insertPost(postsVO);
 		return "redirect:postInfo?postsNo=" + postsNo;
-	}
-
-	// 게시글 삭제 - 처리 : URI - postDelete / PARAMETER - Integer
-	// RETURN - 전체조회 다시 호출
-	@GetMapping("/postDelete") // QueryString : @RequestParam
-	public String postDelete(@RequestParam Integer postsNo, 
-			                 @RequestParam Integer boardsNo) {
-		boardService.deletePost(postsNo);
-		return "redirect:postList?boardsNo=" + boardsNo;
 	}
 }

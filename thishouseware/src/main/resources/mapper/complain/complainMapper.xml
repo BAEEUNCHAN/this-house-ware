@@ -1,221 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.contractor.app.complain.mapper.ComplainMapper">
+<mapper
+	namespace="com.contractor.app.complain.mapper.ComplainMapper">
 
-<!-- 문의 전체조회 -->
-<select id="selectComplainAll" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	ORDER BY    c.company_no
+	<!-- 문의 전체조회 -->
+	<select id="selectComplainAll" resultType="ComplainsVO">
 
-</select>
+		SELECT c.complain_no
+		,c.complain_dt
+		,c.complain_title
+		,c.complain_content
+		,c.complain_request
+		,c.upload_dt
+		,c.progress
+		,c.complain_type
+		,c.customer_name
+		,c.phone
+		,p.company_no
+		,p.company_name
+		FROM complains c JOIN companys p
+		ON c.company_no = p.company_no
+		ORDER BY c.company_no
 
-<!-- 문의 단건조회 -->
-<select id="selectComplainInfo" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		complain_no = #{complainNo}
-	
-</select>
-
-<!-- 문의 등록 -->
-
-<insert id="insertComplainInfo" parameterType="ComplainsVO">
-	
-	<selectKey keyProperty="complainNo"
-			   resultType="Integer"
-			   order="BEFORE">
-		SELECT NVL(MAX(complain_no), 0) + 1
-		FROM complains
-	</selectKey>
+	</select>
 	
 	
+
+	<!-- 문의 단건조회 -->
+	<select id="selectComplainInfo" resultType="ComplainsVO">
+
+		SELECT c.complain_no
+		,c.complain_dt
+		,c.complain_title
+		,c.complain_content
+		,c.complain_request
+		,c.upload_dt
+		,c.progress
+		,c.complain_type
+		,c.customer_name
+		,c.phone
+		,p.company_no
+		,p.company_name
+		FROM complains c JOIN companys p
+		ON c.company_no = p.company_no
+		WHERE complain_no = #{complainNo}
+
+	</select>
 	
-	INSERT INTO complains(complain_no
-						 ,complain_dt
-						 ,complain_title
-						 ,complain_content
-						 ,complain_request
-						 ,upload_dt
-						 ,progress
-						 ,complain_type
-						 ,customer_name
-						 ,phone
-						 ,company_no)
-	VALUES				 (#{complainNo}
-						 ,#{complainDt}
-						 ,#{complainTitle}
-						 ,#{complainContent}
-						 ,#{complainRequest}
-						 ,sysdate
-						 ,0
-						 ,#{complainType}
-						 ,#{customerName}
-						 ,#{phone}
-						 ,#{companyNo})
-</insert>
+	<!-- 문의답변 -->
+	<select id="selectComplainDeptInfo" parameterType="Integer" resultType="ComplainsVO">
+		SELECT		 d.department_name
+					,e.id
+					,e.name
+					,r.reply_content
+					,r.reply_dt
+					,r.reply_no
+		FROM		department d  JOIN employees e
+		ON		    d.department_no = e.department_no
+		JOIN		replys r
+		ON			e.id = r.id
+		WHERE 		r.complain_no = #{complainNo}
+	</select>
+
+	<!-- 문의 등록 -->
+
+	<insert id="insertComplainInfo" parameterType="ComplainsVO">
+
+		<selectKey keyProperty="complainNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(complain_no), 0) + 1
+			FROM complains
+		</selectKey>
 
 
-<!-- 문의 수정 -->
-<update id="updateComplainInfo" parameterType="ComplainsVO">
-	UPDATE  complains
-	SET		
-			complain_title		= #{complainTitle}
-			,complain_content	= #{complainContent}
-			,complain_request	= #{complainRequest}
-	WHERE 	complain_no			= #{complainNo}
-</update>
+
+		INSERT INTO complains(complain_no
+		,complain_dt
+		,complain_title
+		,complain_content
+		,complain_request
+		,upload_dt
+		,progress
+		,complain_type
+		,customer_name
+		,phone
+		,complain_pwd
+		,company_no)
+		VALUES (#{complainNo}
+		,#{complainDt}
+		,#{complainTitle}
+		,#{complainContent}
+		,#{complainRequest}
+		,sysdate
+		,0
+		,#{complainType}
+		,#{customerName}
+		,#{phone}
+		,#{complainPwd}
+		,#{companyNo})
+	</insert>
 
 
-<!-- 문의 삭제 -->
-<delete id="deleteComplainInfo" parameterType="int">
-	DELETE FROM complains
-	WHERE		complain_no = #{complainNo}
-</delete>
+	<!-- 문의 수정 -->
+	<update id="updateComplainInfo" parameterType="ComplainsVO">
+		UPDATE complains
+		SET
+		complain_title = #{complainTitle}
+		,complain_content = #{complainContent}
+		,complain_request = #{complainRequest}
+		WHERE complain_no = #{complainNo}
+	</update>
+	<update id="updateComplainProgress" parameterType="ComplainsVO">
+		UPDATE complains
+		SET
+		progress = #{progress}
+		WHERE complain_no = #{complainNo}
+	</update>
 
 
-<!-- 문의타입 : 0 / 1 -->
-<select id="selectComplainType0" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.complain_type = 1
+	<!-- 문의 삭제 -->
+	<delete id="deleteComplainInfo" parameterType="int">
+		DELETE FROM complains
+		WHERE complain_no = #{complainNo}
+	</delete>
 
-</select>
 
-<!-- 진행상황 : 0 ~ 4 -->
-<select id="selectComplainAll0" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.progress = 0
-
-</select>
-<select id="selectComplainAll1" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.progress = 1
-
-</select>
-<select id="selectComplainAll2" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.progress = 2
-
-</select>
-<select id="selectComplainAll3" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.progress = 3
-
-</select>
-<select id="selectComplainAll4" resultType="ComplainsVO">
-	
-	SELECT		c.complain_no
-				,c.complain_dt
-				,c.complain_title
-				,c.complain_content
-				,c.complain_request
-				,c.upload_dt
-				,c.progress
-				,c.complain_type
-				,c.customer_name
-				,c.phone
-				,p.company_no
-                ,p.company_name
-	FROM		complains c JOIN companys p
-    ON          c.company_no = p.company_no
-	WHERE		c.progress = 4
-
-</select>
 
 </mapper>

@@ -1,4 +1,4 @@
-package com.contractor.app.employee;
+package com.contractor.app.util;
 
 public class EmployeeUtil {
 	

@@ -9,21 +9,16 @@
 </head>
 <body>
 	<div class="text-center">
-		<h3>게시글 목록</h3>
+		<h3><span>[[${board.title}]]</span> </h3>
+		<span>게시글 수  [[${#lists.size(posts)}]]</span>
 		<table class="table">
 			<thead>
 				<tr>
 					<th>게시글 번호</th>
-					<th>게시판 번호</th>
 					<th>머리글</th>
-					<th>작성일자</th>
-					<th>게시 기간여부</th>
-					<th>게시 시작시간</th>
-					<th>게시 종료시간</th>
 					<th>제목</th>
-					<th>설명</th>
-					<th>권한</th>
 					<th>아이디</th>
+					<th>작성일자</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,28 +26,23 @@
 				<!--  PostsVO => <tr/> -->
 				<tr>
 					<td>[[ ${info.postsNo}]]</td>
-					<td>[[ ${info.boardsNo}]]</td>
 					<td>[[ ${info.postsType}]]</td>
-					<td>[[ ${info.submitDT}]]</td>
-					<td>[[ ${info.postSetting}]]</td>
-					<td>[[ ${info.postStartTime}]]</td>
-					<td>[[ ${info.postEndTime}]]</td>
 					<td>[[ ${info.title}]]</td>
-					<td>[[ ${info.content}]]</td>
-					<td>[[ ${info.authority}]]</td>
 					<td>[[ ${info.id}]]</td>
+					<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")} ]]</td>
 				</tr>
+				</a>
 			</tbody>
 		</table>
 	</div>
-	<!-- <script>
+	<script>
 		// 제이쿼리 객체 생성
 		$('tbody > tr').on('click', function(event) {
 			let trTag = event.currentTarget;
-			let bno = $(trTag).children().eq(0).text();
-			let url = 'boardInfo?bno=' + bno;
+			let postsNo = $(trTag).children().eq(0).text();
+			let url = '/board/postInfo?postsNo=' + postsNo;
 			location.href=url;
 		});
-	</script> -->
+	</script>
 </body>
 </html>

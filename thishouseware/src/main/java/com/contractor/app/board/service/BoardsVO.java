@@ -1,5 +1,7 @@
 package com.contractor.app.board.service;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,8 @@ public class BoardsVO {
 	private String title; //제목
 	private String description; //설명
 	private String authority; //권한
+	
+	List<PostsVO> posts;
 	
 	@Override
 	public boolean equals(Object obj) {

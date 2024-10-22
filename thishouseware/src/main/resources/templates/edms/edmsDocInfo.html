@@ -99,7 +99,7 @@ button:hover {
 											<td><label for="datt">첨부파일명</label></td>
 											<!--  <input name="downLoadLink" type="hidden"  th:value="${edmsDocs.attatch}" />-->
 											<td><span th:text="${edmsDocs.attatch}"></span>
-										       <a th:href="@{'http://localhost:8099/fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+										       <a th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
 										        <br>
 											</td>
 											

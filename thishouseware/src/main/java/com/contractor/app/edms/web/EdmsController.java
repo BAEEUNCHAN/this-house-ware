@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -134,14 +135,26 @@ public class EdmsController {
 
 	// 결재문서 첨부파일 다운로드
 	// 파일 다운로드 처리
-	@GetMapping("/fileDownload")
-	public void fileDownload(@RequestParam("fileLink") String file, HttpServletResponse response) throws IOException {
-		File f = new File(uploadPath, file);
+	@GetMapping("/fileDownload/{fileName}")
+	public void fileDownload(@RequestParam("fileName") String file, HttpServletResponse response) throws IOException {
+		
+	    int lastIndex = file.lastIndexOf("/");
+
+	    // 파일 이름 추출
+	    String fileName = (lastIndex != -1) ? file.substring(lastIndex + 1) : file;
+	    System.out.println(fileName);
+
+	    // File 객체 생성
+		File f = new File(uploadPath, fileName);
+		
+		// 파일 이름을 UTF-8로 인코딩 (특수문자, 공백 처리)
+	    String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
 
 		// file 다운로드 설정
-		response.setContentType("application/download");
+		response.setContentType("application/octet-stream");
 		response.setContentLength((int) f.length());
-		response.setHeader("Content-disposition", "attachment;filename=\"" + file + "\"");
+		response.setHeader("Content-disposition",  "attachment; filename*=UTF-8''" + encodedFileName);
+
 		// response 객체를 통해서 서버로부터 파일 다운로드
 		OutputStream os = response.getOutputStream();
 		// 파일 입력 객체 생성

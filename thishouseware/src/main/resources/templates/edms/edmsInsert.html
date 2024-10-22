@@ -151,42 +151,6 @@ button:hover {
 				$('#edmsContent').load(url)				
 				});
 
-<<<<<<< HEAD
-			<script>
-		    const sendScreenshot = (img) => {
-		      let data = new FormData(document.insertForm);
-		      data.append('screenshot', img);
-		      fetch('/edms/edmsInsert', {
-		        method: "post",
-		        body: data
-		      })
-		      .then(res => {
-		    	    if (res.ok) {
-		    	      // 요청이 성공하면 페이지 이동
-		    	      location.href = '/edms/edmsDocList';
-		    	    } else {
-		    	        // 실패시 alert
-		    	        alert('스크린샷 업로드에 실패했습니다.');
-		    	      }
-		    	    })
-		    	    .catch(error => {
-		    	      alert('오류가 발생했습니다: ' + error.message);
-		    	    });
-		    	  }
-		    
-		    	document.querySelector(".btnSubmit").addEventListener("click", function () {
-		
-		      const input = document.getElementById('edmsContent');
-		      html2canvas(input).then(canvas => {
-		        //document.body.appendChild(canvas);
-		        const imgData = canvas.toDataURL('image/png');
-		        sendScreenshot(imgData)
-		      })
-		      
-		      
-		    });
-		  </script>
-=======
 			    const sendScreenshot = (img) => {
 			      let data = new FormData(document.insertForm);
 			      data.append('screenshot', img);
@@ -220,11 +184,9 @@ button:hover {
 			      
 			    });
 		  		</script>
-		  
->>>>>>> branch 'CHAN' of https://github.com/BAEEUNCHAN/this-house-ware.git
+
 			</div>
 		</div>
-	</div>
 	</div>
 </html>
 

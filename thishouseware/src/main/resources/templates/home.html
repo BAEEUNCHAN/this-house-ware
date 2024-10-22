@@ -10,12 +10,12 @@
 </head>
 <body>
 	<h1>익명 게시판 입니다.</h1>
+	<p th:text="${#authentication.principal.empVO.id}"></p>
 	
 	
 	<h1>수민</h1>
 	<button type="button" th:onclick='|location.href="@{board/boardMainPage}"|'>게시판</button>
 	<button type="button" th:onclick='|location.href="@{board/boardList}"|'>게시판목록</button>
-	<button type="button" th:onclick='|location.href="@{board/postList}"|'>게시글목록</button>
 	<button type="button" th:onclick='|location.href="@{board/postInsert}"|'>게시글등록</button>
 	
 	<h1>예림</h1>

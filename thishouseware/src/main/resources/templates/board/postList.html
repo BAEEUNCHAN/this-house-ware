@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 <title></title>
 </head>
 <body>
 	<div class="text-center">
-		<h3><span>[[${board.title}]]</span> </h3>
-		<span>게시글 수  [[${#lists.size(posts)}]]</span>
+		<h3>
+			<span>[[${board.title}]]</span>
+		</h3>
+		<span>게시글 수 [[${#lists.size(posts)}]]</span>
 		<table class="table">
 			<thead>
 				<tr>
@@ -23,17 +25,41 @@
 			</thead>
 			<tbody>
 				<th:block th:each="info : ${posts}">
-				<!--  PostsVO => <tr/> -->
-				<tr>
-					<td>[[ ${info.postsNo}]]</td>
-					<td>[[ ${info.postsType}]]</td>
-					<td>[[ ${info.title}]]</td>
-					<td>[[ ${info.id}]]</td>
-					<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")} ]]</td>
-				</tr>
-				</a>
+					<!--  PostsVO => <tr/> -->
+					<tr>
+						<td>[[ ${info.postsNo}]]</td>
+						<td>[[ ${info.postsType}]]</td>
+						<td>[[ ${info.title}]]</td>
+						<td>[[ ${info.id}]]</td>
+						<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")} ]]</td>
+					</tr>
+					</a>
 			</tbody>
 		</table>
+
+		<!-- 페이지 네이션 -->[[${paging}]]
+		<nav aria-label> 
+		<ul class="pagination">
+			<li class="page-item disbled">
+				<a class="page-link"
+					th:href="@{|/board/postList?nowPage=1&cntPerPage=${paging.cntPerPage}|}"
+					th:if="${paging.nowPage > 1}">« 처음</a> <a
+					th:href="@{|/board/postList?nowPage=${paging.nowPage - 1}&cntPerPage=${paging.cntPerPage}|}"
+					th:if="${paging.nowPage > 1}">이전</a> <span
+					th:each="pageNum : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+						<a
+						th:href="@{|/board/postList?nowPage=${pageNum}&cntPerPage=${paging.cntPerPage}|}"
+						th:text="${pageNum}"
+						th:class="${paging.nowPage == pageNum} ? 'current' : ''"></a>
+				</span> <a
+					th:href="@{|/board/postList?nowPage=${paging.nowPage + 1}&cntPerPage=${paging.cntPerPage}|}"
+					th:if="${paging.nowPage < paging.lastPage}">다음</a>&nbsp;&nbsp;&nbsp;
+					<a
+					th:href="@{|/board/postList?nowPage=${paging.lastPage}&cntPerPage=${paging.cntPerPage}|}"
+					th:if="${paging.nowPage < paging.lastPage}">마지막 »</a></li>
+			</ul>
+		</nav>
+
 	</div>
 	<script>
 		// 제이쿼리 객체 생성
@@ -41,7 +67,7 @@
 			let trTag = event.currentTarget;
 			let postsNo = $(trTag).children().eq(0).text();
 			let url = '/board/postInfo?postsNo=' + postsNo;
-			location.href=url;
+			location.href = url;
 		});
 	</script>
 </body>

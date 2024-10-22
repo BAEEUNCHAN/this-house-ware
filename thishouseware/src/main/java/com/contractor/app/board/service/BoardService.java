@@ -26,4 +26,16 @@ public interface BoardService {
 
 	// 게시판 단건조회
 	public BoardsVO selectBoard(BoardsVO boardsVO);
+
+	// 게시글별 댓글 전체조회
+	public List<CommentsVO> selectCommentBoard(CommentsVO commentsVO);
+
+	// 댓글 등록
+	public int insertCommentInfo(CommentsVO commentsVO);
+
+	// 게시물 총 갯수
+	public int countPost(PostsVO postsVO);
+
+	// 페이징 처리 게시글 조회
+	public List<PostsVO> selectPostsPaging(PagingVO pagingVO);
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.contractor.app.board.mapper.BoardMapper;
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
+import com.contractor.app.board.service.CommentsVO;
+import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 
 @Service
@@ -57,6 +59,26 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardsVO selectBoard(BoardsVO boardsVO) {
 		return boardMapper.selectBoard(boardsVO);
+	}
+
+	@Override
+	public List<CommentsVO> selectCommentBoard(CommentsVO commentsVO) {
+		return boardMapper.selectCommentsBoard(commentsVO);
+	}
+
+	@Override
+	public int insertCommentInfo(CommentsVO commentsVO) {
+		return boardMapper.insertCommentInfo(commentsVO);
+	}
+
+	@Override
+	public int countPost(PostsVO postsVO) {
+		return boardMapper.countPost(postsVO);
+	}
+
+	@Override
+	public List<PostsVO> selectPostsPaging(PagingVO pagingVO) {
+		return boardMapper.selectPostsPaging(pagingVO);
 	}
 
 

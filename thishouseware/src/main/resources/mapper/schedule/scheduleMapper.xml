@@ -1,3 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.schedule.scheduleMapper"></mapper>
+<mapper namespace="com.contractor.app.schedule.mapper.ScheduleMapper">
+	<!-- 전체 일정 조회하기 -->
+    <select id="listScheduleAll" resultType="map">
+        SELECT schedule_no as "no"
+               , title as "title"
+        	   , TO_CHAR(start_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "start"
+               , TO_CHAR(end_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "end"
+               <!-- , all_day 컬럼 필요 ? -->
+               , content as "content"
+               , schedule_code as "code"
+               
+               , department_no as "department"
+               , id "id"
+        FROM schedule
+    </select>
+    
+    <!-- 사원별 일정 조회하기 -->
+    <select id="listSchedule" resultType="ScheduleVo">
+        SELECT schedule_no
+               , title 
+        	   , TO_CHAR(start_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "start"
+               , TO_CHAR(end_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "end"
+               <!-- , all_day 컬럼 필요 ? -->
+               , content
+               , schedule_code
+               , department_no               
+        FROM schedule
+        WHERE id = #{id}
+    </select>
+
+    <!-- 일정 저장하기 -->    
+    <insert id="insertSchedule" parameterType="ScheduleVo">
+    	<selectKey keyProperty="scheduleNo"
+				   resultType="Integer"
+				   order="BEFORE">
+			SELECT NVL(MAX(schedule_no), 0) + 1
+			FROM schedule
+		</selectKey>
+        INSERT INTO schedule(
+            				 schedule_no
+            				 , title
+            				 , start_dt
+            				 , end_dt
+            				 <if test="content != null">
+            				 , content
+            				 </if>
+            				 , schedule_code
+            				 , department_no
+            				 , id
+        					)
+        VALUES (
+                #{scheduleNo}
+                , #{title}
+                , TO_DATE(#{start}, 'YYYY-MM-DD HH24:MI:SS')
+                , TO_DATE(#{end}, 'YYYY-MM-DD HH24:MI:SS')
+                <!-- , #{allDay} -->
+                <if test="content != null">
+                , #{content}
+                </if>
+                <!-- 관리자일 경우 f1 => 회사 일정 등록, 직원일 경우 f2 => 개인 일정 등록 -->
+                , #{scheduleCode}
+                , #{departmentNo}
+                , #{id} 
+               )
+    </insert>
+
+    <!-- 일정 수정하기 -->
+    <update id="updateSchedule">
+        UPDATE schedule
+        SET
+        	<if test="title != null and !title.equals('')">
+            title = #{title}
+            </if>
+            , start_dt = TO_DATE(#{start}, 'YYYY-MM-DD"T"HH24:MI:SS')
+            , end_dt = TO_DATE(#{end}, 'YYYY-MM-DD"T"HH24:MI:SS')
+            <!-- , all_day = #{allDay} -->
+            , content = #{content}
+        WHERE schedule_no = #{scheduleNo}
+    </update>
+    
+    <!-- 일정 삭제하기 -->
+    <delete id="deleteSchedule" parameterType="int">
+        DELETE FROM schedule
+        WHERE schedule_no = #{scheduleNo}
+    </delete>
+
+</mapper>

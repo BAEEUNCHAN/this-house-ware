@@ -8,10 +8,10 @@ public interface BoardService {
 
 	// 게시글 전체 조회
 	public List<PostsVO> postList(PostsVO postsVO);
-	
+
 	// 게시글 단건 조회
 	public PostsVO postInfo(PostsVO postsVO);
-	
+
 	// 게시글 등록
 	public int insertPost(PostsVO postsVO);
 
@@ -35,4 +35,7 @@ public interface BoardService {
 
 	// 페이징 처리 게시글 조회
 	public List<PostsVO> selectPostsPaging(PagingVO pagingVO);
+
+	// 게시판별 게시글 전체 조회
+	public List<PostsVO> postListBoard(PostsVO postsVO);
 }

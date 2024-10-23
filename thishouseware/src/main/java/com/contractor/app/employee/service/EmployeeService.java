@@ -19,5 +19,9 @@ public interface EmployeeService {
 
 	boolean modifyAuthentication(String id,String randomValue);
 
+	String canChangePw(String id, String authenticationsValue);
+
+	boolean modifyPasswordByEmp(EmployeeVO empVO);
+
 	
 }

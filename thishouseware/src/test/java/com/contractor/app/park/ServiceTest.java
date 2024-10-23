@@ -21,11 +21,11 @@ public class ServiceTest {
 		newPassword = encoder.encode(newPassword);
 		
 		// 값은 맞으나 시간 초과일경
-		String answer = employeeService.getChangePwAnswer("emp115", auth);
+		String answer = employeeService.canChangePw("emp115", auth);
 		System.out.println(answer);
 		
 		// 실패할경우
-		answer = employeeService.getChangePwAnswer("emp115", "wrong");
+		answer = employeeService.canChangePw("emp115", "wrong");
 		
 	}
 }

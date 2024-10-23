@@ -98,6 +98,25 @@ public class employeeController {
 	@ResponseBody
 	public String changePw(@RequestBody EmployeeVO empVO) {
 		System.out.println(empVO);
+		String newPassword = empVO.getPassword();
+		newPassword = encoder.encode(newPassword);
+		empVO.setPassword(newPassword);
+		// 아이디, 새로운비밀번호, 인증 값 을 토대로 pl/sql 함수 실행하기
+		String answer = employeeService.canChangePw(empVO.getId(), 
+				empVO.getAuthenticationsValue());
+		if(answer.equals("-1")) {
+			return "error-1"; // 서버 자체적 오류
+		}else if(answer.equals("1")) {
+			return "error1"; // 인증값 또는 아이디 오류
+		}else if(answer.equals("2")) {
+			return "error2"; // 인증값 만료됨
+		}
+		
+		try {
+			employeeService.modifyPasswordByEmp(empVO);
+		} catch (Exception e) {
+			return "error-1";
+		}
 		
 		return "success";
 	}

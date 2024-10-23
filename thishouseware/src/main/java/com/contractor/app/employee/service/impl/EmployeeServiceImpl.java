@@ -62,4 +62,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return authenticationMapper.updateAuthentication(id, randomValue) == 1;
 	}
 
+	@Override
+	public String canChangePw(String id, String authenticationsValue) {
+		return employeeMapper.canChangePwFunc(id,authenticationsValue);
+	}
+
+	@Override
+	public boolean modifyPasswordByEmp(EmployeeVO empVO) {
+		return employeeMapper.updateEmployeeByEmp(empVO) == 1;
+	}
+
 }

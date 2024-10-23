@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">문서함</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class=hidden style="display: none">문서번호</th>
+											<th>번호</th>
+											<th>부서명</th>
+											<th>제목</th>
+											<th>기안자</th>
+											<th>작성일자</th>
+										</tr>
+									</thead>
+									<tbody class = "docBox">
+										<th:block th:each="info,sts : ${docBoxs}">
+											<tr>
+												<!-- 자체순번 / 문서는 최근 문서순 정렬 -->
+												<td class=hidden1 style="display: none;">[[${info.edmsDocNo}]]</td>
+												<td>[[${sts.count}]]</td> 
+												<td>[[${info.departmentNo}]]</td>
+												<td>[[${info.title}]]</td>
+												<td>[[${info.id}]]</td>
+												<!--<td>[[${info.submitDt}]]</td>-->
+												<td>[[${#dates.format(info.submitDt, "yyyy-MM-dd")}]]</td>
+												
+											</tr>
+										</th:block>
+									</tbody>  
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+			<script>
+			//문서함에서 문서 클릭시 문서함 목록으로 이동하기
+		    $('.docBox > tr').on('click', function(event){
+		        let trTag = event.currentTarget;
+		        let edno = $(trTag).children().eq(0).text();
+		        let url = '/edms/edmsDocInfo?edmsDocNo=' + edno + '&fromDocList=true'; // 문서함에서 온 경우를 표시하는 쿼리 파라미터 추가
+		        location.href = url;
+		    });
+			</script>
+</body>
+</html>

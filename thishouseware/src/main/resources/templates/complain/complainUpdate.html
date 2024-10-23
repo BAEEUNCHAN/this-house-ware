@@ -89,20 +89,21 @@
 										maxlength=70 id="complainTitle"
 										aria-describedby="basic-addon1" placeholder="제목을 입력하세요."
 										th:value="${complain.complainTitle}"><br />
-									<br /> <label for="complainContent">문의내용</label>
+									<br /> <p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>문의내용</p>
 									<textarea class="form-control" name="complainContent"
 										id="complainContent" rows="5" placeholder="600자 이내로 입력하세요." 
 										th:text="${complain.complainContent}"></textarea>
 
-									<label for="complainRequest">요청사항</label>
+									<p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>요구사항</p>
 									<textarea class="form-control" name="complainRequest"
 										id="complainRequest" rows="5" placeholder="600자 이내로 입력하세요."
 										th:text="${complain.complainRequest}"></textarea>
 						 <input type="hidden" id="complainNo" name="complainNo" th:value="${complain.complainNo}">
 									<br />
+									비밀번호 : <input type="password" name="complainPwd" id="complainPwd" maxlength="8" placeholder="최대 8자리" th:value="${complain.complainPwd}"><br/><br/>
 									<div class="text-center">
 									<a><button type="submit" class="btn btn-success">등록</button></a>
-									<button type="button" class="btn btn-danger" th:onclick='|location.href="@{/complainList}"|'>취소</button></a>
+									<button type="button" class="btn btn-danger" th:onclick='|location.href="@{/complainInfo}"|'>취소</button></a>
 									</div>
 								</div>
 							</div>
@@ -114,31 +115,37 @@
 		</div>
 	
 	<script>
-	// submit을 하기 전 제목, 작성자, 작성일자 확인, 값이 없는 경우 등록되지 않도록 이벤트걸기.
-	// Form 태그 네임속성 활용해서 이벤트 걸기
+	
 	$(updateForm).on('submit', complainUpdateHandler)
 	
 	function complainUpdateHandler(event){
-		event.preventDefault(); // submit stop
+		event.preventDefault(); 
 		
-		let title = $('form [name="complainTitle"]'); // 공백은 하위요소 찾는 것.
+		let title = $('form [name="complainTitle"]');
 		if(title.val() == ''){
 			alert('제목이 입력되지 않았습니다.');
 			title.focus();
 			return;
 		}
 		
-		let content = $('form [name="complainContent"]'); // 공백은 하위요소 찾는 것.
+		let content = $('form [name="complainContent"]'); 
 		if(content.val() == ''){
 			alert('문의내용이 입력되지 않았습니다.');
 			content.focus();
 			return;
 		}
 		
-		let request = $('form [name="complainRequest"]'); // 공백은 하위요소 찾는 것.
+		let request = $('form [name="complainRequest"]'); 
 		if(request.val() == ''){
 			alert('요청사항이 입력되지 않았습니다.');
 			request.focus();
+			return;
+		} 
+		
+		let pwd = $('form [name="complainPwd"]'); 
+		if(pwd.val() == ''){
+			alert('비밀번호를 입력해주세요.');
+			pwd.focus();
 			return;
 		} 
 	

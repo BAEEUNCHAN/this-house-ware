@@ -1,142 +1,242 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.contractor.app.board.mapper.BoardMapper">
-	
+
 	<resultMap id="boardResult" type="BoardsVO">
-	  <id property="boardsNo" column="boards_no"></id>
-	  <collection property="posts" javaType="ArrayList" column="boards_no" ofType="PostsVO" select="selectPostRecent"/>
+		<id property="boardsNo" column="boards_no"></id>
+		<collection property="posts" javaType="ArrayList"
+			column="boards_no" ofType="PostsVO" select="selectPostRecent" />
 	</resultMap>
-	
-	<!-- 전체조회 -->
-	<select id="selectBoardMain" parameterType="BoardsVO" resultMap="boardResult">
+
+	<!-- 게시판 메인페이지 -->
+	<select id="selectBoardMain" parameterType="BoardsVO"
+		resultMap="boardResult">
 		SELECT BOARDS_NO,
-			   FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
-			   DEPARTMENT_NAME,
-    		   ANONY_CHK,
- 			   TITLE,
-			   DESCRIPTION,
-			   AUTHORITY
-	    FROM   boards
-	    ORDER BY BOARDS_TYPE, boards_no
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		DEPARTMENT_NAME,
+		ANONY_CHK,
+		TITLE,
+		DESCRIPTION,
+		AUTHORITY
+		FROM boards
+		ORDER BY BOARDS_TYPE, boards_no
 	</select>
-	
+
 	<!-- 최신글 5개씩 가져오기 -->
-	<select id="selectPostRecent"  resultType="PostsVO">
-	SELECT *
-	FROM (
+	<select id="selectPostRecent" resultType="PostsVO">
+		SELECT *
+		FROM (
 		SELECT p.POSTS_NO
-     		 , b.BOARDS_NO
-     		 , FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
-     		 , p.SUBMIT_DT
-     		 , FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
-     		 , p.POST_STARTTIME 
-     		 , p.POST_ENDTIME
-     		 , p.TITLE
-     		 , p.CONTENT
-     		 , p.AUTHORITY
-     		 , p.ID
-     		 , case POSTS_TYPE when 'p2' then '1'
-     		                   when 'p1' then '2'
-     		                   when 'p3' then '3' end as type
+		, b.BOARDS_NO
+		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+		, p.SUBMIT_DT
+		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		, p.POST_STARTTIME
+		, p.POST_ENDTIME
+		, p.TITLE
+		, p.CONTENT
+		, p.AUTHORITY
+		, p.ID
+		, case POSTS_TYPE when 'p2' then '1'
+		when 'p1' then '2'
+		when 'p3' then '3' end as type
 		FROM posts p JOIN boards b
-		ON   p.BOARDS_NO = b.BOARDS_NO
+		ON p.BOARDS_NO =
+		b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{boardsNo}
-	    ORDER BY type, p.POSTS_NO desc
-	    )
-		WHERE ROWNUM   <![CDATA[<=]]> 5
+		ORDER BY type, p.POSTS_NO desc
+		)
+		WHERE ROWNUM   <![CDATA[<=]]>
+		5
 	</select>
-		
-	<!-- 전체조회 -->
-	<select id="selectBoardAll" parameterType="BoardsVO" resultType="BoardsVO">
+
+	<!-- 게시판 전체조회 -->
+	<select id="selectBoardAll" parameterType="BoardsVO"
+		resultType="BoardsVO">
 		SELECT BOARDS_NO,
-			   FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
-			   DEPARTMENT_NAME,
-    		   ANONY_CHK,
- 			   TITLE,
-			   DESCRIPTION,
-			   AUTHORITY
-	    FROM   boards
-	    ORDER BY BOARDS_TYPE, boards_no
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		DEPARTMENT_NAME,
+		ANONY_CHK,
+		TITLE,
+		DESCRIPTION,
+		AUTHORITY
+		FROM boards
+		ORDER BY BOARDS_TYPE, boards_no
 	</select>
-		
-	<!-- 게시판 단건조회 -->	
-	<select id="selectBoard" parameterType="BoardsVO" resultType="BoardsVO">
+
+	<!-- 게시판 단건조회 -->
+	<select id="selectBoard" parameterType="BoardsVO"
+		resultType="BoardsVO">
 		SELECT BOARDS_NO,
-			   FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
-			   DEPARTMENT_NAME,
-    		   ANONY_CHK,
- 			   TITLE,
-			   DESCRIPTION,
-			   AUTHORITY
-	    FROM   boards
-	    WHERE  boards_no = #{boardsNo}
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		DEPARTMENT_NAME,
+		ANONY_CHK,
+		TITLE,
+		DESCRIPTION,
+		AUTHORITY
+		FROM boards
+		WHERE boards_no = #{boardsNo}
 	</select>
-		
+
 	<!-- 게시글 전체조회 -->
-	<select id="selectPostAll" parameterType="PostsVO" resultType="PostsVO">
+	<select id="selectPostAll" parameterType="PostsVO"
+		resultType="PostsVO">
 		SELECT POSTS_NO
-     		 , BOARDS_NO
-     		 , FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
-     		 , SUBMIT_DT
-     		 , FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
-     		 , POST_STARTTIME 
-     		 , POST_ENDTIME
-     		 , TITLE
-     		 , CONTENT
-     		 , AUTHORITY
-     		 , ID
+		, BOARDS_NO
+		, FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
+		, SUBMIT_DT
+		, FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
+		, POST_STARTTIME
+		, POST_ENDTIME
+		, TITLE
+		, CONTENT
+		, AUTHORITY
+		, ID
 		FROM posts
-	    ORDER BY POSTS_NO
+		ORDER BY POSTS_NO
 	</select>
-	
+
 	<!-- 게시판별 게시글 전체조회 -->
-	<select id="selectPostBoard" parameterType="PostsVO" resultType="PostsVO">
+	<select id="selectPostBoard" parameterType="PostsVO"
+		resultType="PostsVO">
 		SELECT p.POSTS_NO
-     		 , b.BOARDS_NO
-     		 , p.POSTS_TYPE
-     		 , FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
-     		 , p.SUBMIT_DT
-     		 , FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
-     		 , p.POST_STARTTIME 
-     		 , p.POST_ENDTIME
-     		 , p.TITLE
-     		 , p.CONTENT
-     		 , p.AUTHORITY
-     		 , p.ID
+		, b.BOARDS_NO
+		<!-- , p.POSTS_TYPE -->
+		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+		, p.SUBMIT_DT
+		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		, p.POST_STARTTIME
+		, p.POST_ENDTIME
+		, p.TITLE
+		, p.CONTENT
+		, p.AUTHORITY
+		, p.ID
+		, case POSTS_TYPE when 'p2' then '1'
+		when 'p1' then '2'
+		when 'p3' then '3' end as type
 		FROM posts p JOIN boards b
-		ON   p.BOARDS_NO = b.BOARDS_NO
+		ON p.BOARDS_NO =
+		b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{boardsNo}
-	    ORDER BY p.POSTS_NO
+		ORDER BY type, p.POSTS_NO desc
 	</select>
-	
+
 	<!-- 게시글 단건조회 -->
 	<select id="selectPostInfo" resultType="PostsVO">
 		SELECT p.POSTS_NO
-     		 , b.BOARDS_NO
-     		 , b.TITLE as board_title
-     		 , FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
-     		 , FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
-     		 , p.SUBMIT_DT
-     		 , p.POST_STARTTIME 
-     		 , p.POST_ENDTIME
-     		 , p.TITLE
-     		 , p.CONTENT
-     		 , p.AUTHORITY
-     		 , p.ID
+		, b.BOARDS_NO
+		, b.TITLE as board_title
+		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		, p.SUBMIT_DT
+		, p.POST_STARTTIME
+		, p.POST_ENDTIME
+		, p.TITLE
+		, p.CONTENT
+		, p.AUTHORITY
+		, p.ID
 		FROM posts p JOIN boards b
-		ON   p.BOARDS_NO = b.BOARDS_NO
-		WHERE p.POSTS_NO = #{postsNo}
+		ON p.BOARDS_NO = b.BOARDS_NO
+		WHERE
+		p.POSTS_NO = #{postsNo}
 	</select>
-	
+
 	<!-- 게시글 등록 -->
 	<insert id="insertPostInfo" parameterType="PostsVO">
-		<selectKey keyProperty="postsNo"
-				   resultType="Integer"
-				   order="BEFORE">
+		<selectKey keyProperty="postsNo" resultType="Integer"
+			order="BEFORE">
 			SELECT NVL(MAX(POSTS_NO), 1) + 1
 			FROM posts
 		</selectKey>
 		INSERT INTO posts
+		( POSTS_NO
+		, BOARDS_NO
+		, POSTS_TYPE
+		, POST_SETTING
+		<if test="postSetting == 'q1'">
+			, POST_STARTTIME
+			, POST_ENDTIME
+		</if>
+		, TITLE
+		, CONTENT
+		<!-- 기본값 admin 설정 -->
+		<!-- , AUTHORITY , ID -->
+		)
+		VALUES ( #{postsNo}
+		,#{boardsNo}
+		,#{postsType}
+		,#{postSetting}
+		<if test="postSetting == 'q1'">
+			,SYSDATE
+			,#{postEndTime}
+		</if>
+		,#{title}
+		,#{content}
+		<!-- 기본값 admin 설정 -->
+		<!-- ,#{authority} ,#{id} -->
+		)
+	</insert>
+
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoradInfo" parameterType="int">
+		DELETE FROM posts
+		WHERE POSTS_NO = #{postsNo}
+	</delete>
+
+	<!-- 댓글 전체조회 -->
+	<select id="selectCommentsBoard" parameterType="CommentsVO"
+		resultType="CommentsVO">
+		SELECT c.COMMENTS_NO
+		, p.POSTS_NO
+		, c.CONTENT
+		, c.AUTHORITY
+		, c.ID
+		FROM comments c JOIN posts p
+		ON p.POSTS_NO = c.POSTS_NO
+		WHERE p.POSTS_NO =
+		#{postsNo}
+		ORDER BY c.COMMENTS_NO desc
+	</select>
+
+	<!-- 댓글 등록 -->
+	<insert id="insertCommentInfo" parameterType="CommentsVO">
+		<selectKey keyProperty="commentsNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(COMMENTS_NO), 1) + 1
+			FROM comments
+		</selectKey>
+		INSERT INTO comments
+		( COMMENTS_NO
+		, POSTS_NO
+		, CONTENT
+		)
+		VALUES ( #{commentsNo}
+		,#{postsNo}
+		,#{content}
+		)
+	</insert>
+
+	<!-- 총 게시글 갯수 출력 -->
+	<select id="countPost" resultType="int">
+		SELECT COUNT(*) 
+		FROM posts
+		WHERE BOARDS_NO = #{boardsNo}
+	</select>
+
+	<!-- 페이징 처리 후 게시글 조회 -->
+	<select id="selectPostsPaging" resultType="PostsVO">
+		SELECT *
+		FROM (
+				SELECT ROWNUM RN, A.*
+				FROM (
+						SELECT *
+						FROM posts
+						ORDER BY POSTS_NO DESC
+					  ) A
+		 	  )
+		WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+
 				(   POSTS_NO
      		 	  , BOARDS_NO
      		 	  , POSTS_TYPE
@@ -156,7 +256,7 @@
 			       ,#{postsType}
 			       ,#{postSetting}
 			       <if test="postSetting == 'q1'">
-			       ,SYSDATE
+			       ,#{postStartTime}
 			       ,#{postEndTime}			       
 			       </if>
 			       ,#{title}
@@ -166,10 +266,4 @@
 			       ,#{id} -->
 				)
 	</insert>
-	
-	<!-- 게시글 삭제 -->
-	<delete id="deleteBoradInfo" parameterType="int">
-	 	DELETE FROM posts
-	 	WHERE POSTS_NO = #{postsNo}	 	
-	</delete>
 </mapper>

@@ -10,15 +10,19 @@ import org.springframework.stereotype.Service;
 import com.contractor.app.complain.mapper.ComplainMapper;
 import com.contractor.app.complain.service.ComplainService;
 import com.contractor.app.complain.service.ComplainsVO;
+import com.contractor.app.reply.mapper.ReplyMapper;
+import com.contractor.app.reply.service.ReplysVO;
 
 
 @Service
 public class ComplainServiceImpl implements ComplainService {
 	private ComplainMapper complainMapper;
+	private ReplyMapper replyMapper;
 	
 	@Autowired
-	public ComplainServiceImpl(ComplainMapper complainMapper) {
+	public ComplainServiceImpl(ComplainMapper complainMapper, ReplyMapper replyMapper) {
 		this.complainMapper = complainMapper;
+		this.replyMapper = replyMapper;
 	}
 	
 	// 문의 전체조회
@@ -26,11 +30,20 @@ public class ComplainServiceImpl implements ComplainService {
 	public List<ComplainsVO> complainList() {
 		return complainMapper.selectComplainAll();
 	}
+	// 문의 상황완료 보고완료만 전체조회
+	@Override
+	public List<ComplainsVO> complainResultList() {
+		return complainMapper.complainResultList();
+	}
 	
-	
-	 // 문의 단건조회
+	// 문의 단건조회(complain)
 	 @Override public ComplainsVO complainInfo(ComplainsVO complainVO) {
 		 return  complainMapper.selectComplainInfo(complainVO);
+	}
+	// 문의 단건조회(department)
+	@Override
+	public List<ComplainsVO> complainDeptInfo(ComplainsVO complainVO) {
+		return complainMapper.selectComplainDeptInfo(complainVO);
 	}
 	 
 	
@@ -57,40 +70,24 @@ public class ComplainServiceImpl implements ComplainService {
 		 return map;
 		 
 	}
+	 @Override
+	public Map<String, Object> updateComplainProgress(ComplainsVO complainVO) {
+		 Map<String, Object> map = new HashMap<>();
+		 boolean isSuccessed = false;
+		 
+		 int result = complainMapper.updateComplainProgress(complainVO);
+		 if(result == 1) {
+			 isSuccessed = true;
+		 }
+		 
+		 map.put("result", isSuccessed);
+		 map.put("target", complainVO);
+		 return map;
+	}
 	 
 	 // 문의 삭제
 	 @Override public int deleteComplain(int ComplainNo) {
 		 return complainMapper.deleteComplainInfo(ComplainNo); }
 	 
-	 /***********************************************************/
-	 // 문의타입
-	 @Override
-	public List<ComplainsVO> complainType0() {
-		return complainMapper.selectComplainType0();
-	}
-	 
-	 /***********************************************************/
-	 
-	 // 진행상황 : 0 조회
-	 @Override
-	public List<ComplainsVO> complainList0() {
-		return complainMapper.selectComplainAll0();
-	}
-	@Override
-	public List<ComplainsVO> complainList1() {
-		return complainMapper.selectComplainAll1();
-	}
-	@Override
-	public List<ComplainsVO> complainList2() {
-		return complainMapper.selectComplainAll2();
-	}
-	@Override
-	public List<ComplainsVO> complainList3() {
-		return complainMapper.selectComplainAll3();
-	}
-	@Override
-	public List<ComplainsVO> complainList4() {
-		return complainMapper.selectComplainAll4();
-	}
 	
 }

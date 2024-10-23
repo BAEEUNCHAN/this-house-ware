@@ -13,8 +13,8 @@ public interface DocMapper {
 	public List<DocJoinVO> getApprovalStatus(String approvalStatus);
 
 	// 부서문서함
-	// 문서함 문서 개인전체조회
-	public List<DocJoinVO> selectDocDeftList();
+	// 문서함 문서 부서전체조회
+	public List<DocJoinVO> selectDocDeptList(int departmentNo);
 	// 부서문서 결과별 조회
-	public List<DocJoinVO> getDeftStatus(String approvalStatus, int departmentNo);
+	public List<DocJoinVO> getDeptStatus(String approvalStatus, int departmentNo);
 }

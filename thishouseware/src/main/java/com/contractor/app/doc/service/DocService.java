@@ -9,8 +9,9 @@ public interface DocService {
 	public List<DocJoinVO> docApprovalStatusList(String approvalStatus);
 	
 	// 부서별 문서 전체조회
-	public List<DocJoinVO> DocDetfList();
+	public List<DocJoinVO> DocDeptList(int departmentNo);
 	// 부서문서결과별 문서 조회	
-	public List<DocJoinVO> docDeftStatusList(String approvalStatus, Integer departmentNo);
+	public List<DocJoinVO> docDeptStatusList(String approvalStatus, Integer departmentNo);
+
 
 }

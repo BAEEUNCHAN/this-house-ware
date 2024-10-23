@@ -42,7 +42,7 @@
 		
 		<!-- 부서문서 -->
 		<!-- 부서별 전체조회 최신순 -->
-		<select id="selectDocDeftList" resultType="DocJoinVO">
+		<select id="selectDocDeptList" parameterType="Integer" resultType="DocJoinVO">
 		    SELECT 
 		        e.department_no, 
 		        d.edms_doc_no, 
@@ -60,7 +60,7 @@
 		</select>
 		
 		<!-- 문서결과별 문서 조회-->
-		<select id="getDeftStatus" parameterType="DocJoinVO" resultType="DocJoinVO">
+		<select id="getDeptStatus" parameterType="DocJoinVO" resultType="DocJoinVO">
 		    SELECT 
 			    e.department_no,
 			    d.edms_doc_no,

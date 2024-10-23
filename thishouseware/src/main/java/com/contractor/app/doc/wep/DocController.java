@@ -59,18 +59,19 @@ public class DocController {
 	}
 
 	// 부서문서함 문서 전체조회
-	@GetMapping("/docDeftList")
-	public void DocDetfList(Model model) {
-		List<DocJoinVO> list = docService.DocDetfList();
-		model.addAttribute("docBoxs", list);
-		// return "docBoxs/docList";
+	@GetMapping("/docDeptList")
+	public String DocDeptList(@RequestParam Integer departmentNo, Model model) {
+	    List<DocJoinVO> list = docService.DocDeptList(departmentNo); 
+	    model.addAttribute("docBoxs", list);
+	    return "docBox/docDeptList";
 	}
 
 	// 부서문서문서 조회
-	@GetMapping("/docDeftStatusList")
+	@GetMapping("/docDeptStatusList")
 	public void getDeftStatus(@RequestParam String approvalStatus, @RequestParam Integer departmentNo, Model model) {
-		List<DocJoinVO> list = docService.docDeftStatusList(approvalStatus, departmentNo);
+		List<DocJoinVO> list = docService.docDeptStatusList(approvalStatus, departmentNo);
 		model.addAttribute("docBoxs", list);
+		//return "docBoxs/docDeftStatusList"
 	}
 
 }// 끝

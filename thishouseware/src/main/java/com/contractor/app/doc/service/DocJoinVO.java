@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class DocJoinVO { // 문서함 
 
- private String departmentNo; // 부서번호
+ private int departmentNo; // 부서번호
  private String title; // 문서 제목
  private String id; // 작성자 
  @DateTimeFormat(pattern = "yyyy-MM-dd")

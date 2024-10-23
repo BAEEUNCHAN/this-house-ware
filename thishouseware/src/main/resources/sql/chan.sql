@@ -42,20 +42,70 @@ commit;
 ALTER TABLE edms_doc MODIFY approval_status VARCHAR2(6);
 
 -- edms_doc 
+-- 결재 상태: 임시저장
 INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
-VALUES ('101', 'user01', '2024년 10월 매출 보고서', '2024년 10월 매출을 정리한 보고서입니다.', 'FORM003', 'sales_report_oct_2024.pdf', 'sales_attachment.zip', SYSDATE, '상신', 'yes', 'SH001');
-
-INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
-VALUES ('102', 'user02', '구매 신청서 - 사무용품', '사무용품 구매 신청입니다.', 'FORM002', 'office_supplies.pdf', NULL, SYSDATE, '결재중', 'no', 'SH002');
+VALUES ('201', 'emp100', '임시 저장 문서 1', '임시 저장 문서 1의 내용입니다.', 'FORM001', NULL, NULL, SYSDATE, '임시저장', 'no', 'SH001');
 
 INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
-VALUES ('103', 'user03', '비밀유지서약서', '신규 프로젝트에 대한 비밀유지 서약서입니다.', 'FORM006', 'nda_agreement.pdf', 'nda_attachment.zip', SYSDATE, '상신', 'yes', 'SH003');
+VALUES ('202', 'emp100', '임시 저장 문서 2', '임시 저장 문서 2의 내용입니다.', 'FORM001', NULL, NULL, SYSDATE, '임시저장', 'no', 'SH002');
 
 INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
-VALUES ('104', 'user04', '휴가 신청서 - 2024년 11월', '2024년 11월 5일부터 7일까지의 휴가 신청입니다.', 'FORM007', 'vacation_request_nov_2024.pdf', NULL, SYSDATE, '반려', 'no', 'SH004');
+VALUES ('203', 'emp100', '임시 저장 문서 3', '임시 저장 문서 3의 내용입니다.', 'FORM001', NULL, NULL, SYSDATE, '임시저장', 'no', 'SH003');
 
 INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
-VALUES ('105', 'user05', '출장 보고서 - 부산 출장', '부산 출장에 대한 보고서입니다.', 'FORM008', 'business_trip_busan.pdf', 'busan_trip_attachment.zip', SYSDATE, '승인', 'yes', 'SH005');
+VALUES ('204', 'emp100', '임시 저장 문서 4', '임시 저장 문서 4의 내용입니다.', 'FORM001', NULL, NULL, SYSDATE, '임시저장', 'no', 'SH004');
 
-commit;
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('205', 'emp100', '임시 저장 문서 5', '임시 저장 문서 5의 내용입니다.', 'FORM001', NULL, NULL, SYSDATE, '임시저장', 'no', 'SH005');
 
+COMMIT;
+
+-- 결재 상태: 결재완료
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('206', 'emp100', '결재 완료 문서 1', '결재 완료 문서 1의 내용입니다.', 'FORM002', NULL, NULL, SYSDATE, '결재완료', 'yes', 'SH001');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('207', 'emp100', '결재 완료 문서 2', '결재 완료 문서 2의 내용입니다.', 'FORM002', NULL, NULL, SYSDATE, '결재완료', 'yes', 'SH001');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('208', 'emp100', '결재 완료 문서 3', '결재 완료 문서 3의 내용입니다.', 'FORM002', NULL, NULL, SYSDATE, '결재완료', 'yes', 'SH001');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('209', 'emp100', '결재 완료 문서 4', '결재 완료 문서 4의 내용입니다.', 'FORM002', NULL, NULL, SYSDATE, '결재완료', 'yes', 'SH001');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('210', 'emp100', '결재 완료 문서 5', '결재 완료 문서 5의 내용입니다.', 'FORM002', NULL, NULL, SYSDATE, '결재완료', 'yes', 'SH001');
+
+-- 결재 상태: 결재대기
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('211', 'emp100', '결재 대기 문서 1', '결재 대기 문서 1의 내용입니다.', 'FORM003', NULL, NULL, SYSDATE, '결재대기', 'no', 'SH005');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('212', 'emp100', '결재 대기 문서 2', '결재 대기 문서 2의 내용입니다.', 'FORM003', NULL, NULL, SYSDATE, '결재대기', 'no','SH005');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('213', 'emp100', '결재 대기 문서 3', '결재 대기 문서 3의 내용입니다.', 'FORM003', NULL, NULL, SYSDATE, '결재대기', 'no', 'SH005');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('214', 'emp100', '결재 대기 문서 4', '결재 대기 문서 4의 내용입니다.', 'FORM003', NULL, NULL, SYSDATE, '결재대기', 'no', 'SH005');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('215', 'emp100', '결재 대기 문서 5', '결재 대기 문서 5의 내용입니다.', 'FORM003', NULL, NULL, SYSDATE, '결재대기', 'no', 'SH005');
+
+-- 결재 상태: 결재수신
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('216', 'emp100', '결재 수신 문서 1', '결재 수신 문서 1의 내용입니다.', 'FORM004', NULL, NULL, SYSDATE, '결재수신', 'yes', 'SH002');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('217', 'emp100', '결재 수신 문서 2', '결재 수신 문서 2의 내용입니다.', 'FORM004', NULL, NULL, SYSDATE, '결재수신', 'yes', 'SH002');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('218', 'emp100', '결재 수신 문서 3', '결재 수신 문서 3의 내용입니다.', 'FORM004', NULL, NULL, SYSDATE, '결재수신', 'yes', 'SH002');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('219', 'emp100', '결재 수신 문서 4', '결재 수신 문서 4의 내용입니다.', 'FORM004', NULL, NULL, SYSDATE, '결재수신', 'yes', 'SH002');
+
+INSERT INTO edms_doc (edms_doc_no, id, title, content, edms_form_no, file_name, attatch, submit_dt, approval_status, share_status, share_folder_no)
+VALUES ('220', 'emp100', '결재 수신 문서 5', '결재 수신 문서 5의 내용입니다.', 'FORM004', NULL, NULL, SYSDATE, '결재수신', 'yes', 'SH002');
+
+COMMIT;

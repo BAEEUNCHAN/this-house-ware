@@ -23,5 +23,19 @@ public class DocServiceImpl implements DocService {
 		return docMapper.selectDocJoinList();
 	} // 문서함 문서 전체조회	
 
+	@Override
+	public List<DocJoinVO> docApprovalStatusList(String approvalStatus) {
+		return docMapper.getApprovalStatus(approvalStatus);
+	} // 문서결과별 문서 조회	
 
+	@Override
+	public List<DocJoinVO> DocDetfList() {
+		return docMapper.selectDocDeftList();
+	} // 부서별 문서 전체조회
+	
+	@Override
+	public List<DocJoinVO> docDeftStatusList(String approvalStatus, Integer departmentNo) {
+	    return docMapper.getDeftStatus(approvalStatus, departmentNo); 
+	} // 부서문서 조회
+	
 }// 끝

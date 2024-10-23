@@ -114,28 +114,27 @@
 		</div>
 	
 	<script>
-	// submit을 하기 전 제목, 작성자, 작성일자 확인, 값이 없는 경우 등록되지 않도록 이벤트걸기.
-	// Form 태그 네임속성 활용해서 이벤트 걸기
+	
 	$(updateForm).on('submit', complainUpdateHandler)
 	
 	function complainUpdateHandler(event){
-		event.preventDefault(); // submit stop
+		event.preventDefault(); 
 		
-		let title = $('form [name="complainTitle"]'); // 공백은 하위요소 찾는 것.
+		let title = $('form [name="complainTitle"]');
 		if(title.val() == ''){
 			alert('제목이 입력되지 않았습니다.');
 			title.focus();
 			return;
 		}
 		
-		let content = $('form [name="complainContent"]'); // 공백은 하위요소 찾는 것.
+		let content = $('form [name="complainContent"]'); 
 		if(content.val() == ''){
 			alert('문의내용이 입력되지 않았습니다.');
 			content.focus();
 			return;
 		}
 		
-		let request = $('form [name="complainRequest"]'); // 공백은 하위요소 찾는 것.
+		let request = $('form [name="complainRequest"]'); 
 		if(request.val() == ''){
 			alert('요청사항이 입력되지 않았습니다.');
 			request.focus();

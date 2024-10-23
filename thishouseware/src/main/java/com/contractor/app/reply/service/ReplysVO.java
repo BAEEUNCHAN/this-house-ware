@@ -12,6 +12,6 @@ public class ReplysVO {
 	private String replyContent;  // 답변내용				, Not Null
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date replyDt;		  // 답변날짜				, Default sysdate
-	private Integer complainNO;	  // 문의번호(FK)			, Not Null
+	private Integer complainNo;	  // 문의번호(FK)			, Not Null
 	private String id;			  // 직원아이디(FK)			, Not Null
 }

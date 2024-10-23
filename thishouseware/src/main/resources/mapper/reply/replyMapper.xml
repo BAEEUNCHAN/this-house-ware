@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.contractor.app.reply.mapper.ReplyMapper">
+<select id="replyList" resultType="ComplainsVO" parameterType="ComplainsVO">
+SELECT		 d.department_name
+					,e.id
+					,e.name
+					,r.reply_content
+					,r.reply_dt
+					,r.reply_no
+					,c.complain_no
+					,c.complain_content
+					,c.complain_request
+					,c.progress
+					,c.complain_dt
+					,c.upload_dt
+					,c.complain_type
+					,c.customer_name
+					,c.phone
+					,c.complain_pwd
+		FROM		department d  JOIN employees e
+		ON		    d.department_no = e.department_no
+		JOIN		replys r
+		ON			e.id = r.id
+		JOIN		complains c
+		ON			c.complain_no = r.complain_no
+		WHERE 		c.complain_no = #{complainNo}
+</select>
 
+<insert id="insertReply" parameterType="ReplysVO">
+	<selectKey keyProperty="replyNo" resultType="Integer" order="BEFORE">
+		  SELECT NVL(MAX(reply_no), 0) + 1
+			FROM replys
+	</selectKey>
+	
+	INSERT INTO replys(reply_no
+					  ,reply_content
+					  ,reply_dt
+					  ,complainNo
+					  ,id)
+	VALUES			  (#{replyNo}
+					  ,#{replyContent}
+					  ,sysdate
+					  ,#{complainNo}
+					  ,#{id})
+</insert>
 
 </mapper>

@@ -11,7 +11,7 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="#">고객관리</a></li>
@@ -40,46 +40,124 @@
 								<!-- 왼쪽화면 끝-->
 								<!-- 오른쪽화면 -->
 								<div class="col-md-6 col-lg-30">
-									<label for="uploadDt">문제발생일 :
-										[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
-									<br /> <label for="customerName"> <span>문의구분 :
-											[[${complain.complainType == 1 ? '고객불편' :
-											(complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황 : </span> <span
-										th:switch="${complain.progress}"> <span th:case="0">대기</span>
-											<span th:case="1">접수</span> <span th:case="2">진행</span> <span
-											th:case="3">상황완료</span> <span th:case="4">보고완료</span>
-									</span>
+									<form name="updateForm" th:action="@{/replyInfo}">
+										<label for="uploadDt">문제발생일 :
+											[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+										<br />  <span>문의구분 :
+												[[${complain.complainType == 1 ? '고객불편' :
+												(complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황 : </span><label for="customerName"> <select
+												
+											class="form-select" id="progress" name="progress"
+											aria-label="Progress Dropdown" style="width: 100px;">
+												<option th:value="0" th:selected="${complain.progress == 0}">대기</option>
+												<option th:value="1" th:selected="${complain.progress == 1}">접수</option>
+												<option th:value="2" th:selected="${complain.progress == 2}">진행</option>
+												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
+												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
+										</select>
+										</label>
+									</form>
 
 
-
-									</label> <br /> <br /> <label for="phone">작성일 :
+									 <br /> <label for="phone">작성일 :
 										[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
 									<br />
 								</div>
 							</div>
 							<div class="card-action">
 								<div class="text-center">
-								<label for="companyName"><h3>[[${complain.complainTitle}]]</h3>
-								</label> 
+									<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
 								</div>
-								
-								<p>*문의내용</p>
-								<label for="customerName">[[${complain.complainContent}]]</label> 
-								<p>*요구사항</p>
-								<label
-									for="phone">[[${complain.complainRequest}]]</label> <br />
-								
-								<div class="text-center">
-									<button class="btn btn-success" th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
-									<button class="btn btn-primary" th:onclick='|location.href="@{/complainList}"|'>목록</button>
-									<button type="button" class="btn btn-danger alert_demo_7"
-																data-toggle="modal" data-target="#exampleModal" th:value="${complain.complainNo}">삭제</button>
+
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="icon-pencil"> 문의내용</i>
+								</p>
+								<label for="customerName">[[${complain.complainContent}]]</label>
+								<br /> <br />
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="icon-pencil"> 요구사항</i>
+								</p>
+								<label for="phone">[[${complain.complainRequest}]]</label> <br />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">문의답변/조치사항</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-lg-12">
+									<br />
+
+
+									<form name="insertReply" th:action="@{/replyInfo}">
+										<th:block th:each="info : ${replys}">
+
+											<div class="timeline-panel">
+												<div class="timeline-heading">
+													<h4 class="timeline-title" style="font-weight:bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+													<p>
+														<small class="text-muted"><i
+															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
+											'yyyy년 MM월 dd일')}]] </small>
+													</p>
+												</div>
+												<div class="timeline-body">
+													<p>[[${info.replyContent}]]</p>
+												</div>
+											</div><br/><br/>
+										</th:block>
+										<br /> <label for="dept"> 부서 : </label>
+										<div style="display: inline-block;">
+											<select class="form-select" id="dept"
+												aria-label="Progress Dropdown" style="width: 100px;">
+												<option th:each="dept : ${depts}"
+													th:value="${dept.departmentName}"
+													th:text="${dept.departmentName}"></option>
+											</select>
+										</div>
+										<label for="dept"> 담당자 : </label>
+										<div style="display: inline-block;">
+											<select class="form-select" id="name"
+												aria-label="Progress Dropdown" style="width: 100px;">
+												<option th:each="emp : ${emps}" th:value="${emp.name}"
+													th:text="${emp.name}"></option>
+											</select>
+										</div>
+
+										<!-- <label for="complainReply">문의답변</label> -->
+										<br /> <br />
+										<textarea class="form-control" name="replyContent"
+											id="replyContent" rows="5" maxlength="500"
+											style="background-color: lightyellow;"></textarea>
+
+
+
+
+
+
+
+										<br />
+										<button type="submit" class="btn btn-primary"
+											style="float: right;">등록</button>
+										<input type="hidden" name="complainNo"
+											th:value="${complain.complainNo}">
+									</form>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+
+
 		</div>
 	</div>
 	<script>
@@ -166,7 +244,27 @@
               jQuery(document).ready(function () {
                 SweetAlert2Demo.init();
               });
-	
+              
+              
+              /* $('#dept').on('change', function(){
+            	  var selectedDept = $(this).val();
+            	  if(selectedDept !== ""){
+            	  }
+              }); */
+			
+              
+              $(updateForm).on('submit', replyUpdateHandler)
+              function replyUpdateHandler(event){
+            	  event.preventDefault();
+            	  updateForm.submit();
+              }
+              $(insertReply).on('submit', replyInsertHandler)
+              function replyInsertHandler(event){
+            	  event.preventDefault();
+            	  insertReply.submit();
+              }
+              
+              
 	
 	</script>
 </body>

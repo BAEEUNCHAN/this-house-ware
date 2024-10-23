@@ -12,7 +12,8 @@ public interface EdmsMapper {
 	public EdmsDocVO selectEdmsDocInfo(EdmsDocVO edmsDocVO);
 	// 결재문서 등록
 	public int insertEdmsInfo(EdmsDocVO edmsDocVO);
-	
+	// 결재문서 임시저장
+	public String insertSaveDoc(EdmsDocVO edmsDocVO);
 	
 	
 

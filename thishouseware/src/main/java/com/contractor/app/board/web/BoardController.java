@@ -2,7 +2,6 @@ package com.contractor.app.board.web;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
+import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
@@ -42,6 +42,12 @@ public class BoardController {
 		return "board/boardList";
 	}
 
+	// 게시글 등록 - 처리 : URI - postInsert / PARAMETER - PostsVO(QueryString)
+	// RETURN - 단건조회 다시 호출
+	@PostMapping("/postInsert")
+	public String postInsertProcess(PostsVO postsVO) { // <form/> 활용한 submit
+		int postsNo = boardService.insertPost(postsVO);
+		return "redirect:postInfo?postsNo=" + postsNo;
 	// 게시글 전체조회 : URI - postList / RETURN - board/postList
 	@GetMapping("/postList")
 	public String postList(Model model, PostsVO postsVO) {
@@ -87,12 +93,56 @@ public class BoardController {
 		return "board/postInsert";
 		// classpath:/templates/board/postInsert.html => 실제 경로
 	}
-
-	// 게시글 등록 - 처리 : URI - postInsert / PARAMETER - PostsVO(QueryString)
-	// RETURN - 단건조회 다시 호출
-	@PostMapping("/postInsert")
-	public String postInsertProcess(PostsVO postsVO) { // <form/> 활용한 submit
-		int postsNo = boardService.insertPost(postsVO);
-		return "redirect:postInfo?postsNo=" + postsNo;
+	
+	// 게시판별 게시글 전체조회 : URI - postList / RETURN - board/postList
+	@GetMapping("/postList")
+	public String postList(Model model, PostsVO postsVO, BoardsVO boardsVO, PagingVO pagingVO
+			             , @RequestParam(value="nowPage", defaultValue = "1",  required=false)String nowPage
+			             , @RequestParam(value="cntPerPage",defaultValue = "10", required=false)String cntPerPage) {
+		
+		int total = boardService.countPost(postsVO);
+	
+		pagingVO = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
+		model.addAttribute("paging", pagingVO);
+		model.addAttribute("viewAll", boardService.selectPostsPaging(pagingVO));
+		
+		BoardsVO board = boardService.selectBoard(boardsVO);
+		List<PostsVO> list = boardService.postListBoard(postsVO);
+		// 페이지에 전달
+		model.addAttribute("posts", list);
+		model.addAttribute("board", board);
+		return "board/postList";
 	}
+
+	// 게시글 삭제 - 처리 : URI - postDelete / PARAMETER - Integer
+	// RETURN - 전체조회 다시 호출
+	@GetMapping("/postDelete") // QueryString : @RequestParam
+	public String postDelete(@RequestParam Integer postsNo, 
+			                 @RequestParam Integer boardsNo) {
+		boardService.deletePost(postsNo);
+		return "redirect:postList?boardsNo=" + boardsNo;
+	}
+	
+	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
+	// RETURN - board/postInfo
+	@GetMapping("postInfo") // postInfo?key=value
+	public String postInfo(PostsVO postsVO, Model model) {
+		PostsVO findVO = boardService.postInfo(postsVO);
+		//List<CommentsVO> comments = boardService.selectCommentBoard(commentsVO);
+		model.addAttribute("post", findVO);
+		//model.addAttribute("comments", comments);
+		
+		return "board/postInfo";
+		// classpath:/templates/board/postInfo.html => 실제 경로
+	}
+	
+//	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
+//	// RETURN - board/postInfo
+//	@PostMapping("/postInfo")
+//	public String postInfo(PostsVO postsVO, Model model) {
+//		int postsNo = boardService.insertPost(postsVO);
+//		return "board/postInfo";
+//		// classpath:/templates/board/postInfo.html => 실제 경로
+//	}
+
 }

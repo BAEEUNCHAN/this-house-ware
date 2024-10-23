@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 <title></title>
@@ -16,18 +16,44 @@
 				<td>[[ ${post.boardTitle} ]]</td>
 			</tr>
 			<tr>
-				<th>작성일자</th>
-				<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd")} ]]</td>
-			</tr>
-			<tr>
 				<th>게시글 제목</th>
 				<td>[[ ${post.title} ]]</td>
+			</tr>
+			<tr>
+				<th>작성자</th>
+				<td>[[ ${post.id} ]]
+			</tr>
+			<tr>
+				<th>작성일자</th>
+				<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd")} ]]</td>
 			</tr>
 			<tr>
 				<th>내용</th>
 				<td height="100px" width="200px">[[ ${post.content} ]]</td>
 			</tr>
 		</table>
+		<!--/* <form name="insertForm" th:action="@{/board/postInfo}" method="post">
+			<table class="table">
+				<tr>
+					<th>댓글</th>
+					<td>[[${#lists.size(comments)}]]</td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td>[[${comments.id}]]</td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea rows="" cols="" name="content"></textarea></td>
+				</tr>
+			</table>
+		</form>
+		<button type="submit">등록</button> */-->
+		<!-- <button type="button" th:onclick="|location.href='@{/postUpdate(bno=${board.bno})}'|">수정</button> -->
+		<button type="button"
+			th:onclick="|location.href='@{/board/postList(boardsNo=${post.boardsNo})}'|">목록</button>
+		<button type="button"
+			th:onclick="|location.href='@{/board/postDelete(postsNo=${post.postsNo}, boardsNo=${post.boardsNo})}'|">삭제</button>
 		<!-- <button type="button" th:onclick="|location.href='@{/boardUpdate(bno=${board.bno})}'|">수정</button>
 		<button type="button" th:onclick="|location.href='@{/boardList}'|">목록</button>
 		<button type="button" th:onclick="|location.href='@{/boardDelete(no=${board.bno})}'|">삭제</button> -->

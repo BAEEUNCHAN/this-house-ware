@@ -20,14 +20,16 @@
  <script>
  	let emailInput = document.querySelector("#email");
  	$('#findIdBtn').on('click', function(event){
- 		
+ 		$("#findIdBtn").attr('disabled',true);
 	    if(emailInput.value <= 0 ){
 	      alert("값을 입력해주셔야합니다.");
+	      $("#findIdBtn").prop('disabled',false);
 	      return null;
 	    }
 	    
 	    let formData = new FormData();
 		formData.append('email', emailInput.value);
+		
 		
 		// $.Ajax 방식 
 		$.ajax('/employee/findId',{
@@ -39,16 +41,19 @@
 		    data : formData
 		})
 		.done(result => {
-			console.log(result);
 			if(result == 'error1'){
 				alert("해당 이메일은 존재하지 않습니다.");
 			}else if(result == 'error2'){
 				alert("이메일 전송이 실패하였습니다.");
 			}else{
 				alert("이메일 전송이 완료되었습니다.");
+				location.href = "/login";
 			}
+			$("#findIdBtn").prop('disabled',false);
 		})
-		.fail(err => console.log(err));
+		.fail(function(result){
+				$("#findIdBtn").prop('disabled',false);
+		});
  	});
  	
  </script>

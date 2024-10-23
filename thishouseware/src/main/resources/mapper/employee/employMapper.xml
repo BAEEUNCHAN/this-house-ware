@@ -37,7 +37,7 @@
 			)
 		}
 	</select>	
-	<select id="selectEmployee" parameterType="EmployeeVO">
+	<select id="selectEmployee" parameterType="EmployeeVO" resultType="EmployeeVO">
 		SELECT
 		    id,
 		    name,
@@ -58,15 +58,39 @@
         on (e.department_no = d.department_no)
 		WHERE id = #{id}
 	</select>
+	<select id="selectEmployeeByEmail" parameterType="EmployeeVO" resultType="EmployeeVO">
+		SELECT
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		WHERE email = #{email}
+	</select>
 	<update id="modifyEmployee" parameterType="EmployeeVO">
 		UPDATE employees 
-		SET HIRE_DT = #{hireDt},
-		    PHONE = #{phone}, 
-		    EMAIL = #{email}, 
-		    IMAGE_LINK = #{imageLink}, 
-		    DEPARTMENT_NO = #{departmentNo}, 
-		    POSITION_CODE = #{positionCode}, 
-		    NAME = #{name} 
+		SET HIRE_DT = #{hireDt}
+		    ,PHONE = #{phone}
+		    ,EMAIL = #{email}
+		    ,IMAGE_LINK = #{imageLink}
+		    ,DEPARTMENT_NO = #{departmentNo}
+		    ,POSITION_CODE = #{positionCode}
+		    ,NAME = #{name}
+		    <if test = "password != null">
+		    	,PASSWORD = #{password} 
+		    </if>
 		WHERE id = #{id}
 	</update>
 </mapper>

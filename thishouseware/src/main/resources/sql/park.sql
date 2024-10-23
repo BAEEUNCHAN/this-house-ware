@@ -14,10 +14,10 @@ SELECT
     department_no,
     position_code,
     RESIGN_DT,
-    D_SIGNATURE
+    D_SIGNATURE,
+    email
 FROM
-    employees
-where id = 'emp100';
+    employees;
 -- 조인 문 추가
 		SELECT
 		    id,
@@ -55,5 +55,31 @@ UPDATE employees
     SET 
         password = '$2a$10$/9OOLt.FG1BWEhKGX1p7qOzYoq6MvD.OO7NnctbZ9nz6lpw2IpSU2';
 
+-- 이메일로 검색
+		SELECT
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		WHERE email = '1';
+        
+-- 이메일 타입 수정
+ALTER TABLE employees MODIFY email VARCHAR2(100);
 -- 수정문 실행후 commit 하자
 commit;
+
+
+

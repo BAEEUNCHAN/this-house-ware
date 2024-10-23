@@ -15,4 +15,6 @@ public interface EmployeeMapper {
 
 	List<EmployeeVO> selectEmployees();
 
+	List<EmployeeVO> selectEmployeeByEmail(EmployeeVO empVO);
+
 }

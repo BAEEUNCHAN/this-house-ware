@@ -26,7 +26,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     @Async
-    public void sendEmailNotice(String email,String emailTitle, String content){
+    public void sendEmail(String email,String emailTitle, String content){
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");

@@ -42,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean modifyEmployee(EmployeeVO empVO) {
-		return employeeMapper.modifyEmployee(empVO) == 1;
+		return employeeMapper.updateEmployee(empVO) == 1;
 	}
 
 	@Override

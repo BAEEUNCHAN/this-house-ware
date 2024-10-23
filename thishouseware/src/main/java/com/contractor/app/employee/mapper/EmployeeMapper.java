@@ -10,7 +10,7 @@ public interface EmployeeMapper {
 
 	EmployeeVO selectEmployee(EmployeeVO empVO);
 
-	int modifyEmployee(EmployeeVO empVO);
+	int updateEmployee(EmployeeVO empVO);
 
 	List<EmployeeVO> selectEmployees();
 

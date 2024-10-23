@@ -17,5 +17,7 @@ public interface EmployeeService {
 
 	EmployeeVO getEmployeeByEmail(EmployeeVO empVO);
 
+	boolean modifyAuthentication(String id,String randomValue);
+
 	
 }

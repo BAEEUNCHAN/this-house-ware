@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.employee.service.EmailService;
-import com.contractor.app.employee.service.EmailVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.util.RandomValue;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,7 +65,32 @@ public class employeeController {
 	@PostMapping("employee/getAuth")
 	@ResponseBody
 	public String getAuth(@RequestBody EmployeeVO empVO) {
-		System.out.println(empVO);
+		EmployeeVO findVO = null;
+		String randomValue = RandomValue.getRandomValue();
+		
+		try {
+			findVO = employeeService.getEmployee(empVO);
+		} catch (Exception e) {
+			return "error1"; // 존재하지 않는 아이디
+		}
+
+		if(!(findVO.getEmail().equals(empVO.getEmail()) 
+				&& findVO.getId().equals(empVO.getId()))){
+			return "error2"; // 이메일과 아이디가 매칭되지 않는다.
+		}
+		
+		try {
+			employeeService.modifyAuthentication(empVO.getId(),randomValue);
+		}catch (Exception e) {
+			return "error3"; // DB 업데이트 실패
+		}
+		
+		try {
+			emailService.sendEmailNotice(empVO.getEmail(), "회원님의 인증코드입니다.",randomValue);
+		} catch (Exception e) {
+			return "error4"; // 이메일 전송 실패
+		}
+		
 		return "success";
 	}
 

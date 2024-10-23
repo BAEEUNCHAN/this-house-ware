@@ -1,10 +1,11 @@
 package com.contractor.app.employee.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
+import com.contractor.app.employee.mapper.AuthenticationMapper;
 import com.contractor.app.employee.mapper.DepartmentMapper;
 import com.contractor.app.employee.mapper.EmployeeMapper;
 import com.contractor.app.employee.service.DepartmentVO;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 	
+	private final AuthenticationMapper authenticationMapper;
 	private final DepartmentMapper departmentMapper;
 	private final EmployeeMapper employeeMapper;
 
@@ -53,6 +55,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		empVO = employeeMapper.selectEmployeeByEmail(empVO).get(0);
 		empVO.setPositionName(EmployeeUtil.getPostionName(empVO.getPositionCode()));
 		return empVO;
+	}
+
+	@Override
+	public boolean modifyAuthentication(String id, String randomValue) {
+		return authenticationMapper.updateAuthentication(id, randomValue) == 1;
 	}
 
 }

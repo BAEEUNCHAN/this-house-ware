@@ -46,6 +46,6 @@ public class EmailService {
     public String setContext(String content) {
         Context context = new Context();
         context.setVariable("content", content);
-        return templateEngine.process("employee/sendIdEmail", context);
+        return templateEngine.process("employee/sendEmail", context);
     }
 }

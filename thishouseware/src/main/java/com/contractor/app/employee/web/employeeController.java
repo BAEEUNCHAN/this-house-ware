@@ -61,6 +61,20 @@ public class employeeController {
 		return "employee/findPassword";
 	}
 	
+	@PostMapping("employee/getAuth")
+	@ResponseBody
+	public String getAuth(EmployeeVO empVO) {
+		System.out.println(empVO);
+		return "success";
+	}
+
+	@PostMapping("employee/changePw")
+	@ResponseBody
+	public String changePw(EmployeeVO empVO) {
+		System.out.println(empVO);
+		return "success";
+	}
+	
 	@GetMapping("employee/info/{id}")
 	public String employeeInfo(@PathVariable String id,EmployeeVO empVO ,Model model) {
 		empVO.setId(id);

@@ -27,7 +27,7 @@ public class EmployeeVO {
 	String departmentName; // 부서 이름
 	
 	// AuthenticationVO
-	AuthenticationVO authenticationVO;
+	String authenticationsValue;
 	
 	// 직급 이름
 	String positionName; // 포지션 이름

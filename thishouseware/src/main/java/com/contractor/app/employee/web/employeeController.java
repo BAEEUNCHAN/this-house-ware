@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -63,14 +64,14 @@ public class employeeController {
 	
 	@PostMapping("employee/getAuth")
 	@ResponseBody
-	public String getAuth(EmployeeVO empVO) {
+	public String getAuth(@RequestBody EmployeeVO empVO) {
 		System.out.println(empVO);
 		return "success";
 	}
 
 	@PostMapping("employee/changePw")
 	@ResponseBody
-	public String changePw(EmployeeVO empVO) {
+	public String changePw(@RequestBody EmployeeVO empVO) {
 		System.out.println(empVO);
 		return "success";
 	}

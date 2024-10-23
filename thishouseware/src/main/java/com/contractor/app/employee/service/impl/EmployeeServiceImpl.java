@@ -10,6 +10,7 @@ import com.contractor.app.employee.mapper.EmployeeMapper;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.util.EmployeeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeVO getEmployee(EmployeeVO empVO) {
-		return employeeMapper.selectEmployee(empVO);
+		empVO = employeeMapper.selectEmployee(empVO);
+		empVO.setPositionName(EmployeeUtil.getPostionName(empVO.getPositionCode()));
+		return empVO;
 	}
 
 	@Override

@@ -37,7 +37,13 @@ public class EdmsServiceImpl implements EdmsService {
 		return result == 1 ? edmsDocVO.getEdmsDocNo() : null ;
 	} // 결재문서 단건등록
 	
-	
+	@Override
+    public String edmsInseSave(EdmsDocVO edmsDocVO) {
+        edmsDocVO.setApprovalStatus("임시저장");
+        edmsMapper.insertSaveDoc(edmsDocVO);
+        return edmsDocVO.getEdmsDocNo();
+    } // 결재문서 임시저장
+
 	
 	
 	

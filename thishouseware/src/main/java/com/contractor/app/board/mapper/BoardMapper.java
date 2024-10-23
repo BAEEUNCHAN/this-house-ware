@@ -22,6 +22,7 @@ public interface BoardMapper {
 
 	// 게시글 등록
 	public int insertPostInfo(PostsVO postsVO);
+
 	
 	// 게시글 삭제
 	public int deleteBoradInfo(int postsNo);
@@ -43,4 +44,5 @@ public interface BoardMapper {
 
 	// 페이징 처리 게시글 조회
 	public List<PostsVO> selectPostsPaging(PagingVO pagingVO);
+
 }

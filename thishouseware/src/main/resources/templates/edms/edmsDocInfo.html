@@ -88,15 +88,15 @@ button:hover {
 										</tr>
 										<tr>
 											<td><label for="dcontent">내용</label></td>
-											<td><span th:text="${edmsDocs.content}"></span></td>
+											<input name="imageLink" type="hidden"  th:value="${edmsDocs.fileName}" />
+											<td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px"></td>
 										</tr>
 										<tr>
-											<td><label for="dfile">문서파일명</label></td>
-											<td><span th:text="${edmsDocs.fileName}"></span></td>
-										</tr>
-										<tr>
-											<td><label for="datt">첨부파일명</label></td>
-											<td><span th:text="${edmsDocs.attatch}"></span></td>
+										    <td><label for="datt">첨부파일명</label></td>
+										    <td>
+										        <a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+										        <br>
+										    </td>
 										</tr>
 										<tr>
 											<td><label for="dsub">상신일시</label></td>
@@ -127,8 +127,7 @@ button:hover {
 									</table>
 								</div>
 								<div class="button-container">
-									<button type="button"
-										th:onclick="|location.href='@{/edms/edmsDocList}'|">목록</button>
+								    <button type="button" id="listButton">목록</button>
 								</div>
 							</table>
 						</div>
@@ -138,5 +137,45 @@ button:hover {
 		</div>
 	</div>
 </div>
-</body>
-</html>
+			<script>
+			//이미지 링크용 스크립트
+			const imgLink = $('input[name=imageLink]').val();
+			$('#edmsImg').attr({src: "/upload/"+imgLink});
+			/*
+			*
+			// 다운로드 링크
+			const downLoadLink = $('input[name=downLoadLink]').val();
+			//다운로드 알림창
+			$('#downLoad').on('click', function(event){
+				//th:href="@{http://localhost:8099/edms/}+${edmsDocs.attatch}"
+				// $.Ajax 방식 
+				$.ajax('/edms/fileDownload?fileLink='+downLoadLink,{
+					type : 'get',
+				})
+				.done(result => {
+						alert("다운로드가 완료되었습니다");
+				});
+			});
+			*/
+			
+			//문서함에서 문서를 클릭했을때 나오는 목록 버튼으로 문서함 이동하기
+				$(document).ready(function() {
+		        // URL의 쿼리 파라미터에서 fromDocList 값을 확인
+		        let params = new URLSearchParams(window.location.search); // 현재 페이지에서 ? 이후 부분을 가져온다
+		        let fromDocList = params.get('fromDocList');
+		
+		        if (fromDocList === 'true') { 
+		            // 문서함에서 왔을 때 목록 버튼을 문서함 페이지로 연결
+		            $('#listButton').on('click', function() {
+		                location.href = '/docBox/docList';
+		            });
+		        } else {
+		            // 기본은 결재 문서 목록으로 연결
+		            $('#listButton').on('click', function() {
+		                location.href = '/edms/edmsDocList';
+		            });
+		        }
+		    });
+		</script>
+	</body>
+	</html>

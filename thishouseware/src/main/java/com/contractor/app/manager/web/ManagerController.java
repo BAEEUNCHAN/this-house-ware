@@ -22,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.contractor.app.employee.EmployeeUtil;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.util.EmployeeUtil;
 import com.contractor.app.util.FileUpload;
 
 import groovy.util.logging.Slf4j;
@@ -74,10 +74,7 @@ public class ManagerController {
 	@GetMapping("manager/modifyEmp")
 	public String modifyEmp(EmployeeVO empVO , Model model) {
 		EmployeeVO findVO = employeeService.getEmployee(empVO);
-		System.out.println(findVO);
 		model.addAttribute("employee",findVO);
-		String positionName = EmployeeUtil.getPostionName(findVO.getPositionCode());
-		model.addAttribute("employeePositionName",positionName);
 		List<DepartmentVO> departments = employeeService.getDepartmentList();
 		model.addAttribute("departments" , departments);
 		

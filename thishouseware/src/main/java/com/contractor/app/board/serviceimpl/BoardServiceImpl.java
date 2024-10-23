@@ -32,11 +32,6 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<PostsVO> postListBoard(PostsVO postsVO) {
-		return boardMapper.selectPostBoard(postsVO);
-	}
-	
-	@Override
 	public PostsVO postInfo(PostsVO postsVO) {
 		return boardMapper.selectPostInfo(postsVO);
 	}
@@ -45,6 +40,7 @@ public class BoardServiceImpl implements BoardService {
 	public int insertPost(PostsVO postsVO) {
 		return boardMapper.insertPostInfo(postsVO);
 	}
+
 
 	@Override
 	public int deletePost(int postsNo) {
@@ -80,7 +76,5 @@ public class BoardServiceImpl implements BoardService {
 	public List<PostsVO> selectPostsPaging(PagingVO pagingVO) {
 		return boardMapper.selectPostsPaging(pagingVO);
 	}
-
-
 	
 }

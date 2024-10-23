@@ -15,4 +15,7 @@ public interface CompanyService {
 	
 	// 회사정보 삭제
 	public int deleteCompany(int companyNo);
+	
+	// 회사정보 중복 확인
+	public boolean companyCheckName(String companyName);
 }

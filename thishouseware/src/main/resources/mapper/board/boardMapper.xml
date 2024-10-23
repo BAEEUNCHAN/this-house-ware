@@ -237,4 +237,33 @@
 		WHERE RN BETWEEN #{start} AND #{end}
 	</select>
 
+				(   POSTS_NO
+     		 	  , BOARDS_NO
+     		 	  , POSTS_TYPE
+     		 	  , POST_SETTING
+     		 	  <if test="postSetting == 'q1'">
+     		 	  , POST_STARTTIME 
+     		 	  , POST_ENDTIME
+     		 	  </if>
+     		 	  , TITLE
+     		 	  , CONTENT
+     		 	  <!-- 기본값 admin 설정 -->
+     		 	  <!-- , AUTHORITY
+     		 	  , ID -->
+				)
+		VALUES  (   #{postsNo}
+				   ,#{boardsNo}
+			       ,#{postsType}
+			       ,#{postSetting}
+			       <if test="postSetting == 'q1'">
+			       ,#{postStartTime}
+			       ,#{postEndTime}			       
+			       </if>
+			       ,#{title}
+			       ,#{content}
+			       <!-- 기본값 admin 설정 -->
+			       <!-- ,#{authority}
+			       ,#{id} -->
+				)
+	</insert>
 </mapper>

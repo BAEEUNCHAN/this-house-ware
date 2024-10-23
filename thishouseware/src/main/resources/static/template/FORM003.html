@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>매출보고서 양식</title>
+<title>업무보고서 양식</title>
 <style>
 .table {
 	width: 100%;
@@ -33,7 +33,7 @@ th {
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">매출보고서 양식</div>
+						<div class="card-title">업무보고서 양식</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -60,36 +60,100 @@ th {
 										</tr>
 									</table>
 									<!-- 여기까진 고정이어야함 -->
-									<h2 style="text-align: center;">매출 보고서</h2>
-									<table border="1"
-										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
+									<h2 style="text-align: center;">월별 업무보고서</h2>
+									<br>
+									<br>
+									<br>
+									<!-- 업무 내용 -->
+									<h4>업무 내용</h4>
+									<table class="table">
 										<tr>
-											<th>구매 항목</th>
-											<!--  수정해야됨
-											<td><select name="expenseType" required>
-													<option value="식비">식비</option>
-													<option value="교통비">교통비</option>
-													<option value="업무 관련 구매">업무 관련 구매</option>
-													<option value="기타">기타</option>
-											</select></td>
-										</tr>
-										<tr>
-											<th>지출 금액</th>
-											<td><input type="number" name="amount" required readonly></td>
-										</tr>
-										<tr>
-											<th>지출 내역</th>
-											<td></td>
-										</tr>
-										<tr>
+											<th>업무명</th>
 											<th>내용</th>
-											<td colspan="5"
-												style="height: 800px; vertical-align: center;">상기와 같이
-												지출을 신청합니다.</td>
-												-->
+											<th>일자/신청일</th>
+										</tr>
+										<tr>
+											<td><input type="text" name="taskName1" /></td>
+											<td><input type="text" name="taskDetail1" /></td>
+											<td><input type="date" name="taskDate1" /></td>
+										</tr>
+										<tr>
+											<td><input type="text" name="taskName2" /></td>
+											<td><input type="text" name="taskDetail2" /></td>
+											<td><input type="date" name="taskDate2" /></td>
 										</tr>
 									</table>
-
+									<br>
+									<br>
+									<!-- 업무 추진 사항 -->
+									<h4>업무 추진 사항</h4>
+									<br>
+									<br>
+									<table class="table">
+										<tr>
+											<th>주차</th>
+											<th>주요 추진 업무</th>
+											<th>수행 내용</th>
+											<th>완료/진행사항</th>
+											<th>결과</th>
+											<th>비고</th>
+										</tr>
+										<tr>
+											<td>1주차</td>
+											<td><input type="text" name="week1Task" /></td>
+											<td><input type="text" name="week1Content" /></td>
+											<td><input type="text" name="week1Progress" /></td>
+											<td><input type="text" name="week1Result" /></td>
+											<td><input type="text" name="week1Remark" /></td>
+										</tr>
+										<tr>
+											<td>2주차</td>
+											<td><input type="text" name="week2Task" /></td>
+											<td><input type="text" name="week2Content" /></td>
+											<td><input type="text" name="week2Progress" /></td>
+											<td><input type="text" name="week2Result" /></td>
+											<td><input type="text" name="week2Remark" /></td>
+										</tr>
+										<tr>
+											<td>3주차</td>
+											<td><input type="text" name="week3Task" /></td>
+											<td><input type="text" name="week3Content" /></td>
+											<td><input type="text" name="week3Progress" /></td>
+											<td><input type="text" name="week3Result" /></td>
+											<td><input type="text" name="week3Remark" /></td>
+										</tr>
+										<tr>
+											<td>4주차</td>
+											<td><input type="text" name="week4Task" /></td>
+											<td><input type="text" name="week4Content" /></td>
+											<td><input type="text" name="week4Progress" /></td>
+											<td><input type="text" name="week4Result" /></td>
+											<td><input type="text" name="week4Remark" /></td>
+										</tr>
+									</table>
+									<br>
+									<br>
+									<!-- 계획 사업 및 목표 -->
+									<h4>계획 사업 및 목표</h4>
+									<br>
+									<br>
+									<table class="table">
+										<tr>
+											<th>계획 사업</th>
+											<th>달성</th>
+											<th>업무 계획</th>
+										</tr>
+										<tr>
+											<td><input type="text" name="planTask1" /></td>
+											<td><input type="text" name="planAchievement1" /></td>
+											<td><input type="text" name="planDetail1" /></td>
+										</tr>
+										<tr>
+											<td><input type="text" name="planTask2" /></td>
+											<td><input type="text" name="planAchievement2" /></td>
+											<td><input type="text" name="planDetail2" /></td>
+										</tr>
+									</table>
 								</form>
 							</div>
 						</div>

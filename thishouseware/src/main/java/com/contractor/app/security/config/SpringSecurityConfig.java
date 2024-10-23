@@ -31,7 +31,9 @@ public class SpringSecurityConfig {
 					.loginPage("/login") // 로그인 페이지 지정
 					.failureUrl("/login?login=failed") // 로그인 실패시 경로
 					)
-			.logout(logout -> logout.logoutSuccessUrl("/"));
+			.logout(logout -> logout.logoutSuccessUrl("/login")
+					.invalidateHttpSession(true) 
+					);
 		// csrf 비활성화 (개발 동안만 사용)
 		http
 			.csrf(csrf-> csrf.disable());

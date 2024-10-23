@@ -12,8 +12,11 @@ public interface ScheduleMapper {
 	// 사원별 일정 조회
 	List<ScheduleVO> listSchedule();
 	
+	// 일정 단건 조회
+	Map<String, Object> infoSchedule();
+	
 	// 일정 저장
-	int insertSchedule();
+	int insertSchedule(ScheduleVO scheduleVO);
 	
 	// 일정 수정
 	int updateSchedule();

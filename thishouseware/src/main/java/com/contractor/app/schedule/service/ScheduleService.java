@@ -12,7 +12,10 @@ public interface ScheduleService {
 	List<ScheduleVO> scheduleList();
 	
 	// 일정 저장
-	boolean scheduleSave();
+	public int scheduleInsert(ScheduleVO scheduleVO);
+	
+	// 일정 단건 조회
+	public Map<String, Object> scheduleInfo(Integer no);
 	
 	// 일정 수정
 	boolean scheduleUpdate();

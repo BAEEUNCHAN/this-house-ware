@@ -14,11 +14,13 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -164,7 +166,15 @@ public class EdmsController {
 		os.close();
 
 	}
-
+	// 결재문서 임시저장
+	 @PostMapping("/insertSaveDoc")
+	    public ResponseEntity<String> saveTemporary(@RequestBody EdmsDocVO edmsDocVO) {
+	        edmsDocVO.setApprovalStatus("임시저장"); // 결재 상태를 임시저장으로 설정
+	        edmsService.edmsInseSave(edmsDocVO); // 임시 저장 메서드 호출
+	        return ResponseEntity.ok().build();
+	    }
+	
+	
 	// 결재양식 전체조회
 	@GetMapping("/edmsFormList")
 	public void edmsFormList(Model model) {

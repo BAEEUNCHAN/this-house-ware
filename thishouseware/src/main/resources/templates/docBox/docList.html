@@ -47,13 +47,14 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		$('.docBox > tr').on('click', function(event){
-			let trTag = event.currentTarget;
-			let edno = $(trTag).children().eq(0).text();
-			let url ='/edms/edmsDocInfo?edmsDocNo=' + edno;
-			location.href=url;
-		});
-	</script>
+			<script>
+			//문서함에서 문서 클릭시 문서함 목록으로 이동하기
+		    $('.docBox > tr').on('click', function(event){
+		        let trTag = event.currentTarget;
+		        let edno = $(trTag).children().eq(0).text();
+		        let url = '/edms/edmsDocInfo?edmsDocNo=' + edno + '&fromDocList=true'; // 문서함에서 온 경우를 표시하는 쿼리 파라미터 추가
+		        location.href = url;
+		    });
+			</script>
 </body>
 </html>

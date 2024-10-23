@@ -101,10 +101,8 @@ public class BoardController {
 	
 		pagingVO = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
 		model.addAttribute("paging", pagingVO);
-		model.addAttribute("viewAll", boardService.selectPostsPaging(pagingVO));
-		
 		BoardsVO board = boardService.selectBoard(boardsVO);
-		List<PostsVO> list = boardService.postListBoard(postsVO);
+		List<PostsVO> list = boardService.postListBoard(pagingVO, postsVO);
 		// 페이지에 전달
 		model.addAttribute("posts", list);
 		model.addAttribute("board", board);

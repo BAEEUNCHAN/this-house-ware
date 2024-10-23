@@ -97,8 +97,11 @@
 	</select>
 
 	<!-- 게시판별 게시글 전체조회 -->
-	<select id="selectPostBoard" parameterType="PostsVO"
-		resultType="PostsVO">
+	<select id="selectPostBoard" resultType="PostsVO">
+		SELECT *
+		FROM (
+				SELECT ROWNUM RN, A.*
+				FROM (
 		SELECT p.POSTS_NO
 		, b.BOARDS_NO
 		<!-- , p.POSTS_TYPE -->
@@ -115,10 +118,12 @@
 		when 'p1' then '2'
 		when 'p3' then '3' end as type
 		FROM posts p JOIN boards b
-		ON p.BOARDS_NO =
-		b.BOARDS_NO
-		WHERE b.BOARDS_NO = #{boardsNo}
+		ON p.BOARDS_NO = b.BOARDS_NO
+		WHERE b.BOARDS_NO = #{postsVO.boardsNo}
 		ORDER BY type, p.POSTS_NO desc
+		) A
+		 	  )
+		WHERE RN BETWEEN #{pagingVO.start} AND #{pagingVO.end}
 	</select>
 
 	<!-- 게시글 단건조회 -->
@@ -221,20 +226,6 @@
 		SELECT COUNT(*) 
 		FROM posts
 		WHERE BOARDS_NO = #{boardsNo}
-	</select>
-
-	<!-- 페이징 처리 후 게시글 조회 -->
-	<select id="selectPostsPaging" resultType="PostsVO">
-		SELECT *
-		FROM (
-				SELECT ROWNUM RN, A.*
-				FROM (
-						SELECT *
-						FROM posts
-						ORDER BY POSTS_NO_SEQ DESC
-					  ) A
-		 	  )
-		WHERE RN BETWEEN #{start} AND #{end}
 	</select>
 
 </mapper>

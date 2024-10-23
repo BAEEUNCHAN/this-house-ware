@@ -79,7 +79,7 @@
         on (e.department_no = d.department_no)
 		WHERE email = #{email}
 	</select>
-	<update id="modifyEmployee" parameterType="EmployeeVO">
+	<update id="updateEmployee" parameterType="EmployeeVO">
 		UPDATE employees 
 		SET HIRE_DT = #{hireDt}
 		    ,PHONE = #{phone}
@@ -93,4 +93,5 @@
 		    </if>
 		WHERE id = #{id}
 	</update>
+
 </mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.result.mapper.ResultMapper">
+	<select id="selectResultAll" resultType="ResultsVO">
+	
+		SELECT 		result_cost
+					,result_people
+					,receive_dt
+					,complete_dt
+					,result_solution
+					,result_feedback
+					,result_dt
+					,complain_no
+					,company_no
+					,department_no
+					,complain_content
+		FROM 		results
+	
+	</select>
+	
+	<!-- result 단건조회 -->
+	<select id="selectResultInfo" resultType="ResultsVO">
+		
+		SELECT 		result_cost
+					,result_people
+					,receive_dt
+					,complete_dt
+					,result_solution
+					,result_feedback
+					,complain_no
+					,company_no
+					,department_no
+		FROM		results
+		WHERE		complain_no = #{complainNo}
+		
+	</select>
+	
+	
+	<insert id="insertResult" parameterType="ResultsVO">
+		 
+		INSERT INTO results(
+							result_cost
+							,result_people
+							,receive_dt
+							,complete_dt
+							,result_solution
+							,result_feedback
+							,complain_no
+							,company_no
+							,department_no)
+		VALUES				(
+							#{resultCost}
+							,#{resultPeople}
+							,#{receiveDt}
+							,#{completeDt}
+							,#{resultSolution}
+							,#{resultFeedback}
+							,#{complainNo}
+							,#{companyNo}
+							,#{departmentNo})
+		
+		
+	</insert> 
+</mapper>

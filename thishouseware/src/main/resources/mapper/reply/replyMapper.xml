@@ -25,6 +25,7 @@ SELECT		 d.department_name
 		JOIN		complains c
 		ON			c.complain_no = r.complain_no
 		WHERE 		c.complain_no = #{complainNo}
+		
 </select>
 
 <insert id="insertReply" parameterType="ReplysVO">
@@ -36,7 +37,7 @@ SELECT		 d.department_name
 	INSERT INTO replys(reply_no
 					  ,reply_content
 					  ,reply_dt
-					  ,complainNo
+					  ,complain_no
 					  ,id)
 	VALUES			  (#{replyNo}
 					  ,#{replyContent}

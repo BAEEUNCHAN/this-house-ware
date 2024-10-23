@@ -5,48 +5,46 @@
 	layout:fragment="Content">
 
 <body>
+	<form name="updateForm" th:action="@{/replyInfo}" method="post">
+		<div class="container">
+			<div class="page-inner">
+				<div class="page-header">
+					<h3 class="fw-bold mb-3">불편/장애사항</h3>
+					<ul class="breadcrumbs mb-3">
+						<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+						</a></li>
+						<li class="separator"><i class="icon-arrow-right"></i></li>
+						<li class="nav-item"><a href="#">고객관리</a></li>
+						<li class="separator"><i class="icon-arrow-right"></i></li>
+						<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
+					</ul>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">불편/장애사항 단건조회</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<!-- 왼쪽화면 -->
+									<div class="col-md-6 col-lg-30">
 
-	<div class="container">
-		<div class="page-inner">
-			<div class="page-header">
-				<h3 class="fw-bold mb-3">불편/장애사항</h3>
-				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
-					</a></li>
-					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="#">고객관리</a></li>
-					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
-				</ul>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="card">
-						<div class="card-header">
-							<div class="card-title">불편/장애사항 단건조회</div>
-						</div>
-						<div class="card-body">
-							<div class="row">
-								<!-- 왼쪽화면 -->
-								<div class="col-md-6 col-lg-30">
+										<label for="companyName">회사명 :
+											[[${complain.companyName}]]</label> <br /> <br /> <label
+											for="customerName">고객명 : [[${complain.customerName}]]</label>
+										<br /> <br /> <label for="phone">연락처 :
+											[[${complain.phone}]]</label> <br /> <br />
 
-									<label for="companyName">회사명 :
-										[[${complain.companyName}]]</label> <br /> <br /> <label
-										for="customerName">고객명 : [[${complain.customerName}]]</label>
-									<br /> <br /> <label for="phone">연락처 :
-										[[${complain.phone}]]</label> <br /> <br />
-
-								</div>
-								<!-- 왼쪽화면 끝-->
-								<!-- 오른쪽화면 -->
-								<div class="col-md-6 col-lg-30">
-									<form name="updateForm" th:action="@{/replyInfo}">
+									</div>
+									<!-- 왼쪽화면 끝-->
+									<!-- 오른쪽화면 -->
+									<div class="col-md-6 col-lg-30">
 										<label for="uploadDt">문제발생일 :
 											[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
-										<br />  <span>문의구분 :
-												[[${complain.complainType == 1 ? '고객불편' :
-												(complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황 : </span><label for="customerName"> <select
-												
+										<br /> <span>문의구분 : [[${complain.complainType == 1 ?
+											'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황
+											: </span><label for="customerName"> <select
 											class="form-select" id="progress" name="progress"
 											aria-label="Progress Dropdown" style="width: 100px;">
 												<option th:value="0" th:selected="${complain.progress == 0}">대기</option>
@@ -55,84 +53,64 @@
 												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
 												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
 										</select>
-										</label>
-									</form>
-
-
-									 <br /> <label for="phone">작성일 :
-										[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
-									<br />
+										</label> <br /> <label for="phone">작성일 :
+											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+										<br />
+									</div>
 								</div>
-							</div>
-							<div class="card-action">
-								<div class="text-center">
-									<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
-								</div>
+								<div class="card-action">
+									<div class="text-center">
+										<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
+									</div>
 
-								<p style="font-weight: bold; font-size: 16px;">
-									<i class="icon-pencil"> 문의내용</i>
-								</p>
-								<label for="customerName">[[${complain.complainContent}]]</label>
-								<br /> <br />
-								<p style="font-weight: bold; font-size: 16px;">
-									<i class="icon-pencil"> 요구사항</i>
-								</p>
-								<label for="phone">[[${complain.complainRequest}]]</label> <br />
+									<p style="font-weight: bold; font-size: 16px;">
+										<i class="fas fa-check-square"> 문의내용</i>
+									</p>
+									<label for="customerName">[[${complain.complainContent}]]</label>
+									<br /> <br />
+									<p style="font-weight: bold; font-size: 16px;">
+										<i class="fas fa-check-square"> 요구사항</i>
+									</p>
+									<label for="phone">[[${complain.complainRequest}]]</label> <br />
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col-md-12">
-					<div class="card">
-						<div class="card-header">
-							<div class="card-title">문의답변/조치사항</div>
-						</div>
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-12 col-lg-12">
-									<br />
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">문의답변/조치사항</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12 col-lg-12">
+										<br />
 
 
-									<form name="insertReply" th:action="@{/replyInfo}">
 										<th:block th:each="info : ${replys}">
 
 											<div class="timeline-panel">
 												<div class="timeline-heading">
-													<h4 class="timeline-title" style="font-weight:bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
 													<p>
 														<small class="text-muted"><i
 															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
-											'yyyy년 MM월 dd일')}]] </small>
+															'yyyy년 MM월 dd일')}]] </small>
 													</p>
 												</div>
 												<div class="timeline-body">
 													<p>[[${info.replyContent}]]</p>
 												</div>
-											</div><br/><br/>
+											</div>
+											<br />
+											<br />
 										</th:block>
-										<br /> <label for="dept"> 부서 : </label>
-										<div style="display: inline-block;">
-											<select class="form-select" id="dept"
-												aria-label="Progress Dropdown" style="width: 100px;">
-												<option th:each="dept : ${depts}"
-													th:value="${dept.departmentName}"
-													th:text="${dept.departmentName}"></option>
-											</select>
-										</div>
-										<label for="dept"> 담당자 : </label>
-										<div style="display: inline-block;">
-											<select class="form-select" id="name"
-												aria-label="Progress Dropdown" style="width: 100px;">
-												<option th:each="emp : ${emps}" th:value="${emp.name}"
-													th:text="${emp.name}"></option>
-											</select>
-										</div>
-
-										<!-- <label for="complainReply">문의답변</label> -->
-										<br /> <br />
+										<small class="text-muted"><i class="far fa-paper-plane">
+										[[${#authentication.principal.empVO.departmentName}]]
+											[[${#authentication.principal.empVO.name}]]</i></small>
 										<textarea class="form-control" name="replyContent"
 											id="replyContent" rows="5" maxlength="500"
 											style="background-color: lightyellow;"></textarea>
@@ -147,19 +125,21 @@
 										<button type="submit" class="btn btn-primary"
 											style="float: right;">등록</button>
 										<input type="hidden" name="complainNo"
-											th:value="${complain.complainNo}">
-									</form>
+											th:value="${complain.complainNo}"> <input
+											type="hidden" name="id"
+											th:value="${#authentication.principal.empVO.id}">
+
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-
-
 		</div>
-	</div>
+	</form>
+
+
 	<script>
 	
 		// 삭제모달
@@ -257,11 +237,6 @@
               function replyUpdateHandler(event){
             	  event.preventDefault();
             	  updateForm.submit();
-              }
-              $(insertReply).on('submit', replyInsertHandler)
-              function replyInsertHandler(event){
-            	  event.preventDefault();
-            	  insertReply.submit();
               }
               
               

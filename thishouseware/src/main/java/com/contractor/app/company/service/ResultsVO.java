@@ -14,7 +14,9 @@ public class ResultsVO {
 	private Integer departmentNo;	// 담당부서		, Not Null
 	@DateTimeFormat(pattern = "yyyy-MM-dd")	
 	private Date receiveDt;			// 글접수일시
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
 	private Date completeDt;		// 해결완료일시
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
 	private Date resultDt;			// 해결기간
 	private String complainContent;	// 상황입력		, Not Null
 	private String resultSolution;	// 해결방법		, Not Null

@@ -63,17 +63,19 @@
 
 								</div>
 
-								<p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>문의내용</p>
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square"></i>문의내용
+								</p>
 								<label for="customerName">[[${complain.complainContent}]]</label>
 								<br /> <br />
-								<p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>요구사항</p>
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square"></i>요구사항
+								</p>
 								<label for="phone">[[${complain.complainRequest}]]</label> <br />
 								<br /> <br />
 								<div class="text-center">
 									<button class="btn btn-success"
 										th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
-									<button class="btn btn-primary"
-										th:onclick='|location.href="@{/complainList}"|'>목록</button>
 									<button type="button" class="btn btn-danger alert_demo_7"
 										data-toggle="modal" data-target="#exampleModal"
 										th:value="${complain.complainNo}">삭제</button>
@@ -83,6 +85,58 @@
 					</div>
 				</div>
 			</div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">문의답변/조치사항</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-lg-12">
+									<br />
+
+
+									<th:block th:each="info : ${replys}">
+
+										<div class="timeline-panel">
+											<div class="timeline-heading">
+												<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+												<p>
+													<small class="text-muted"><i
+														class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
+														'yyyy년 MM월 dd일')}]] </small>
+												</p>
+											</div>
+											<div class="timeline-body">
+												<p>[[${info.replyContent}]]</p>
+											</div>
+										</div>
+										<br />
+										<br />
+									</th:block>
+
+
+
+
+
+
+									<div class="text-center">
+										<button class="btn btn-primary"
+										th:onclick='|location.href="@{/complainList}"|'>목록</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
 	</div>
 	<script>

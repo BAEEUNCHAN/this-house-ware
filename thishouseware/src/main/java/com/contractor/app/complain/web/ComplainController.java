@@ -45,6 +45,8 @@ public class ComplainController {
 	public String complainInfo(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
+		List<ComplainsVO> list = complainService.complainDeptInfo(complainVO);
+		model.addAttribute("replys", list);
 		return "complain/complainInfo";
 	}
 	

@@ -35,6 +35,10 @@ public class ComplainServiceImpl implements ComplainService {
 	public List<ComplainsVO> complainResultList() {
 		return complainMapper.complainResultList();
 	}
+	@Override
+	public List<ComplainsVO> resultList(ComplainsVO complainVO) {
+		return complainMapper.resultList(complainVO);
+	}
 	
 	// 문의 단건조회(complain)
 	 @Override public ComplainsVO complainInfo(ComplainsVO complainVO) {
@@ -45,7 +49,6 @@ public class ComplainServiceImpl implements ComplainService {
 	public List<ComplainsVO> complainDeptInfo(ComplainsVO complainVO) {
 		return complainMapper.selectComplainDeptInfo(complainVO);
 	}
-	 
 	
 	 // 문의 등록
 	 @Override

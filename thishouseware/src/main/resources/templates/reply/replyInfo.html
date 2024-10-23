@@ -53,7 +53,7 @@
 												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
 												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
 										</select>
-										</label> <br /> <label for="phone">작성일 :
+										</label> <br /><br /> <label for="phone">작성일 :
 											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
 										<br />
 									</div>

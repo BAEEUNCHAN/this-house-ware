@@ -57,10 +57,15 @@ public class ReplyController {
 	
 	@PostMapping("replyInfo")
 	public String replyProcess(ComplainsVO complainVO, ReplysVO replyVO) {
-		// 처리과정업데이트
-		complainService.updateComplainProgress(complainVO);
-		// 댓글등록
-		int complainNo = replyService.insertReply(replyVO);
+		
+		if(replyVO.getReplyContent() == "") {
+			// 처리과정업데이트
+			complainService.updateComplainProgress(complainVO);
+		}else {
+			complainService.updateComplainProgress(complainVO);
+			// 댓글등록
+			int complainNo = replyService.insertReply(replyVO);
+		}
 		return "redirect:replyInfo?complainNo="+replyVO.getComplainNo();
 	}
 	

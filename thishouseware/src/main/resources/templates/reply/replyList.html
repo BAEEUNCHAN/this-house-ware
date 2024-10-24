@@ -4,17 +4,15 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 
-<link
-	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
-	rel="stylesheet">
+<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <style>
 .dataTables_length {
-	float: left; 
+	float: left;
 }
 
 .dataTables_info {
-	float: left; 
+	float: left;
 }
 
 .progress-0 {
@@ -63,7 +61,7 @@
 				<button class="btn btn-outline-dark" id="progress4Btn">보고완료</button> -->
 			<!-- 처리상황 드롭다운 메뉴 -->
 			<select class="form-select" id="progressDropdown"
-				aria-label="Progress Dropdown" style="width:100px;">
+				aria-label="Progress Dropdown" style="width: 100px;">
 				<option value="">선택</option>
 				<option value="0">대기</option>
 				<option value="1">접수</option>
@@ -76,10 +74,7 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<div class="card-title">
-									불편/장애사항 목록<a href="/insertComplain" class="float-end"><button
-											class="btn btn-primary">문의등록</button></a>
-								</div>
+								<div class="card-title">불편/장애사항 목록</div>
 							</div>
 							<div class="card-body">
 								<div class="row">
@@ -110,11 +105,16 @@
 														<td><span th:switch="${info.complainType}"> <span
 																th:case="1">고객불편</span> <span th:case="2">운영장애</span></span>
 														<td><span th:switch="${info.progress}"> <span
-																th:case="0" th:class="'progress-0'"><span class="badge badge-danger">대기</span></span> <span
-																th:case="1" th:class="'progress-1'"><span class="badge badge-warning">접수</span></span> <span
-																th:case="2" th:class="'progress-2'"><span class="badge badge-success">진행</span></span> <span
-																th:case="3" th:class="'progress-3'"><span class="badge badge-black">상황완료</span></span> <span
-																th:case="4" th:class="'progress-4'"><span class="badge badge-primary">보고완료</span></span>
+																th:case="0" th:class="'progress-0'"><span
+																	class="badge badge-danger">대기</span></span> <span th:case="1"
+																th:class="'progress-1'"><span
+																	class="badge badge-warning">접수</span></span> <span th:case="2"
+																th:class="'progress-2'"><span
+																	class="badge badge-success">진행</span></span> <span th:case="3"
+																th:class="'progress-3'"><span
+																	class="badge badge-primary">상황완료</span></span> <span
+																th:case="4" th:class="'progress-4'"><span
+																	class="badge badge-count">보고완료</span></span>
 														</span></td>
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
 
@@ -141,7 +141,27 @@
 	</div>
 
 
-
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">게시물을 정말 삭제하시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">삭제하기</button>
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 
@@ -154,8 +174,8 @@
                 var initDemos = function () {
                   $(".alert_demo_7").click(function (e) {
                 	  event.stopPropagation();
-                	  //let complainNo = $(e.currentTarget).closest('tr').children().first().text();
-                	  let complainNo = $(trTag).children().first().text().trim();
+                	  let complainNo = $(e.currentTarget).closest('tr').children().first().text();
+                	  //let complainNo = $(trTag).children().first().text().trim();
                     swal({
                       title: "불편/장애사항 삭제",
                       text: "문의사항을 삭제하시겠습니까?",
@@ -196,7 +216,7 @@
   								swal(
   										 {
   									title: "오류!",
-  									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
+  									text: "댓글이 있는 문의글은 삭제할 수 없습니다.",
   									icon: "error",
   									buttons: {
   										confirm: {

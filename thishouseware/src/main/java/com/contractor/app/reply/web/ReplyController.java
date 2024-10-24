@@ -1,12 +1,11 @@
 package com.contractor.app.reply.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,19 +72,26 @@ public class ReplyController {
 		return "redirect:replyInfo?complainNo="+replyVO.getComplainNo();
 	}
 	
-	@PostMapping("replyDelete")
+	
+	// 삭제
 	@ResponseBody
-	public Map<String, Object> replyDelete(int replyId) {
-	    Map<String, Object> response = new HashMap<>();
-	    try {
-	        replyService.replyDelete(replyId);
-	        response.put("success", true);
-	    } catch (Exception e) {
-	        response.put("error", false);
-	    }
-	    return response;
+	@DeleteMapping("replyDelete")
+	public String replyDelete(@RequestParam Integer replyNo) {
+		ReplysVO replyVO = new ReplysVO();
+		replyService.replyDelete(replyNo);
+		return "redirect:replyInfo?complainNo=" + replyVO.getComplainNo();
+	} 
+	
+	// 댓글수정
+	@ResponseBody
+	@PostMapping("replyUpdate")
+	public String replyUpdate(@RequestParam(value = "complainNo", required = false) Integer complainNo, ReplysVO replyVO) {
+		replyService.replyUpdate(replyVO);
+		return "success";
 	}
+	
 
 	
+
 	
 }

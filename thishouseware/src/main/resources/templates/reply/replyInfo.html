@@ -3,7 +3,15 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-
+<!-- data table -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<!-- modal -->
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <body>
 	<form name="updateForm" th:action="@{/replyInfo}" method="post">
 		<div class="container">
@@ -53,7 +61,7 @@
 												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
 												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
 										</select>
-										</label> <br /><br /> <label for="phone">작성일 :
+										</label> <br /> <br /> <label for="phone">작성일 :
 											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
 										<br />
 									</div>
@@ -94,21 +102,28 @@
 
 											<div class="timeline-panel">
 												<div class="timeline-heading">
-													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]
-													<th:block th:if="${#authentication.principal.empVO.id} == ${info.id}">
-													
-													<i class="fas fa-times-circle" style="float:right; color:gray;" data-id="${info.replyId}"></i>
-													<i class="far fa-edit" style="float:right; color:gray;"></i>
-													</th:block>
-													</h4> <p>
+													<h4 class="timeline-title" style="font-weight: bold;">
+														[[${info.departmentName}]][[${info.name}]]
+														<th:block
+															th:if="${#authentication.principal.empVO.id} == ${info.id}">
+															<!-- 삭제버튼 -->
+															<i class="fas fa-times-circle"
+																style="float: right; color: gray;"
+																th:data-id="${info.replyNo}"> </i>
+															<!-- 수정버튼 -->
+															<i class="far fa-edit" style="float: right; color: gray;"
+																th:data-id="${info.replyNo}"></i>
+														</th:block>
+													</h4>
+													<p>
 														<small class="text-muted"><i
 															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
 															'yyyy년 MM월 dd일')}]] </small>
 													</p>
-													
-													
-													
-													
+
+
+
+
 												</div>
 												<div class="timeline-body">
 													<p>[[${info.replyContent}]]</p>
@@ -117,13 +132,13 @@
 											<br />
 											<br />
 										</th:block>
-										<small class="text-muted"><i class="far fa-paper-plane">
-										[[${#authentication.principal.empVO.departmentName}]]
-											[[${#authentication.principal.empVO.name}]]</i></small>
+										<small class="text-muted"><i
+											class="far fa-paper-plane">
+												[[${#authentication.principal.empVO.departmentName}]]
+												[[${#authentication.principal.empVO.name}]]</i></small>
 										<textarea class="form-control" name="replyContent"
 											id="replyContent" rows="5" maxlength="500"
 											style="background-color: lightyellow;"></textarea>
-
 
 
 
@@ -149,32 +164,84 @@
 	</form>
 
 
+
+
+
 	<script>
 		
-	
-    $('.fa-times-circle').on('click', function() {
+    // 삭제버튼
+      $('.fa-times-circle').on('click', function() {
         var replyNo = $(this).data('id');
-        var confirmed = confirm("정말로 이 댓글을 삭제하시겠습니까?");
+        //var replyNo = ('#deleteReply').val();
+        var confirmed = confirm("댓글을 삭제하시겠습니까?");
         
         if(confirmed) {
             $.ajax({
-                url: `/replyDelete?replyNo=`+replyNo,
+                url: `/replyDelete?replyNo=` + replyNo,
                 type: 'DELETE',
-                success: function(response) {
-                    if (response.success) {
-                        alert('댓글이 성공적으로 삭제되었습니다.');
-                    } else {
-                        alert('댓글 삭제에 실패했습니다.');
-                    }
-                }
-                /* .bind(this),
-                error: function(xhr, status, error) {
-                    alert('서버 에러가 발생했습니다. 다시 시도해주세요.');
-                } */
-            });
+        }).then(() => {
+        	location.reload();
+        })
         }
-    });
-
+    });  
+    
+    
+    
+    
+    $(".fa-edit").click(function (e) {
+    	var replyNo = $(this).data('id');
+    	var replyContent = $(this).closest('.timeline-panel').find('.timeline-body p').text().trim();
+        swal({
+          title: "",
+          text : "수정할 댓글내용을 입력하세요.",
+          content: {
+            element: "input",
+            attributes: {
+              value: replyContent, 
+              type: "text",
+              id: "input-field",
+              className: "form-control",
+            },
+          },
+          buttons: {
+            confirm: {
+            	text: "수정",
+              className: "btn btn-success",
+            },
+            cancel: {
+            	text: "취소",
+              visible: true,
+              className: "btn btn-danger",
+            },
+          },
+        }).then(function (value) {
+        	if(value){
+        		var updatedContent = $("#input-field").val();
+        	$.ajax({
+                url: `/replyUpdate?replyNo=` + replyNo,
+                type: 'POST',
+                data: {
+				replyNo: replyNo,                	
+                replyContent: updatedContent,
+                },
+                success: function(response){
+          swal("수정 완료", "댓글이 성공적으로 수정되었습니다.", "success")
+          .then(function() {
+              location.reload();
+          });
+                },
+                error: function() {
+                    swal("오류", "댓글 수정에 실패했습니다.", "error").then(function(){
+                    	location.reload();
+                    }) } 
+                    
+        })
+        	}
+        	
+        });
+      });
+    
+    
               
               $(updateForm).on('submit', replyUpdateHandler)
               function replyUpdateHandler(event){

@@ -44,12 +44,31 @@
 										<div class="col-md-6 col-lg-30">
 											<label for="uploadDt">문제발생일 :
 												[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]] <br />
-											<br /> <span>문의구분 : [[${complain.complainType == 1 ?
-												'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] /
-												처리상황 : </span> <br /> </label><span th:if="${complain.progress == 3}"
-												class="badge badge-warning">  상황완료</span> <span
-												th:if="${complain.progress == 4}"
-												class="badge badge-primary">  보고완료</span>
+												<br /> <span>문의구분 : [[${complain.complainType == 1 ?
+													'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] /
+													처리상황 : </span> <br />
+											<th:block th:each="info : ${results}">
+												<th:block th:if="${info.resultCost != null}">
+													<span th:if="${complain.progress == 3}"
+														class="badge badge-warning"> 상황완료</span>
+													<span th:if="${complain.progress == 4}"
+														class="badge badge-primary"> 보고완료</span>
+												</th:block>
+											</th:block>
+
+
+											</label>
+											<th:block
+												th:if="${results == null } or ${results.size() == 0}">
+												<select class="form-select" id="progress" name="progress"
+													aria-label="Progress Dropdown" style="width: 100px; display: inline-block;">
+													<option th:value="3"
+														th:selected="${complain.progress == 3}">상황완료</option>
+													<option th:value="4"
+														th:selected="${complain.progress == 4}">보고완료</option>
+												</select>
+											</th:block>
+
 
 
 											<br /> <br /> <label for="phone">작성일 :
@@ -91,7 +110,7 @@
 											<th:block
 												th:if="${results == null } or ${results.size() == 0}">
 												<label for="resultCost"><i
-													class="fas fa-check-square" > 소모비용 : </i></label>
+													class="fas fa-check-square"> 소모비용 : </i></label>
 												<input type="number" name="resultCost" maxlength="10"
 													aria-label="Username" id="resultCost"
 													style="width: 150px; height: 33px;"
@@ -223,20 +242,19 @@
 												</div>
 											</div>
 											<div class="text-center">
-										<th:block
-											th:if="${results == null } or ${results.size() == 0}">
-											<button type="submit" class="btn btn-success"
-												>등록</button>
-											<input type="hidden" name="complainNo"
-												th:value="${complain.complainNo}">
-											<input type="hidden" name="companyNo"
-												th:value="${complain.companyNo}">
-											<input type="hidden" name="id"
-												th:value="${#authentication.principal.empVO.id}">
-											<input type="hidden" name="departmentNo"
-												th:value="${#authentication.principal.empVO.departmentNo}">
-										</th:block>
-										</div>
+												<th:block
+													th:if="${results == null } or ${results.size() == 0}">
+													<button type="submit" class="btn btn-success">등록</button>
+													<input type="hidden" name="complainNo"
+														th:value="${complain.complainNo}">
+													<input type="hidden" name="companyNo"
+														th:value="${complain.companyNo}">
+													<input type="hidden" name="id"
+														th:value="${#authentication.principal.empVO.id}">
+													<input type="hidden" name="departmentNo"
+														th:value="${#authentication.principal.empVO.departmentNo}">
+												</th:block>
+											</div>
 										</div>
 
 
@@ -279,13 +297,10 @@
 		document.getElementById('completeDt').value = new Date().toISOString()
 				.substring(0, 10);
 
-		
-		
-		
 		$(updateForm).on('submit', resultUpdateHandler)
 		function resultUpdateHandler(event) {
 			event.preventDefault();
-			
+
 			// 연락처 빈칸 확인
 			let resultCost = $('form [name="resultCost"]'); // 공백은 하위요소 찾는 것.
 			if (resultCost.val() == '') {
@@ -311,9 +326,7 @@
 				resultFeedback.focus();
 				return;
 			}
-			
-			
-			
+
 			alert('게시글이 등록되었습니다.');
 			updateForm.submit();
 		}

@@ -97,11 +97,33 @@ public class ComplainController {
 	}
 	 
 	// 비밀번호 확인 - 페이지
+	@ResponseBody
 	@PostMapping("complainPwdCheck") 
-	public String complainPwdCheck(ComplainsVO complainVO, Model model) {
-		ComplainsVO findVO = complainService.complainInfo(complainVO);
-		model.addAttribute("complain", findVO);
-		return "complain/complainPwdCheck";
+	public String complainPwdCheck(@RequestParam(value = "complainNo", required = false) Integer complainNo, @RequestParam(value = "complainPwd", required = false) String complainPwd,  Model model) {
+		/*
+		 * ComplainsVO findVO = complainService.complainInfo(complainVO);
+		 * model.addAttribute("complain", findVO);
+		 */
+		ComplainsVO complainVO = new ComplainsVO();
+		
+		System.out.println(complainPwd);
+		System.out.println(complainVO.getComplainPwd());
+		
+		if(complainPwd.equals(complainVO.getComplainPwd()) ) {
+			System.out.println("비밀번호 같음");
+			return "success";
+		}else {
+			System.out.println("비밀번호 다름");
+			return "error";
+		}
+		
+		/*
+		 * if(complainPwd == complainVO.getComplainPwd() ) {
+		 * return "success";
+		 * }else {
+		 * return "error"; }
+		 */
+		
 	}
 	
 

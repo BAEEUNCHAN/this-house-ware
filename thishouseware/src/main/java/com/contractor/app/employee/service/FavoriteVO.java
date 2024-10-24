@@ -1,4 +1,4 @@
-package com.contractor.app.employee.mapper;
+package com.contractor.app.employee.service;
 
 import lombok.Data;
 

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.contractor.app.employee.service.EmailService;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.employee.service.impl.EmailServiceImpl;
 import com.contractor.app.util.RandomValue;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class employeeController {
 	
 	private final EmployeeService employeeService;
 	private final PasswordEncoder encoder;
-	private final EmailService emailService;
+	private final EmailServiceImpl emailService;
 
 	@GetMapping("login")
 	public String loginForm() {

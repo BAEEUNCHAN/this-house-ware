@@ -1,10 +1,5 @@
-package com.contractor.app.employee.service;
+package com.contractor.app.employee.service.impl;
 
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class EmailService {
+public class EmailServiceImpl {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     @Async

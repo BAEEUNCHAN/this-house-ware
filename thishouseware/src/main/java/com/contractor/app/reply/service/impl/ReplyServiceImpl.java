@@ -29,4 +29,9 @@ public class ReplyServiceImpl implements ReplyService {
 		int result = replyMapper.insertReply(replyVO);
 		return result == 1 ? replyVO.getComplainNo() : -1;
 	}
+	
+	@Override
+	public int replyDelete(int replyNo) {
+		return replyMapper.deleteReplyInfo(replyNo) ;
+	}
 }

@@ -94,12 +94,21 @@
 
 											<div class="timeline-panel">
 												<div class="timeline-heading">
-													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
-													<p>
+													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]
+													<th:block th:if="${#authentication.principal.empVO.id} == ${info.id}">
+													
+													<i class="fas fa-times-circle" style="float:right; color:gray;" data-id="${info.replyId}"></i>
+													<i class="far fa-edit" style="float:right; color:gray;"></i>
+													</th:block>
+													</h4> <p>
 														<small class="text-muted"><i
 															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
 															'yyyy년 MM월 dd일')}]] </small>
 													</p>
+													
+													
+													
+													
 												</div>
 												<div class="timeline-body">
 													<p>[[${info.replyContent}]]</p>
@@ -141,97 +150,31 @@
 
 
 	<script>
+		
 	
-		// 삭제모달
-		 //== Class definition
-              var SweetAlert2Demo = (function () {
-                //== Demos
-                var initDemos = function () {
-                  $(".alert_demo_7").click(function (e) {
-                	  event.stopPropagation();
-                	  let complainNo = $(this).val();
-                    swal({
-                      title: "불편/장애사항 삭제",
-                      text: "문의사항을 삭제하시겠습니까?",
-                      type: "warning",
-                      buttons: {
-                        confirm: {
-                          text: "삭제",
-                          className: "btn btn-danger",
-                        },
-                        cancel: {
-                        	text: "취소",
-                          visible: true,
-                          className: "btn btn-black",
-                        },
-                      },
-                    }).then((Delete) => {
-                      if (Delete) {
-                    	  
-                    	  $.ajax({
-                              url: `/complainDelete?complainNo=${complainNo}`, 
-                              type: 'DELETE',
-                              success: function (response) {
-                                  swal({
-                                      title: "삭제완료!",
-                                      text: "해당 문의사항이 삭제되었습니다.",
-                                      icon: "success",
-                                      buttons: {
-                                          confirm: {
-                                              text: "확인",
-                                              className: "btn btn-success",
-                                          },
-                                      },
-                                  }).then(() => {
-                                	  window.location.href = '/complainList';
-                                  });
-                              },
-                              error: function (error) {
-  								swal(
-  										 {
-  									title: "오류!",
-  									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
-  									icon: "error",
-  									buttons: {
-  										confirm: {
-  											text: "확인",
-  											className: "btn btn-danger",
-  										},
-  									},
-  								} 
-  										).then(() => {
-  									//location.reload();
-  								});
-  							}  
-                          });
-                      } else {
-                          swal.close();
-                      }
-                  });
-              });
+    $('.fa-times-circle').on('click', function() {
+        var replyNo = $(this).data('id');
+        var confirmed = confirm("정말로 이 댓글을 삭제하시겠습니까?");
         
-                };
-        
-                return {
-                  //== Init
-                  init: function () {
-                    initDemos();
-                  },
-                };
-              })();
-        
-              //== Class Initialization
-              jQuery(document).ready(function () {
-                SweetAlert2Demo.init();
-              });
-              
-              
-              /* $('#dept').on('change', function(){
-            	  var selectedDept = $(this).val();
-            	  if(selectedDept !== ""){
-            	  }
-              }); */
-			
+        if(confirmed) {
+            $.ajax({
+                url: `/replyDelete?replyNo=`+replyNo,
+                type: 'DELETE',
+                success: function(response) {
+                    if (response.success) {
+                        alert('댓글이 성공적으로 삭제되었습니다.');
+                    } else {
+                        alert('댓글 삭제에 실패했습니다.');
+                    }
+                }
+                /* .bind(this),
+                error: function(xhr, status, error) {
+                    alert('서버 에러가 발생했습니다. 다시 시도해주세요.');
+                } */
+            });
+        }
+    });
+
               
               $(updateForm).on('submit', replyUpdateHandler)
               function replyUpdateHandler(event){

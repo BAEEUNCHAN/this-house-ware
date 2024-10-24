@@ -46,4 +46,10 @@ SELECT		 d.department_name
 					  ,#{id})
 </insert>
 
+<delete id="deleteReplyInfo" parameterType="int">
+	DELETE FROM replys
+	WHERE		reply_no = #{replyNo}
+</delete>
+
+
 </mapper>

@@ -146,22 +146,30 @@
                           <div class="u-text">
                             <h4 th:text="${#authentication.principal.empVO.id}"></h4>
                             <p class="text-muted" th:text="${session.attendance.attendancesCode}"></p> 
-                            <a th:if="${session.attendance.attendancesCode == 'J2'}"
-                              href="출근 요청 url 작성!"
-                              class="btn btn-primary fs-6"
-                              >출근 </a>
-                            <a th:if="${session.attendance.attendancesCode == 'J1'}"
-                            href="퇴근 요청 url 작성!"
-                            class="btn btn-danger fs-6"
-                            >퇴근 </a>
-                            <a th:if="${session.attendance.attendancesCode == 'J1'}"
-                            href="외출 요청 url 작성!"
-                            class="btn btn-secondary fs-6"
-                            >외출 </a>
-                            <a th:if="${session.attendance.attendancesCode == 'J4'}"
-                            href="복귀 요청 url 작성!"
-                            class="btn btn-success fs-6"
-                            >복귀 </a>
+                            <button type="button" 
+                              class="btn btn-success" 
+                              id="attendanceBtn1"
+                              th:if="${session.attendance.attendancesCode == 'J2'}">
+                              출근
+                            </button>
+                            <button type="button" 
+                              class="btn btn-danger fs-6" 
+                              id="attendanceBtn2"
+                              th:if="${session.attendance.attendancesCode == 'J1'}">
+                              퇴근
+                            </button>
+                            <button type="button" 
+                              class="btn btn-secondary fs-6" 
+                              id="attendanceBtn3"
+                              th:if="${session.attendance.attendancesCode == 'J1'}">
+                              외출
+                            </button>
+                            <button type="button" 
+                              class="btn btn-success fs-6" 
+                              id="attendanceBtn4"
+                              th:if="${session.attendance.attendancesCode == 'J3'}">
+                              복귀
+                            </button>
                           </div>
                         </div>
                       </li>
@@ -179,4 +187,194 @@
             </div>
           </nav>
           <!-- End Navbar -->
+<script>
+//== Class definition
+var SweetAlert2Demo = (function () {
+  //== Demos
+  var initDemos = function () {
+    // 출근버튼
+    $("#attendanceBtn1").click(function (e) {
+      swal({
+        title: "출근하시겠습니까?",
+        type: "warning",
+        buttons: {
+          confirm: {
+            text: "예",
+            className: "btn btn-success",
+          },
+          cancel: {
+         	text: "아니요",
+            visible: true,
+            className: "btn btn-danger",
+          },
+        },
+      }).then((buttonResult) => {
+        if (buttonResult) {
+          let obj = new Object();
+          obj.attendancesCode = "j1";
+          $.ajax({
+            url:'/attendance/modifyCode',
+            type: 'post',
+            data: JSON.stringify(obj),
+            contentType : 'application/json',
+            success: function(answer){
+              if(answer == "success"){
+                swal({
+                  title: "요청이 처리되었습니다.",
+                  type: "success",
+                  buttons: {
+                    confirm: {
+                      text: "예",
+                      className: "btn btn-success",
+                    },
+                  },
+                });
+              }
+              else{
+                swal({
+                  title: "요청이 실패하였습니다.",
+                  type: "error",
+                  buttons: {
+                    confirm: {
+                      text: "예",
+                      className: "btn btn-success",
+                    },
+                  },
+                });
+              }
+            },
+            error: function (error) {
+              swal({
+                  title: "요청이 실패하였습니다.",
+                  type: "error",
+                  buttons: {
+                    confirm: {
+                      text: "예",
+                      className: "btn btn-success",
+                    },
+                  },
+                });
+            }
+          })
+          
+        } else {
+          swal.close();
+        }
+      });
+    });
+    // 퇴근 버튼
+    $("#attendanceBtn2").click(function (e) {
+      swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        buttons: {
+          confirm: {
+            text: "Yes, delete it!",
+            className: "btn btn-success",
+          },
+          cancel: {
+            visible: true,
+            className: "btn btn-danger",
+          },
+        },
+      }).then((Delete) => {
+        if (Delete) {
+          swal({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            type: "success",
+            buttons: {
+              confirm: {
+                className: "btn btn-success",
+              },
+            },
+          });
+        } else {
+          swal.close();
+        }
+      });
+    });
+    // 외출 버튼
+    $("#attendanceBtn3").click(function (e) {
+      swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        buttons: {
+          confirm: {
+            text: "Yes, delete it!",
+            className: "btn btn-success",
+          },
+          cancel: {
+            visible: true,
+            className: "btn btn-danger",
+          },
+        },
+      }).then((Delete) => {
+        if (Delete) {
+          swal({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            type: "success",
+            buttons: {
+              confirm: {
+                className: "btn btn-success",
+              },
+            },
+          });
+        } else {
+          swal.close();
+        }
+      });
+    });
+    // 복귀 버튼
+    $("#attendanceBtn4").click(function (e) {
+      swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        buttons: {
+          confirm: {
+            text: "Yes, delete it!",
+            className: "btn btn-success",
+          },
+          cancel: {
+            visible: true,
+            className: "btn btn-danger",
+          },
+        },
+      }).then((Delete) => {
+        if (Delete) {
+          swal({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            type: "success",
+            buttons: {
+              confirm: {
+                className: "btn btn-success",
+              },
+            },
+          });
+        } else {
+          swal.close();
+        }
+      });
+    });
+
+  };
+
+  return {
+    //== Init
+    init: function () {
+      initDemos();
+    },
+  };
+})();
+
+//== Class Initialization
+jQuery(document).ready(function () {
+  SweetAlert2Demo.init();
+});
+</script>
 </th:block>

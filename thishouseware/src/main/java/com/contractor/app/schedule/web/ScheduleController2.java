@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.schedule.service.AttendanceService;
+import com.contractor.app.schedule.service.AttendanceVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 
@@ -23,5 +24,11 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleController2 {
 	private final AttendanceService attendanceService;
 	
-	
+	@PostMapping("attendance/modifyCode")
+	@ResponseBody
+	public String modifyAttendanceCode(@RequestBody AttendanceVO attendanceVO) {
+		System.out.println(attendanceVO.getAttendancesCode());
+		
+		return "success";
+	}
 }

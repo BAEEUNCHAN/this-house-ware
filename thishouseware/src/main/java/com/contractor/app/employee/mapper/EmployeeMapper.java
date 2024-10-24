@@ -1,7 +1,8 @@
 package com.contractor.app.employee.mapper;
 
 import java.util.List;
-import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.contractor.app.employee.service.EmployeeVO;
 
@@ -11,10 +12,14 @@ public interface EmployeeMapper {
 
 	EmployeeVO selectEmployee(EmployeeVO empVO);
 
-	int modifyEmployee(EmployeeVO empVO);
+	int updateEmployee(EmployeeVO empVO);
 
 	List<EmployeeVO> selectEmployees();
 
 	List<EmployeeVO> selectEmployeeByEmail(EmployeeVO empVO);
+
+	String canChangePwFunc(@Param("id") String id,@Param("authenticationsValue") String authenticationsValue);
+
+	int updateEmployeeByEmp(EmployeeVO empVO);
 
 }

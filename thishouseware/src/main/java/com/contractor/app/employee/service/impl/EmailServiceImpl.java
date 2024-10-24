@@ -1,10 +1,5 @@
-package com.contractor.app.employee.service;
+package com.contractor.app.employee.service.impl;
 
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(readOnly = true)
-public class EmailService {
+public class EmailServiceImpl {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     @Async
-    public void sendEmailNotice(String email,String emailTitle, String content){
+    public void sendEmail(String email,String emailTitle, String content){
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -46,6 +41,6 @@ public class EmailService {
     public String setContext(String content) {
         Context context = new Context();
         context.setVariable("content", content);
-        return templateEngine.process("employee/sendIdEmail", context);
+        return templateEngine.process("employee/sendEmail", context);
     }
 }

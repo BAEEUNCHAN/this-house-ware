@@ -1,4 +1,4 @@
-package com.contractor.app.favorite.service;
+package com.contractor.app.employee.service;
 
 import lombok.Data;
 

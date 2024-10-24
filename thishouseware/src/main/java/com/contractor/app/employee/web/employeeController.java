@@ -6,13 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.contractor.app.employee.service.EmailService;
-import com.contractor.app.employee.service.EmailVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.employee.service.impl.EmailServiceImpl;
+import com.contractor.app.util.RandomValue;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,7 @@ public class employeeController {
 	
 	private final EmployeeService employeeService;
 	private final PasswordEncoder encoder;
-	private final EmailService emailService;
+	private final EmailServiceImpl emailService;
 
 	@GetMapping("login")
 	public String loginForm() {
@@ -47,7 +48,7 @@ public class employeeController {
 		}
 		
 		try {
-			emailService.sendEmailNotice(email, "회원님의 아이디입니다.", empVO.getId());
+			emailService.sendEmail(email, "회원님의 아이디입니다.", empVO.getId());
 		} catch (Exception e) {
 			return "error2";
 		}
@@ -59,6 +60,65 @@ public class employeeController {
 	@GetMapping("employee/findPassword")
 	public String findPasswordForm() {
 		return "employee/findPassword";
+	}
+	
+	@PostMapping("employee/getAuth")
+	@ResponseBody
+	public String getAuth(@RequestBody EmployeeVO empVO) {
+		EmployeeVO findVO = null;
+		String randomValue = RandomValue.getRandomValue();
+		
+		try {
+			findVO = employeeService.getEmployee(empVO);
+		} catch (Exception e) {
+			return "error1"; // 존재하지 않는 아이디
+		}
+
+		if(!(findVO.getEmail().equals(empVO.getEmail()) 
+				&& findVO.getId().equals(empVO.getId()))){
+			return "error2"; // 이메일과 아이디가 매칭되지 않는다.
+		}
+		
+		try {
+			employeeService.modifyAuthentication(empVO.getId(),randomValue);
+		}catch (Exception e) {
+			return "error3"; // DB 업데이트 실패
+		}
+		
+		try {
+			emailService.sendEmail(empVO.getEmail(), "회원님의 인증코드입니다.",randomValue);
+		} catch (Exception e) {
+			return "error4"; // 이메일 전송 실패
+		}
+		
+		return "success";
+	}
+
+	@PostMapping("employee/changePw")
+	@ResponseBody
+	public String changePw(@RequestBody EmployeeVO empVO) {
+		System.out.println(empVO);
+		String newPassword = empVO.getPassword();
+		newPassword = encoder.encode(newPassword);
+		empVO.setPassword(newPassword);
+		// 아이디, 새로운비밀번호, 인증 값 을 토대로 pl/sql 함수 실행하기
+		String answer = employeeService.canChangePw(empVO.getId(), 
+				empVO.getAuthenticationsValue());
+		if(answer.equals("-1")) {
+			return "error-1"; // 서버 자체적 오류
+		}else if(answer.equals("1")) {
+			return "error1"; // 인증값 또는 아이디 오류
+		}else if(answer.equals("2")) {
+			return "error2"; // 인증값 만료됨
+		}
+		
+		try {
+			employeeService.modifyPasswordByEmp(empVO);
+		} catch (Exception e) {
+			return "error-1";
+		}
+		
+		return "success";
 	}
 	
 	@GetMapping("employee/info/{id}")

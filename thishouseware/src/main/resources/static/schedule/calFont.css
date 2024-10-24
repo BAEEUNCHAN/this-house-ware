@@ -1,0 +1,40 @@
+@charset "UTF-8";
+/* body 스타일 */
+    html, body {
+      overflow: hidden;
+      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+    /* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
+    .fc-header-toolbar {
+      padding-top: 1em;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+    /* 일요일 날짜: 빨간색 */
+    .fc-day-sun a {
+      color: red;
+    }
+    /* 토요일 날짜: 파란색 */
+    .fc-day-sat a {
+      color: blue;
+    }
+    .fc-day-mon a{
+      color: black;
+    }
+    .fc-day-tue a{
+      color: black;
+    }
+    .fc-day-wed a {
+      color: black;
+    }
+    .fc-day-thu a {
+      color: black;
+    }
+    .fc-day-fri a {
+      color: black;
+    }
+    
+    .fc-event-title {
+      color: indigo
+    }

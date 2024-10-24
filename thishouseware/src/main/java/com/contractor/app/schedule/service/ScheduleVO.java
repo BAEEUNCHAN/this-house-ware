@@ -11,4 +11,5 @@ public class ScheduleVO {
 	String sheduleCode;		// 일정 코드
 	Integer departmentNo;	// 부서 번호	
 	String id;				// 아이디
+	String color;			// 일정 색상
 }

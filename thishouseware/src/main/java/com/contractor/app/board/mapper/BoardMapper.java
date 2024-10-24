@@ -15,14 +15,13 @@ public interface BoardMapper {
 	public List<PostsVO> selectPostAll(PostsVO postsVO);
 	
 	// 게시판별 게시글 전체조회
-	public List<PostsVO> selectPostBoard(PostsVO postsVO);
+	public List<PostsVO> selectPostBoard(PagingVO pagingVO, PostsVO postsVO);
 
 	// 게시글 단건조회 : 조건 - postsNo
 	public PostsVO selectPostInfo(PostsVO postsVO);
 
 	// 게시글 등록
 	public int insertPostInfo(PostsVO postsVO);
-
 	
 	// 게시글 삭제
 	public int deleteBoradInfo(int postsNo);
@@ -42,7 +41,5 @@ public interface BoardMapper {
 	// 게시물 총 갯수
 	public int countPost(PostsVO postsVO);
 
-	// 페이징 처리 게시글 조회
-	public List<PostsVO> selectPostsPaging(PagingVO pagingVO);
 
 }

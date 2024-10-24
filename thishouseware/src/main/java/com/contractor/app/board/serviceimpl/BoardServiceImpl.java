@@ -26,10 +26,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectBoardAll(boardsVO);
 	}
 
-	@Override
-	public List<PostsVO> postList(PostsVO postsVO) {
-		return boardMapper.selectPostAll(postsVO);
-	}
 
 	@Override
 	public PostsVO postInfo(PostsVO postsVO) {
@@ -71,14 +67,10 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.countPost(postsVO);
 	}
 
-	@Override
-	public List<PostsVO> selectPostsPaging(PagingVO pagingVO) {
-		return boardMapper.selectPostsPaging(pagingVO);
-	}
 
 	@Override
-	public List<PostsVO> postListBoard(PostsVO postsVO) {
-		return boardMapper.selectPostBoard(postsVO);
+	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO) {
+		return boardMapper.selectPostBoard(pagingVO, postsVO);
 	}
 
 }

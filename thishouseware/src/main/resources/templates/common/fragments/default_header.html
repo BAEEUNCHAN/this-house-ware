@@ -145,13 +145,23 @@
                           </div>
                           <div class="u-text">
                             <h4 th:text="${#authentication.principal.empVO.id}"></h4>
-                            <p class="text-muted" th:text="${#authentication.principal.empVO.email}"></p>
                             <p class="text-muted" th:text="${session.attendance.attendancesCode}"></p> 
-                            <a
+                            <a th:if="${session.attendance.attendancesCode == 'J2'}"
                               href="출근 요청 url 작성!"
-                              class="btn btn-xs btn-secondary btn-sm"
-                              >출근 요청</a
-                            >
+                              class="btn btn-primary fs-6"
+                              >출근 </a>
+                            <a th:if="${session.attendance.attendancesCode == 'J1'}"
+                            href="퇴근 요청 url 작성!"
+                            class="btn btn-danger fs-6"
+                            >퇴근 </a>
+                            <a th:if="${session.attendance.attendancesCode == 'J1'}"
+                            href="외출 요청 url 작성!"
+                            class="btn btn-secondary fs-6"
+                            >외출 </a>
+                            <a th:if="${session.attendance.attendancesCode == 'J4'}"
+                            href="복귀 요청 url 작성!"
+                            class="btn btn-success fs-6"
+                            >복귀 </a>
                           </div>
                         </div>
                       </li>

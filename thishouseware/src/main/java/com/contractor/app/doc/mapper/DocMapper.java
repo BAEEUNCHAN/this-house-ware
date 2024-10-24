@@ -18,5 +18,5 @@ public interface DocMapper {
 	// 부서문서 결재완료 조회
 	public List<DocJoinVO> getDeptStatus(String approvalStatus, int departmentNo);
 	// 부서문서 중요문서
-	
+	public List<DocJoinVO> getDeptImportant(String important, int departmentNo);
 }

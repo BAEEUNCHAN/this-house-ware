@@ -34,8 +34,13 @@ public class DocServiceImpl implements DocService {
 	} // 부서별 문서 전체조회
 	
 	@Override
-	public List<DocJoinVO> docDeptStatusList(String approvalStatus, Integer departmentNo) {
+	public List<DocJoinVO> docDeptStatusList(String approvalStatus, int departmentNo) {
 	    return docMapper.getDeptStatus(approvalStatus, departmentNo); 
 	} // 부서문서 결재완료 조회
+	
+	@Override
+	public List<DocJoinVO> docDeptImportantList(String important, int departmentNo) {
+		return docMapper.getDeptImportant(important, departmentNo);
+	} // 부서문서 중요문서
 	
 }// 끝

@@ -81,5 +81,24 @@
 				ORDER BY 
 				    d.submit_dt DESC
 			</select>
-		
+			
+		<!-- 부서 중요문서 조회 -->
+		<select id="getDeptImportant" parameterType="DocJoinVO" resultType="DocJoinVO">
+			   SELECT 
+				    e.department_no,
+				    d.edms_doc_no,
+				    d.title, 
+				    e.id,
+				    d.submit_dt,
+				    d.important 
+				FROM 
+				    edms_doc d
+				JOIN 
+				    employees e ON d.id = e.id  
+				WHERE 
+				    d.important = #{important}
+				    AND e.department_no = #{departmentNo}
+				ORDER BY 
+				    d.submit_dt DESC
+			</select>
 </mapper>

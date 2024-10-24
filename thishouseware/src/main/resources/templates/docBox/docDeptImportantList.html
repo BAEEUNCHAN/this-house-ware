@@ -43,7 +43,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">부서문서함</div>
+                    <div class="card-title">중요문서함</div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -79,10 +79,6 @@
                                     </th:block>
                                 </tbody>
                             </table>
-	                         <button type="button" class="btn btn-info btn-sm" 
-        						th:onclick="|location.href='@{/docBox/docDeptStatusList(approvalStatus='결재완료', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">결재완료</button>
-	                         <button type="button" class="btn btn-success btn-sm"
-        						th:onclick="|location.href='@{/docBox/docDeptImportantList(important='true', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">중요문서</button>
                         </div>
                     </div>
                 </div>
@@ -108,8 +104,6 @@
     $('.chk_box').on('click', function(event) {
         event.stopPropagation(); // 이벤트 전파 방지
     });
-    
-    
 </script>
 
 </body>

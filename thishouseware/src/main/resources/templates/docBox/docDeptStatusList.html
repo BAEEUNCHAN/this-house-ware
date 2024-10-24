@@ -35,7 +35,6 @@
 												<td>[[${info.id}]]</td>
 												<!--<td>[[${info.submitDt}]]</td>-->
 												<td>[[${#dates.format(info.submitDt, "yyyy-MM-dd")}]]</td>
-												
 											</tr>
 										</th:block>
 									</tbody>  
@@ -52,7 +51,7 @@
 			    $('.docBox > tr').on('click', function(event) {
 			        let trTag = event.currentTarget;
 			        let edno = $(trTag).children().eq(0).text();
-			        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 ID
+			        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 id
 			        let deptNo = [[${#authentication.principal.empVO.departmentNo}]]; // 부서 번호
 			
 			        // URL에 문서 번호, fromDocList, id, 부서 번호 포함

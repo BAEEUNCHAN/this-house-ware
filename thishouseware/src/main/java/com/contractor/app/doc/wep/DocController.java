@@ -34,7 +34,7 @@ public class DocController {
 	
 	// 문서결과별 문서 조회
 	@GetMapping("/docApprovalStatusList")
-	public void getApprovalStatus(@RequestParam String approvalStatus, String id, Model model) {
+	public void getApprovalStatus(@RequestParam String approvalStatus, @RequestParam String id, Model model) {
 		List<DocJoinVO> list;
 
 		switch (approvalStatus) {
@@ -66,14 +66,22 @@ public class DocController {
 	    return "docBox/docDeptList";
 	}
 	
-	
 
 	// 부서문서 결재완료 조회
 	@GetMapping("/docDeptStatusList")
-	public String getDeftStatus(@RequestParam String approvalStatus, @RequestParam Integer departmentNo, Model model) {
+	public String getDeftStatus(@RequestParam String approvalStatus, @RequestParam int departmentNo, Model model) {
 		List<DocJoinVO> list = docService.docDeptStatusList(approvalStatus, departmentNo);
 		model.addAttribute("docBoxs", list);
 		return "docBox/docDeptStatusList";
 	}
+	
+	// 부서문서 중요문서 조회
+	@GetMapping("/docDeptImportantList")
+	public String getDeptImportant(@RequestParam String important, @RequestParam int departmentNo, Model model) {
+		List<DocJoinVO> list = docService.docDeptImportantList(important, departmentNo);
+		model.addAttribute("docBoxs", list);
+		return "docBox/docDeptImportantList";
+	}
+	
 
 }// 끝

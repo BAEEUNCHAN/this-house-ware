@@ -29,6 +29,7 @@ public class EdmsDocVO {
 	private String edmsFormNo; // 결재양식 번호 / not null
 	private String shareStatus; // 공유폴더 여부 / not null
 	private String shareFolderNo; // 공유 폴더 번호 / not null
+	private boolean important; // 중요문서
 	
 
 }

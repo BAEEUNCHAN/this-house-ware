@@ -1,61 +1,110 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layouts/default_layout}"
+    layout:fragment="Content">
 
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+</head>
+<style>
+/* 기본 체크박스 숨기기 */
+.chk_box input[type="checkbox"] {
+    display: none; /* 체크박스 숨기기 */
+}
+
+/* 체크박스 스타일 */
+.chk_box {
+    cursor: pointer; /* 커서 포인터로 변경 */
+    position: relative; /* 상대 위치 지정 */
+}
+
+/* 기본 별 아이콘 색상 */
+.chk_box .fa-star {
+    color: #6c757d; /* 기본 색상 */
+    font-size: 20px; /* 별 아이콘 크기 조정 */
+}
+
+/* 체크된 상태의 별 아이콘 색상 */
+.chk_box input[type="checkbox"]:checked + .fa-star {
+    color: #ffc107; /* 체크 시 별 색상 변경 */
+}
+
+/* 테이블 셀 간격 조정 */
+.table th,
+.table td {
+    padding: 5px 8px; /* 상하 패딩 5px, 좌우 패딩 8px으로 조정 */
+}
+</style>
+
+<body>
 <div class="page-inner">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="card">
-					<div class="card-header">
-						<div class="card-title">문서함</div>
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="text-center">
-								<table class="table">
-									<thead>
-										<tr>
-											<th class=hidden style="display: none">문서번호</th>
-											<th>번호</th>
-											<th>부서명</th>
-											<th>제목</th>
-											<th>기안자</th>
-											<th>작성일자</th>
-										</tr>
-									</thead>
-									<tbody class = "docBox">
-										<th:block th:each="info,sts : ${docBoxs}">
-											<tr>
-												<!-- 자체순번 / 문서는 최근 문서순 정렬 -->
-												<td class=hidden1 style="display: none;">[[${info.edmsDocNo}]]</td>
-												<td>[[${sts.count}]]</td> 
-												<td>[[${info.departmentNo}]]</td>
-												<td>[[${info.title}]]</td>
-												<td>[[${info.id}]]</td>
-												<!--<td>[[${info.submitDt}]]</td>-->
-												<td>[[${#dates.format(info.submitDt, "yyyy-MM-dd")}]]</td>
-												
-											</tr>
-										</th:block>
-									</tbody>  
-								</table>
-								<button type="button" class="btn btn-info btn-sm" th:onclick="|location.href='@{/docBox/docDeftStatusList}'|">임시저장</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-			<script>
-			//문서함에서 문서 클릭시 문서함 목록으로 이동하기
-		    $('.docBox > tr').on('click', function(event){
-		        let trTag = event.currentTarget;
-		        let edno = $(trTag).children().eq(0).text();
-		        let url = '/edms/edmsDocInfo?edmsDocNo=' + edno + '&fromDocDeftList=true'; // 문서함에서 온 경우를 표시하는 쿼리 파라미터 추가
-		        location.href = url;
-		    });
-			</script>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">부서문서함</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden" style="display: none">문서번호</th>
+                                        <th>번호</th>
+                                        <th>부서명</th>
+                                        <th>제목</th>
+                                        <th>기안자</th>
+                                        <th>작성일자</th>
+                                        <th>중요문서</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="docBox">
+                                    <th:block th:each="info, sts : ${docBoxs}">
+                                        <tr>
+                                            <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td>
+                                            <td>[[${sts.count}]]</td>
+                                            <td>[[${info.departmentNo}]]</td>
+                                            <td>[[${info.title}]]</td>
+                                            <td>[[${info.id}]]</td>
+                                            <td>[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td>
+                                            <td>
+                                                <label class="chk_box">
+                                                    <input type="checkbox" th:checked="${info.important}" />
+                                                    <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
+    $('.docBox > tr').on('click', function(event) {
+        let trTag = event.currentTarget;
+        let edno = $(trTag).children().eq(0).text();
+        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 ID
+        let deptNo = [[${#authentication.principal.empVO.departmentNo}]]; // 부서 번호
+
+        // URL에 문서 번호, fromDocList, id, 부서 번호 포함
+        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocDeptList=true&id=${id}&deptNo=${deptNo}`; 
+        location.href = url;
+    });
+
+    // 체크박스 클릭 시 상세보기로 넘어가지 않도록 설정
+    $('.chk_box').on('click', function(event) {
+        event.stopPropagation(); // 이벤트 전파 방지
+    });
+</script>
+
 </body>
 </html>

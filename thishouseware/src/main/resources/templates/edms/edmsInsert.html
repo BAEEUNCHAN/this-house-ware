@@ -163,6 +163,7 @@ button:hover {
 					</div>
 				</div>
 				<script th:inline="javascript">
+				var userId = [[${#authentication.principal.empVO.id}]]
 				document.querySelector('#edmsFormNo').addEventListener('change',function(e){
 				let url= '/template/'+event.target.value +'.html'
 				$('#edmsContent').load(url)				

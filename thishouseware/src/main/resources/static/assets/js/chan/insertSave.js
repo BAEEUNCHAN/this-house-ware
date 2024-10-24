@@ -4,30 +4,7 @@
 var SweetAlert2Demo = (function() {
 	//== Demos
 	var initDemos = function() {
-/*		$("#alert_demo_7").click(function(e) {
-			Swal.fire({
-				title: "Are you sure?",
-				text: "You won't be able to revert this!",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonText: "Yes, delete it!",
-				cancelButtonText: "No, cancel!",
-				confirmButtonClass: "btn btn-success",
-				cancelButtonClass: "btn btn-danger",
-				buttonsStyling: false,
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Swal.fire({
-						title: "Deleted!",
-						text: "Your file has been deleted.",
-						icon: "success",
-						confirmButtonClass: "btn btn-success",
-						buttonsStyling: false,
-					});
-				}
-			});
-		});
-*/
+
 		//== 임시저장 모달
 		$(".btnSave").click(function(e) {
 			Swal.fire({
@@ -66,7 +43,8 @@ var SweetAlert2Demo = (function() {
 								icon: "success",
 								confirmButtonClass: "btn btn-success",
 								buttonsStyling: false,
-							});
+							}).then(res => location.href=`/docBox/docApprovalStatusList?approvalStatus=임시저장&id=${userId}`)
+							;
 						},
 						error: function(error) {
 							Swal.fire({

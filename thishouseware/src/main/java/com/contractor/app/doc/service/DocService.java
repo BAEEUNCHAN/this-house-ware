@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface DocService {
 	//문서함 문서 전체조회(메인화면)
-	public List<DocJoinVO> DocJoinList();
+	public List<DocJoinVO> DocJoinList(String id);
 	// 문서결과별 문서 조회	
-	public List<DocJoinVO> docApprovalStatusList(String approvalStatus);
+	public List<DocJoinVO> docApprovalStatusList(String approvalStatus,String id);
 	
 	// 부서별 문서 전체조회
 	public List<DocJoinVO> DocDeptList(int departmentNo);
-	// 부서문서결과별 문서 조회	
+	// 부서문서 결재완료 문서 조회	
 	public List<DocJoinVO> docDeptStatusList(String approvalStatus, Integer departmentNo);
 
 

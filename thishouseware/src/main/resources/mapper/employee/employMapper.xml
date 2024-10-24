@@ -36,7 +36,58 @@
 				#{id, mode=OUT, jdbcType=VARCHAR}
 			)
 		}
-	</select>	
+	</select>
+	<!-- 사용된 프로시져 코드 
+		create or replace PROCEDURE ADD_NEW_EMP
+			(
+			  p_password IN VARCHAR2 
+			, p_phone IN VARCHAR2 
+			, p_email IN VARCHAR2 
+			, p_image_link IN VARCHAR2 
+			, p_department_no IN NUMBER 
+			, p_hire_dt IN DATE 
+			, p_position_code IN VARCHAR2 
+			, p_name IN VARCHAR2 
+			, p_id OUT VARCHAR2
+			) AS 
+			    v_id employees.id%TYPE;
+			BEGIN
+			    SELECT  'emp'
+			        ||TO_CHAR(SUBSTR(NVL( MAX(id),'emp99'),4)+1) 
+			    into v_id
+			    FROM employees;
+			    
+			    INSERT INTO EMPLOYEES 
+					(id, 
+					PASSWORD, 
+					PHONE, 
+					EMAIL, 
+					IMAGE_LINK, 
+					DEPARTMENT_NO,
+					hire_dt,
+					position_code,
+					name
+					) 
+					VALUES 
+					(
+					v_id,
+					p_password, 
+					p_phone, 
+					p_email, 
+					p_image_link, 
+					p_department_no,
+					p_hire_dt,
+					p_position_code,
+					p_name
+					);
+			    INSERT INTO AUTHENTICATIONS
+			    ( id)
+			    VALUES
+			    ( v_id);
+			    
+			    p_id := v_id;
+			END ADD_NEW_EMP;
+	-->	
 	<select id="selectEmployee" parameterType="EmployeeVO" resultType="EmployeeVO">
 		SELECT
 		    id,
@@ -106,4 +157,31 @@
 	        ) AS result
         FROM DUAL
 	</select>
+	<!-- 사용된 pl/sql 함수 코드
+		create or replace FUNCTION CAN_CHANGE_PW 
+		(
+		  ID IN VARCHAR2 
+		, AUTHENTICATIONSVALUE IN VARCHAR2 
+		) RETURN VARCHAR2 AS 
+		    v_time NUMBER(8,2);
+		BEGIN
+		    
+		    SELECT  ROUND((sysdate - Authentications_time) * 24 * 60)
+		    INTO v_time
+		    FROM  Authentications
+		    WHERE id = id
+		    AND authentications_value = AUTHENTICATIONSVALUE;
+		
+		    IF v_time > 5 THEN
+		        return 2;
+		    END IF;
+		    
+		    RETURN 0;
+		    EXCEPTION 
+		        WHEN NO_DATA_FOUND THEN
+		            RETURN 1;
+		        WHEN OTHERS THEN 
+		            RETURN -1;
+		END CAN_CHANGE_PW;
+	 -->
 </mapper>

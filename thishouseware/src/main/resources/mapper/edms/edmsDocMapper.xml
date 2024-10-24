@@ -80,13 +80,20 @@
 				(
 					#{edmsDocNo}
 					<!-- employees_seq.NEXTVAL -->
-					, 'emp101'
+					, #{id}
 					, #{title}
 					, #{content}
 					, #{fileName}
 					, #{attatch}
-					, sysdate					
-					, '대기'				
+					, sysdate
+					<choose>
+						<when test="approvalStatus != '임시저장'">
+							, '결재대기'	
+						</when>
+						<otherwise>
+							, '임시저장'
+						</otherwise>
+					</choose>								
 					, #{edmsFormNo}
 					, #{shareStatus}
 					, #{shareFolderNo}

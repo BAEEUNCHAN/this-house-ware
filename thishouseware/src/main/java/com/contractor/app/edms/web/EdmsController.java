@@ -73,7 +73,7 @@ public class EdmsController {
 
 	// 결재문서 등록 - 처리
 	@PostMapping("/edmsInsert")
-	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam String screenshot,
+	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam(required = false) String screenshot,
 			@RequestPart(required = false) MultipartFile uploadFile) {
 		// 이미지 처리
 		Map<String, Object> object = SaveImage(screenshot);

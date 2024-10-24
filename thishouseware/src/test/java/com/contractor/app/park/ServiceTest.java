@@ -6,12 +6,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.contractor.app.employee.service.EmployeeService;
+import com.contractor.app.schedule.service.AttendanceService;
+import com.contractor.app.schedule.service.AttendanceVO;
 
 @SpringBootTest
 public class ServiceTest {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private AttendanceService attendanceService;
 	@Autowired
 	private PasswordEncoder encoder;
 	
@@ -27,5 +31,11 @@ public class ServiceTest {
 		// 실패할경우
 		answer = employeeService.canChangePw("emp115", "wrong");
 		
+	}
+	
+	@Test
+	void getAttendance() {
+		AttendanceVO vo = attendanceService.getLastAttendanceById("1");
+		System.out.println(vo);
 	}
 }

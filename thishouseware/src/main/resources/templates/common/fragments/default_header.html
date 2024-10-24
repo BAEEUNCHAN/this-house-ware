@@ -146,6 +146,7 @@
                           <div class="u-text">
                             <h4 th:text="${#authentication.principal.empVO.id}"></h4>
                             <p class="text-muted" th:text="${#authentication.principal.empVO.email}"></p>
+                            <p class="text-muted" th:text="${session.attendance.attendancesCode}"></p> 
                             <a
                               href="출근 요청 url 작성!"
                               class="btn btn-xs btn-secondary btn-sm"

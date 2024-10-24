@@ -102,6 +102,16 @@ UPDATE employees
         password = '1234'
     WHERE id = 'emp115';
 select id, password from employees where id = 'emp115';
+
+insert into attendances values(
+    5,1,1,sysdate,1,1
+);
+select *
+FROM attendances
+WHERE attendances_no = 
+(   SELECT max(attendances_no) 
+    FROM attendances
+    WHERE id = '1');
 -- 수정문 실행후 commit 하자
 commit;
 

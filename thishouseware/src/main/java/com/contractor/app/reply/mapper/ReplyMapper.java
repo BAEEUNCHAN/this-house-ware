@@ -9,4 +9,6 @@ public interface ReplyMapper {
 	public List<ComplainsVO> replyList(int complainNo);
 	
 	public int insertReply(ReplysVO replyVO);
+	
+	public int deleteReplyInfo(int replyNo);
 }

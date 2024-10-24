@@ -44,6 +44,17 @@ public class ComplainsVO {
 	private Date replyDt;
 	private Integer replyNo;
 	
+	private Integer resultCost;		// 소모비용		
+	private Integer resultPeople;	// 투입인원
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
+	private Date receiveDt;			// 글접수일시
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
+	private Date completeDt;		// 해결완료일시
+	@DateTimeFormat(pattern = "yyyy-MM-dd")	
+	private Date resultDt;			// 해결기간
+	private String resultSolution;	// 해결방법		, Not Null
+	private String resultFeedback;	// 피드백내용		, Not Null
+	
 	
 
 	

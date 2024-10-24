@@ -9,5 +9,7 @@ public interface ReplyService {
 	public List<ComplainsVO> replyList(int complainVO);
 	
 	public int insertReply(ReplysVO replyVO);
+	
+	public int replyDelete(int replyNo);
 
 }

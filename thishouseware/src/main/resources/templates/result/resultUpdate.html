@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 
 <body>
-	<form name="updateForm" th:action="@{/replyInfo}" method="post">
+	<form name="updateForm" th:action="@{/resultUpdate}" method="post">
 		<div class="container">
 			<div class="page-inner">
 				<div class="page-header">
@@ -53,7 +53,7 @@
 												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
 												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
 										</select>
-										</label> <br /><br /> <label for="phone">작성일 :
+										</label> <br /> <br /> <label for="phone">작성일 :
 											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
 										<br />
 									</div>
@@ -71,7 +71,43 @@
 									<p style="font-weight: bold; font-size: 16px;">
 										<i class="fas fa-check-square"> 요구사항</i>
 									</p>
-									<label for="phone">[[${complain.complainRequest}]]</label> <br />
+									<label for="phone">[[${complain.complainRequest}]]</label>
+								</div>
+							</div>
+
+							<div class="card-action" style="background-color: lightyellow;">
+								<div class="row">
+
+									<div class="col-md-6 col-lg-30">
+
+										<label for="resultCost"><i class="fas fa-check-square">
+												소모비용 : </i></label> <input type="number" name="resultCost"
+											maxlength="10" aria-label="Username" id="resultCost"
+											th:value="${result.resultCost}"
+											style="width: 150px; height: 33px;"
+											aria-describedby="basic-addon1"><br /> <br /> <label
+											for="resultPeople"><i class="fas fa-check-square">
+												투입인원 : </i></label> <input type="number" name="resultPeople"
+											maxlength="7" aria-label="Username" id="resultPeople"
+											th:value="${result.resultPeople}"
+											style="width: 150px; height: 33px;"
+											aria-describedby="basic-addon1"><br />
+									</div>
+
+
+
+									<div class="col-md-6 col-lg-30">
+										<label for="receiveDt"><i class="fas fa-calendar-alt">
+												문제접수일시 : </i></label> <input type="date" name="receiveDt" id="receiveDt"
+											max="2077-10-10" min="2020-06-05"
+											th:value="${#dates.format(result.receiveDt, 'yyyy-MM-dd')}">
+										<br /> <br /> <label for="completeDt"><i
+											class="fas fa-calendar-check"> 문제해결일시 : </i></label> <input
+											type="date" name="completeDt" id="completeDt"
+											max="2077-10-10" min="2020-06-05"
+											th:value="${#dates.format(result.completeDt, 'yyyy-MM-dd')}">
+										<br />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -94,51 +130,67 @@
 
 											<div class="timeline-panel">
 												<div class="timeline-heading">
-													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]
-													<th:block th:if="${#authentication.principal.empVO.id} == ${info.id}">
-													
-													<i class="fas fa-times-circle" style="float:right; color:gray;" data-id="${info.replyId}"></i>
-													<i class="far fa-edit" style="float:right; color:gray;"></i>
-													</th:block>
-													</h4> <p>
+													<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+													<p>
 														<small class="text-muted"><i
 															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
 															'yyyy년 MM월 dd일')}]] </small>
 													</p>
-													
-													
-													
-													
 												</div>
 												<div class="timeline-body">
 													<p>[[${info.replyContent}]]</p>
 												</div>
+												<br /> <br />
 											</div>
-											<br />
-											<br />
 										</th:block>
-										<small class="text-muted"><i class="far fa-paper-plane">
-										[[${#authentication.principal.empVO.departmentName}]]
-											[[${#authentication.principal.empVO.name}]]</i></small>
-										<textarea class="form-control" name="replyContent"
-											id="replyContent" rows="5" maxlength="500"
-											style="background-color: lightyellow;"></textarea>
-
-
-
-
-
-
-
-										<br />
-										<button type="submit" class="btn btn-primary"
-											style="float: right;">등록</button>
-										<input type="hidden" name="complainNo"
-											th:value="${complain.complainNo}"> <input
-											type="hidden" name="id"
-											th:value="${#authentication.principal.empVO.id}">
 
 									</div>
+								</div>
+
+
+
+
+
+							</div>
+
+
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card">
+									<div class="card-header">
+										<div class="card-title">문의답변/조치사항</div>
+									</div>
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-12 col-lg-12">
+												<i class="fas fa-check-square"> 해결방법 </i>
+												<textarea class="form-control" name="resultSolution"
+													id="resultSolution" rows="3" maxlength="300"
+													style="background-color: lightyellow;"
+													th:text="result.resultSolution"></textarea>
+												<br /> <i class="fas fa-check-square"> 피드백내용 </i>
+												<textarea class="form-control" name="resultFeedback"
+													id="resultFeedback" rows="3" maxlength="300"
+													style="background-color: lightyellow;"
+													th:text="result.resultFeedback"></textarea>
+												<br /> <input type="hidden" name="complainNo"
+													th:value="${complain.complainNo}">
+
+											</div>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-primary"
+										style="float: right;">등록</button>
+									<input type="hidden" name="complainNo"
+										th:value="${complain.complainNo}"> <input
+										type="hidden" name="companyNo"
+										th:value="${complain.companyNo}"> <input type="hidden"
+										name="id" th:value="${#authentication.principal.empVO.id}">
+									<input type="hidden" name="departmentNo"
+										th:value="${#authentication.principal.empVO.departmentNo}">
+									
+
 								</div>
 							</div>
 						</div>
@@ -150,40 +202,11 @@
 
 
 	<script>
-		
-	
-    $('.fa-times-circle').on('click', function() {
-        var replyNo = $(this).data('id');
-        var confirmed = confirm("정말로 이 댓글을 삭제하시겠습니까?");
-        
-        if(confirmed) {
-            $.ajax({
-                url: `/replyDelete?replyNo=`+replyNo,
-                type: 'DELETE',
-                success: function(response) {
-                    if (response.success) {
-                        alert('댓글이 성공적으로 삭제되었습니다.');
-                    } else {
-                        alert('댓글 삭제에 실패했습니다.');
-                    }
-                }
-                /* .bind(this),
-                error: function(xhr, status, error) {
-                    alert('서버 에러가 발생했습니다. 다시 시도해주세요.');
-                } */
-            });
-        }
-    });
-
-              
-              $(updateForm).on('submit', replyUpdateHandler)
-              function replyUpdateHandler(event){
-            	  event.preventDefault();
-            	  updateForm.submit();
-              }
-              
-              
-	
+		$(updateForm).on('submit', resultUpdateHandler)
+		function resultUpdateHandler(event) {
+			event.preventDefault();
+			updateForm.submit();
+		}
 	</script>
 </body>
 </html>

@@ -18,8 +18,8 @@ public interface ScheduleService {
 	public Map<String, Object> scheduleInfo(Integer no);
 	
 	// 일정 수정
-	boolean scheduleUpdate();
+	public int scheduleUpdate(ScheduleVO scheduleVO);
 	
 	// 일정 삭제
-	boolean ScheduleDelete();
+	boolean ScheduleDelete(Integer no);
 }

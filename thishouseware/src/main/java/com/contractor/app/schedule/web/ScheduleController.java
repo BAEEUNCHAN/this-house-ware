@@ -53,6 +53,7 @@ public class ScheduleController {
 	        System.out.println("Received Schedule Code: " + scheduleVO.getSheduleCode());
 	        System.out.println("Received Department No: " + scheduleVO.getDepartmentNo());
 	        System.out.println("Received Id: " + scheduleVO.getId());
+	        System.out.println("Received bgColor: " + scheduleVO.getBgColor());
 	        
 	        // DB에 저장
 			if (scheduleService.scheduleInsert(scheduleVO) > 0) {
@@ -74,5 +75,56 @@ public class ScheduleController {
 	@ResponseBody
 	public Map<String, Object> schInfoJSON(Integer no) {		
 		return scheduleService.scheduleInfo(no);
+	}
+	
+	// 일정 등록
+	@PostMapping("schUpdate")
+	@ResponseBody
+	public Map<String, Object> schUpdateJSON(@RequestBody ScheduleVO scheduleVO) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			// 받은 데이터 확인용
+	        System.out.println("Received Title: " + scheduleVO.getTitle());
+	        System.out.println("Received Start Date: " + scheduleVO.getStart());
+	        System.out.println("Received End Date: " + scheduleVO.getEnd());
+	        System.out.println("Received Content: " + scheduleVO.getContent());
+	        System.out.println("Received Schedule Code: " + scheduleVO.getSheduleCode());
+	        System.out.println("Received Department No: " + scheduleVO.getDepartmentNo());
+	        System.out.println("Received Id: " + scheduleVO.getId());
+	        System.out.println("Received bgColor: " + scheduleVO.getBgColor());
+	        
+	        // DB에 저장
+			if (scheduleService.scheduleUpdate(scheduleVO) > 0) {
+				result.put("success", true);
+				System.out.println("Success");
+			}
+			else {
+				result.put("success", false);
+				System.out.println("Fail");
+			}
+		} catch (Exception e) {
+			result.put("success", false);
+		}
+		return result;
+	}
+	
+	// 일정 삭제
+	@PostMapping("schDelete")
+	@ResponseBody
+	public Map<String, Object> schDelete(Integer no) {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			if(scheduleService.ScheduleDelete(no)) {
+				result.put("success", true);
+				System.out.println("Success");
+			}
+			else {
+				result.put("success", false);
+				System.out.println("Fail");
+			}
+		} catch (Exception e) {
+			result.put("success", false);
+		}
+		return result;
 	}
 }

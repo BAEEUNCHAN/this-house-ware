@@ -46,13 +46,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	// 일정 수정
 	@Override
-	public boolean scheduleUpdate() {
-		return scheduleMapper.updateSchedule() == 1;
+	public int scheduleUpdate(ScheduleVO scheduleVO) {
+		int result = scheduleMapper.updateSchedule(scheduleVO);
+		return result == 1 ? scheduleVO.getScheduleNo() : -1;
 	}
 	
 	// 일정 삭제
 	@Override
-	public boolean ScheduleDelete() {
-		return scheduleMapper.deleteSchedule() == 1;
+	public boolean ScheduleDelete(Integer no) {
+		return scheduleMapper.deleteSchedule(no) == 1;
 	}
 }

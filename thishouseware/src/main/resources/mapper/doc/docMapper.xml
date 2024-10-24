@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.doc.mapper.DocMapper">
+	
+	<!-- 개인문서 -->
+	<!-- 전체조회 최신순 -->
+	<select id="selectDocJoinList" resultType="DocJoinVO">
+		SELECT 
+		    e.department_no 
+		    , d.edms_doc_no
+		    , d.title 
+		    , e.id 
+		    , d.submit_dt
+		FROM 
+		    edms_doc d
+		JOIN 
+		    employees e ON d.id = e.id
+		ORDER BY 
+		    d.submit_dt DESC
+		</select>
+		
+		<!-- 문서결과별 문서 조회-->
+		<select id="getApprovalStatus" parameterType="String" resultType="DocJoinVO">
+		    SELECT 
+		        e.department_no
+		        ,d.edms_doc_no
+		        ,d.title 
+		        ,e.id
+		        ,d.submit_dt
+		        ,d.approval_status
+		    FROM 
+		        edms_doc d
+		    JOIN 
+		        employees e ON d.id = e.id
+		    WHERE 
+		        d.approval_status = #{approvalStatus}
+		    ORDER BY 
+		        d.submit_dt DESC
+		</select>
+		
+		
+		
+		<!-- 부서문서 -->
+		<!-- 부서별 전체조회 최신순 -->
+		<select id="selectDocDeptList" parameterType="Integer" resultType="DocJoinVO">
+		    SELECT 
+		        e.department_no, 
+		        d.edms_doc_no, 
+		        d.title, 
+		        e.id, 
+		        d.submit_dt
+		    FROM 
+		        edms_doc d
+		    JOIN 
+		        employees e ON d.id = e.id
+		    WHERE   
+		    	e.department_no = #{departmentNo}  
+		    ORDER BY 
+		        d.submit_dt DESC
+		</select>
+		
+		<!-- 문서결과별 문서 조회-->
+		<select id="getDeptStatus" parameterType="DocJoinVO" resultType="DocJoinVO">
+		    SELECT 
+			    e.department_no,
+			    d.edms_doc_no,
+			    d.title, 
+			    e.id,
+			    d.submit_dt,
+			    d.approval_status
+			FROM 
+			    edms_doc d
+			JOIN 
+			    employees e ON d.id = e.id
+			WHERE 
+			    d.approval_status = #{approvalStatus}
+			    AND e.department_no = #{departmentNo}
+			ORDER BY 
+			    d.submit_dt DESC
+		</select>
+		
+</mapper>

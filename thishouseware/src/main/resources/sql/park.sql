@@ -14,10 +14,10 @@ SELECT
     department_no,
     position_code,
     RESIGN_DT,
-    D_SIGNATURE
+    D_SIGNATURE,
+    email
 FROM
-    employees
-where id = 'emp100';
+    employees;
 -- 조인 문 추가
 		SELECT
 		    id,
@@ -55,5 +55,55 @@ UPDATE employees
     SET 
         password = '$2a$10$/9OOLt.FG1BWEhKGX1p7qOzYoq6MvD.OO7NnctbZ9nz6lpw2IpSU2';
 
+-- 이메일로 검색
+		SELECT
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		WHERE email = '1';
+        
+-- 이메일 타입 수정
+ALTER TABLE employees MODIFY email VARCHAR2(100);
+
+-- 인증 값 수정
+UPDATE authentications
+    SET 
+        AUTHENTICATIONS_VALUE = 1
+        ,AUTHENTICATIONS_TIME = SYSDATE
+    WHERE id = 'emp115';
+-- 시간값 계산 결과에서 분 추출
+select  ROUND((sysdate - Authentications_time) * 24 * 60)
+FROM    Authentications;
+
+-- 함수 실행하여 결과 가져오기
+SELECT 
+    CAN_CHANGE_PW(
+         'emp115'
+        ,'HLL7KWU3SQW0566'
+        ,'1234'
+    ) AS result
+FROM DUAL;
+UPDATE employees
+    SET
+        password = '1234'
+    WHERE id = 'emp115';
+select id, password from employees where id = 'emp115';
 -- 수정문 실행후 commit 하자
 commit;
+
+
+

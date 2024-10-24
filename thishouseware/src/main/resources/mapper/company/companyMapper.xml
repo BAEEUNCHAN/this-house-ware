@@ -48,4 +48,11 @@
 	WHERE		company_no = #{companyNo}
 </delete>
 
+<!-- 회사이름 중복체크 -->
+<select id="companyCheckName" parameterType="String" resultType="boolean">
+	SELECT COUNT(*)
+	FROM companys
+	WHERE company_name = #{companyName}
+</select>
+
 </mapper>

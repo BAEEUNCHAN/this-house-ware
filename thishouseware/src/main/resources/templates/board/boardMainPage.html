@@ -70,18 +70,16 @@ body {
 			<!-- 게시판 목록 출력 -->
 			<div th:each="board : ${boards}" class="board-item">
 				<div class="board-header" id>
-					<a th:text="${board.boardsNo}" class="post-header" th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+					<a th:text="${board.boardsNo}" class="post-header"
+						th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
 					<h4 th:text="${board.title}">게시판 이름</h4>
 				</div>
 				<ul class="post-list">
 					<!-- 해당 게시판의 게시글 제목 출력 -->
 					<li th:each="post : ${board.posts}" class="post-item" id="posts">
-						<!-- <strong	th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
-							    th:text="${post.postsType}" class="post-header">[머리글]</strong>
-						<a th:href="@{/board/postInfo(postsNo=${post.postsNo})}"
-						   th:text="${post.title}" class="post-title">게시글 제목</a> --> <a
-						th:text="${post.postsNo}" class="post-header"
-						th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+						<a th:text="${post.postsNo}" class="post-header"
+						   th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}">
+						</a>
 						<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
 						<a th:text="${post.title}" class="post-title">게시글 제목</a>
 					</li>

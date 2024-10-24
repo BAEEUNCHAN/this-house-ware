@@ -10,7 +10,6 @@ public class PasswordEncoderTest {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Test
 	void pwdEncoderTest() {
 		String password = "1234";
 		

@@ -10,7 +10,8 @@ public interface EdmsService { // 전자결재
 	public EdmsDocVO edmsDocInfo(EdmsDocVO edmsDocVO);
 	// 결재문서 등록
 	public String edmsInsert(EdmsDocVO edmsDocVO);
-	
+	// 결재문서 임시저장
+	public String edmsInseSave(EdmsDocVO edmsDocVO);
 	
 	
 	

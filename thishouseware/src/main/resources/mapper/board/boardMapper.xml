@@ -214,10 +214,12 @@
 		( COMMENTS_NO
 		, POSTS_NO
 		, CONTENT
+		, id
 		)
 		VALUES ( #{commentsNo}
 		,#{postsNo}
 		,#{content}
+		,#{id}
 		)
 	</insert>
 

@@ -31,7 +31,6 @@ public interface BoardService {
 	// 게시물 총 갯수
 	public int countPost(PostsVO postsVO);
 
-
 	// 게시판별 게시글 전체 조회
 	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO);
 }

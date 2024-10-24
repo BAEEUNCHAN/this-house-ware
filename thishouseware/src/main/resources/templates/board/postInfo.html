@@ -32,7 +32,7 @@
 				<td height="100px" width="200px">[[ ${post.content} ]]</td>
 			</tr>
 		</table>
-		<!--/* <form name="insertForm" th:action="@{/board/postInfo}" method="post">
+		<!-- /*<form name="insertForm" th:action="@{/board/postInfo}" method="post">
 			<table class="table">
 				<tr>
 					<th>댓글</th>
@@ -47,8 +47,8 @@
 					<td><textarea rows="" cols="" name="content"></textarea></td>
 				</tr>
 			</table>
-		</form>
-		<button type="submit">등록</button> */-->
+		</form> */ -->
+		<button type="submit">등록</button>
 		<!-- <button type="button" th:onclick="|location.href='@{/postUpdate(bno=${board.bno})}'|">수정</button> -->
 		<button type="button"
 			th:onclick="|location.href='@{/board/postList(boardsNo=${post.boardsNo})}'|">목록</button>

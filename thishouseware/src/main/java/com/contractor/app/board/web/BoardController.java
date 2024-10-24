@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.contractor.app.board.service.BoardService;
 import com.contractor.app.board.service.BoardsVO;
+import com.contractor.app.board.service.CommentsVO;
 import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
@@ -121,7 +122,7 @@ public class BoardController {
 	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
 	// RETURN - board/postInfo
 	@GetMapping("postInfo") // postInfo?key=value
-	public String postInfo(PostsVO postsVO, Model model) {
+	public String postInfo(PostsVO postsVO, Model model, CommentsVO commentsVO) {
 		PostsVO findVO = boardService.postInfo(postsVO);
 		//List<CommentsVO> comments = boardService.selectCommentBoard(commentsVO);
 		model.addAttribute("post", findVO);

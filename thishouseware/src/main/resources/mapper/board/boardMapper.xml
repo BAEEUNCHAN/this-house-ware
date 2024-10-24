@@ -139,7 +139,7 @@
 		, p.TITLE
 		, p.CONTENT
 		, p.AUTHORITY
-		, p.ID
+		, FIND_NAME(p.ID) as NAME
 		FROM posts p JOIN boards b
 		ON p.BOARDS_NO = b.BOARDS_NO
 		WHERE
@@ -189,17 +189,17 @@
 	</delete>
 
 	<!-- 댓글 전체조회 -->
-	<select id="selectCommentsBoard" parameterType="CommentsVO"
+	<select id="selectCommentsPost" parameterType="CommentsVO"
 		resultType="CommentsVO">
 		SELECT c.COMMENTS_NO
 		, p.POSTS_NO
 		, c.CONTENT
 		, c.AUTHORITY
-		, c.ID
+		, FIND_NAME(c.ID) as NAME
+		, c.SUBMIT_DT
 		FROM comments c JOIN posts p
 		ON p.POSTS_NO = c.POSTS_NO
-		WHERE p.POSTS_NO =
-		#{postsNo}
+		WHERE p.POSTS_NO = #{postsNo}
 		ORDER BY c.COMMENTS_NO desc
 	</select>
 
@@ -215,11 +215,14 @@
 		, POSTS_NO
 		, CONTENT
 		, id
+		, submit_dt
 		)
-		VALUES ( #{commentsNo}
+		VALUES ( 
+		#{commentsNo}
 		,#{postsNo}
 		,#{content}
 		,#{id}
+		,SYSDATE
 		)
 	</insert>
 

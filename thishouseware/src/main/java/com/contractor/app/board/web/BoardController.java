@@ -1,7 +1,9 @@
 package com.contractor.app.board.web;
 
+import java.security.Principal;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
+import com.contractor.app.security.service.LoginUserVO;
 
 import lombok.RequiredArgsConstructor;
 /**
@@ -69,12 +72,21 @@ public class BoardController {
 
 	// 게시글 등록 - 페이지 : URI - postInsert / RETURN - board/postInsert
 	@GetMapping("/postInsert")
-	public String postInsertForm(Model model, PostsVO postsVO) {
+	public String postInsertForm(Model model, PostsVO postsVO ,Authentication authentication) {
 		// 게시판 목록 조회
 		List<BoardsVO> list = boardService.boardList(null);
 
 		// 게시판 유형 조회
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
+		LoginUserVO loginUserVO = (LoginUserVO)authentication.getPrincipal();
+		String positionCode = loginUserVO.getEmpVO().getPositionCode();
+		
+		// 로그인 한 계정의 포지션 코드를 채크한후 a1(사장) a2(관리자) 등급이아니면
+		// boardsType 의 앞에서부터 2개 의 값을 제거한다.
+		if(positionCode == "a1" || positionCode == "a2"){
+			boardsType.remove(0);
+			boardsType.remove(0);
+		}
 
 		// 머리글 유형 조회
 		List<CommonCodeVO> postsType = commonCodeService.selectCommonCode("0P");
@@ -124,21 +136,21 @@ public class BoardController {
 	@GetMapping("postInfo") // postInfo?key=value
 	public String postInfo(PostsVO postsVO, Model model, CommentsVO commentsVO) {
 		PostsVO findVO = boardService.postInfo(postsVO);
-		//List<CommentsVO> comments = boardService.selectCommentBoard(commentsVO);
+		List<CommentsVO> comments = boardService.selectCommentsPost(commentsVO);
 		model.addAttribute("post", findVO);
-		//model.addAttribute("comments", comments);
+		model.addAttribute("comments", comments);
 		
 		return "board/postInfo";
 		// classpath:/templates/board/postInfo.html => 실제 경로
 	}
 	
-//	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
-//	// RETURN - board/postInfo
-//	@PostMapping("/postInfo")
-//	public String postInfo(PostsVO postsVO, Model model) {
-//		int postsNo = boardService.insertPost(postsVO);
-//		return "board/postInfo";
-//		// classpath:/templates/board/postInfo.html => 실제 경로
-//	}
+	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
+	// RETURN - board/postInfo
+	@PostMapping("/postInfo")
+	public String postInfo(PostsVO postsVO, CommentsVO commentsVO) {
+		int postsNo = boardService.insertCommentInfo(commentsVO);
+		return "redirect:postInfo?postsNo=" + commentsVO.getPostsNo();
+		// classpath:/templates/board/postInfo.html => 실제 경로
+	}
 
 }

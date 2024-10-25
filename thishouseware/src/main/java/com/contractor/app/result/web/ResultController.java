@@ -35,7 +35,7 @@ public class ResultController {
 	}
 
 	// 상황완료 전체조회 : URI - resultList / return - result/resultList
-	@GetMapping("resultList")
+	@GetMapping("result/resultList")
 	public String resultList(ComplainsVO complainVO, Model model) {
 		List<ComplainsVO> list = complainService.complainResultList();
 		model.addAttribute("complains", list);
@@ -45,7 +45,7 @@ public class ResultController {
 	}
 
 	// result 단건
-	@GetMapping("resultInfo")
+	@GetMapping("result/resultInfo")
 	public String resultInfo(ComplainsVO complainVO, Model model, ReplysVO replyVO, DepartmentVO departmentVO,
 			EmployeeVO employeeVO, ResultsVO resultVO, int complainNo) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
@@ -63,7 +63,7 @@ public class ResultController {
 		return "result/resultInfo";
 	}
 
-	@PostMapping("resultInfo")
+	@PostMapping("result/resultInfo")
 	public String resultInfoInsert(ComplainsVO complainVO, ResultsVO resultVO) {
 
 		if (resultVO.getResultSolution() == "") {
@@ -76,11 +76,11 @@ public class ResultController {
 			int complainNo = resultService.insertResult(resultVO);
 		}
 
-		return "redirect:result/resultInfo?complainNo=" + resultVO.getComplainNo();
+		return "redirect:/result/resultInfo?complainNo=" + resultVO.getComplainNo();
 	}
 	
 	// 보고완료 수정 페이지
-	@GetMapping("resultUpdate")
+	@GetMapping("result/resultUpdate")
 	public String resultUpdateForm(ComplainsVO complainVO, ResultsVO resultVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
@@ -98,7 +98,7 @@ public class ResultController {
 	}
 	
 	// 보고완료 수정 처리
-	@PostMapping("resultUpdate")
+	@PostMapping("result/resultUpdate")
 	public String resultUpdateProcess(ResultsVO resultVO, ComplainsVO complainVO) {
 		
 		if (resultVO.getResultSolution() == "") {
@@ -112,7 +112,7 @@ public class ResultController {
 			
 		}
 		
-		return "redirect:resultInfo?complainNo="+resultVO.getComplainNo();
+		return "redirect:/result/resultInfo?complainNo="+resultVO.getComplainNo();
 	}
 
 }

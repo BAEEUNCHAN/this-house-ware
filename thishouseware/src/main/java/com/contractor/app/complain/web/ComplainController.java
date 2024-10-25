@@ -31,7 +31,7 @@ public class ComplainController {
 	}
 	
 	// 문의 전체조회 : URI - complainList / return - complain/complainList
-	@GetMapping("complainList")
+	@GetMapping("complain/complainList")
 	public String complainList(ComplainsVO complainVO, Model model) {
 		List<ComplainsVO> list = complainService.complainList();
 		model.addAttribute("complains", list);
@@ -41,7 +41,7 @@ public class ComplainController {
 	}
 	
 	// 문의 단건조회
-	@GetMapping("complainInfo")
+	@GetMapping("complain/complainInfo")
 	public String complainInfo(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
@@ -51,7 +51,7 @@ public class ComplainController {
 	}
 	
 	// 문의 등록 : URI - insertComplain / RETURN - complain/insertComplain
-	@GetMapping("insertComplain")
+	@GetMapping("complain/insertComplain")
 	public String insertComplainForm(ComplainsVO complainVO, Model model, CompanysVO companyVO) {
 		//List<ComplainsVO> list = complainService.complainList();
 		List<CompanysVO> companyList = companyService.companyList();
@@ -61,17 +61,17 @@ public class ComplainController {
 	}
 	
 	// 문의 등록 : 문의 등록 처리
-	@PostMapping("insertComplain")
+	@PostMapping("complain/insertComplain")
 	public String insertComplainProcess(ComplainsVO complainVO) {
 		
 		int complainNo = complainService.insertComplain(complainVO);
-		return "redirect:complainInfo?complainNo="+ complainNo;
+		return "redirect:/complain/complainInfo?complainNo="+ complainNo;
 	}
 	
 	// 문의 수정 - 페이지 : URI - complainUpdate / PARAMETER - ComplainsVO(QueryString)
 	// Return - complain/complainUpdate
 	// => 단건조회에서 수정
-	@GetMapping("complainUpdate")
+	@GetMapping("complain/complainUpdate")
 	public String complainUpdateForm(ComplainsVO complainVO, Model model) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain" ,findVO);
@@ -81,19 +81,19 @@ public class ComplainController {
 	// 문의 수정 - 처리 : URI - complainUpdate / PARAMETER - ComplainsVO(JSON) => @ResponseBody 써야함
 	// Return - 수정결과 데이터(Map)
 	// => 등록(내부에서 수행하는 쿼리문 - UPDATE문)
-	@PostMapping("complainUpdate")
+	@PostMapping("complain/complainUpdate")
 	public String complainUpdateProcess(ComplainsVO complainVO){
 		 complainService.updateComplain(complainVO);
-		 return "redirect:complainInfo?complainNo="+complainVO.getComplainNo();
+		 return "redirect:/complain/complainInfo?complainNo="+complainVO.getComplainNo();
 	}
 	 
 	// 삭제 - 처리 : URI - complainDelete / PARAMETER - Integer
 	//             RETURN - 전체조회 다시 호출
 	@ResponseBody
-	@DeleteMapping("complainDelete") // QueryString : @RequestParam
+	@DeleteMapping("complain/complainDelete") // QueryString : @RequestParam
 	public String complainDelete(@RequestParam Integer complainNo) {
 		complainService.deleteComplain(complainNo);
-		return "redirect:complainList";
+		return "redirect:/complain/complainList";
 	}
 	 
 	// 비밀번호 확인 - 페이지

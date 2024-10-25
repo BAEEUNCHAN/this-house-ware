@@ -195,7 +195,7 @@
                       if (Delete) {
                     	  
                     	  $.ajax({
-                              url: `/complainDelete?complainNo=${complainNo}`, 
+                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
                               type: 'DELETE',
                               success: function (response) {
                                   swal({
@@ -257,7 +257,7 @@
 			//event.target
 			let trTag = event.currentTarget;
 			let complainNo = $(trTag).children().first().text().trim();
-			let url = `/replyInfo?complainNo=${complainNo}`;
+			let url = `/reply/replyInfo?complainNo=${complainNo}`;
 			location.href = url;
 		});
 		

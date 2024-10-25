@@ -20,7 +20,7 @@
 				</ul>
 			</div>
 			<div class="row">
-				<form name="updateForm" th:action="@{/resultInfo}" method="post">
+				<form name="updateForm" th:action="@{/result/resultInfo}" method="post">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="card">
@@ -276,7 +276,7 @@
 					<th:block th:each="info : ${results}">
 						<th:block th:if="${info.resultSolution != null}">
 							<button class="btn btn-success"
-								th:onclick='|location.href="@{/resultUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+								th:onclick='|location.href="@{/result/resultUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
 							<input type="hidden" name="complainNo"
 								th:value="${complain.complainNo}">
 							<input type="hidden" name="companyNo"
@@ -286,7 +286,7 @@
 							<input type="hidden" name="departmentNo"
 								th:value="${#authentication.principal.empVO.departmentNo}">
 							<button class="btn btn-primary"
-								th:onclick='|location.href="@{/resultList}"|'>목록</button>
+								th:onclick='|location.href="@{/result/resultList}"|'>목록</button>
 						</th:block>
 					</th:block>
 				</div>

@@ -10,8 +10,6 @@
 </head>
 <body>
 	<h1>익명 게시판 입니다.</h1>
-	<p th:text="${#authentication.principal.empVO.id}"></p>
-	
 	
 	<h1>수민</h1>
 	<button type="button" th:onclick='|location.href="@{board/boardMainPage}"|'>게시판</button>
@@ -25,6 +23,7 @@
 	<button type="button" th:onclick='|location.href="@{/insertComplain}"|'>문의등록</button>
 	<button type="button" th:onclick='|location.href="@{/replyList}"|'>문의목록(회사)</button>
 	<button type="button" th:onclick='|location.href="@{/resultList}"|'>문의처리완료목록</button>
+	<button type="button" th:onclick='|location.href="@{/home2}"|'>home2</button>
 	
 	<h1>은찬</h1>
 	<button type="button" th:onclick='|location.href="@{/edms/edmsDocList}"|'>결재문서</button>

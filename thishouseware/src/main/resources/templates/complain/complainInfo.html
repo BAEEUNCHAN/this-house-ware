@@ -76,7 +76,7 @@
 								<br /> <br />
 								<div class="text-center">
 									<button class="btn btn-success"
-										th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+										th:onclick='|location.href="@{/complain/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
 									<button type="button" class="btn btn-danger alert_demo_7"
 										data-toggle="modal" data-target="#exampleModal"
 										th:value="${complain.complainNo}">삭제</button>
@@ -126,7 +126,7 @@
 
 									<div class="text-center">
 										<button class="btn btn-primary"
-										th:onclick='|location.href="@{/complainList}"|'>목록</button>
+										th:onclick='|location.href="@{/complain/complainList}"|'>목록</button>
 									</div>
 
 								</div>
@@ -192,7 +192,7 @@
                       if (Delete) {
                     	  
                     	  $.ajax({
-                              url: `/complainDelete?complainNo=${complainNo}`, 
+                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
                               type: 'DELETE',
                               success: function (response) {
                                   swal({
@@ -206,7 +206,7 @@
                                           },
                                       },
                                   }).then(() => {
-                                	  window.location.href = '/complainList';
+                                	  window.location.href = '/complain/complainList';
                                   });
                               },
                               error: function (error) {

@@ -13,7 +13,7 @@
 	rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <body>
-	<form name="updateForm" th:action="@{/replyInfo}" method="post">
+	<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
 		<div class="container">
 			<div class="page-inner">
 				<div class="page-header">
@@ -177,7 +177,7 @@
         
         if(confirmed) {
             $.ajax({
-                url: `/replyDelete?replyNo=` + replyNo,
+                url: `/reply/replyDelete?replyNo=` + replyNo,
                 type: 'DELETE',
         }).then(() => {
         	location.reload();
@@ -220,7 +220,7 @@
         	if(value){
         		var updatedContent = $("#input-field").val();
         	$.ajax({
-                url: `/replyUpdate?replyNo=` + replyNo,
+                url: `/reply/replyUpdate?replyNo=` + replyNo,
                 type: 'POST',
                 data: {
 				replyNo: replyNo,                	

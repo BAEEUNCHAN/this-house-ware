@@ -31,7 +31,7 @@
 					<div class="card-header">
 
 						<div class="card-title">
-							회사목록 <a href="/insertCompany" class="float-end"><button class="btn btn-primary">회사등록</button></a>
+							회사목록 <a href="/company/insertCompany" class="float-end"><button class="btn btn-primary">회사등록</button></a>
 						</div>
 
 
@@ -125,7 +125,7 @@
                  if (Delete) {
                	  
                	  $.ajax({
-                         url: `/companyDelete?companyNo=${companyNo}`, 
+                         url: `/company/companyDelete?companyNo=${companyNo}`, 
                          type: 'DELETE',
                          success: function (response) {
                              swal({
@@ -186,7 +186,7 @@
 		$('tbody > tr').on('click', function(event) {
 			let trTag = event.currentTarget;
 			let companyNo = $(trTag).children().first().text();
-			let url = `/companyInfo?companyNo=${companyNo}`;
+			let url = `/company/companyInfo?companyNo=${companyNo}`;
 			location.href = url;
 		});
 		

@@ -1,6 +1,8 @@
 package com.contractor.app.reply.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,21 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public int replyDelete(int replyNo) {
 		return replyMapper.deleteReplyInfo(replyNo) ;
+	}
+	
+	// 댓글수정
+	@Override
+	public Map<String, Object> replyUpdate(ReplysVO replyVO) {
+		Map<String, Object> map = new HashMap<>();
+		 boolean isSuccessed = false;
+		 
+		 int result = replyMapper.replyUpdate(replyVO);
+		 if(result == 1) {
+			 isSuccessed = true;
+		 }
+		 
+		 map.put("result", isSuccessed);
+		 map.put("target", replyVO);
+		 return map;
 	}
 }

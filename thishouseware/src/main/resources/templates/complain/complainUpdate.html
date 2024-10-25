@@ -23,7 +23,7 @@
 				</ul>
 			</div>
 			<div class="row">
-				<form name="updateForm" th:action="@{/complainUpdate}"
+				<form name="updateForm" th:action="@{/complain/complainUpdate}"
 					method="post">
 					<div class="col-md-12">
 						<div class="card">
@@ -103,7 +103,7 @@
 									비밀번호 : <input type="password" name="complainPwd" id="complainPwd" maxlength="8" placeholder="최대 8자리" th:value="${complain.complainPwd}"><br/><br/>
 									<div class="text-center">
 									<a><button type="submit" class="btn btn-success">등록</button></a>
-									<button type="button" class="btn btn-danger" th:onclick='|location.href="@{/complainInfo}"|'>취소</button></a>
+									<button type="button" class="btn btn-danger" th:onclick='|location.href="@{/complainList}"|'>취소</button></a>
 									</div>
 								</div>
 							</div>

@@ -8,9 +8,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.contractor.app.security.handler.LoginSuccessHandler;
+
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SpringSecurityConfig {
+	
+	private final LoginSuccessHandler loginSuccessHandler;
 
 	@Bean// 비밀번호 암호화
 	PasswordEncoder passwordEncoder() {
@@ -27,9 +34,10 @@ public class SpringSecurityConfig {
 					.anyRequest().permitAll()
 			);
 		http
-			.formLogin(formlogin-> formlogin.defaultSuccessUrl("/")
+			.formLogin(formlogin-> formlogin
 					.loginPage("/login") // 로그인 페이지 지정
 					.failureUrl("/login?login=failed") // 로그인 실패시 경로
+					.successHandler(loginSuccessHandler) // 로그인 성공시 실행할 핸들러
 					)
 			.logout(logout -> logout.logoutSuccessUrl("/login")
 					.invalidateHttpSession(true) 

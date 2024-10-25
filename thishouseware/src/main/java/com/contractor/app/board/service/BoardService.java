@@ -23,7 +23,7 @@ public interface BoardService {
 	public BoardsVO selectBoard(BoardsVO boardsVO);
 
 	// 게시글별 댓글 전체조회
-	public List<CommentsVO> selectCommentBoard(CommentsVO commentsVO);
+	public List<CommentsVO> selectCommentsPost(CommentsVO commentsVO);
 
 	// 댓글 등록
 	public int insertCommentInfo(CommentsVO commentsVO);

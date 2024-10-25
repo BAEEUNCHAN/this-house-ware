@@ -12,13 +12,15 @@
 	<select id="selectBoardMain" parameterType="BoardsVO"
 		resultMap="boardResult">
 		SELECT BOARDS_NO,
-		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as
+		BOARDS_TYPE,
 		DEPARTMENT_NAME,
 		ANONY_CHK,
 		TITLE,
 		DESCRIPTION,
 		AUTHORITY
-		FROM boards
+		FROM
+		boards
 		ORDER BY BOARDS_TYPE, boards_no
 	</select>
 
@@ -28,23 +30,29 @@
 		FROM (
 		SELECT p.POSTS_NO
 		, b.BOARDS_NO
-		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+		,
+		FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
 		, p.SUBMIT_DT
-		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
-		, p.POST_STARTTIME
+		,
+		FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		,
+		p.POST_STARTTIME
 		, p.POST_ENDTIME
 		, p.TITLE
 		, p.CONTENT
 		, p.AUTHORITY
-		, p.ID
+		,
+		p.ID
 		, case POSTS_TYPE when 'p2' then '1'
 		when 'p1' then '2'
-		when 'p3' then '3' end as type
+		when 'p3'
+		then '3' end as type
 		FROM posts p JOIN boards b
 		ON p.BOARDS_NO =
 		b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{boardsNo}
-		ORDER BY type, p.POSTS_NO desc
+		ORDER BY type, p.POSTS_NO
+		desc
 		)
 		WHERE ROWNUM   <![CDATA[<=]]>
 		5
@@ -54,13 +62,15 @@
 	<select id="selectBoardAll" parameterType="BoardsVO"
 		resultType="BoardsVO">
 		SELECT BOARDS_NO,
-		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as
+		BOARDS_TYPE,
 		DEPARTMENT_NAME,
 		ANONY_CHK,
 		TITLE,
 		DESCRIPTION,
 		AUTHORITY
-		FROM boards
+		FROM
+		boards
 		ORDER BY BOARDS_TYPE, boards_no
 	</select>
 
@@ -68,13 +78,15 @@
 	<select id="selectBoard" parameterType="BoardsVO"
 		resultType="BoardsVO">
 		SELECT BOARDS_NO,
-		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as BOARDS_TYPE,
+		FIND_COMMON_CODE_NAME(BOARDS_TYPE) as
+		BOARDS_TYPE,
 		DEPARTMENT_NAME,
 		ANONY_CHK,
 		TITLE,
 		DESCRIPTION,
 		AUTHORITY
-		FROM boards
+		FROM
+		boards
 		WHERE boards_no = #{boardsNo}
 	</select>
 
@@ -83,11 +95,14 @@
 		resultType="PostsVO">
 		SELECT POSTS_NO
 		, BOARDS_NO
-		, FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
+		,
+		FIND_COMMON_CODE_NAME(POSTS_TYPE) as POSTS_TYPE
 		, SUBMIT_DT
-		, FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
+		,
+		FIND_COMMON_CODE_NAME(POST_SETTING) as POST_SETTING
 		, POST_STARTTIME
-		, POST_ENDTIME
+		,
+		POST_ENDTIME
 		, TITLE
 		, CONTENT
 		, AUTHORITY
@@ -100,50 +115,67 @@
 	<select id="selectPostBoard" resultType="PostsVO">
 		SELECT *
 		FROM (
-				SELECT ROWNUM RN, A.*
-				FROM (
+		SELECT ROWNUM RN, A.*
+		FROM (
 		SELECT p.POSTS_NO
-		, b.BOARDS_NO
+		,
+		b.BOARDS_NO
 		<!-- , p.POSTS_TYPE -->
 		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
 		, p.SUBMIT_DT
-		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
-		, p.POST_STARTTIME
+		,
+		FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		,
+		p.POST_STARTTIME
 		, p.POST_ENDTIME
 		, p.TITLE
 		, p.CONTENT
 		, p.AUTHORITY
-		, p.ID
+		,
+		FIND_NAME(p.ID) as NAME
 		, case POSTS_TYPE when 'p2' then '1'
-		when 'p1' then '2'
+		when 'p1'
+		then '2'
 		when 'p3' then '3' end as type
 		FROM posts p JOIN boards b
-		ON p.BOARDS_NO = b.BOARDS_NO
+		ON
+		p.BOARDS_NO = b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{postsVO.boardsNo}
-		ORDER BY type, p.POSTS_NO desc
+		<!-- 검색어 있을 때 조건 추가 -->
+		<if test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
+			AND ((p.TITLE LIKE '%' || #{pagingVO.searchWord} || '%')
+			OR (FIND_NAME(p.ID) LIKE '%' || #{pagingVO.searchWord} || '%'))
+		</if>
+		ORDER BY type, p.POSTS_NO DESC
 		) A
-		 	  )
-		WHERE RN BETWEEN #{pagingVO.start} AND #{pagingVO.end}
+		)
+		WHERE RN BETWEEN #{pagingVO.start}
+		AND #{pagingVO.end}
 	</select>
 
 	<!-- 게시글 단건조회 -->
 	<select id="selectPostInfo" resultType="PostsVO">
 		SELECT p.POSTS_NO
-		, b.BOARDS_NO
+		,
+		b.BOARDS_NO
 		, b.TITLE as board_title
-		, FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
-		, FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
+		,
+		FIND_COMMON_CODE_NAME(p.POSTS_TYPE) as POSTS_TYPE
+		,
+		FIND_COMMON_CODE_NAME(p.POST_SETTING) as POST_SETTING
 		, p.SUBMIT_DT
-		, p.POST_STARTTIME
+		,
+		p.POST_STARTTIME
 		, p.POST_ENDTIME
 		, p.TITLE
 		, p.CONTENT
 		, p.AUTHORITY
-		, p.ID
+		,
+		FIND_NAME(p.ID) as NAME
 		FROM posts p JOIN boards b
-		ON p.BOARDS_NO = b.BOARDS_NO
-		WHERE
-		p.POSTS_NO = #{postsNo}
+		ON p.BOARDS_NO =
+		b.BOARDS_NO
+		WHERE p.POSTS_NO = #{postsNo}
 	</select>
 
 	<!-- 게시글 등록 -->
@@ -189,18 +221,21 @@
 	</delete>
 
 	<!-- 댓글 전체조회 -->
-	<select id="selectCommentsBoard" parameterType="CommentsVO"
+	<select id="selectCommentsPost" parameterType="CommentsVO"
 		resultType="CommentsVO">
 		SELECT c.COMMENTS_NO
 		, p.POSTS_NO
 		, c.CONTENT
 		, c.AUTHORITY
-		, c.ID
+		,
+		FIND_NAME(c.ID) as NAME
+		, c.SUBMIT_DT
 		FROM comments c JOIN posts p
-		ON p.POSTS_NO = c.POSTS_NO
-		WHERE p.POSTS_NO =
-		#{postsNo}
-		ORDER BY c.COMMENTS_NO desc
+		ON
+		p.POSTS_NO = c.POSTS_NO
+		WHERE p.POSTS_NO = #{postsNo}
+		ORDER BY
+		c.COMMENTS_NO desc
 	</select>
 
 	<!-- 댓글 등록 -->
@@ -215,17 +250,20 @@
 		, POSTS_NO
 		, CONTENT
 		, id
+		, submit_dt
 		)
-		VALUES ( #{commentsNo}
+		VALUES (
+		#{commentsNo}
 		,#{postsNo}
 		,#{content}
 		,#{id}
+		,SYSDATE
 		)
 	</insert>
 
 	<!-- 총 게시글 갯수 출력 -->
 	<select id="countPost" resultType="int">
-		SELECT COUNT(*) 
+		SELECT COUNT(*)
 		FROM posts
 		WHERE BOARDS_NO = #{boardsNo}
 	</select>

@@ -53,10 +53,12 @@ public class ScheduleController {
 	        System.out.println("Received Schedule Code: " + scheduleVO.getSheduleCode());
 	        System.out.println("Received Department No: " + scheduleVO.getDepartmentNo());
 	        System.out.println("Received Id: " + scheduleVO.getId());
-	        System.out.println("Received bgColor: " + scheduleVO.getBgColor());
+	        System.out.println("Received bgColor: " + scheduleVO.getColor());
 	        
 	        // DB에 저장
-			if (scheduleService.scheduleInsert(scheduleVO) > 0) {
+	        int no = scheduleService.scheduleInsert(scheduleVO);	        
+			if (no > 0) {
+				result.put("scheduleNo", no);
 				result.put("success", true);
 				System.out.println("Success");
 			}
@@ -91,7 +93,7 @@ public class ScheduleController {
 	        System.out.println("Received Schedule Code: " + scheduleVO.getSheduleCode());
 	        System.out.println("Received Department No: " + scheduleVO.getDepartmentNo());
 	        System.out.println("Received Id: " + scheduleVO.getId());
-	        System.out.println("Received bgColor: " + scheduleVO.getBgColor());
+	        System.out.println("Received bgColor: " + scheduleVO.getColor());
 	        
 	        // DB에 저장
 			if (scheduleService.scheduleUpdate(scheduleVO) > 0) {

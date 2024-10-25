@@ -11,7 +11,7 @@
                , schedule_code as "code"
                , department_no as "department"
                , id as "id"
-               , bg_color as "backgroundColor"
+               , color as "backgroundColor"
         FROM schedule
     </select>
     
@@ -24,7 +24,7 @@
                , content as "content"
                , schedule_code as "code"
                , department_no as "department"
-               , bg_color as "backgroundColor"              
+               , color as "backgroundColor"              
         FROM schedule
         WHERE id = #{id}
     </select>
@@ -39,7 +39,7 @@
                , schedule_code as "code"
                , department_no as "department"
                , id as "id"
-               , bg_color as "backgroundColor"              
+               , color as "backgroundColor"              
         FROM schedule
         WHERE schedule_no = #{no}
     </select>
@@ -63,8 +63,8 @@
             				 , schedule_code
             				 , department_no
             				 , id
-            				 <if test="bgColor != null">
-            				 , bg_color
+            				 <if test="color != null">
+            				 , color
             				 </if>
         					)
         VALUES (
@@ -80,8 +80,8 @@
                 , #{sheduleCode}
                 , #{departmentNo}
                 , #{id}
-                <if test="bgColor != null">
-                , #{bgColor}
+                <if test="color != null">
+                , #{color}
                 </if> 
                )
     </insert>
@@ -98,8 +98,8 @@
             <if test="content != null">
             , content = #{content}
             </if>
-            <if test="bgColor != null">
-            , bg_color = #{bgColor}
+            <if test="color != null">
+            , color = #{color}
             </if>
         WHERE schedule_no = #{scheduleNo}
     </update>

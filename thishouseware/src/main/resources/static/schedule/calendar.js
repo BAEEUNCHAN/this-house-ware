@@ -1,5 +1,13 @@
 /**
  * calendar.js
+ * 
+ * FullCalendar 이벤트 속성
+ * 1) title : 해당 이벤트의 제목을 나타낸다.
+ * 2) color : 이벤트의 색상을 변경한다.
+ * 3) textColor : 이벤트 내용의 텍스트의 색상을 변경한다.
+ * 4) backgroundColor : 이벤트 배경색의 색상만을 변경한다.
+ * 5) borderColor : 이벤트 테두리의 색상만을 변경한다.
+ * 6) rendering : "bakground"라고 입력하면 color, backgroundColor의 색상으로 해당일 전체의 내용이 채워진다.
  */
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');    
@@ -15,13 +23,14 @@ document.addEventListener('DOMContentLoaded', function() {
     	allEvents = result;
 
     	// full-calendar 생성하기
-    	var calendar = new FullCalendar.Calendar(calendarEl, {			
-      		themeSystem: 'bootstrap5', // Bootstrap 5 Theming
-      		googleCalendarApiKey: key,// 구글캘린더 api키 입력하시면 됩니다.
+    	var calendar = new FullCalendar.Calendar(calendarEl, {
+			themeSystem: 'bootstrap5', // Bootstrap 5 Theming
+      		googleCalendarApiKey: key, // 구글캘린더 api키 입력하시면 됩니다.
       		height: '600px', // calendar 높이 설정
       		expandRows: true, // 화면에 맞게 높이 재설정
       		slotMinTime: '00:00', // Day 캘린더에서 시작 시간
       		slotMaxTime: '23:59', // Day 캘린더에서 종료 시간
+      		// eventTextColor: 'black', // 이벤트 텍스트 컬러
       		customButtons:{
         		myCustomButton:{
           			text:"일정추가",
@@ -37,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
         		center: 'title',
         		right: 'dayGridMonth,timeGridWeek,timeGridDay listWeek'
       		},
+      		buttonText: {
+				// 해더 툴바 텍스트 변경시
+			},
       		initialView: 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
       		// initialDate: '2024-10-15', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
       		// slotDuration: '01:00:00', // 기본 30분 단위가 아니라 1시간 단위로 일정(일) 설정
@@ -60,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         		console.log("eventRemove : " + obj);
       		},
       		
-      		select: function(arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다. , 추후 비활성화
+      		select: function(arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
         		/*let title = prompt('일정 추가');
         		if (title) {
           			calendar.addEvent({
@@ -94,12 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
         		calendar.unselect()
       		},
       		
-      		eventClick: function (info) {    // 일정 클릭 시
-	      		console.log(info);	      		
+      		eventClick: function (info) {      // 일정 클릭 시	      			      		
 	      		info.jsEvent.preventDefault(); // 브라우저 네이게이션 비활성화
 	      		
-	      		// 구글 캘린더 일정 클릭시 이벤트 제외
-	      		if(info.event.extendedProps.no == undefined) { 	      
+	      		// 구글 캘린더 일정 과 다른 사람의 이벤트 제외
+	      		if(info.event.extendedProps.no == undefined || info.event.id != id) { 	      
 					return;	
 				}
 				
@@ -110,7 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log(info.event.extendedProps.content);
 				console.log(info.event.backgroundColor);
 				console.log(info.event.id);
-		
+				
+				// 모달창에 현재 이벤트 정보 출력
 				let startDt = new Date(info.event.start - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);
 				let endDt = new Date(info.event.end - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);								
 				$("#eventInfoModal #title").val(info.event.title);    		
@@ -121,49 +133,42 @@ document.addEventListener('DOMContentLoaded', function() {
 				$("#eventInfoModal").modal("show");
 				
 				//일정 수정 이벤트
-				$("#modSchedule").click(function() {
-					if (info.event.id = 'emp101') { // 로그인 시 실제 로그인 id 값과 비교
-						let eventData = {
-					        title: $("#eventInfoModal #title").val(),
-					        start: $("#eventInfoModal #start").val(),
-					        end: $("#eventInfoModal #end").val(),						        
-					    };
-					    
-						//빈값입력시 오류
-						if (eventData.title == "" || eventData.start == "" || eventData.end == "") {
-							alert("입력하지 않은 값이 있습니다.");
-						} 
-						//끝나는 날짜가 시작하는 날짜보다 값이 크면 안됨
-						else if ($("#start").val() > $("#end").val()) {
-							alert("시간을 잘못 입력 하셨습니다.");
-						}
-						else {
-							// 서버로 data 보내기
-							updateSchedule(info);
-							$("#eventInfoModal").modal("hide");
-							// 수정 사항을 즉시 반영하는 방법 찾아야 함
-							// v6 rerender 안됨, 방법 못찾음
-							location.reload();
-						}
+				$("#modSchedule").get(0).onclick = function(target) {
+					let eventData = {
+				        title: $("#eventInfoModal #title").val(),
+				        start: $("#eventInfoModal #start").val(),
+				        end: $("#eventInfoModal #end").val(),						        
+				    };
+				    console.log(eventData.title);
+  					console.log(eventData.start);
+  					console.log(eventData.end);
+					//빈값입력시 오류
+					if (eventData.title == "" || eventData.start == "" || eventData.end == "") {
+						alert("일정이름, 시작시간, 종료시간은 필수 입력값입니다.");
+					} 
+					//끝나는 날짜가 시작하는 날짜보다 값이 크면 안됨
+					else if ($("#eventInfoModal #start").val() > $("#eventInfoModal #end").val()) {
+						alert("시간을 잘못 입력 하셨습니다.");
 					}
 					else {
-						alert("자신의 일정만 수정 가능합니다!");
+						// 서버로 data 보내기
+						updateSchedule(info);
+						/*let event = updateSchedule(info);
+						if(event != null) {
+							// target.remove(); // 현재 이벤트 삭제하는 방법 찾기 
+							calendar.addEvent(event);
+						}*/
+						$("#eventInfoModal").modal("hide");														
 					}
-					
-				});
+				};
 				
 				// 일정 삭제 이벤트
-				$("#delSchedule").click(function() {
-					if (info.event.id = 'emp101') { // 로그인 시 실제 로그인 id 값과 비교
-						if (confirm("선택한 일정을 삭제하시겠습니까?")) {
-							deleteSchedule(info);
-							$("#eventInfoModal").modal("hide");
-						}
-					}
-					else {
-						alert("자신의 일정만 삭제 가능합니다!");
+				$("#delSchedule").get(0).onclick = function() {
+					if (confirm("선택한 일정을 삭제하시겠습니까?")) {
+						deleteSchedule(info);
+						$("#eventInfoModal").modal("hide");
 					}				
-				});
+				};
     		},
       
   			//데이터 가져오는 이벤트        
@@ -177,41 +182,43 @@ document.addEventListener('DOMContentLoaded', function() {
     			}
   			]
     	});
-		
-    	//일정 추가 모달창 이벤트
-    	$("#addSchedule").on("click", function() {
-      		let eventData = {
-		        title: $("#title").val(),
-		        start: $("#start").val(),
-		        end: $("#end").val(),
-		        // content: $("#content").val(),
-		        // backgroundColor: $("#color").val(),
-      		};
-      		//빈값입력시 오류
-      		if (eventData.title == "" || eventData.start == "" || eventData.end == "") {
-        		alert("입력하지 않은 값이 있습니다.");
-      		} 
-      		//끝나는 날짜가 시작하는 날짜보다 값이 크면 안됨
-      		else if ($("#start").val() > $("#end").val()) {
-        		alert("시간을 잘못 입력 하셨습니다.");
-      		}
-      		else {
+    	
+		//일정 추가 모달창 이벤트
+		$("#addSchedule").get(0).onclick = function() {
+			let eventData = {
+		        title: $("#addEventModal #title").val(),
+		        start: $("#addEventModal #start").val(),
+		        end: $("#addEventModal #end").val(),	        
+			};
+			console.log(eventData.title);
+			console.log(eventData.start);
+			console.log(eventData.end);
+			//빈값 입력시 오류
+			if (eventData.title == "" || eventData.start == "" || eventData.end == "") {
+				alert("일정이름, 시작시간, 종료시간은 필수 입력값입니다.");
+			} 
+			//끝나는 날짜가 시작하는 날짜보다 값이 크면 안됨
+			else if ($("#addEventModal #start").val() > $("#addEventModal #end").val()) {
+				alert("시간을 잘못 입력 하셨습니다.");
+			}
+			else {
 				// 서버로 data 보내기
-				saveSchedule();
-        		// 이벤트 추가
-		        // calendar.addEvent(eventData);
+				let event = saveSchedule();
+				// 이벤트 추가
+				if (event != null) {
+					calendar.addEvent(event);
+				}
+		        
 		        $("#addEventModal").modal("hide");
-		        $("#title").val("");
-		        $("#start").val("");
-		        $("#end").val("");
-		        $("#content").val("");
-		        $("#color").val("");
-		        // v6 rerender 안됨, 방법 못찾음
-		        location.reload();
-      		}
-		});
-    
-    	// 캘린더 랜더링
+		       /* $("#addEventModal #title").val("");
+		        $("#addEventModal #start").val("");
+		        $("#addEventModal #end").val("");
+		        $("#addEventModal #content").val("");
+		        $("#addEventModal #color").val("");	*/	        
+			}
+		};
+		
+		// 캘린더 랜더링
     	calendar.render();
   	});
 });
@@ -220,32 +227,37 @@ document.addEventListener('DOMContentLoaded', function() {
 function saveSchedule() {
 	// 서버로 data 보내기
 	let obj = new Object();
-	obj.title = $("#title").val();
-	obj.start = $("#start").val();
-    obj.end = $("#end").val();
-    obj.content = $("#content").val();
-    obj.bgColor = $("#color").val();
-    obj.id = 'emp101';
+	obj.title = $("#addEventModal #title").val();
+	obj.start = $("#addEventModal #start").val();
+    obj.end = $("#addEventModal #end").val();
+    obj.content = $("#addEventModal #content").val();
+    obj.color = $("#addEventModal #color").val();
+    obj.id = id;
     obj.sheduleCode = 'f1';
-    obj.departmentNo = 13;
-    console.log(obj);
+    obj.departmentNo = 13;    
     $.ajax({
 		type: 'post',
 		url: '/schAdd',
 		data: JSON.stringify(obj),
 		contentType: 'application/json',
+		async: false,
 		success: function(result) {
 			if(result.success) {
+				obj.no = result.scheduleNo;
 				alert("저장했습니다");
+		        // location.reload();
 			}
 			else {
 				alert("저장에 실패했습니다");
+				return null;
 			}
 		},
 		error: function(result) {
 			alert(result);
+			return null;
         }
 	});
+	return obj;
 }
 
 // 일정 수정
@@ -257,11 +269,10 @@ function updateSchedule(info) {
 	obj.start = $("#eventInfoModal #start").val();
     obj.end = $("#eventInfoModal #end").val();
     obj.content = $("#eventInfoModal #content").val();
-    obj.bgColor = $("#eventInfoModal #color").val();
-    obj.id = 'emp101';
+    obj.color = $("#eventInfoModal #color").val();
+    obj.id = id;
     obj.sheduleCode = 'f1';
     obj.departmentNo = 13;
-    console.log(obj);
     $.ajax({
 		type: 'post',
 		url: '/schUpdate',
@@ -270,15 +281,19 @@ function updateSchedule(info) {
 		success: function(result) {
 			if(result.success) {
 				alert("수정했습니다");
+		        location.reload();		        
 			}
 			else {
 				alert("수정 중 오류가 발생했습니다");
+				return null;
 			}
 		},
 		error: function(result) {
 			alert(result);
+			return null;
         }
 	});
+	return obj;
 }
 
 // 일정 삭제
@@ -291,7 +306,6 @@ function deleteSchedule(info) {
       		if(result.success) {
         		// info.event.remove();
         		alert("삭제하였습니다");
-        		// v6 rerender 안됨, 방법 못찾음
         		location.reload();							
       		}                        
       		else {

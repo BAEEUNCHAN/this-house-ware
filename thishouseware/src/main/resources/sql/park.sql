@@ -129,22 +129,11 @@ values (
     WHERE attendances_no = 
             (   SELECT max(attendances_no) 
                 FROM attendances
-                WHERE id = 'emp115')
+                WHERE id = 'emp100')
     )
     ,'emp100'
 );
-		SELECT 
-			ATTENDANCES_NO,
-			ATTENDANCES_CODE,
-			DEPARTMENT_NO,
-			TIME,
-			WORKING_TIME,
-			ID
-		FROM attendances
-		WHERE attendances_no = 
-		(   SELECT max(attendances_no) 
-		    FROM attendances
-		    WHERE id = 'emp100');
+
 -- 수정문 실행후 commit 하자
 commit;
 

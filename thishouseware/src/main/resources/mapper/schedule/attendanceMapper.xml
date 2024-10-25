@@ -19,7 +19,14 @@
 	</select>
 	<!-- 해당 직원의 근태기록 추가 -->
 	<insert id="insertAttendance" parameterType="AttendanceVO">
-		insert into attendances
+		insert into attendances (
+			ATTENDANCES_NO
+			,ATTENDANCES_CODE
+			,DEPARTMENT_NO
+			,TIME
+			,WORKING_TIME
+			,ID
+		)
 		values (
 		    attendances_seq.NEXTVAL
 		    ,#{attendancesCode}
@@ -32,7 +39,9 @@
 					    WHERE attendances_no = 
 					            (   SELECT max(attendances_no) 
 					                FROM attendances
-					                WHERE id = '#{id}')
+					                WHERE id = #{id}
+					            	AND ATTENDANCES_CODE = 'j1'
+					            )
 					    )
 			    </when>
 			    <otherwise>

@@ -192,190 +192,24 @@
 var SweetAlert2Demo = (function () {
   //== Demos
   var initDemos = function () {
+  
     // 출근버튼
     $("#attendanceBtn1").click(function (e) {
-      swal({
-        title: "출근하시겠습니까?",
-        type: "warning",
-        buttons: {
-          confirm: {
-            text: "예",
-            className: "btn btn-success",
-          },
-          cancel: {
-         	text: "아니요",
-            visible: true,
-            className: "btn btn-danger",
-          },
-        },
-      }).then((buttonResult) => {
-        if (buttonResult) {
-          let obj = new Object();
-          obj.attendancesCode = "j1";
-          $.ajax({
-            url:'/attendance/modifyCode',
-            type: 'post',
-            data: JSON.stringify(obj),
-            contentType : 'application/json',
-            success: function(answer){
-              if(answer == "success"){
-                swal({
-                  title: "요청이 처리되었습니다.",
-                  type: "success",
-                  buttons: {
-                    confirm: {
-                      text: "예",
-                      className: "btn btn-success",
-                    },
-                  },
-                }).then(function(){
-					location.reload();
-				});
-              }
-              else if("error1"){
-                swal({
-                  title: "IP 인식에 오류가 발생하였습니다.",
-                  type: "error",
-                  buttons: {
-                    confirm: {
-                      text: "예",
-                      className: "btn btn-success",
-                    },
-                  },
-                });              	
-              }
-              else{
-                swal({
-                  title: "서버 오류가 발생하였습니다.",
-                  type: "error",
-                  buttons: {
-                    confirm: {
-                      text: "예",
-                      className: "btn btn-success",
-                    },
-                  },
-                });
-              }
-            },
-            error: function (error) {
-              swal({
-                  title: "요청이 실패하였습니다.",
-                  type: "error",
-                  buttons: {
-                    confirm: {
-                      text: "예",
-                      className: "btn btn-success",
-                    },
-                  },
-                });
-            }
-          })
-          
-        } else {
-          swal.close();
-        }
-      });
+      attendanceEvent('j1','출근하시겠습니까?');
     });
     // 퇴근 버튼
     $("#attendanceBtn2").click(function (e) {
-      swal({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        type: "warning",
-        buttons: {
-          confirm: {
-            text: "Yes, delete it!",
-            className: "btn btn-success",
-          },
-          cancel: {
-            visible: true,
-            className: "btn btn-danger",
-          },
-        },
-      }).then((Delete) => {
-        if (Delete) {
-          swal({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            type: "success",
-            buttons: {
-              confirm: {
-                className: "btn btn-success",
-              },
-            },
-          });
-        } else {
-          swal.close();
-        }
-      });
+      attendanceEvent('j2','퇴근하시겠습니까?');
     });
     // 외출 버튼
     $("#attendanceBtn3").click(function (e) {
-      swal({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        type: "warning",
-        buttons: {
-          confirm: {
-            text: "Yes, delete it!",
-            className: "btn btn-success",
-          },
-          cancel: {
-            visible: true,
-            className: "btn btn-danger",
-          },
-        },
-      }).then((Delete) => {
-        if (Delete) {
-          swal({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            type: "success",
-            buttons: {
-              confirm: {
-                className: "btn btn-success",
-              },
-            },
-          });
-        } else {
-          swal.close();
-        }
-      });
+      attendanceEvent('j3','외출하시겠습니까?');
     });
     // 복귀 버튼
     $("#attendanceBtn4").click(function (e) {
-      swal({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        type: "warning",
-        buttons: {
-          confirm: {
-            text: "Yes, delete it!",
-            className: "btn btn-success",
-          },
-          cancel: {
-            visible: true,
-            className: "btn btn-danger",
-          },
-        },
-      }).then((Delete) => {
-        if (Delete) {
-          swal({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            type: "success",
-            buttons: {
-              confirm: {
-                className: "btn btn-success",
-              },
-            },
-          });
-        } else {
-          swal.close();
-        }
-      });
+      attendanceEvent('j1','복귀하시겠습니까?');
     });
-
+    
   };
 
   return {
@@ -386,6 +220,89 @@ var SweetAlert2Demo = (function () {
   };
 })();
 
+function attendanceEvent(attendancesCode,title){
+  swal({
+    title: title,
+    type: "warning",
+    buttons: {
+      confirm: {
+        text: "예",
+        className: "btn btn-success",
+      },
+      cancel: {
+     	text: "아니요",
+        visible: true,
+        className: "btn btn-danger",
+      },
+    },
+  }).then((buttonResult) => {
+    if (buttonResult) {
+      let obj = new Object();
+      obj.attendancesCode = attendancesCode;
+      $.ajax({
+        url:'/attendance/modifyCode',
+        type: 'post',
+        data: JSON.stringify(obj),
+        contentType : 'application/json',
+        success: function(answer){
+          if(answer == "success"){
+            swal({
+              title: "요청이 처리되었습니다.",
+              type: "success",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+            }).then(function(){
+				location.reload();
+			});
+          }
+          else if("error1"){
+            swal({
+              title: "IP 인식에 오류가 발생하였습니다.",
+              type: "error",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+            });              	
+          }
+          else{
+            swal({
+              title: "서버 오류가 발생하였습니다.",
+              type: "error",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+            });
+          }
+        },
+        error: function (error) {
+          swal({
+              title: "요청이 실패하였습니다.",
+              type: "error",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+          });
+        }
+      })
+      
+    } else {
+      swal.close();
+    }
+  });
+}
 //== Class Initialization
 jQuery(document).ready(function () {
   SweetAlert2Demo.init();

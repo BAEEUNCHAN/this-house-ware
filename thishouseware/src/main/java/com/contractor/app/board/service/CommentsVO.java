@@ -15,4 +15,6 @@ public class CommentsVO {
 	private String id; //아이디
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date submitDT; // 작성 날짜
+	
+	private String name; // 이름
 }

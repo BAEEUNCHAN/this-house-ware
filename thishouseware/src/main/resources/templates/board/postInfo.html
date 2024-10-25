@@ -20,7 +20,7 @@
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td>[[ ${post.id} ]]
+			<td>[[ ${post.name} ]]
 		</tr>
 		<tr>
 			<th>작성일자</th>
@@ -51,12 +51,7 @@
 			<th:block th:each="info : ${comments}">
 			<tr>
 				<td>[[ ${info.commentsNo} ]]</td>
-				<td><th:block th:if="${info.id}"
-						  th:text="'<관리자> ' + ${info.id}">
-					<th:block th:if="${post.id} == ${info.id}"
-						  th:text="'<글쓴이> ' + ${info.id}">
-					<th:block th:unless="${post.id} != ${info.id}"
-				          th:text="${info.id}"></td>
+				<td>[[ ${info.name} ]]</td>
 				<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")} ]]</td>
 				<td>[[ ${info.content} ]]</td>
 			</tr>

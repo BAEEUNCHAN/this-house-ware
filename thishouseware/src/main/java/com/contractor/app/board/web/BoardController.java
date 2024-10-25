@@ -21,6 +21,7 @@ import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.security.service.LoginUserVO;
 
 import lombok.RequiredArgsConstructor;
+
 /**
  * 게시판 관리
  */
@@ -28,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-	
+
 	private final BoardService boardService;
 	private final CommonCodeService commonCodeService;
 
@@ -40,15 +41,12 @@ public class BoardController {
 
 	// 메인페이지 : URI - boardMainPage / RETURN - board/boardMainPage
 	@GetMapping("/boardMainPage")
-	public String boardMainPage(Model model, 
-			                    BoardsVO boardsVO, 
-			                    PostsVO postsVO) {
+	public String boardMainPage(Model model, BoardsVO boardsVO, PostsVO postsVO) {
 		// 게시판 목록 조회
 		List<BoardsVO> boards = boardService.selectBoardMain(boardsVO);
 
 		// 페이지에 전달
 		model.addAttribute("boards", boards);
-
 
 		return "board/boardMainPage";
 	}
@@ -72,18 +70,18 @@ public class BoardController {
 
 	// 게시글 등록 - 페이지 : URI - postInsert / RETURN - board/postInsert
 	@GetMapping("/postInsert")
-	public String postInsertForm(Model model, PostsVO postsVO ,Authentication authentication) {
+	public String postInsertForm(Model model, PostsVO postsVO, Authentication authentication) {
 		// 게시판 목록 조회
 		List<BoardsVO> list = boardService.boardList(null);
 
 		// 게시판 유형 조회
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
-		LoginUserVO loginUserVO = (LoginUserVO)authentication.getPrincipal();
+		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
 		String positionCode = loginUserVO.getEmpVO().getPositionCode();
-		
+
 		// 로그인 한 계정의 포지션 코드를 채크한후 a1(사장) a2(관리자) 등급이아니면
 		// boardsType 의 앞에서부터 2개 의 값을 제거한다.
-		if(positionCode == "a1" || positionCode == "a2"){
+		if (positionCode == "a1" || positionCode == "a2") {
 			boardsType.remove(0);
 			boardsType.remove(0);
 		}
@@ -103,34 +101,46 @@ public class BoardController {
 		return "board/postInsert";
 		// classpath:/templates/board/postInsert.html => 실제 경로
 	}
-	
+
 	// 게시판별 게시글 전체조회 : URI - postList / RETURN - board/postList
 	@GetMapping("/postList")
-	public String postList(Model model, PostsVO postsVO, BoardsVO boardsVO, PagingVO pagingVO
-			             , @RequestParam(value="nowPage", defaultValue = "1",  required=false)String nowPage
-			             , @RequestParam(value="cntPerPage",defaultValue = "10", required=false)String cntPerPage) {
-		
+	public String postList(Model model, PostsVO postsVO, BoardsVO boardsVO, PagingVO pagingVO,
+			@RequestParam(value = "nowPage", defaultValue = "1", required = false) String nowPage,
+			@RequestParam(value = "cntPerPage", defaultValue = "10", required = false) String cntPerPage,
+			@RequestParam(required = false) String searchWord) {
+
+		// 게시글 총 개수 가져오기
 		int total = boardService.countPost(postsVO);
-	
+
+		// 페이징 및 검색어 설정
 		pagingVO = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-		model.addAttribute("paging", pagingVO);
+		if (searchWord != null && !searchWord.isEmpty()) {
+			pagingVO.setSearchWord(searchWord.trim());
+		}
+		
+		// DB 쿼리에서 사용할 start, end값 계산 (총 개수 추가)
+		pagingVO.calcStartEnd(Integer.parseInt(nowPage), Integer.parseInt(cntPerPage), total);
+		
+		// 게시글과 게시판 정보 가져오기
 		BoardsVO board = boardService.selectBoard(boardsVO);
 		List<PostsVO> list = boardService.postListBoard(pagingVO, postsVO);
+		
 		// 페이지에 전달
+		model.addAttribute("paging", pagingVO);
 		model.addAttribute("posts", list);
 		model.addAttribute("board", board);
+		
 		return "board/postList";
 	}
 
 	// 게시글 삭제 - 처리 : URI - postDelete / PARAMETER - Integer
 	// RETURN - 전체조회 다시 호출
 	@GetMapping("/postDelete") // QueryString : @RequestParam
-	public String postDelete(@RequestParam Integer postsNo, 
-			                 @RequestParam Integer boardsNo) {
+	public String postDelete(@RequestParam Integer postsNo, @RequestParam Integer boardsNo) {
 		boardService.deletePost(postsNo);
 		return "redirect:postList?boardsNo=" + boardsNo;
 	}
-	
+
 	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
 	// RETURN - board/postInfo
 	@GetMapping("postInfo") // postInfo?key=value
@@ -139,11 +149,11 @@ public class BoardController {
 		List<CommentsVO> comments = boardService.selectCommentsPost(commentsVO);
 		model.addAttribute("post", findVO);
 		model.addAttribute("comments", comments);
-		
+
 		return "board/postInfo";
 		// classpath:/templates/board/postInfo.html => 실제 경로
 	}
-	
+
 	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
 	// RETURN - board/postInfo
 	@PostMapping("/postInfo")

@@ -23,6 +23,8 @@ public class PostsVO {
 	private String authority; //권한
 	private String id; //아이디
 	
+	private String name; // 이름
+	
 	private String boardTitle; 
 	
 	@Override

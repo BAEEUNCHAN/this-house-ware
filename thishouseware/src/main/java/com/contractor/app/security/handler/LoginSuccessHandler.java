@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	AttendanceService attendanceService;
+	private final AttendanceService attendanceService;
 	
 	/**
 	 * 로그인 성공시 실행된다.
@@ -30,20 +30,19 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
        
         LoginUserVO loginVO = (LoginUserVO) authentication.getPrincipal();
         String id = loginVO.getUsername();
-        AttendanceVO attendVO= new AttendanceVO(); 
-        
+        AttendanceVO attendanceVO= new AttendanceVO(); 
         try {
-        	attendVO= attendanceService.getLastAttendanceById(id);
+        	attendanceVO= attendanceService.getLastAttendanceById(id);
         }catch (NullPointerException e) {
 			// 데이터가 없을경우 퇴근 상태 코드값을 대입한다.
-			attendVO.setAttendancesCode("J2");
+			attendanceVO.setAttendancesCode("j2");
 		}catch (Exception e) {
 			System.out.println("서버오류");
 		}
         
     	// 근태코드를 새션상으로 올린다.(로그아웃시 모든 세션이 제거되므로 따로 제거할 필요 없다.)
     	HttpSession session = request.getSession();
-        session.setAttribute("attendance",attendVO);
+        session.setAttribute("attendance",attendanceVO);
         getRedirectStrategy().sendRedirect(request,response,"/");
     }
 }

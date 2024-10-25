@@ -6,6 +6,8 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
 /* 기본 체크박스 숨기기 */
@@ -29,11 +31,65 @@
 .chk_box input[type="checkbox"]:checked + .fa-star {
     color: #ffc107; /* 체크 시 별 색상 변경 */
 }
+/* 모달 버튼 */
+.custom-confirm-btn {
+    background-color: #4a90e2; /* 차분한 파란색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px; /* 버튼 간격 추가 */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
 
-/* 테이블 셀 간격 조정 */
-.table th,
-.table td {
-    padding: 5px 8px; /* 상하 패딩 5px, 좌우 패딩 8px으로 조정 */
+.custom-confirm-btn:hover {
+    background-color: #357ABD; /* 파란색 어두운 버전 */
+}
+
+.custom-cancel-btn {
+    background-color: #6c757d; /* 중간 회색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.custom-success-btn {
+    background-color: #28a745; /* 녹색 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-success-btn:hover {
+    background-color: #218838; /* Hover 시 어두운 녹색 */
+}
+/* 오류 발생 모달 확인 버튼 스타일 */
+.custom-error-btn {
+    background-color: #e74c3c; /* 붉은색 계열 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-error-btn:hover {
+    background-color: #c0392b; /* 호버 시 어두운 붉은색 */
 }
 </style>
 
@@ -63,19 +119,19 @@
                                 <tbody class="docBox">
                                     <th:block th:each="info, sts : ${docBoxs}">
                                         <tr>
-                                            <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td>
-                                            <td>[[${sts.count}]]</td>
-                                            <td>[[${info.departmentNo}]]</td>
-                                            <td>[[${info.title}]]</td>
-                                            <td>[[${info.id}]]</td>
-                                            <td>[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td>
-                                            <td>
-                                                <label class="chk_box">
-                                                    <input type="checkbox" th:checked="${info.important}" />
-                                                    <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
-                                                </label>
-                                            </td>
-                                        </tr>
+										    <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td> 
+										    <td class="count">[[${sts.count}]]</td> 
+										    <td class="departmentNo">[[${info.departmentNo}]]</td>
+										    <td class="title">[[${info.title}]]</td> 
+										    <td class="id">[[${info.id}]]</td> 
+										    <td class="submitDt">[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td> 
+										    <td>
+										        <label class="chk_box">
+										            <input type="checkbox" th:checked="${info.important}" />
+										            <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
+										        </label>
+										    </td>
+										</tr>
                                     </th:block>
                                 </tbody>
                             </table>
@@ -93,12 +149,12 @@
 
 <script th:inline="javascript">
     // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
+    var deptNo = [[${#authentication.principal.empVO.departmentNo}]]
+    var id = [[${#authentication.principal.empVO.id}]]
+    
     $('.docBox > tr').on('click', function(event) {
         let trTag = event.currentTarget;
         let edno = $(trTag).children().eq(0).text();
-        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 id
-        let deptNo = [[${#authentication.principal.empVO.departmentNo}]]; // 부서 번호
-
         // URL에 문서 번호, fromDocList, id, 부서 번호 포함
         let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocDeptList=true&id=${id}&deptNo=${deptNo}`; 
         location.href = url;
@@ -108,9 +164,7 @@
     $('.chk_box').on('click', function(event) {
         event.stopPropagation(); // 이벤트 전파 방지
     });
-    
-    
 </script>
-
+<script src="/assets/js/chan/importantModal.js"></script>
 </body>
 </html>

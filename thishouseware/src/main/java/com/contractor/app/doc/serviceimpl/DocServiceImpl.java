@@ -39,6 +39,11 @@ public class DocServiceImpl implements DocService {
 	} // 부서문서 결재완료 조회
 	
 	@Override
+	public void docUpdateImportant(String edmsDocNo, String important) {
+			docMapper.updateDeptImportant(edmsDocNo,important);
+	} // 부서문서 중요문서 업데이트
+	
+	@Override
 	public List<DocJoinVO> docDeptImportantList(String important, int departmentNo) {
 		return docMapper.getDeptImportant(important, departmentNo);
 	} // 부서문서 중요문서

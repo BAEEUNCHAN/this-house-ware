@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.doc.service.DocJoinVO;
 import com.contractor.app.doc.service.DocService;
@@ -31,7 +34,7 @@ public class DocController {
 		model.addAttribute("docBoxs", list);
 		// return "docBoxs/docList";
 	}
-	
+
 	// 문서결과별 문서 조회
 	@GetMapping("/docApprovalStatusList")
 	public void getApprovalStatus(@RequestParam String approvalStatus, @RequestParam String id, Model model) {
@@ -39,16 +42,16 @@ public class DocController {
 
 		switch (approvalStatus) {
 		case "임시저장":
-			list = docService.docApprovalStatusList("임시저장",id);
+			list = docService.docApprovalStatusList("임시저장", id);
 			break;
 		case "결재완료":
-			list = docService.docApprovalStatusList("결재완료",id);
+			list = docService.docApprovalStatusList("결재완료", id);
 			break;
 		case "결재대기":
-			list = docService.docApprovalStatusList("결재대기",id);
+			list = docService.docApprovalStatusList("결재대기", id);
 			break;
 		case "결재수신":
-			list = docService.docApprovalStatusList("결재수신",id);
+			list = docService.docApprovalStatusList("결재수신", id);
 			break;
 		default:
 			list = new ArrayList<>(); // 기본값 또는 에러 처리
@@ -61,11 +64,10 @@ public class DocController {
 	// 부서문서함 문서 전체조회
 	@GetMapping("/docDeptList")
 	public String DocDeptList(@RequestParam Integer departmentNo, Model model) {
-	    List<DocJoinVO> list = docService.DocDeptList(departmentNo); 
-	    model.addAttribute("docBoxs", list);
-	    return "docBox/docDeptList";
+		List<DocJoinVO> list = docService.DocDeptList(departmentNo);
+		model.addAttribute("docBoxs", list);
+		return "docBox/docDeptList";
 	}
-	
 
 	// 부서문서 결재완료 조회
 	@GetMapping("/docDeptStatusList")
@@ -74,14 +76,24 @@ public class DocController {
 		model.addAttribute("docBoxs", list);
 		return "docBox/docDeptStatusList";
 	}
-	
+
+	// 부서문서 중요문서 업데이트
+	@PostMapping("/updateDeptImportant")
+	@ResponseBody
+	public ResponseEntity<String> updateDeptImportant(@RequestParam String edmsDocNo, @RequestParam String important,
+			@RequestParam int departmentNo) {
+
+		docService.docUpdateImportant(edmsDocNo, important); // 중요 상태 업데이트
+
+		return ResponseEntity.ok("중요문서로 설정 완료");
+	}
+
 	// 부서문서 중요문서 조회
 	@GetMapping("/docDeptImportantList")
-	public String getDeptImportant(@RequestParam String important, @RequestParam int departmentNo, Model model) {
+	public String getDeptImportantList(@RequestParam String important, @RequestParam int departmentNo, Model model) {
 		List<DocJoinVO> list = docService.docDeptImportantList(important, departmentNo);
 		model.addAttribute("docBoxs", list);
 		return "docBox/docDeptImportantList";
 	}
-	
 
 }// 끝

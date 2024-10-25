@@ -12,6 +12,8 @@ public interface DocService {
 	public List<DocJoinVO> DocDeptList(int departmentNo);
 	// 부서문서 결재완료 문서 조회	
 	public List<DocJoinVO> docDeptStatusList(String approvalStatus, int departmentNo);
+	// 부서문서 중요문서 업데이트
+	public void docUpdateImportant(String edmsDocNo, String important);
 	// 부서문서 중요문서
 	public List<DocJoinVO> docDeptImportantList(String important, int departmentNo);
 

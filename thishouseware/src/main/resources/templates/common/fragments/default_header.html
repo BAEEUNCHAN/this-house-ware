@@ -19,19 +19,21 @@
                   <i class="gg-menu-left"></i>
                 </button>
               </div>
-              <button class="topbar-toggler more">
-                <i class="gg-more-vertical-alt"></i>
-              </button>
+              <th:block sec:authorize="isAuthenticated()">
+	              <button class="topbar-toggler more" >
+	                <i class="gg-more-vertical-alt"></i>
+	              </button>
+              </th:block>
             </div>
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          <nav
+          <nav sec:authorize="isAuthenticated()"
             class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
           >
             <div class="container-fluid">
 
-              <ul sec:authorize="isAuthenticated()" class="navbar-nav topbar-nav ms-md-auto align-items-center">
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
                 <!-- 즐겨찾기 용으로 활용하게 남겨두기 -->
                 <li class="nav-item topbar-icon dropdown hidden-caret">
                   <a

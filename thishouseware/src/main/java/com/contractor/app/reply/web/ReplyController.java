@@ -1,12 +1,11 @@
 package com.contractor.app.reply.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +33,7 @@ public class ReplyController {
 	}
 	
 	// 문의 전체조회 : URI - replyList / return - reply/replyList
-	@GetMapping("replyList")
+	@GetMapping("reply/replyList")
 	public String replyList(ComplainsVO complainVO, Model model) {
 		List<ComplainsVO> list = complainService.complainList();
 		model.addAttribute("complains", list);
@@ -45,7 +44,7 @@ public class ReplyController {
 	
 	// reply 단건 + 문의답변
 	// employees 테이블 List / reply + employees 등록
-	@GetMapping("replyInfo")
+	@GetMapping("reply/replyInfo")
 	public String replyInfo(ComplainsVO complainVO, Model model, ReplysVO replyVO, DepartmentVO departmentVO, EmployeeVO employeeVO, int complainNo) {
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);
@@ -59,7 +58,7 @@ public class ReplyController {
 		return "reply/replyInfo";
 	}
 	
-	@PostMapping("replyInfo")
+	@PostMapping("reply/replyInfo")
 	public String replyProcess(ComplainsVO complainVO, ReplysVO replyVO) {
 		
 		if(replyVO.getReplyContent() == "") {
@@ -70,22 +69,29 @@ public class ReplyController {
 			// 댓글등록
 			int complainNo = replyService.insertReply(replyVO);
 		}
-		return "redirect:replyInfo?complainNo="+replyVO.getComplainNo();
+		return "redirect:/reply/replyInfo?complainNo="+replyVO.getComplainNo();
 	}
 	
-	@PostMapping("replyDelete")
+	
+	// 삭제
 	@ResponseBody
-	public Map<String, Object> replyDelete(int replyId) {
-	    Map<String, Object> response = new HashMap<>();
-	    try {
-	        replyService.replyDelete(replyId);
-	        response.put("success", true);
-	    } catch (Exception e) {
-	        response.put("error", false);
-	    }
-	    return response;
+	@DeleteMapping("reply/replyDelete")
+	public String replyDelete(@RequestParam Integer replyNo) {
+		ReplysVO replyVO = new ReplysVO();
+		replyService.replyDelete(replyNo);
+		return "redirect:reply/replyInfo?complainNo=" + replyVO.getComplainNo();
+	} 
+	
+	// 댓글수정
+	@ResponseBody
+	@PostMapping("reply/replyUpdate")
+	public String replyUpdate(@RequestParam(value = "complainNo", required = false) Integer complainNo, ReplysVO replyVO) {
+		replyService.replyUpdate(replyVO);
+		return "success";
 	}
+	
 
 	
+
 	
 }

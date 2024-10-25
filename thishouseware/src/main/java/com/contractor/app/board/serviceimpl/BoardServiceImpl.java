@@ -52,10 +52,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectBoard(boardsVO);
 	}
 
-	@Override
-	public List<CommentsVO> selectCommentBoard(CommentsVO commentsVO) {
-		return boardMapper.selectCommentsBoard(commentsVO);
-	}
 
 	@Override
 	public int insertCommentInfo(CommentsVO commentsVO) {
@@ -71,6 +67,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO) {
 		return boardMapper.selectPostBoard(pagingVO, postsVO);
+	}
+
+	@Override
+	public List<CommentsVO> selectCommentsPost(CommentsVO commentsVO) {
+		return boardMapper.selectCommentsPost(commentsVO);
 	}
 
 }

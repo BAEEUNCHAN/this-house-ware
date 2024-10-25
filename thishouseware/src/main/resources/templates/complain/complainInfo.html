@@ -3,7 +3,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-
+<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <body>
 
 	<div class="container">
@@ -75,7 +76,7 @@
 								<br /> <br />
 								<div class="text-center">
 									<button class="btn btn-success"
-										th:onclick='|location.href="@{/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+										th:onclick='|location.href="@{/complain/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
 									<button type="button" class="btn btn-danger alert_demo_7"
 										data-toggle="modal" data-target="#exampleModal"
 										th:value="${complain.complainNo}">삭제</button>
@@ -107,7 +108,7 @@
 												<p>
 													<small class="text-muted"><i
 														class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
-														'yyyy년 MM월 dd일')}]] </small>
+														'yyyy년 MM월 dd일 a hh:mm')}]] </small>
 												</p>
 											</div>
 											<div class="timeline-body">
@@ -125,7 +126,7 @@
 
 									<div class="text-center">
 										<button class="btn btn-primary"
-										th:onclick='|location.href="@{/complainList}"|'>목록</button>
+										th:onclick='|location.href="@{/complain/complainList}"|'>목록</button>
 									</div>
 
 								</div>
@@ -134,11 +135,34 @@
 					</div>
 				</div>
 			</div>
-
-
-
 		</div>
 	</div>
+	
+	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">게시물을 정말 삭제하시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">삭제하기</button>
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
 	<script>
 	
 		// 삭제모달
@@ -168,7 +192,7 @@
                       if (Delete) {
                     	  
                     	  $.ajax({
-                              url: `/complainDelete?complainNo=${complainNo}`, 
+                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
                               type: 'DELETE',
                               success: function (response) {
                                   swal({
@@ -182,14 +206,14 @@
                                           },
                                       },
                                   }).then(() => {
-                                	  window.location.href = '/complainList';
+                                	  window.location.href = '/complain/complainList';
                                   });
                               },
                               error: function (error) {
   								swal(
   										 {
   									title: "오류!",
-  									text: "삭제 중 오류가 발생했습니다. 다시 시도해 주세요.",
+  									text: "문의사항에 답변이 있으면 삭제할 수 없습니다.",
   									icon: "error",
   									buttons: {
   										confirm: {

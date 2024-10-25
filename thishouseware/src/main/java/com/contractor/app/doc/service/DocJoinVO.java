@@ -25,6 +25,6 @@ public class DocJoinVO { // 문서함
  private String approvalStatus; // 결재상태
  @DateTimeFormat(pattern = "yyyy-MM-dd")
  private Date approvalDt;// 결재일시
- 
+ private String important; // 중요문서
 
 }

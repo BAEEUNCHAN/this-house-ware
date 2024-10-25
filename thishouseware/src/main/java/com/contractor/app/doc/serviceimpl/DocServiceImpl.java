@@ -19,13 +19,13 @@ public class DocServiceImpl implements DocService {
 	}
 
 	@Override
-	public List<DocJoinVO> DocJoinList() {
-		return docMapper.selectDocJoinList();
+	public List<DocJoinVO> DocJoinList(String id) {
+		return docMapper.selectDocJoinList(id);
 	} // 문서함 문서 전체조회	
 
 	@Override
-	public List<DocJoinVO> docApprovalStatusList(String approvalStatus) {
-		return docMapper.getApprovalStatus(approvalStatus);
+	public List<DocJoinVO> docApprovalStatusList(String approvalStatus,String id) {
+		return docMapper.getApprovalStatus(approvalStatus,id);
 	} // 문서결과별 문서 조회	
 
 	@Override
@@ -34,8 +34,18 @@ public class DocServiceImpl implements DocService {
 	} // 부서별 문서 전체조회
 	
 	@Override
-	public List<DocJoinVO> docDeptStatusList(String approvalStatus, Integer departmentNo) {
+	public List<DocJoinVO> docDeptStatusList(String approvalStatus, int departmentNo) {
 	    return docMapper.getDeptStatus(approvalStatus, departmentNo); 
-	} // 부서문서 조회
+	} // 부서문서 결재완료 조회
+	
+	@Override
+	public void docUpdateImportant(String edmsDocNo, String important) {
+			docMapper.updateDeptImportant(edmsDocNo,important);
+	} // 부서문서 중요문서 업데이트
+	
+	@Override
+	public List<DocJoinVO> docDeptImportantList(String important, int departmentNo) {
+		return docMapper.getDeptImportant(important, departmentNo);
+	} // 부서문서 중요문서
 	
 }// 끝

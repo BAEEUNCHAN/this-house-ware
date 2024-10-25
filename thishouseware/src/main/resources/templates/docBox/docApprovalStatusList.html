@@ -8,7 +8,7 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">부서문서함</div>
+						<div class="card-title">문서함</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -47,14 +47,15 @@
 			</div>
 		</div>
 	</div>
-			<script>
-			//문서함에서 문서 클릭시 문서함 목록으로 이동하기
-		    $('.docBox > tr').on('click', function(event){
-		        let trTag = event.currentTarget;
-		        let edno = $(trTag).children().eq(0).text();
-		        let url = '/edms/edmsDocInfo?edmsDocNo=' + edno + '&fromDocList=true'; // 문서함에서 온 경우를 표시하는 쿼리 파라미터 추가
-		        location.href = url;
-		    });
+			<script th:inline="javascript">
+			    // 문서함에서 문서 클릭 시 문서함 목록으로 이동하기
+			    $('.docBox > tr').on('click', function(event) {
+			        let trTag = event.currentTarget;
+			        let edno = $(trTag).children().eq(0).text();
+			        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 ID
+			        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocList=true&id=${id}`; 
+			        location.href = url;
+			    });
 			</script>
 </body>
 </html>

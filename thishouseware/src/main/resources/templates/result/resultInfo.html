@@ -47,6 +47,7 @@
 												<br /> <span>문의구분 : [[${complain.complainType == 1 ?
 													'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] /
 													처리상황 : </span> <br />
+											</label>
 											<th:block th:each="info : ${results}">
 												<th:block th:if="${info.resultCost != null}">
 													<span th:if="${complain.progress == 3}"
@@ -57,11 +58,16 @@
 											</th:block>
 
 
-											</label>
 											<th:block
 												th:if="${results == null } or ${results.size() == 0}">
 												<select class="form-select" id="progress" name="progress"
 													aria-label="Progress Dropdown" style="width: 100px; display: inline-block;">
+													<option th:value="0"
+														th:selected="${complain.progress == 0}">대기</option>
+													<option th:value="1"
+														th:selected="${complain.progress == 1}">진행</option>
+													<option th:value="2"
+														th:selected="${complain.progress == 2}">접수</option>
 													<option th:value="3"
 														th:selected="${complain.progress == 3}">상황완료</option>
 													<option th:value="4"
@@ -180,7 +186,7 @@
 														<p>
 															<small class="text-muted"><i
 																class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
-																'yyyy년 MM월 dd일')}]] </small>
+																'yyyy년 MM월 dd일 a hh:mm')}]] </small>
 														</p>
 													</div>
 													<div class="timeline-body">

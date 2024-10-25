@@ -183,25 +183,25 @@
 										type : 'POST',
 										data : {
 											complainNo : complainNo,
-											complainPwd : inputPwd,
+											inputPwd : inputPwd,
 										},
 										success : function(response) {
 											if (response == "success") {
-												swal("비밀번호o", "비밀번호 맞음",
-														"success").then(
+												swal({
+														title:"비밀번호확인완료",
+														icon: "success"}).then(
 														function() {
-															// "complain/complainInfo?complainNo="+complainNo
-															location.reload();
+															window.location.href = "complainInfo?complainNo="+complainNo
 														});
 											}else{
-												swal("오류", "비밀번호 틀림", "error")
+												swal("오류", "비밀번호를 확인해주세요.", "error")
 												.then(function() {
 													location.reload();
 												})
 											}
 										},
 										error : function() {
-											swal("오류", "비밀번호 틀림", "error")
+											swal("오류", "비밀번호를 확인해주세요.", "error")
 													.then(function() {
 														location.reload();
 													})

@@ -30,4 +30,6 @@ public interface ComplainMapper {
 	
 	// 비밀번호 체크
 	public int checkPwd(String complainPwd, int complainNo);
+	
+	public ComplainsVO getComplainPwd(int complainNo);
 }

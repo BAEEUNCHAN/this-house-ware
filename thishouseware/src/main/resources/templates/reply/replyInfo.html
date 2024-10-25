@@ -118,7 +118,7 @@
 													<p>
 														<small class="text-muted"><i
 															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
-															'yyyy년 MM월 dd일')}]] </small>
+															'yyyy년 MM월 dd일 a hh:mm')}]] </small>
 													</p>
 
 
@@ -137,7 +137,7 @@
 												[[${#authentication.principal.empVO.departmentName}]]
 												[[${#authentication.principal.empVO.name}]]</i></small>
 										<textarea class="form-control" name="replyContent"
-											id="replyContent" rows="5" maxlength="500"
+											id="replyContent" rows="5" maxlength="500" wrap="soft" 
 											style="background-color: lightyellow;"></textarea>
 
 
@@ -195,12 +195,14 @@
           title: "",
           text : "수정할 댓글내용을 입력하세요.",
           content: {
-            element: "input",
+            element: "textarea",
             attributes: {
               value: replyContent, 
-              type: "text",
+              //type: "text",
               id: "input-field",
               className: "form-control",
+              wrap: "soft",
+              style: "white-space:normal !important; word-wrap:break-word !important; width: 100% !important; height: 200px !important;",
             },
           },
           buttons: {

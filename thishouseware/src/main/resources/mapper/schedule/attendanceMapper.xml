@@ -3,7 +3,7 @@
 <mapper namespace="com.contractor.app.schedule.mapper.AttendanceMapper">
 
 	<!-- 해당 직원의 마지막 근태기록 조회 -->
-	<select id="selectLastAttendanceById" resultType="AttendanceVO" parameterType="string">
+	<select id="selectLastAttendanceById" resultType="AttendanceVO"  parameterType="string">
 		SELECT 
 			ATTENDANCES_NO,
 			ATTENDANCES_CODE,
@@ -17,4 +17,29 @@
 		    FROM attendances
 		    WHERE id = #{id})
 	</select>
+	<!-- 해당 직원의 근태기록 추가 -->
+	<insert id="insertAttendance" parameterType="AttendanceVO">
+		insert into attendances
+		values (
+		    attendances_seq.NEXTVAL
+		    ,#{attendancesCode}
+		    ,#{departmentNo}
+		    ,SYSDATE
+		    <choose>
+				<when  test="attendancesCode.equals('j2')">
+			    	,(select  ROUND((SYSDATE - time) * 24 * 60)
+					    FROM    attendances
+					    WHERE attendances_no = 
+					            (   SELECT max(attendances_no) 
+					                FROM attendances
+					                WHERE id = '#{id}')
+					    )
+			    </when>
+			    <otherwise>
+			    	,null
+			    </otherwise>
+		    </choose>
+		    ,#{id}
+		)
+	</insert>
 </mapper>

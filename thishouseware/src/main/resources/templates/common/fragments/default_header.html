@@ -149,25 +149,25 @@
                             <button type="button" 
                               class="btn btn-success" 
                               id="attendanceBtn1"
-                              th:if="${session.attendance.attendancesCode == 'J2'}">
+                              th:if="${session.attendance.attendancesCode == 'j2'}">
                               출근
                             </button>
                             <button type="button" 
                               class="btn btn-danger fs-6" 
                               id="attendanceBtn2"
-                              th:if="${session.attendance.attendancesCode == 'J1'}">
+                              th:if="${session.attendance.attendancesCode == 'j1'}">
                               퇴근
                             </button>
                             <button type="button" 
                               class="btn btn-secondary fs-6" 
                               id="attendanceBtn3"
-                              th:if="${session.attendance.attendancesCode == 'J1'}">
+                              th:if="${session.attendance.attendancesCode == 'j1'}">
                               외출
                             </button>
                             <button type="button" 
                               class="btn btn-success fs-6" 
                               id="attendanceBtn4"
-                              th:if="${session.attendance.attendancesCode == 'J3'}">
+                              th:if="${session.attendance.attendancesCode == 'j3'}">
                               복귀
                             </button>
                           </div>
@@ -228,11 +228,25 @@ var SweetAlert2Demo = (function () {
                       className: "btn btn-success",
                     },
                   },
-                });
+                }).then(function(){
+					location.reload();
+				});
+              }
+              else if("error1"){
+                swal({
+                  title: "IP 인식에 오류가 발생하였습니다.",
+                  type: "error",
+                  buttons: {
+                    confirm: {
+                      text: "예",
+                      className: "btn btn-success",
+                    },
+                  },
+                });              	
               }
               else{
                 swal({
-                  title: "요청이 실패하였습니다.",
+                  title: "서버 오류가 발생하였습니다.",
                   type: "error",
                   buttons: {
                     confirm: {

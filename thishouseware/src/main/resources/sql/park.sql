@@ -1,3 +1,7 @@
+// 시퀸스 관리
+DROP SEQUENCE attendances_seq;
+CREATE SEQUENCE attendances_seq;
+
 select 
     department_no,
     department_name
@@ -112,6 +116,35 @@ WHERE attendances_no =
 (   SELECT max(attendances_no) 
     FROM attendances
     WHERE id = '1');
+-- attendances 추가
+-- 퇴근일경우 출근시간과 퇴근시간간의 경과 시간 구하기
+insert into attendances
+values (
+    attendances_seq.NEXTVAL
+    ,'j2'
+    ,'11'
+    ,SYSDATE
+    ,(select  ROUND((sysdate - time) * 24 * 60)
+    FROM    attendances
+    WHERE attendances_no = 
+            (   SELECT max(attendances_no) 
+                FROM attendances
+                WHERE id = 'emp115')
+    )
+    ,'emp100'
+);
+		SELECT 
+			ATTENDANCES_NO,
+			ATTENDANCES_CODE,
+			DEPARTMENT_NO,
+			TIME,
+			WORKING_TIME,
+			ID
+		FROM attendances
+		WHERE attendances_no = 
+		(   SELECT max(attendances_no) 
+		    FROM attendances
+		    WHERE id = 'emp100');
 -- 수정문 실행후 commit 하자
 commit;
 

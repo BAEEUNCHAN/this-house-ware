@@ -17,4 +17,9 @@ public class AttendanceServiceImpl implements AttendanceService{
 	public AttendanceVO getLastAttendanceById(String id) {
 		return attendanceMapper.selectLastAttendanceById(id);
 	}
+
+	@Override
+	public boolean addAttendancesCode(AttendanceVO attendanceVO) {
+		return attendanceMapper.insertAttendance(attendanceVO) == 1;
+	}
 }

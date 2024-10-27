@@ -74,4 +74,24 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectCommentsPost(commentsVO);
 	}
 
+	@Override
+	public int deleteComment(int commentsNo) {
+		return boardMapper.deleteComment(commentsNo);
+	}
+
+	@Override
+	public int updatePostInfo(PostsVO postsVO) {
+		return boardMapper.updatePostInfo(postsVO);
+	}
+
+	@Override
+	public int updateCommentInfo(CommentsVO commentsVO) {
+		return boardMapper.updateCommentInfo(commentsVO);
+	}
+
+	@Override
+	public CommentsVO selectCommentNo(int commentsNo) {
+		return boardMapper.selectCommentNo(commentsNo);
+	}
+
 }

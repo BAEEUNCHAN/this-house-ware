@@ -1,0 +1,25 @@
+<!-- src/main/resources/templates/common/fragments/pagination.html -->
+<div th:fragment="pagination(paging)">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${paging.nowPage} == 1 ? 'disabled'">
+                <a class="page-link" th:href="|javascript:gopage(1)|">처음</a>
+            </li>
+            <li class="page-item" th:classappend="${paging.startPage} == 1 ? 'disabled'">
+                <a class="page-link" th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a>
+            </li>
+            <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
+                class="page-item"
+                th:addclass="${num} == ${paging.nowPage} ? active">
+                <a class="page-link" th:href="|javascript:gopage(${num})|"
+                   th:text="${num}"></a>
+            </li>
+            <li class="page-item" th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
+                <a class="page-link" th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
+            </li>
+            <li class="page-item" th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
+                <a class="page-link" th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
+            </li>
+        </ul>
+    </nav>
+</div>

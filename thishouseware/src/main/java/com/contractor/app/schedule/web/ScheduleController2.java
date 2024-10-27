@@ -1,5 +1,6 @@
 package com.contractor.app.schedule.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.contractor.app.schedule.service.AttendanceVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 import com.contractor.app.security.service.LoginUserVO;
+import com.contractor.app.util.Attendances;
 import com.contractor.app.util.GetIP;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +33,10 @@ public class ScheduleController2 {
 	@Value("${company.ip.front}")
 	private String companyIpFront;
 	private String mainIp = "127.0.0.1";
+	
+	// Google API key
+	@Value("${apikey.googlekey}")
+	String key;
 	
 	private final AttendanceService attendanceService;
 	
@@ -62,5 +68,37 @@ public class ScheduleController2 {
         session.setAttribute("attendance",attendanceVO);
 			
 		return "success";
+	}
+	
+	@GetMapping("attendance/empPage")
+	public String empPage(Model model) {
+		model.addAttribute("key", key);
+		return "schedule/attendanceInfo";
+	}
+	
+	@GetMapping("attendance/empData")
+	@ResponseBody
+	public List<CalendarVO> empData(Authentication authentication){
+		//List<AttendanceVO> list = attendanceService.getAttendancesById(authentication.getName());
+		List<AttendanceVO> list = attendanceService.getAttendancesById("emp100");
+		
+		// 달력에 출력하기 위한 형태로 형변환하기
+		List<CalendarVO> calendarList = new ArrayList<CalendarVO>();
+		for(AttendanceVO aVo : list) {
+			String attendanceName = Attendances.getAttendanceCode(aVo.getAttendancesCode());
+			CalendarVO vo = new CalendarVO(attendanceName,aVo.getTime().toString());
+			calendarList.add(vo);
+			
+		}
+		return calendarList;
+	}
+	
+	private class CalendarVO{
+		public CalendarVO(String title, String startDate) {
+			this.title = title;
+			this.startDate = startDate;
+		}
+		String title;
+		String startDate;
 	}
 }

@@ -8,6 +8,8 @@ public interface AttendanceService {
 
 	boolean addAttendancesCode(AttendanceVO attendanceVO);
 
-	List<AttendanceVO> getAttendancesById(String name);
+	List<AttendanceVO> getAttendancesById(String string);
+
+	List<AttendanceVO> getAttendances();
 	
 }

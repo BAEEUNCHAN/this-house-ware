@@ -15,12 +15,6 @@
   <!-- Google Calendar API CDN -->
   <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.14/index.global.min.js'></script>
   <style>
-	/* body 스타일 */
-	html, body {
-	  overflow: hidden;
-	  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-	  font-size: 14px;
-	}
 	
 	/* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
 	.fc-header-toolbar {
@@ -65,7 +59,7 @@
     <div id='calendar'></div>
   </div>
   <script th:inline="javascript">
-  	let id = [[${#authentication.principal.empVO.id}]] 
+  	let id = [[${id}]] 
   	let key = [[${key}]];
     /**
      * calendar.js
@@ -80,7 +74,7 @@
      */
     document.addEventListener('DOMContentLoaded', function() {
     	var calendarEl = document.getElementById('calendar');    
-      	fetch('/attendance/empData', {
+      	fetch('/attendance/empData?id='+id, {
         	method: "GET",
       	})
       	.then(result => result.json())
@@ -114,10 +108,10 @@
           		// slotDuration: '01:00:00', // 기본 30분 단위가 아니라 1시간 단위로 일정(일) 설정
           		navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
           		editable: true, // default : false 이벤트 드래그 등의 편집여부를 설정함
-          		selectable: true, // 달력 일자 드래그 설정가능
+          		selectable: false, // 달력 일자 드래그 설정가능
           		nowIndicator: true, // 현재 시간 마크
           		allDaySlot:false, // timegrid 화면에서  allday 슬롯 제외하기
-          		dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+          		dayMaxEvents: false, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
           		locale: 'ko', // 한국어 설정
 
           		eventAdd: function (obj) {      // 이벤트 추가 시 발생하는 이벤트

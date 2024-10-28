@@ -1,5 +1,6 @@
 package com.contractor.app.schedule.web;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.schedule.service.AttendanceService;
 import com.contractor.app.schedule.service.AttendanceVO;
@@ -21,10 +24,12 @@ import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 import com.contractor.app.security.service.LoginUserVO;
 import com.contractor.app.util.Attendances;
+import com.contractor.app.util.EmployeeUtil;
 import com.contractor.app.util.GetIP;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -39,6 +44,7 @@ public class ScheduleController2 {
 	String key;
 	
 	private final AttendanceService attendanceService;
+	private final EmployeeService employeeService;
 	
 	@PostMapping("attendance/modifyCode")
 	@ResponseBody
@@ -71,34 +77,47 @@ public class ScheduleController2 {
 	}
 	
 	@GetMapping("attendance/empPage")
-	public String empPage(Model model) {
+	public String empPage(Model model,@RequestParam String id ,Authentication authentication) {
 		model.addAttribute("key", key);
+		model.addAttribute("id", id);
 		return "schedule/attendanceInfo";
 	}
 	
 	@GetMapping("attendance/empData")
 	@ResponseBody
-	public List<CalendarVO> empData(Authentication authentication){
-		//List<AttendanceVO> list = attendanceService.getAttendancesById(authentication.getName());
-		List<AttendanceVO> list = attendanceService.getAttendancesById("emp100");
+	public List<CalendarVO> empData(@RequestParam String id,Authentication authentication){
+		List<AttendanceVO> list = attendanceService.getAttendancesById(id);
 		
 		// 달력에 출력하기 위한 형태로 형변환하기
 		List<CalendarVO> calendarList = new ArrayList<CalendarVO>();
 		for(AttendanceVO aVo : list) {
 			String attendanceName = Attendances.getAttendanceCode(aVo.getAttendancesCode());
-			CalendarVO vo = new CalendarVO(attendanceName,aVo.getTime().toString());
+			CalendarVO vo = new CalendarVO();
+			vo.setTitle(attendanceName);
+			vo.setStart(aVo.getTime());
+			vo.setEnd(aVo.getTime());
 			calendarList.add(vo);
 			
 		}
 		return calendarList;
 	}
 	
+	@Data
 	private class CalendarVO{
-		public CalendarVO(String title, String startDate) {
-			this.title = title;
-			this.startDate = startDate;
-		}
 		String title;
-		String startDate;
+		Date start;
+		Date end;
+	}
+	
+	@GetMapping("attendance/emps")
+	public String empsPage(Model model) {
+		List<EmployeeVO> emps = new ArrayList<EmployeeVO>();
+		emps = employeeService.getEmployees();
+		emps.forEach(obj ->{
+			String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
+			obj.setPositionName(positionName);
+		});
+		model.addAttribute("employees" , emps);
+		return "schedule/empsAttendances";
 	}
 }

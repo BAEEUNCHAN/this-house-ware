@@ -14,4 +14,7 @@ public class AttendanceVO {
 	Date time;			// 입력시간
 	int workingTime;			// 근무시간(분단위)
 	String id;				// 아이디
+	
+	// 내용추가
+	String attendancesName; // 근태이름
 }

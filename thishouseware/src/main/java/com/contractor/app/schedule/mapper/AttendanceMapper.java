@@ -12,6 +12,8 @@ public interface AttendanceMapper {
 
 	int insertAttendance(AttendanceVO attendanceVO);
 
-	List<AttendanceVO> selectAttendancesById(String id);
+	List<AttendanceVO> selectAttendancesById(String string);
+
+	List<AttendanceVO> selectAttendances();
 
 }

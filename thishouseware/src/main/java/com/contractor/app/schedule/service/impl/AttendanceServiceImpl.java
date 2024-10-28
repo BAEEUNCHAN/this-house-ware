@@ -26,7 +26,14 @@ public class AttendanceServiceImpl implements AttendanceService{
 	}
 
 	@Override
-	public List<AttendanceVO> getAttendancesById(String name) {
-		return attendanceMapper.selectAttendancesById(name);
+	public List<AttendanceVO> getAttendancesById(String string) {
+		return attendanceMapper.selectAttendancesById(string);
+	}
+
+	@Override
+	public List<AttendanceVO> getAttendances() {
+		List<AttendanceVO> list = attendanceMapper.selectAttendances();
+
+		return null;
 	}
 }

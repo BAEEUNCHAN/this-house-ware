@@ -18,6 +18,7 @@ import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
+import com.contractor.app.complain.service.ComplainsVO;
 import com.contractor.app.security.service.LoginUserVO;
 
 import lombok.RequiredArgsConstructor;
@@ -117,26 +118,26 @@ public class BoardController {
 		if (searchWord != null && !searchWord.isEmpty()) {
 			pagingVO.setSearchWord(searchWord.trim());
 		}
-		
+
 		// DB 쿼리에서 사용할 start, end값 계산 (총 개수 추가)
 		pagingVO.calcStartEnd(Integer.parseInt(nowPage), Integer.parseInt(cntPerPage), total);
-		
+
 		// 게시글과 게시판 정보 가져오기
 		BoardsVO board = boardService.selectBoard(boardsVO);
 		List<PostsVO> list = boardService.postListBoard(pagingVO, postsVO);
-		
+
 		// 페이지에 전달
 		model.addAttribute("paging", pagingVO);
 		model.addAttribute("posts", list);
 		model.addAttribute("board", board);
-		
+
 		return "board/postList";
 	}
 
 	// 게시글 삭제 - 처리 : URI - postDelete / PARAMETER - Integer
 	// RETURN - 전체조회 다시 호출
 	@GetMapping("/postDelete") // QueryString : @RequestParam
-	public String postDelete(@RequestParam Integer postsNo, @RequestParam Integer boardsNo) {
+	public String postDelete(@RequestParam Integer postsNo, @RequestParam Integer boardsNo, PostsVO postsVO) {
 		boardService.deletePost(postsNo);
 		return "redirect:postList?boardsNo=" + boardsNo;
 	}
@@ -158,9 +159,67 @@ public class BoardController {
 	// RETURN - board/postInfo
 	@PostMapping("/postInfo")
 	public String postInfo(PostsVO postsVO, CommentsVO commentsVO) {
-		int postsNo = boardService.insertCommentInfo(commentsVO);
+		boardService.insertCommentInfo(commentsVO);
 		return "redirect:postInfo?postsNo=" + commentsVO.getPostsNo();
 		// classpath:/templates/board/postInfo.html => 실제 경로
 	}
 
+	// 댓글 삭제 - 처리 : URI - commentDelete / PARAMETER - Integer
+	// RETURN - 전체조회 다시 호출
+	@GetMapping("/commentDelete") // QueryString : @RequestParam
+	public String commentDelete(@RequestParam Integer commentsNo, CommentsVO commentsVO) {
+		boardService.deleteComment(commentsNo);
+		return "redirect:postInfo?postsNo=" + commentsVO.getPostsNo();
+	}
+
+	// 게시글 수정 - 페이지 : URI - postUpdate / PARAMETER - PostsVO(QueryString)
+	// Return - board/postUpdate
+	// => 단건조회에서 수정
+	@GetMapping("postUpdate")
+	public String postUpdate(PostsVO postsVO, Model model, CommentsVO commentsVO) {
+		PostsVO findVO = boardService.postInfo(postsVO);
+		List<CommentsVO> comments = boardService.selectCommentsPost(commentsVO);
+		
+		model.addAttribute("post", findVO);
+		model.addAttribute("comments", comments);
+		
+		return "board/postUpdate";
+	}
+
+	// 게시글 수정 - 처리 : URI - postUpdate / PARAMETER - PostsVO(JSON) =>
+	// @ResponseBody 써야함
+	// Return - 수정결과 데이터(Map)
+	// => 등록(내부에서 수행하는 쿼리문 - UPDATE문)
+	@PostMapping("postUpdate")
+	public String postUpdate(PostsVO postsVO) {
+		boardService.updatePostInfo(postsVO);
+		return "redirect:postInfo?postsNo=" + postsVO.getPostsNo();
+	}
+	
+	// 댓글 수정 - 페이지 : URI - commentUpdate / PARAMETER - CommentsVO(QueryString)
+	// Return - board/commentUpdate
+	// => 단건조회에서 수정
+	@GetMapping("commentUpdate")
+	public String commentUpdate(PostsVO postsVO, Model model, CommentsVO commentsVO, @RequestParam("commentsNo") int commentsNo) {
+		PostsVO findVO = boardService.postInfo(postsVO);
+		List<CommentsVO> comments = boardService.selectCommentsPost(commentsVO);
+		CommentsVO comment = boardService.selectCommentNo(commentsNo); 
+		
+		model.addAttribute("post", findVO);
+		model.addAttribute("comments", comments);
+		model.addAttribute("commentNo", comment.getCommentsNo());
+		
+		return "board/commentUpdate";
+	}
+	
+	// 댓글 수정 - 처리 : URI - commentUpdate / PARAMETER - CommentsVO(JSON) =>
+	// @ResponseBody 써야함
+	// Return - 수정결과 데이터(Map)
+	// => 등록(내부에서 수행하는 쿼리문 - UPDATE문)
+	@PostMapping("commentUpdate")
+	public String commentUpdate(PostsVO postsVO, CommentsVO commentsVO) {
+		boardService.updateCommentInfo(commentsVO);
+		
+		return "redirect:postInfo?postsNo=" + commentsVO.getPostsNo();
+	}
 }

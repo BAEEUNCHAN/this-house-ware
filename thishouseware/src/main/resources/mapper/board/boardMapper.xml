@@ -213,6 +213,14 @@
 		<!-- ,#{authority} ,#{id} -->
 		)
 	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updatePostInfo" parameterType="PostsVO">
+		UPDATE posts
+		SET    title = #{title},
+			   content = #{content}
+		WHERE posts_no = #{postsNo}
+	</update>
 
 	<!-- 게시글 삭제 -->
 	<delete id="deleteBoradInfo" parameterType="int">
@@ -260,12 +268,30 @@
 		,SYSDATE
 		)
 	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateCommentInfo" parameterType="CommentsVO">
+		UPDATE comments
+		SET    content = #{content}
+		WHERE comments_no = #{commentsNo}
+	</update>
 
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM comments
+		WHERE COMMENTS_NO = #{commentsNo}
+	</delete>
+	
 	<!-- 총 게시글 갯수 출력 -->
 	<select id="countPost" resultType="int">
 		SELECT COUNT(*)
 		FROM posts
 		WHERE BOARDS_NO = #{boardsNo}
 	</select>
+	
+	<!-- 댓글 번호 조회 -->
+	<select id="selectCommentNo" parameterType="int" resultType="CommentsVO">
+        SELECT * FROM comments WHERE comments_no = #{commentsNo}
+    </select>
 
 </mapper>

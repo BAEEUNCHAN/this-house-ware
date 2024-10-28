@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<body>
+
+<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">거래처</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">거래처목록</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객목록</a></li>
+				</ul>
+			</div>
+
+
+	<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">고객목록</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="col-md-2">회사번호</th>
+											<th class="col-md-3">회사명</th>
+											<th class="col-md-2">고객명</th>
+											<th class="col-md-2">연락처</th>
+											<th class="col-md-1"></th>
+											<!-- yyyy년MM월dd일 -->
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:each="info : ${companys}">
+											<tr>
+												<td>[[${info.companyNo}]]</td>
+												<td>[[${info.companyName}]]</td>
+												<td>[[${info.customerName}]]</td>
+												<td>[[${info.phone}]]</td>
+												<td>
+													<button type="button" class="btn btn-danger"
+															data-toggle="modal" data-target="#exampleModal" onclick="event.stopPropagation()">
+																<i class="icon-trash"></i>
+													</button>
+												</td>
+											</tr>
+										</th:block>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="card-action">
+								<div class="text-center">
+									<button class="btn btn-primary" th:onclick='|location.href="@{/company/companyList}"|'>목록</button>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+</body>
+</html>

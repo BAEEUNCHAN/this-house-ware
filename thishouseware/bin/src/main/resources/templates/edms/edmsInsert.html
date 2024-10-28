@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><!--이미지 스크린샷-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--모달-->
+<style>
+/* 테이블 스타일 */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 16px;
+	text-align: left;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 테이블 헤더 스타일 */
+th, td {
+	padding: 12px;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+/* 라벨 스타일 */
+label {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+/* 테이블 데이터 스타일 */
+td span {
+	display: block;
+	color: #333;
+}
+
+/* 테이블 행 배경색 (홀수 행 스타일) */
+tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+/* 버튼을 가운데 정렬 */
+.button-container {
+	text-align: center; /* 컨테이너를 가운데 정렬 */
+	margin-top: 20px; /* 버튼 상단에 여백 추가 */
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+/* 모달 버튼 */
+.custom-confirm-btn {
+    background-color: #4a90e2; /* 차분한 파란색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px; /* 버튼 간격 추가 */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-confirm-btn:hover {
+    background-color: #357ABD; /* 파란색 어두운 버전 */
+}
+
+.custom-cancel-btn {
+    background-color: #6c757d; /* 중간 회색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.custom-success-btn {
+    background-color: #28a745; /* 녹색 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-success-btn:hover {
+    background-color: #218838; /* Hover 시 어두운 녹색 */
+}
+/* 오류 발생 모달 확인 버튼 스타일 */
+.custom-error-btn {
+    background-color: #e74c3c; /* 붉은색 계열 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-error-btn:hover {
+    background-color: #c0392b; /* 호버 시 어두운 붉은색 */
+}
+
+</style>
+<div class="page-inner">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div class="card-title">결재문서 작성</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="text-center">
+							<h2 style="text-align: center;">문서 정보 입력</h2>
+							<form name="insertForm" th:action="@{/edms/edmsInsert}"
+								method="post" enctype="multipart/form-data">
+								<table class="table">
+									<tr>
+										<td><label for="id">아이디</label></td>
+										<td><input type ="hidden" th:value ="${#authentication.principal.empVO.id}"name ="id" id="id">
+										<p th:text="${#authentication.principal.empVO.id}"></p></td>
+									</tr>
+									<tr>
+										<td><label for="title">제목</label></td>
+										<td><input type="text" id="edmsTitle" name="title"
+											required></td>
+									</tr>
+									<tr>
+										<td><label for="edmsFormNo">결재양식</label></td>
+										<td><select id="edmsFormNo" name="edmsFormNo">
+												<option value="" selected>선택</option>
+												<!-- 기본값 설정 -->
+												<optgroup label="회계/인사">
+													<option value="FORM001">지출결의서</option>
+													<option value="FORM002">구매신청서</option>
+													<option value="FORM003">월간업무보고서</option>
+													<option value="FORM004">전자계약서(정규)</option>
+													<option value="FORM005">전자계약서(계약)</option>
+													<option value="FORM006">비밀유지서약서</option>
+												</optgroup>
+												<optgroup label="근태">
+													<option value="FORM007">휴가신청서</option>
+													<option value="FORM008">출장보고서</option>
+													<option value="FORM009">연장근무신청서</option>
+												</optgroup>
+												<optgroup label="교육">
+													<option value="FORM010">교육신청서</option>
+												</optgroup>
+												<optgroup label="일반">
+													<option value="FORM011">일반기안</option>
+													<option value="FORM012">협조문</option>
+												</optgroup>
+										</select></td>
+									<tr>
+										<td><label for="edmsContent">내용</label></td>
+										<td><div id="edmsContent"></div>
+										</td>
+									</tr>
+									<tr>
+									<tr>
+										<td><label for="attatch">첨부파일</label></td>
+										<td><input type="file" id="attatch" name="uploadFile"></td>
+									</tr>
+									<tr>
+										<td><label for="shareStatus">공유폴더 여부</label></td>
+										<td><label><input type="radio" name="shareStatus"
+												value="y">예</label> <label><input type="radio"
+												name="shareStatus" value="n">아니오</label></td>
+									</tr>
+									<tr>
+										<td><label for="shareFolderNo">공유 폴더 번호</label></td>
+										<td><input type="text" id="shareFolderNo"
+											name="shareFolderNo" required></td>
+									</tr>
+								</table>
+								<div style="text-align: center; margin-top: 20px;">
+								    <input type="button" class="btnSave btn btn-info" value="임시저장" style="float: right; margin-right: 10px; display: none;">
+								    <input type="button" class="btnSubmit btn btn-success" value="등록">
+								</div>
+								
+							</form>
+						</div>
+					</div>
+					</div>
+				</div>
+				<script th:inline="javascript">
+				var userId = [[${#authentication.principal.empVO.id}]]
+				document.querySelector('#edmsFormNo').addEventListener('change',function(e){
+				let url= '/template/'+event.target.value +'.html'
+				$('#edmsContent').load(url)				
+				});
+
+			    const sendScreenshot = (img) => {
+			      let data = new FormData(document.insertForm);
+			      data.append('screenshot', img);
+			      fetch('/edms/edmsInsert', {
+			        method: "post",
+			        body: data
+			      })
+			      .then(res => {
+			    	    if (res.ok) {
+			    	      // 요청이 성공하면 페이지 이동
+			    	      location.href = '/edms/edmsDocList';
+			    	    } else {
+			    	        // 실패시 alert
+			    	        alert('스크린샷 업로드에 실패했습니다.');
+			    	      }
+			    	    })
+			    	    .catch(error => {
+			    	      alert('오류가 발생했습니다: ' + error.message);
+			    	    });
+			    	  }
+			    
+			    document.querySelector(".btnSubmit").addEventListener("click", function () {
+			
+			      const input = document.getElementById('edmsContent');
+			      html2canvas(input).then(canvas => {
+			        //document.body.appendChild(canvas);
+			        const imgData = canvas.toDataURL('image/png');
+			        sendScreenshot(imgData)
+			      })
+			      
+			      
+			    });
+		  		</script>
+		  		<!-- 임시저장 모달 -->
+				<script src="/assets/js/chan/insertSave.js"></script>
+				<script src="/assets/js/chan/insertSaveButton.js"></script>
+			</div>
+		</div>
+	</div>
+</html>
+

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<body>
+
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">불편/장애사항 단건조회</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<!-- 왼쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+
+									<label for="companyName">회사명 :
+										[[${complain.companyName}]]</label> <br /> <br /> <label
+										for="customerName">고객명 : [[${complain.customerName}]]</label>
+									<br /> <br /> <label for="phone">연락처 :
+										[[${complain.phone}]]</label> <br /> <br />
+
+								</div>
+								<!-- 왼쪽화면 끝-->
+								<!-- 오른쪽화면 -->
+								<div class="col-md-6 col-lg-30">
+									<label for="uploadDt">문제발생일 :
+										[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+									<br /> <label for="customerName"> <span>문의구분 :
+											[[${complain.complainType == 1 ? '고객불편' :
+											(complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황 : </span> <span
+										th:switch="${complain.progress}"> <span th:case="0">대기</span>
+											<span th:case="1">접수</span> <span th:case="2">진행</span> <span
+											th:case="3">상황완료</span> <span th:case="4">보고완료</span>
+									</span>
+
+
+
+									</label> <br /> <br /> <label for="phone">작성일 :
+										[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+									<br />
+								</div>
+							</div>
+							<div class="card-action">
+								<div class="text-center">
+									<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
+
+								</div>
+
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square"></i>문의내용
+								</p>
+								<label for="customerName">[[${complain.complainContent}]]</label>
+								<br /> <br />
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square"></i>요구사항
+								</p>
+								<label for="phone">[[${complain.complainRequest}]]</label> <br />
+								<br /> <br />
+								<div class="text-center">
+									<button class="btn btn-success"
+										th:onclick='|location.href="@{/complain/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+									<button type="button" class="btn btn-danger alert_demo_7"
+										data-toggle="modal" data-target="#exampleModal"
+										th:value="${complain.complainNo}">삭제</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">문의답변/조치사항</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-lg-12">
+									<br />
+
+
+									<th:block th:each="info : ${replys}">
+
+										<div class="timeline-panel">
+											<div class="timeline-heading">
+												<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+												<p>
+													<small class="text-muted"><i
+														class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
+														'yyyy년 MM월 dd일 a hh:mm')}]] </small>
+												</p>
+											</div>
+											<div class="timeline-body">
+												<p>[[${info.replyContent}]]</p>
+											</div>
+										</div>
+										<br />
+										<br />
+									</th:block>
+
+
+
+
+
+
+									<div class="text-center">
+										<button class="btn btn-primary"
+										th:onclick='|location.href="@{/complain/complainList}"|'>목록</button>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">게시물을 정말 삭제하시겠습니까?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">삭제하기</button>
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소하기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	<script>
+	
+		// 삭제모달
+		 //== Class definition
+              var SweetAlert2Demo = (function () {
+                //== Demos
+                var initDemos = function () {
+                  $(".alert_demo_7").click(function (e) {
+                	  event.stopPropagation();
+                	  let complainNo = $(this).val();
+                    swal({
+                      title: "불편/장애사항 삭제",
+                      text: "문의사항을 삭제하시겠습니까?",
+                      type: "warning",
+                      buttons: {
+                        confirm: {
+                          text: "삭제",
+                          className: "btn btn-danger",
+                        },
+                        cancel: {
+                        	text: "취소",
+                          visible: true,
+                          className: "btn btn-black",
+                        },
+                      },
+                    }).then((Delete) => {
+                      if (Delete) {
+                    	  
+                    	  $.ajax({
+                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
+                              type: 'DELETE',
+                              success: function (response) {
+                                  swal({
+                                      title: "삭제완료!",
+                                      text: "해당 문의사항이 삭제되었습니다.",
+                                      icon: "success",
+                                      buttons: {
+                                          confirm: {
+                                              text: "확인",
+                                              className: "btn btn-success",
+                                          },
+                                      },
+                                  }).then(() => {
+                                	  window.location.href = '/complain/complainList';
+                                  });
+                              },
+                              error: function (error) {
+  								swal(
+  										 {
+  									title: "오류!",
+  									text: "문의사항에 답변이 있으면 삭제할 수 없습니다.",
+  									icon: "error",
+  									buttons: {
+  										confirm: {
+  											text: "확인",
+  											className: "btn btn-danger",
+  										},
+  									},
+  								} 
+  										).then(() => {
+  									//location.reload();
+  								});
+  							}  
+                          });
+                      } else {
+                          swal.close();
+                      }
+                  });
+              });
+        
+                };
+        
+                return {
+                  //== Init
+                  init: function () {
+                    initDemos();
+                  },
+                };
+              })();
+        
+              //== Class Initialization
+              jQuery(document).ready(function () {
+                SweetAlert2Demo.init();
+              });
+	
+	
+	</script>
+</body>
+</html>

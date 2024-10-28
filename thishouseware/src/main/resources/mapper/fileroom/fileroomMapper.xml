@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.contractor.app.fileroom.mapper.fileroomMapper">
+	<!-- 자료실별 폴더, 파일 전체조회 -->
+	<select id="selectFileroom" resultType="FilesVO">
+		SELECT
+		fd.FOLDER_NO,
+		fd.FOLDER_NAME,
+		fd.FOLDER_SIZE,
+		fd.AUTHORITY,
+		fd.FILE_ROOMS_NO AS
+		FOLDER_FILE_ROOMS_NO,
+		fd.SHARE_CHK,
+		fd.FOLDER_PATH,
+		fd.ID AS FOLDER_ID,
+		f.FILE_NO,
+		f.FILE_NAME,
+		f.EXTENSION,
+		f.PATH AS FILE_PATH,
+		f.FILE_SIZE,
+		f.UPLOAD_DT,
+		f.ID AS FILE_ID,
+		f.FOLDER_NO AS FILE_FOLDER_NO,
+		f.FILE_ROOMS_NO AS FILE_FILE_ROOMS_NO
+		FROM
+		folder fd LEFT JOIN files f
+		ON fd.FOLDER_NO = f.FOLDER_NO
+		WHERE
+		fd.FILE_ROOMS_NO = #{fileRoomsNo}
+		ORDER BY
+		fd.FOLDER_NO, f.UPLOAD_DT DESC;
+	</select>
+
+</mapper>

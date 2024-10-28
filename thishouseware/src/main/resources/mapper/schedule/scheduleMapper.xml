@@ -3,7 +3,7 @@
 <mapper namespace="com.contractor.app.schedule.mapper.ScheduleMapper">
 	<!-- 전체 일정 조회하기 -->	
     <select id="listScheduleAll" resultType="map">
-        SELECT schedule_no as "no"
+        SELECT schedule_no as "scheduleNo"
                , title as "title"
         	   , TO_CHAR(start_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "start"
                , TO_CHAR(end_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "end"
@@ -17,7 +17,7 @@
     
     <!-- 사원별 일정 조회하기 -->
     <select id="listSchedule" resultType="map">
-        SELECT schedule_no as "no"
+        SELECT schedule_no as "scheduleNo"
                , title as "title"
         	   , TO_CHAR(start_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "start"
                , TO_CHAR(end_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "end"
@@ -31,7 +31,7 @@
     
     <!-- 일정 상세 조회하기 -->
     <select id="infoSchedule" resultType="map" parameterType="int">
-        SELECT schedule_no as "no"
+        SELECT schedule_no as "scheduleNo"
                , title as "title"
         	   , TO_CHAR(start_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "start"
                , TO_CHAR(end_dt, 'YYYY-MM-DD"T"HH24:MI:SS') AS "end"

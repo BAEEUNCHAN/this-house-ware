@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.schedule.service.AttendanceService;
@@ -117,15 +118,30 @@ public class ScheduleController2 {
 		Date end;
 	}
 	
+	/**
+	 * 해당 요청은 팀장, 본부장, 사장 , 관리자만 요청할 수 있게한다. (스프링 시큐리티 url 권한으로 제한한다.)
+	 * 이후 해당 부서값을 통해 보여줄 데이터를 제한한다.
+	 */
 	@GetMapping("attendance/emps")
-	public String empsPage(Model model) {
-		List<EmployeeVO> emps = new ArrayList<EmployeeVO>();
-		emps = employeeService.getEmployees();
+	public String empsPage(Model model,Authentication authentication) {
+		List<Integer> deptNos = empAuthUtil.searchDeptNos(authentication);
+		deptNos.forEach(System.out::println);
+		List<EmployeeVO> emps = employeeService.getEmployees();
+		
+		if(empAuthUtil.getAuthEmp(authentication).getDepartmentNo() == 1) {
+			model.addAttribute("employees" , emps);
+			return "schedule/empsAttendances";
+		}
+		
+		List<EmployeeVO> filterEmps = new ArrayList<EmployeeVO>();
 		emps.forEach(obj ->{
-			String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
-			obj.setPositionName(positionName);
+			if(deptNos.contains(obj.getDepartmentNo())) {
+				String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
+				obj.setPositionName(positionName);
+				filterEmps.add(obj);
+			}
 		});
-		model.addAttribute("employees" , emps);
+		model.addAttribute("employees" , filterEmps);
 		return "schedule/empsAttendances";
 	}
 }

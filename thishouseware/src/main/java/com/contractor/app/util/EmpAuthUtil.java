@@ -1,5 +1,6 @@
 package com.contractor.app.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -101,5 +102,20 @@ public class EmpAuthUtil {
 		return false;
 	}
 	
-	
+	/**
+	 * manager의 부서번호를 통해 
+	 * 조회가능한 하위 부서번호와 현제 부서번호를 반환해준다.
+	 */
+	public List<Integer> searchDeptNos(Authentication authentication){
+		EmployeeVO manager = getAuthEmp(authentication);
+		int managerDeptNo = manager.getDepartmentNo();
+		List<Integer> answer = new ArrayList<Integer>();
+		answer.add(managerDeptNo);
+		List<DepartmentVO> departments = empService.getDepartmentList();
+		for (DepartmentVO departmentVO : departments) {
+			if(departmentVO.getUpperDepartmentNo() == managerDeptNo)
+				answer.add(departmentVO.getDepartmentNo());
+		}
+		return answer;
+	}
 }

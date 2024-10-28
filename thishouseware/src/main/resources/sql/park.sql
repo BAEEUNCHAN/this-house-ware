@@ -3,8 +3,7 @@ DROP SEQUENCE attendances_seq;
 CREATE SEQUENCE attendances_seq;
 
 select 
-    department_no,
-    department_name
+*
 from department;
 
 -- 직원 조회

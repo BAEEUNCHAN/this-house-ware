@@ -30,7 +30,7 @@ import com.contractor.app.common.service.Base64ToImgDecodeUtil;
 import com.contractor.app.edms.service.EdmsDocVO;
 import com.contractor.app.edms.service.EdmsFormVO;
 import com.contractor.app.edms.service.EdmsService;
-import com.contractor.app.util.FileUpload;
+import com.contractor.app.util.FileUploadUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -87,7 +87,7 @@ public class EdmsController {
 
 		// 첨부파일이 없을경우 다운로드 파일을 보여주지 않는다
 		if (uploadFile != null && uploadFile.getSize() > 0) {
-			imageLink = FileUpload.fileUpload(uploadFile, "upload/edms/", uploadPath);
+			imageLink = FileUploadUtil.fileUpload(uploadFile, "upload/edms/", uploadPath);
 			edmsDocVO.setAttatch(imageLink);
 		}
 

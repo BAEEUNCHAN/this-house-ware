@@ -23,9 +23,9 @@ import com.contractor.app.schedule.service.AttendanceVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 import com.contractor.app.security.service.LoginUserVO;
-import com.contractor.app.util.Attendances;
+import com.contractor.app.util.AttendancesUtil;
 import com.contractor.app.util.EmployeeUtil;
-import com.contractor.app.util.GetIP;
+import com.contractor.app.util.GetIPUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -53,7 +53,7 @@ public class ScheduleController2 {
 			HttpServletRequest request) {
 		
 		// 회사 컴퓨터로 로그인된것인지 확인한다.
-		String requestIp = GetIP.getClientIp(request);
+		String requestIp = GetIPUtil.getClientIp(request);
 		if(!requestIp.contains(companyIpFront)) {
 			// 매인 서버용 ip 확인 (실 서비스때는 지우자.)
 			if(!requestIp.contains(mainIp)) {
@@ -91,7 +91,7 @@ public class ScheduleController2 {
 		// 달력에 출력하기 위한 형태로 형변환하기
 		List<CalendarVO> calendarList = new ArrayList<CalendarVO>();
 		for(AttendanceVO aVo : list) {
-			String attendanceName = Attendances.getAttendanceCode(aVo.getAttendancesCode());
+			String attendanceName = AttendancesUtil.getAttendanceCode(aVo.getAttendancesCode());
 			CalendarVO vo = new CalendarVO();
 			vo.setTitle(attendanceName);
 			vo.setStart(aVo.getTime());

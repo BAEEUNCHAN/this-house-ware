@@ -1,6 +1,6 @@
 package com.contractor.app.util;
 
-public class Attendances {
+public class AttendancesUtil {
 	
 	// 직급 코드로 직급을 반환해준다.
 	public static String getAttendanceCode(String attendanceCode) {

@@ -27,7 +27,7 @@ import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.util.EmployeeUtil;
-import com.contractor.app.util.FileUpload;
+import com.contractor.app.util.FileUploadUtil;
 
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -102,7 +102,7 @@ public class ManagerController {
 	    }
         // System.out.println(uploadPath);
         // DB 에 저장하기위한 파일의 경로 추출과 파일 저장을 동시에한다.
-        imageLink = FileUpload.fileUpload(uploadFile,"img/emp/", uploadPath);
+        imageLink = FileUploadUtil.fileUpload(uploadFile,"img/emp/", uploadPath);
         if(imageLink == null)
         	return "error2";
         empVO.setImageLink(imageLink);
@@ -142,14 +142,14 @@ public class ManagerController {
 		    }
 		    
 		    // DB 에 저장하기위한 파일의 경로는 추출한다.
-		    imageLink = FileUpload.fileUpload(uploadFile,"img/emp/" ,uploadPath);
+		    imageLink = FileUploadUtil.fileUpload(uploadFile,"img/emp/" ,uploadPath);
 	        if(imageLink ==null) {
 	        	return "error2";
 	        }
 	        empVO.setImageLink(imageLink);
 	        
 	        // 기존 파일 삭제하기
-	        System.out.println(FileUpload.deleteFile(beforeImageLink,uploadPath));
+	        System.out.println(FileUploadUtil.deleteFile(beforeImageLink,uploadPath));
 	    }
         
         // 서버입력 성공 여부

@@ -74,18 +74,16 @@ public class EmpAuthUtil {
 			return true;
 		}
 		
-		List<DepartmentVO> departments = empService.getDepartmentList();
-		DepartmentVO empDepartmentVO = null;
-		for (DepartmentVO departmentVO : departments) {
-			if(departmentVO.getDepartmentNo() == emp.getDepartmentNo())
-				empDepartmentVO = departmentVO;
-		}
+		DepartmentVO empDepartmentVO 
+			= empService.getDepartmentBydeptNo(emp.getDepartmentNo());
 		// 관리자의 부서가 같거나 상위 부서인지 채크한다.
-		if(manager.getDepartmentNo() == empDepartmentVO.getDepartmentNo())
+		if(manager.getDepartmentNo() == empDepartmentVO.getDepartmentNo()) {
 			return true;
+		}
 		
-		if(manager.getDepartmentNo() == empDepartmentVO.getUpperDepartmentNo())
+		if(manager.getDepartmentNo() == empDepartmentVO.getUpperDepartmentNo()) {
 			return true;
+		}
 		
 		return false;
 	}
@@ -102,5 +100,6 @@ public class EmpAuthUtil {
 		}
 		return false;
 	}
+	
 	
 }

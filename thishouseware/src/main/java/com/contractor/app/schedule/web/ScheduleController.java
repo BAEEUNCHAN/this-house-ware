@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.contractor.app.schedule.service.LeaveDetailVO;
+import com.contractor.app.schedule.service.LeavesService;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 
@@ -21,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleController {
 	private final ScheduleService scheduleService;
+	
+	private final LeavesService leavesService;
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
@@ -116,7 +120,7 @@ public class ScheduleController {
 	public Map<String, Object> schDelete(Integer no) {
 		Map<String, Object> result = new HashMap<>();
 		try {
-			if(scheduleService.ScheduleDelete(no)) {
+			if(scheduleService.scheduleDelete(no)) {
 				result.put("success", true);
 				System.out.println("Success");
 			}
@@ -128,5 +132,19 @@ public class ScheduleController {
 			result.put("success", false);
 		}
 		return result;
+	}
+	
+	// 휴가 전체 조회 페이지
+	@GetMapping("schedule/leavesList")
+	public String leavesList(Model model) {		
+		model.addAttribute("key", key);
+		return "schedule/leavesList";
+	}
+	
+	// DB서버의 휴가 가져오기 AJAX
+	@PostMapping("leaveListAll")
+	@ResponseBody
+	public List<Map<String, Object>> leaveListJSON() {		
+		return leavesService.leaveListAll();
 	}
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.schedule.mapper.LeavesMapper">
+
+	<!-- 휴가 전체 조회 -->
+	<select id="listLeave" resultType="map">
+		SELECT l.leave_no AS "leaveNo"
+		       , l.id AS "id"
+		       , l.leave_start_dt AS "start"
+		       , l.leave_end_dt AS "end"
+		       , l.id || ': ' || l.leave_type AS "title"
+		       , d.leave_total_days AS "total"
+		       , d.leave_used_days AS "used"
+		       , d.leave_remain_days AS "remain"
+		       , d.leave_end_dt AS "endDay" 
+		FROM leave l JOIN leave_detail d
+		ON l.id = d.id
+	</select>
+	
+	<!-- 휴가 추가 -->
+	<insert id="insertLeave" parameterType="LeavesVO">
+		<selectKey keyProperty="leaveNo"
+		           resultType="Integer"
+		           order="BEFORE">
+			SELECT NVL(MAX(leave_no), 0) + 1
+			FROM leave           
+		</selectKey>
+		INSERT INTO leave(
+						  leave_no
+						  , id
+						  , leave_start_dt
+						  , leave_end_dt
+						  , leave_days
+						  , leave_type
+						  )
+		VALUES (				
+				#{leaveNo}
+				, #{id}
+				, TO_DATE(#{leaveStartDt}, 'YYYY-MM-DD"T"HH24:MI')
+				, TO_DATE(#{leaveEndDt}, 'YYYY-MM-DD"T"HH24:MI')
+				, #{leaveDays}
+				, #{leaveType}
+				)
+	</insert>
+	
+	<!-- 휴가 삭제 -->
+	<delete id="deleteLeave" parameterType="int">
+		DELETE FROM leave
+		WHERE leave_no = #{leaveNo}
+	</delete>
+
+</mapper>

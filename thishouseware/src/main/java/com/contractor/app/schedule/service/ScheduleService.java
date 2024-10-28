@@ -21,5 +21,5 @@ public interface ScheduleService {
 	public int scheduleUpdate(ScheduleVO scheduleVO);
 	
 	// 일정 삭제
-	boolean ScheduleDelete(Integer no);
+	boolean scheduleDelete(Integer no);
 }

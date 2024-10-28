@@ -7,11 +7,11 @@ public class Attendances {
 		switch (attendanceCode) {
 			case "j1":
 				return "출근";
-			case "J2":
+			case "j2":
 				return "퇴근";
-			case "J3":
+			case "j3":
 				return "외출";
-			case "J4":
+			case "j4":
 				return "복귀";
 		}
 		return null;

@@ -177,6 +177,11 @@
 		WHERE complain_no = #{complainNo}
 	</delete>
 
+	<select id="getComplainPwd" parameterType="int" resultType="ComplainsVO">
+		SELECT  complain_pwd
+		FROM	complains
+		WHERE	complain_no = #{complainNo}
+	</select>
 
 
 </mapper>

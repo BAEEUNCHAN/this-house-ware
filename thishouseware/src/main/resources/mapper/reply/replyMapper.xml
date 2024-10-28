@@ -46,10 +46,16 @@ SELECT		 d.department_name
 					  ,#{id})
 </insert>
 
-<delete id="deleteReplyInfo" parameterType="int">
+<delete id="deleteReplyInfo" parameterType="Integer">
 	DELETE FROM replys
 	WHERE		reply_no = #{replyNo}
 </delete>
 
+<update id="replyUpdate" parameterType="ReplysVO">
+	UPDATE  replys
+	SET		reply_content = #{replyContent}
+			,reply_dt	  = sysdate
+	WHERE	reply_no	  = #{replyNo}
+</update>
 
 </mapper>

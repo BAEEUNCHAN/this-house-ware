@@ -29,6 +29,8 @@ public interface ComplainService {
 	// 삭제 
 	public int deleteComplain(int ComplainNo);
 	
+	ComplainsVO getComplainPwd(int complainNo);
+	
 	
 	
 	

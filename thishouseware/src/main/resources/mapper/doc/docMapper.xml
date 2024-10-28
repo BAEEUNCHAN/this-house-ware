@@ -15,6 +15,7 @@
 		    edms_doc d
 		JOIN 
 		    employees e ON d.id = e.id
+        WHERE e.id = #{id}    
 		ORDER BY 
 		    d.submit_dt DESC
 		</select>
@@ -34,6 +35,7 @@
 		        employees e ON d.id = e.id
 		    WHERE 
 		        d.approval_status = #{approvalStatus}
+		    AND e.id = #{id}
 		    ORDER BY 
 		        d.submit_dt DESC
 		</select>
@@ -48,35 +50,66 @@
 		        d.edms_doc_no, 
 		        d.title, 
 		        e.id, 
-		        d.submit_dt
+		        d.submit_dt,
+		        d.important 
 		    FROM 
 		        edms_doc d
 		    JOIN 
 		        employees e ON d.id = e.id
 		    WHERE   
-		    	e.department_no = #{departmentNo}  
+		    	e.department_no = #{departmentNo} 
+		    	AND (d.important = 'false' OR d.important IS NULL)    
 		    ORDER BY 
 		        d.submit_dt DESC
 		</select>
 		
-		<!-- 문서결과별 문서 조회-->
+		<!-- 부서 결재완료 문서 조회 (중요문서 제외) -->
 		<select id="getDeptStatus" parameterType="DocJoinVO" resultType="DocJoinVO">
 		    SELECT 
-			    e.department_no,
-			    d.edms_doc_no,
-			    d.title, 
-			    e.id,
-			    d.submit_dt,
-			    d.approval_status
-			FROM 
-			    edms_doc d
-			JOIN 
-			    employees e ON d.id = e.id
-			WHERE 
-			    d.approval_status = #{approvalStatus}
-			    AND e.department_no = #{departmentNo}
-			ORDER BY 
-			    d.submit_dt DESC
+		        e.department_no,
+		        d.edms_doc_no,
+		        d.title, 
+		        e.id,
+		        d.submit_dt,
+		        d.approval_status,
+		        d.important 
+		    FROM 
+		        edms_doc d
+		    JOIN 
+		        employees e ON d.id = e.id  
+		    WHERE 
+		        d.approval_status = '결재완료'
+		        AND e.department_no = #{departmentNo}
+		        AND (d.important = 'false' OR d.important IS NULL)  
+		    ORDER BY 
+		        d.submit_dt DESC
 		</select>
+			
+		<!-- 부서 중요문서 조회 -->
+		<select id="getDeptImportant" parameterType="DocJoinVO" resultType="DocJoinVO">
+			   SELECT 
+				    e.department_no,
+				    d.edms_doc_no,
+				    d.title, 
+				    e.id,
+				    d.submit_dt,
+				    d.important 
+				FROM 
+				    edms_doc d
+				JOIN 
+				    employees e ON d.id = e.id  
+				WHERE 
+				    d.important = #{important}
+				    AND e.department_no = #{departmentNo}
+				ORDER BY 
+				    d.submit_dt DESC
+			</select>
+			
+		<!-- 부서 중요문서 이동 -->
+		<update id="updateDeptImportant" >
+			UPDATE edms_doc
+		  	SET important = 'true'
+		 	WHERE edms_doc_no = #{edmsDocNo}
+		 </update>
 		
 </mapper>

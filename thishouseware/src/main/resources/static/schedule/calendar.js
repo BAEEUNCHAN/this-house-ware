@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
   	})
   	.then(result => result.json())
   	.then(result => {
-    	console.log(result);
     	allEvents = result;
 
     	// full-calendar 생성하기
@@ -110,17 +109,17 @@ document.addEventListener('DOMContentLoaded', function() {
 	      		info.jsEvent.preventDefault(); // 브라우저 네이게이션 비활성화
 	      		
 	      		// 구글 캘린더 일정 과 다른 사람의 이벤트 제외
-	      		if(info.event.extendedProps.no == undefined || info.event.id != id) { 	      
+	      		if(info.event.extendedProps.scheduleNo == undefined || info.event.id != id) { 	      
 					return;	
 				}
 				
-				console.log(info.event.extendedProps.no);
+				/*console.log(info.event.extendedProps.scheduleNo);
 				console.log(info.event.title);
 				console.log(info.event.start);
 				console.log(info.event.end);
 				console.log(info.event.extendedProps.content);
 				console.log(info.event.backgroundColor);
-				console.log(info.event.id);
+				console.log(info.event.id);*/
 				
 				// 모달창에 현재 이벤트 정보 출력
 				let startDt = new Date(info.event.start - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);
@@ -139,9 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				        start: $("#eventInfoModal #start").val(),
 				        end: $("#eventInfoModal #end").val(),						        
 				    };
-				    console.log(eventData.title);
-  					console.log(eventData.start);
-  					console.log(eventData.end);
 					//빈값입력시 오류
 					if (eventData.title == "" || eventData.start == "" || eventData.end == "") {
 						alert("일정이름, 시작시간, 종료시간은 필수 입력값입니다.");
@@ -152,12 +148,11 @@ document.addEventListener('DOMContentLoaded', function() {
 					}
 					else {
 						// 서버로 data 보내기
-						updateSchedule(info);
-						/*let event = updateSchedule(info);
+						let event = updateSchedule(info);
 						if(event != null) {
-							// target.remove(); // 현재 이벤트 삭제하는 방법 찾기 
+							info.event.remove(); 
 							calendar.addEvent(event);
-						}*/
+						}
 						$("#eventInfoModal").modal("hide");														
 					}
 				};
@@ -177,6 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
     				events: allEvents,        
     			},
     			{
+      				// Google Calendar에서 공휴일 정보 가져오기
       				googleCalendarId : 'ko.south_korea.official#holiday@group.v.calendar.google.com',
       				backgroundColor: 'red',
     			}
@@ -209,12 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					calendar.addEvent(event);
 				}
 		        
-		        $("#addEventModal").modal("hide");
-		       /* $("#addEventModal #title").val("");
-		        $("#addEventModal #start").val("");
-		        $("#addEventModal #end").val("");
-		        $("#addEventModal #content").val("");
-		        $("#addEventModal #color").val("");	*/	        
+		        $("#addEventModal").modal("hide");	        
 			}
 		};
 		
@@ -243,7 +234,7 @@ function saveSchedule() {
 		async: false,
 		success: function(result) {
 			if(result.success) {
-				obj.no = result.scheduleNo;
+				obj.scheduleNo = result.scheduleNo;
 				alert("저장했습니다");
 		        // location.reload();
 			}
@@ -264,7 +255,7 @@ function saveSchedule() {
 function updateSchedule(info) {
 	// 서버로 data 보내기
 	let obj = new Object();
-	obj.scheduleNo = info.event.extendedProps.no;
+	obj.scheduleNo = info.event.extendedProps.scheduleNo;
 	obj.title = $("#eventInfoModal #title").val();
 	obj.start = $("#eventInfoModal #start").val();
     obj.end = $("#eventInfoModal #end").val();
@@ -281,7 +272,7 @@ function updateSchedule(info) {
 		success: function(result) {
 			if(result.success) {
 				alert("수정했습니다");
-		        location.reload();		        
+		        // location.reload();		        
 			}
 			else {
 				alert("수정 중 오류가 발생했습니다");
@@ -300,13 +291,12 @@ function updateSchedule(info) {
 function deleteSchedule(info) {	
 	$.ajax({
 		type: 'post',
-		url: '/schDelete?no='+info.event.extendedProps.no,
+		url: '/schDelete?no='+info.event.extendedProps.scheduleNo,
 		success: function(result) {
-      		console.log(result.success);
       		if(result.success) {
-        		// info.event.remove();
+        		info.event.remove();
         		alert("삭제하였습니다");
-        		location.reload();							
+        		// location.reload();							
       		}                        
       		else {
         		alert("오류가 발생하였습니다");

@@ -8,4 +8,11 @@
 		from department
 		order by department_no
 	</select>
+	<select id="selectDepartmentBydeptNo" resultType="DepartmentVO" parameterType="int">
+		select 
+		    department_no,
+		    department_name
+		from department
+		where department_no  = #{departmentNo}
+	</select>
 </mapper>

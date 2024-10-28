@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class FileUpload {
+public class FileUploadUtil {
 
 	/**
 	 * 파일 업로드가 실패하면 null 이 반환된다.

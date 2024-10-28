@@ -1,5 +1,7 @@
 package com.contractor.app.schedule.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.contractor.app.schedule.mapper.AttendanceMapper;
@@ -21,5 +23,17 @@ public class AttendanceServiceImpl implements AttendanceService{
 	@Override
 	public boolean addAttendancesCode(AttendanceVO attendanceVO) {
 		return attendanceMapper.insertAttendance(attendanceVO) == 1;
+	}
+
+	@Override
+	public List<AttendanceVO> getAttendancesById(String string) {
+		return attendanceMapper.selectAttendancesById(string);
+	}
+
+	@Override
+	public List<AttendanceVO> getAttendances() {
+		List<AttendanceVO> list = attendanceMapper.selectAttendances();
+
+		return null;
 	}
 }

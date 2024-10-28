@@ -2,7 +2,7 @@ package com.contractor.app.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-public class GetIP {
+public class GetIPUtil {
 	
 	public static String getClientIp(HttpServletRequest request) {
 		String ip = request.getHeader("X-Forwarded-For");

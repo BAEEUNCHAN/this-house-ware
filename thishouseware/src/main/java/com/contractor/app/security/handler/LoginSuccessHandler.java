@@ -30,19 +30,22 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
        
         LoginUserVO loginVO = (LoginUserVO) authentication.getPrincipal();
         String id = loginVO.getUsername();
-        AttendanceVO attendanceVO= new AttendanceVO(); 
+
         try {
-        	attendanceVO= attendanceService.getLastAttendanceById(id);
-        }catch (NullPointerException e) {
-			// 데이터가 없을경우 퇴근 상태 코드값을 대입한다.
-			attendanceVO.setAttendancesCode("j2");
-		}catch (Exception e) {
+        	AttendanceVO attendanceVO= attendanceService.getLastAttendanceById(id);
+        	// 근태코드를 새션상으로 올린다.(로그아웃시 모든 세션이 제거되므로 따로 제거할 필요 없다.)
+        	HttpSession session = request.getSession();
+            session.setAttribute("attendance",attendanceVO);
+            System.out.println(attendanceVO.getAttendancesCode());
+            getRedirectStrategy().sendRedirect(request,response,"/");
+        }catch (Exception e) {
 			System.out.println("서버오류");
 		}
-        
-    	// 근태코드를 새션상으로 올린다.(로그아웃시 모든 세션이 제거되므로 따로 제거할 필요 없다.)
+        AttendanceVO attendanceVO= new AttendanceVO(); 
+        attendanceVO.setAttendancesCode("j2");
     	HttpSession session = request.getSession();
         session.setAttribute("attendance",attendanceVO);
+        System.out.println(attendanceVO.getAttendancesCode());
         getRedirectStrategy().sendRedirect(request,response,"/");
     }
 }

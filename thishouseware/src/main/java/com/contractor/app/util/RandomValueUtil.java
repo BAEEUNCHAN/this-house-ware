@@ -2,7 +2,7 @@ package com.contractor.app.util;
 
 import java.util.Random;
 
-public class RandomValue {
+public class RandomValueUtil {
 
     private static int randomValueLength = 15;
     private static final char[] characters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 

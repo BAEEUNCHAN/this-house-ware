@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.employee.service.impl.EmailServiceImpl;
-import com.contractor.app.util.RandomValue;
+import com.contractor.app.util.RandomValueUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -66,7 +66,7 @@ public class employeeController {
 	@ResponseBody
 	public String getAuth(@RequestBody EmployeeVO empVO) {
 		EmployeeVO findVO = null;
-		String randomValue = RandomValue.getRandomValue();
+		String randomValue = RandomValueUtil.getRandomValue();
 		
 		try {
 			findVO = employeeService.getEmployee(empVO);

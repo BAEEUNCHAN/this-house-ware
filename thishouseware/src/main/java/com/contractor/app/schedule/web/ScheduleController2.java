@@ -24,6 +24,7 @@ import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 import com.contractor.app.security.service.LoginUserVO;
 import com.contractor.app.util.AttendancesUtil;
+import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.EmployeeUtil;
 import com.contractor.app.util.GetIPUtil;
 
@@ -45,6 +46,7 @@ public class ScheduleController2 {
 	
 	private final AttendanceService attendanceService;
 	private final EmployeeService employeeService;
+	private final EmpAuthUtil empAuthUtil;
 	
 	@PostMapping("attendance/modifyCode")
 	@ResponseBody
@@ -78,6 +80,12 @@ public class ScheduleController2 {
 	
 	@GetMapping("attendance/empPage")
 	public String empPage(Model model,@RequestParam String id ,Authentication authentication) {
+		
+		if(!empAuthUtil.authChek(authentication, id)) {
+			// 권한이 없는 페이지 만들기!
+			return "home";
+		}
+		
 		model.addAttribute("key", key);
 		model.addAttribute("id", id);
 		return "schedule/attendanceInfo";

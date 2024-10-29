@@ -177,8 +177,8 @@
                       </li>
                       <li>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="@{employee/info/{id}(id=${#authentication.principal.empVO.id})}">내정보</a>
-                        <a class="dropdown-item" th:href="@{employee/modify/{id}(id=${#authentication.principal.empVO.id})}">내 정보 수정</a>
+                        <a class="dropdown-item" th:href="@{/employee/info/{id}(id=${#authentication.principal.empVO.id})}">내정보</a>
+                        <a class="dropdown-item" th:href="@{/employee/modify/{id}(id=${#authentication.principal.empVO.id})}">내 정보 수정</a>
                       	<div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/logout">로그아웃</a>
                       </li>

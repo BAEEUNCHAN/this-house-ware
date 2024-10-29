@@ -11,8 +11,10 @@ public class AttendanceVO {
 	String attendancesCode;	// 근태 코드
 	Integer departmentNo;	// 부서 번호
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	Date startTime;			// 출근일시
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	Date endTime;			// 퇴근일시
+	Date time;			// 입력시간
+	int workingTime;			// 근무시간(분단위)
 	String id;				// 아이디
+	
+	// 내용추가
+	String attendancesName; // 근태이름
 }

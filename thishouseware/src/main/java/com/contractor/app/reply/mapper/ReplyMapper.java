@@ -11,4 +11,8 @@ public interface ReplyMapper {
 	public int insertReply(ReplysVO replyVO);
 	
 	public int deleteReplyInfo(int replyNo);
+	
+	// 댓글수정
+	public int replyUpdate(ReplysVO replyVO);
+	
 }

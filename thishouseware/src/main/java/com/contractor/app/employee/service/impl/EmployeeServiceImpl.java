@@ -72,4 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.updateEmployeeByEmp(empVO) == 1;
 	}
 
+	@Override
+	public DepartmentVO getDepartmentBydeptNo(int departmentNo) {	
+		return departmentMapper.selectDepartmentBydeptNo(departmentNo);
+	}
+
 }

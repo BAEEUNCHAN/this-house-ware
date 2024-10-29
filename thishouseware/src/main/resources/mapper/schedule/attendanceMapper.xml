@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.schedule.mapper.AttendanceMapper">
+
+	<!-- 해당 직원의 마지막 근태기록 조회 -->
+	<select id="selectLastAttendanceById" resultType="AttendanceVO"  parameterType="string">
+		SELECT 
+			ATTENDANCES_NO,
+			ATTENDANCES_CODE,
+			DEPARTMENT_NO,
+			TIME,
+			WORKING_TIME,
+			ID
+		FROM attendances
+		WHERE attendances_no = 
+		(   SELECT max(attendances_no) 
+		    FROM attendances
+		    WHERE id = #{id})
+	</select>
+	<!-- 해당 직원의 근태기록 추가 -->
+	<insert id="insertAttendance" parameterType="AttendanceVO">
+		insert into attendances (
+			ATTENDANCES_NO
+			,ATTENDANCES_CODE
+			,DEPARTMENT_NO
+			,TIME
+			,WORKING_TIME
+			,ID
+		)
+		values (
+		    attendances_seq.NEXTVAL
+		    ,#{attendancesCode}
+		    ,#{departmentNo}
+		    ,SYSDATE
+		    <choose>
+				<when  test="attendancesCode.equals('j2')">
+			    	,(select  ROUND((SYSDATE - time) * 24 * 60)
+					    FROM    attendances
+					    WHERE attendances_no = 
+					            (   SELECT max(attendances_no) 
+					                FROM attendances
+					                WHERE id = #{id}
+					            	AND ATTENDANCES_CODE = 'j1'
+					            )
+					    )
+			    </when>
+			    <otherwise>
+			    	,null
+			    </otherwise>
+		    </choose>
+		    ,#{id}
+		)
+	</insert>
+	
+	<!-- 직원의 근태기록 조회하기 -->
+	<select id="selectAttendancesById" resultType="AttendanceVO"  parameterType="string">
+		SELECT 
+			ATTENDANCES_NO,
+			ATTENDANCES_CODE,
+			DEPARTMENT_NO,
+			TIME,
+			WORKING_TIME,
+			ID
+		FROM attendances
+		WHERE id = #{id}
+	</select>
+</mapper>

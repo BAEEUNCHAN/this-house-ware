@@ -23,5 +23,7 @@ public interface EmployeeService {
 
 	boolean modifyPasswordByEmp(EmployeeVO empVO);
 
+	DepartmentVO getDepartmentBydeptNo(int departmentNo);
+
 	
 }

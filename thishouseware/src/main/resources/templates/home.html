@@ -1,38 +1,108 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+	layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
  
 <head>
   <meta charset='utf-8'>
-  <title>레이아웃 테스트</title>
+  <title>홈</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    button {
+        border: none;
+        color: white;
+        padding: 10px 15px; /* 패딩 조정 */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px; /* 폰트 크기 조정 */
+        margin: 5px;
+        border-radius: 5px; /* 테두리 반경 조정 */
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+        opacity: 0.9; /* Hover effect */
+        transform: translateY(-2px); /* Slight lift effect on hover */
+    }
+
+    /* 각 버튼에 다른 색상 지정 */
+    .btn-default {
+        background-color: #607d8b; /* Default */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Primary */
+    }
+
+    .btn-secondary {
+        background-color: #6c757d; /* Secondary */
+    }
+
+    .btn-info {
+        background-color: #17a2b8; /* Info */
+    }
+
+    .btn-success {
+        background-color: #28a745; /* Success */
+    }
+
+    .btn-warning {
+        background-color: #ffc107; /* Warning */
+    }
+
+    .btn-danger {
+        background-color: #dc3545; /* Danger */
+    }
+
+    .btn-link {
+        background-color: transparent; /* Link */
+        color: #007bff;
+        text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-	<h1>익명 게시판 입니다.</h1>
+	<h1>임시 HOME</h1>
 	<p th:text="${#authentication.principal.empVO.id}"></p>
-	
 	
 	<h1>수민</h1>
 	<button type="button" th:onclick='|location.href="@{board/boardMainPage}"|'>게시판</button>
 	<button type="button" th:onclick='|location.href="@{board/postInsert}"|'>게시글등록</button>
 	<button type="button" th:onclick='|location.href="@{file/fileMainPage}"|'>자료실</button>
 	<button type="button" th:onclick='|location.href="@{file/fileInsert}"|'>파일 업로드</button>
+
 	
 	<h1>예림</h1>
-	<button type="button" th:onclick='|location.href="@{/companyList}"|'>회사목록</button>
-	<button type="button" th:onclick='|location.href="@{/insertCompany}"|'>회사등록</button>
-	<button type="button" th:onclick='|location.href="@{/complainList}"|'>문의목록(고객)</button>
-	<button type="button" th:onclick='|location.href="@{/insertComplain}"|'>문의등록</button>
-	<button type="button" th:onclick='|location.href="@{/replyList}"|'>문의목록(회사)</button>
-	<button type="button" th:onclick='|location.href="@{/resultList}"|'>문의처리완료목록</button>
-	
-	<h1>은찬</h1>
-	<button type="button" th:onclick='|location.href="@{/edms/edmsDocList}"|'>결재문서</button>
-	<button type="button" th:onclick='|location.href="@{/edms/edmsInsert}"|'>결재문서등록</button>
-	<button type="button" th:onclick='|location.href="@{/edms/edmsFormList}"|'>결재양식</button>
-	<button type="button" th:onclick='|location.href="@{/docBox/docList}"|'>개인문서함</button>
-	<button type="button" th:onclick='|location.href="@{/docBox/docDeptList}"|'>부서문서함</button>
 
+	<button type="button" class="btn-warning" th:onclick='|location.href="@{/companyList}"|'>회사목록</button>
+	<button type="button" class="btn-info" th:onclick='|location.href="@{/insertCompany}"|'>회사등록</button>
+	<button type="button" class="btn-danger" th:onclick='|location.href="@{/complainList}"|'>문의목록(고객)</button>
+	<button type="button" class="btn-success" th:onclick='|location.href="@{/insertComplain}"|'>문의등록</button>
+	<button type="button" class="btn-primary" th:onclick='|location.href="@{/replyList}"|'>문의목록(회사)</button>
+	<button type="button" class="btn-secondary" th:onclick='|location.href="@{/resultList}"|'>문의처리완료목록</button>
+
+	<h1>은찬</h1>
+	<button type="button" class="btn-warning" th:onclick='|location.href="@{/edms/edmsDocList}"|'>결재문서</button>
+	<button type="button" class="btn-info" th:onclick='|location.href="@{/edms/edmsInsert}"|'>결재문서등록</button>
+	<button type="button" class="btn-secondary" th:onclick='|location.href="@{/edms/edmsFormList}"|'>결재양식</button>
+	<button type="button" class="btn-success" th:data-id="${#authentication.principal.empVO.id}" onclick="location.href='/docBox/docList?id=' + this.dataset.id">개인문서함</button>
+	<button type="button" class="btn-primary" th:data-dno="${#authentication.principal.empVO.departmentNo}" onclick="location.href='/docBox/docDeptList?departmentNo=' + this.dataset.dno">부서문서함</button>
+	<button type="button" class="btn-danger" th:onclick='|location.href="@{/appr/apprLineList}"|'>결재라인</button>
+	<button type="button" class="btn-warning" th:onclick='|location.href="@{/appr/apprList}"|'>결재자</button>
+	<button type="button" class="btn-info" th:onclick='|location.href="@{/appr/apprFavoriteList}"|'>결재라인 즐겨찾기</button>
 </body>
 </html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+            <div class="row">
+              <div class="col-md-12">
+                <form class="card" th:object="${employee}">
+                  <div class="card-header">
+                    <div class="card-title">직원 수정</div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <div class="form-group">
+                          <label for="email">이메일 변경</label>
+                          <input type="text" class="form-control" th:field="*{email}">
+                        </div>
+                        <input type="hidden"  th:field="*{id}" >
+                        <input type="hidden"  th:field="*{imageLink}" >
+                        <!-- inline -->
+                        <div class="form-group">
+                          <label for="name" class="col-md-3 col-form-label">이름 변경</label>
+                          <input type="text" class="form-control input-full" th:field="*{name}">
+                        </div>                        
+                        <div class="form-group">
+                          <label for="phone" class="col-md-3 col-form-label">연락처 변경</label>
+                          <input type="text" class="form-control input-full" th:field="*{phone}">
+                        </div>  
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">직급 변경</label>
+                          <select class="form-select" th:field="*{positionCode}">
+                            <option value="a1">사장</option>
+                            <option value="a2">관리자</option>
+                            <option value="a3">본부장</option>
+                            <option value="a4">팀장</option>
+                            <option value="a5">사원</option>
+                            <option value="a6">인턴</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">부서 변경</label>
+                          <select class="form-select" id="departmentNo" name="departmentNo" th:field="*{departmentNo}">
+                            <th:block th:each="info : ${departments}">
+                              <option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
+                            </th:block> 
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">입사일 변경</label>
+                          <input type="date"
+                            id="hireDt"
+                            name="hireDt"
+                            th:value="${#dates.format(employee.hireDt, 'yyyy-MM-dd')}"
+                            max="2050-01-01"
+                            min="2000-01-01"
+                            >
+                        </div>
+                        <div class="form-group">
+                          <label for="exampleFormControlFile1">사진수정</label>
+                          <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="card card-post card-round">
+                          <img id="empImg" class="card-img-top" alt="사원 이미지" width="300px" height="300px">
+                          <div class="card-body">
+                            <div class="d-flex">
+                              <div class="info-post ms-2">
+                                <p class="username">[[${employee.positionName}]]</p>
+                                <p class="date text-muted">[[${employee.name}]]</p>
+                              </div>
+                            </div>
+                            <div class="separator-solid"></div>
+                            <h3 class="card-title">
+                              [[${employee.departmentName}]]
+                            </h3>
+                            <p class="card-text">
+                               입사일 : [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]<br>
+                               [[${employee.phone}]] <br>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-action">
+                    <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+<script>
+let emailInput = document.querySelector("#email");
+let nameInput = document.querySelector("#name");
+let phoneInput = document.querySelector("#phone");
+// 입력값 확인
+function valueCheck(){
+    // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
+    if(
+        emailInput.value.length > 0 &&
+        nameInput.value.length > 0 &&
+        phoneInput.value.length > 0
+    ){
+        return true;
+    }else{
+        return false;
+    }
+}
+// 이미지 링크용 스크립트
+const imgLink = $('input[name=imageLink]').val();
+$('#empImg').attr({src: "/upload/"+imgLink});
+
+// 회원 정보 수정하기
+$('#modifyEmployee').on('click', function(event){
+
+	if(!valueCheck()){
+		alert("수정값이 잘못되었습니다.");
+		return null;
+	}
+	let formData = new FormData(); 
+  formData.append("id", $('#id').val());
+  formData.append("imageLink", $('#imageLink').val());
+	formData.append("email", $('#email').val());
+	formData.append("name", $('#name').val());
+	formData.append("hireDt", $('#hireDt').val());
+	formData.append("phone", $('#phone').val());
+	formData.append("departmentNo", $('#departmentNo').val());
+	formData.append("positionCode", $('#positionCode').val());
+	formData.append("uploadFile",$('#uploadFile')[0].files[0]);
+
+	for (const x of formData) {
+ 		console.log(x);
+	};
+	// $.Ajax 방식 
+	$.ajax('/manager/modifyEmp',{
+		type : 'post',				
+		data : formData,     // data 속성의 값(객체 타입)을
+		processData : false, // QueryString으로 변환하는 설정
+		contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
+	})
+	.done(result => {
+		if(result == 'error1'){
+			alert("이미지 파일이 아닙니다.");
+		}else if(result == 'error2'){
+			alert("파일업로드가 실패하였습니다.");
+		}else if(result == 'error3'){
+			alert("날짜 타입이 잘못되셨습니다.");
+		}else if(result == 'error4'){
+			alert("서버문제로 회원수정이 실패하였습니다.");
+		}else{
+			alert("회원 정보 수정이 성공하셧습니다.");
+			location.href = "/manager/modifyEmp?id="+result;
+		}
+	})
+	.fail(err => console.log(err));
+	});
+</script>

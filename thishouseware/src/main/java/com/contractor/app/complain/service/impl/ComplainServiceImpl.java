@@ -92,5 +92,8 @@ public class ComplainServiceImpl implements ComplainService {
 	 @Override public int deleteComplain(int ComplainNo) {
 		 return complainMapper.deleteComplainInfo(ComplainNo); }
 	 
-	
+	@Override
+	public ComplainsVO getComplainPwd(int complainNo) {
+		return complainMapper.getComplainPwd(complainNo);
+	}
 }

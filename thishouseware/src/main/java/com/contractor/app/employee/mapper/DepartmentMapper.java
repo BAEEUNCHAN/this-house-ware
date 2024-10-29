@@ -8,4 +8,6 @@ public interface DepartmentMapper {
 
 	List<DepartmentVO> selectDepartmentAll();
 
+	DepartmentVO selectDepartmentBydeptNo(int departmentNo);
+
 }

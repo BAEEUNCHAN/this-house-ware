@@ -100,7 +100,7 @@
 	<button type="button" class="btn-success" th:data-id="${#authentication.principal.empVO.id}" onclick="location.href='/docBox/docList?id=' + this.dataset.id">개인문서함</button>
 	<button type="button" class="btn-primary" th:data-dno="${#authentication.principal.empVO.departmentNo}" onclick="location.href='/docBox/docDeptList?departmentNo=' + this.dataset.dno">부서문서함</button>
 	<button type="button" class="btn-danger" th:onclick='|location.href="@{/appr/apprLineList}"|'>결재라인</button>
-	<button type="button" class="btn-warning" th:onclick='|location.href="@{/appr/apprList}"|'>결재자</button>
+	<button type="button" class="btn-warning" th:onclick='|location.href="@{/appr/apprList}"|'>결재자등록</button>
 	<button type="button" class="btn-info" th:onclick='|location.href="@{/appr/apprFavoriteList}"|'>결재라인 즐겨찾기</button>
 </body>
 </html>

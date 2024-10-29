@@ -24,11 +24,11 @@ public interface ApprService {
 	public Map<String, Object> favoriteDelete(int favoriteNo);
 	
 	// 결재자 등록 정보 전체조회
-	public List<ApprVO> apprList();
+	public List<ApprVO> apprList(int approvalLineNo);
 	// 결재자 단건조회
-	public ApprVO apprInfo(ApprVO apprVO);
+	public ApproverVO apprInfo(ApproverVO approverVO);
 	// 결재자 추가
-	public int apprInsert(ApprVO apprVO);
+	public int apprInsert(ApproverVO approverVO);
 	// 결재자 삭제
 	public Map<String, Object> apprDelete(int approverNo);
 	

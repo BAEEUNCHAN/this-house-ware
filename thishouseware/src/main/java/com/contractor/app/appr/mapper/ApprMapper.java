@@ -5,6 +5,7 @@ import java.util.List;
 import com.contractor.app.appr.service.ApprFavoriteVO;
 import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprVO;
+import com.contractor.app.appr.service.ApproverVO;
 
 public interface ApprMapper {
 	// 결재선 전체조회
@@ -26,11 +27,11 @@ public interface ApprMapper {
 	public int deleteFavorite(int favoriteNo);
 	
 	// 결재자 등록 정보 전체조회
-	public List<ApprVO> apprAllList();
+	public List<ApprVO> apprAllList(int approvalLineNo);
 	// 결재자 단건조회
-	public ApprVO apprInfo(ApprVO apprVO);
+	public ApproverVO apprInfo(ApproverVO approverVO);
 	// 결재자 추가 
-	public int insertAppr(ApprVO apprVO);
+	public int insertAppr(ApproverVO approverVO);
 	// 결재자 삭제
 	public int deleteAppr(int approverNo);
 }

@@ -4,7 +4,7 @@
       layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
 <head>
     <meta charset="UTF-8">
-    <title>결재선 추가</title>
+    <title>결재선 등록</title>
 </head>
 <body>
 <div class="page-inner">
@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">결재선 추가</div>
+                    <div class="card-title">결재라인 등록</div>
                 </div>
                 <div class="card-body">
                     <form action="/appr/apprLineInsert" method="post">
@@ -21,24 +21,12 @@
                             <input type="hidden" id="id" name="id" th:value="${#authentication.principal.empVO.id}">
                             <p th:text="${#authentication.principal.empVO.id}"></p>
                         </div>
-                        
                         <div class="form-group">
-                            <label for="approvalLineName">결재선 이름</label>
-                            <input type="text" id="approvalLineName" name="approvalLineName" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="referrer">참조자</label>
-                            <input type="text" id="referrer" name="referrer" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="favoriteChk">즐겨찾기 여부</label>
-                            <select id="favoriteChk" name="favoriteChk" class="form-control">
-                                <option value="Y">예</option>
-                                <option value="N">아니오</option>
-                            </select>
+                            <label for="approvalLineName">결재선이름</label>
+                            <input type="text" id="name" name="name" >
                         </div>
                         <div class="text-right">
-                            <button type="submit" class="btn btn-primary">추가</button>
+                            <button type="submit" class="btn btn-primary">등록</button>
                             <a href="/appr/apprLineList" class="btn btn-secondary">취소</a>
                         </div>
                     </form>

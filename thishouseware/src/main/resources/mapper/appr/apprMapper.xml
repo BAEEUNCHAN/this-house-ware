@@ -100,30 +100,13 @@
 			, approver AS id
 			, approval_order
 			, approval_status
-			,
-			approval_dt
+			, approval_dt
 			, rejected_reason
 			, edms_doc_no
 			, approval_line_no
 		FROM
 		approver
-		<where>
-			<if test="appriverNo != null and !appriverNo.equals('')">
-				approver_no = #{appriverNo}
-			</if>
-			<if test="id != null and !id.equals('')">
-				approver = #{id}
-			</if>
-			<if test="apprivalOrder != null and !apprivalOrder.equals('')">
-				approval_order = #{apprivalOrder}
-			</if>
-			<if test="edmsDocNo != null and !edmsDocNo.equals('')">
-				edms_doc_no = #{edmsDocNo}
-			</if>
-			<if test="apprivalLineNo != null and !apprivalLineNo.equals('')">
-				approval_line_no = #{apprivalLineNo}
-			</if>
-		</where>
+		WHERE approval_line_no = #{apprivalLineNo}
 		ORDER BY approval_dt
 	</select>
 	

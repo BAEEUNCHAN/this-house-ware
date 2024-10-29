@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.contractor.app.appr.service.ApprFavoriteVO;
@@ -32,6 +33,45 @@ public class ApprController {
 		// return "appr/apprLineList";
 	}
 
+	// 결재선 단건조회
+	@GetMapping("/apprLineInfo") //
+	public String apprLineInfo(ApprLineVO apprLineVO, Model model) {
+		ApprLineVO findVO = apprService.apprLineInfo(apprLineVO);
+		model.addAttribute("apprLines", findVO);
+		return "appr/apprLineInfo";
+	}
+
+	// 결재선 추가 - 페이지(GET)
+	@GetMapping("/apprLineInsert")
+	public String apprLineForm() {
+		return "appr/apprLineInsert";
+	}
+
+	// 결재선 추가 - 처리(POST)
+	@PostMapping("/apprLineInsert")
+	public String apprLineProcess(ApprLineVO apprLineVO) {
+		int apprLine = apprService.apprLineInsert(apprLineVO);
+
+		String url = null;
+
+		if (apprLine > -1) {
+			// 정상적으로 등록된 경우
+			url = "redirect:apprLineInfo?approvalLineNo=" + apprLine;
+			// "redirect:" 가 가능한 경우 GetMapping
+		} else {
+			// 등록되지 않은 경우
+			url = "redirect:apprLineList";
+		}
+		return url;
+	}
+
+	// 결재선 삭제
+	@GetMapping("/apprLineDelete")
+	public String apprLineDelete(Integer approvalLineNo) {
+		apprService.apprLineDelete(approvalLineNo);
+		return "redirect:apprLineList";
+	}
+
 	// 결재선 즐겨찾기 전체조회
 	@GetMapping("/apprFavoriteList")
 	public void apprFavoriteList(Model model) {
@@ -39,6 +79,45 @@ public class ApprController {
 		model.addAttribute("apprFavorites", list);
 		// return "appr/apprFavoriteList";
 
+	}
+
+	// 즐겨찾기 단건조회
+	@GetMapping("/favoriteInfo") //
+	public String favoriteInfo(ApprFavoriteVO apprFavoriteVO, Model model) {
+		ApprFavoriteVO findVO = apprService.favoriteInfo(apprFavoriteVO);
+		model.addAttribute("apprFavorites", findVO);
+		return "appr/favoriteInfo";
+	}
+
+	// 즐겨찾기 추가 - 페이지(GET)
+	@GetMapping("/favoriteInsert")
+	public String favoriteForm() {
+		return "appr/favoriteInsert";
+	}
+
+	// 즐겨찾기 추가 - 처리(POST)
+	@PostMapping("/favoriteInsert")
+	public String favoriteProcess(ApprFavoriteVO apprFavoriteVO) {
+		int favorite = apprService.favoriteInsert(apprFavoriteVO);
+
+		String url = null;
+
+		if (favorite > -1) {
+			// 정상적으로 등록된 경우
+			url = "redirect:favoriteInfo?favoriteNo=" + favorite;
+			// "redirect:" 가 가능한 경우 GetMapping
+		} else {
+			// 등록되지 않은 경우
+			url = "redirect:apprFavoriteList";
+		}
+		return url;
+	}
+
+	// 즐겨찾기 삭제
+	@GetMapping("/favoriteDelete")
+	public String favoriteDelete(Integer favoriteNo) {
+		apprService.favoriteDelete(favoriteNo);
+		return "redirect:apprFavoriteList";
 	}
 
 	// 결재자 정보 전체조회
@@ -49,4 +128,42 @@ public class ApprController {
 		// return "appr/apprFavoriteList";
 	}
 
+	// 결재자 정보 단건조회
+	@GetMapping("/apprInfo") //
+	public String apprInfo(ApprVO apprVO, Model model) {
+		ApprVO findVO = apprService.apprInfo(apprVO);
+		model.addAttribute("apprs", findVO);
+		return "appr/apprInfo";
+	}
+
+	// 결재자 추가 - 페이지(GET)
+	@GetMapping("/apprInsert")
+	public String apprForm() {
+		return "appr/apprInsert";
+	}
+
+	// 결재자 추가 - 처리(POST)
+	@PostMapping("/apprInsert")
+	public String apprProcess(ApprVO apprVO) {
+		int approver = apprService.apprInsert(apprVO);
+
+		String url = null;
+
+		if (approver > -1) {
+			// 정상적으로 등록된 경우
+			url = "redirect:apprInfo?approverNo=" + approver;
+			// "redirect:" 가 가능한 경우 GetMapping
+		} else {
+			// 등록되지 않은 경우
+			url = "redirect:apprList";
+		}
+		return url;
+	}
+
+	// 결재자 삭제
+	@GetMapping("/apprDelete")
+	public String apprDelete(Integer approverNo) {
+		apprService.apprDelete(approverNo);
+		return "redirect:apprList";
+	}
 }// 끝

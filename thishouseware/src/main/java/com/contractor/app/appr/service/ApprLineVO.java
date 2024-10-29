@@ -21,7 +21,7 @@ public class ApprLineVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createDt; // 생성일시
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date resentUserDt; // 최근 사용일시
+	private Date recentUsedDt; // 최근 사용일시
 	private String referrer; // 참조자
 	private String favoriteChk; // 즐찾여부
 

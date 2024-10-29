@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재자 조회</title>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재자 조회</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>결재선이름</th>
+                                        <th>생성일자</th>
+                                        <th>최근사용일자</th>
+                                        <th>즐겨찾기여부</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="apprs">
+                                    <th:block th:each="info : ${apprLines}">
+                                        <tr>
+                                            <td th:text="${info.approvalLineNo}">결재선 번호</td>
+                                            <td th:text="${info.approvalLineName}">결재선 이름</td>
+                                            <td th:text="${#dates.format(info.createDt, 'yyyy-MM-dd')}">생성일자</td>
+                                            <td th:text="${#dates.format(info.recentUserDt, 'yyyy-MM-dd')}">최근 사용일자</td>
+                                            <td th:text="${info.favoriteChk}">즐겨찾기 여부</td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.apprs > tr').on('click', function(event) {
+        let trTag = event.currentTarget;
+        let edno = $(trTag).children().eq(0).text();
+        let url = 'edmsDocInfo?edmsDocNo=' + edno;
+        location.href = url;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/home2_layout}"
+	layout:fragment="Content">
+<head>
+	 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+	 <style>
+	 
+	 
+	 
+	 
+	 
+	 
+ body {
+    background-color: #f8f9fa;
+}
+
+
+
+.page-inner {
+    margin-top: 50px;
+}
+
+.page-header h3 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.breadcrumbs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.breadcrumbs .separator {
+    margin: 0 8px;
+}
+
+
+
+.card {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.form-signin-heading {
+    font-size: 20px;
+    font-weight: 500;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    margin-bottom: 20px;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #007bff;
+    border-color: #007bff;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+</head>
+
+
+<body>
+<!-- <div class="container"> -->
+		 <div class="page-inner text-center">
+			<div class="page-header text-center">
+				<h3 class="fw-bold mb-3">　<i class="icon-home"></i>THISHOUSEWARE</h3>
+				<ul class="breadcrumbs mb-3">
+					<!-- <li class="nav-home"><a href="/"> <i class="icon-home"></i> </a></li>
+					<li class="nav-item"><a href="#">ThisHouseWare</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li> -->
+				</ul>
+			</div> 
+			<br/><br/><br/><br/><br/>
+	<div class="card text-center" >
+	<div class="col-md-12">
+		<div class="card-body">
+			<!-- Logo -->
+			<!-- /Logo -->
+			<h4 class="mb-2" style="font-weight:bold;">이집웨어</h4>
+	
+			<form class="form-signin" method="post" action="/login">
+		        <h2 class="form-signin-heading">Please sign in</h2>
+		        <p>
+		          <label for="username" class="sr-only">Username</label>
+		          <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+		        </p>
+		        <p>
+		          <label for="password" class="sr-only">Password</label>
+		          <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+		        </p>
+		        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+	      	</form>
+	
+			<a href="/employee/findId">
+				<span>아이디 찾기</span>
+			</a>/
+			<a href="/employee/findPassword">
+				<span>비밀번호 찾기</span>
+			</a>
+		</div>
+	</div>
+	</div>
+</div>
+<!-- </div> -->
+</body>
+</html>

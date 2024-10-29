@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<div class="text-center">
+		<form name="insertForm" th:action="@{/boardInsert}" method="post">
+		<h3>게시판 등록</h3>
+		<table class="table">
+			<tr>
+				<th>게시판 유형</th>
+				<td><input type="text" name="boardsType"></td>
+			</tr>
+			<tr>
+				<th>부서명</th>
+				<td><input type="text" name="departmentName"></td>
+			</tr>
+			<tr>
+				<th>익명 여부</th>
+				<td><input type="text" name="anonyChk"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td><input type="text" name="title"></td>
+			</tr>
+			<tr>
+				<th>설명</th>
+				<td><textarea name="description"></textarea></td>
+			</tr>
+			<tr>
+				<th>권한</th>
+				<td><input type="text" name="authority"></td>
+			</tr>
+		</table>
+		<button type="submit">등록</button>
+		</form>
+	</div>
+	<script>
+		// submit을 하기 전 게시판 유형, 익명 여부, 제목, 권한 확인
+		$(insertForm).on('submit', boardInsertHandler);
+		
+		 function boardInsertHandler(event) {
+			 event.preventDefault();
+			 
+			 let boardsType = $('form [name="boardsType"]');
+			 if(boardsType.val() == '') {
+				 alert('게시글 유형이 입력되지 않았습니다.');
+				 boardsType.focus();
+				 return;
+			 }
+			 
+			 let anonyChk = $('form [name="anonyChk"]');
+			 if(anonyChk.val() == '') {
+				 alert('익명 여부가 입력되지 않았습니다.');
+				 anonyChk.focus();
+				 return;
+			 }
+			 
+			 let title = $('form [name="title"]');
+			 if(title.val() == '') {
+				 alert('제목이 입력되지 않았습니다.');
+				 title.focus();
+				 return;
+			 }
+			 
+			 let authority = $('form [name="authority"]');
+			 if(authority.val() == '') {
+				 alert('권한이 입력되지 않았습니다.');
+				 authority.focus();
+				 return;
+			 }
+			 
+			 alert('게시판이 등록되었습니다.');
+			 insertForm.submit();
+		 }
+	</script>
+</body>
+</html>

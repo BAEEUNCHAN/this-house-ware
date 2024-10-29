@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int updatePostInfo(PostsVO postsVO) {
-		return boardMapper.updatePostInfo(postsVO);
+		return boardMapper.updatePostInfo(postsVO); 
 	}
 
 	@Override
@@ -93,5 +93,4 @@ public class BoardServiceImpl implements BoardService {
 	public CommentsVO selectCommentNo(int commentsNo) {
 		return boardMapper.selectCommentNo(commentsNo);
 	}
-
 }

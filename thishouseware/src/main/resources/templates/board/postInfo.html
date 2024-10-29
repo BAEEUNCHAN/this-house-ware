@@ -56,8 +56,8 @@
 											</tr>
 											<tr>
 												<th>작성일자</th>
-												<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd")}
-													]]</td>
+												<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd
+													HH:mm")} ]]</td>
 											</tr>
 											<tr>
 												<th>내용</th>
@@ -91,7 +91,7 @@
 													<tr>
 														<td>[[ ${info.commentsNo} ]]</td>
 														<td>[[ ${info.name} ]]</td>
-														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")}
+														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd HH:mm")}
 															]]</td>
 														<td>[[ ${info.content} ]]</td>
 														<td><button type="button" class="btn btn-success"

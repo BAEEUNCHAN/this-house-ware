@@ -142,9 +142,11 @@
 		p.BOARDS_NO = b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{postsVO.boardsNo}
 		<!-- 검색어 있을 때 조건 추가 -->
-		<if test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
+		<if
+			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
 			AND ((p.TITLE LIKE '%' || #{pagingVO.searchWord} || '%')
-			OR (FIND_NAME(p.ID) LIKE '%' || #{pagingVO.searchWord} || '%'))
+			OR
+			(FIND_NAME(p.ID) LIKE '%' || #{pagingVO.searchWord} || '%'))
 		</if>
 		ORDER BY type, p.POSTS_NO DESC
 		) A
@@ -213,12 +215,13 @@
 		<!-- ,#{authority} ,#{id} -->
 		)
 	</insert>
-	
+
 	<!-- 게시글 수정 -->
 	<update id="updatePostInfo" parameterType="PostsVO">
 		UPDATE posts
-		SET    title = #{title},
-			   content = #{content}
+		SET title
+		= #{title},
+		content = #{content}
 		WHERE posts_no = #{postsNo}
 	</update>
 
@@ -268,11 +271,12 @@
 		,SYSDATE
 		)
 	</insert>
-	
+
 	<!-- 댓글 수정 -->
 	<update id="updateCommentInfo" parameterType="CommentsVO">
 		UPDATE comments
-		SET    content = #{content}
+		SET
+		content = #{content}
 		WHERE comments_no = #{commentsNo}
 	</update>
 
@@ -281,17 +285,17 @@
 		DELETE FROM comments
 		WHERE COMMENTS_NO = #{commentsNo}
 	</delete>
-	
+
 	<!-- 총 게시글 갯수 출력 -->
 	<select id="countPost" resultType="int">
 		SELECT COUNT(*)
 		FROM posts
 		WHERE BOARDS_NO = #{boardsNo}
 	</select>
-	
-	<!-- 댓글 번호 조회 -->
-	<select id="selectCommentNo" parameterType="int" resultType="CommentsVO">
-        SELECT * FROM comments WHERE comments_no = #{commentsNo}
-    </select>
 
+	<!-- 댓글 번호 조회 -->
+	<select id="selectCommentNo" parameterType="int"
+		resultType="CommentsVO">
+		SELECT * FROM comments WHERE comments_no = #{commentsNo}
+	</select>
 </mapper>

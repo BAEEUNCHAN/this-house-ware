@@ -1,5 +1,6 @@
 package com.contractor.app.board.serviceimpl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,15 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int insertPost(PostsVO postsVO) {
+		//현재 날짜 구하기 
+		Date now = new Date();
+		
+		if (postsVO.getPostStartTime().compareTo(now) <= 0 
+		 && postsVO.getPostEndTime().compareTo(now) >= 0) {
+			postsVO.setDisplay("q1"); // 게시
+		} else if (postsVO.getPostStartTime().compareTo(now) > 0) {
+			postsVO.setDisplay("q2"); // 비게시
+		}
 		return boardMapper.insertPostInfo(postsVO);
 	}
 

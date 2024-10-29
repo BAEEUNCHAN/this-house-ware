@@ -18,4 +18,7 @@ public interface ResultMapper {
 	
 	// result 보고 수정
 	public int updateResultInfo(ResultsVO resultVO);
+	
+	// 삭제
+	public int deleteResult(Integer complainNo);
 }

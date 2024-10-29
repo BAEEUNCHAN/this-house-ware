@@ -22,6 +22,27 @@
         on (e.department_no = d.department_no)
 		order by id
 	</select>
+	<select id="selectEmployeesWhereDept" resultType="EmployeeVO" parameterType="EmployeeVO">
+		select 
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		where department_name = #{departmentName}
+	</select>
 	<select id="insertEmployee" statementType="CALLABLE" parameterType="EmployeeVO">
 		{
 			call ADD_NEW_EMP(

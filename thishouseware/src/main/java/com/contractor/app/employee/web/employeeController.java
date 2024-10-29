@@ -1,5 +1,6 @@
 package com.contractor.app.employee.web;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.employee.service.impl.EmailServiceImpl;
+import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.RandomValueUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class employeeController {
 	private final EmployeeService employeeService;
 	private final PasswordEncoder encoder;
 	private final EmailServiceImpl emailService;
+	private final EmpAuthUtil empAuthUtil;
 
 	@GetMapping("login")
 	public String loginForm() {
@@ -122,7 +125,12 @@ public class employeeController {
 	}
 	
 	@GetMapping("employee/info/{id}")
-	public String employeeInfo(@PathVariable String id,EmployeeVO empVO ,Model model) {
+	public String employeeInfo(@PathVariable String id,EmployeeVO empVO ,Model model , Authentication authentication) {
+		// 해당 페이지를 볼 권한이 없는경우
+		if(!empAuthUtil.authChek(authentication, id , true)) {
+			return "common/error/403";
+		}
+		
 		empVO.setId(id);
 		empVO = employeeService.getEmployee(empVO);
 		model.addAttribute("employee",empVO);
@@ -130,7 +138,13 @@ public class employeeController {
 	}
 	
 	@GetMapping("employee/modify/{id}")
-	public String employeeModifyForm(@PathVariable String id,EmployeeVO empVO ,Model model) {
+	public String employeeModifyForm(@PathVariable String id,EmployeeVO empVO ,Model model, Authentication authentication) {
+		
+		// 해당 페이지를 볼 권한이 없는경우
+		if(!empAuthUtil.authChek(authentication, id , true)) {
+			return "common/error/403";
+		}
+		
 		empVO.setId(id);
 		model.addAttribute("employee",empVO);
 		return "employee/employeeModify";

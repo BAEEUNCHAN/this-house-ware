@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<style>
+.dataTables_length {
+	float: left;
+}
+
+.dataTables_info {
+	float: left;
+}
+
+.progress-0 {
+	color: red;
+}
+
+.progress-1 {
+	color: orange;
+}
+
+.progress-2 {
+	color: green;
+}
+
+.progress-3 {
+	color: gray;
+}
+
+.progress-4 {
+	color: black;
+}
+</style>
+
+
+<body>
+
+
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 목록</a></li>
+				</ul>
+			</div>
+			<div></div>
+			<button class="btn btn-info" id="customerIssueBtn">고객불편</button>
+			<button class="btn btn-info" id="operationIssueBtn">운영장애</button>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">
+									불편/장애사항 목록<a href="/complain/insertComplain" class="float-end"><button
+											class="btn btn-primary">문의등록</button></a>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<table class="display" id="example">
+											<thead>
+												<tr>
+													<th class="col-md-1" style="text-align: center;">No</th>
+													<th class="col-md-3" style="text-align: center;">제목</th>
+													<th class="col-md-1" style="text-align: center;">고객</th>
+													<th class="col-md-2" style="text-align: center;">회사명</th>
+													<th class="col-md-2" style="text-align: center;">유형</th>
+													<th class="col-md-1" style="text-align: center;">처리상황</th>
+													<th class="col-md-2" style="text-align: center;">작성날짜</th>
+													<!-- yyyy년MM월dd일 -->
+												</tr>
+											</thead>
+											<tbody>
+												<th:block th:each="info : ${complains}">
+													<!-- 조건, 반복문 있을 때 구분하기 위해 th:block -->
+													<tr>
+														<!-- 여기 onclick 넣어도 됨. -->
+														<td>[[${info.complainNo}]]</td>
+														<td>[[${info.complainTitle}]]</td>
+														<td>[[${info.customerName}]]</td>
+														<td>[[${info.companyName}]]</td>
+														<td><span th:switch="${info.complainType}"> <span
+																th:case="1">고객불편</span> <span th:case="2">운영장애</span></span>
+														<td><span th:switch="${info.progress}"> <span
+																th:case="0" th:class="'progress-0'"><span
+																	class="badge badge-danger">대기</span></span> <span th:case="1"
+																th:class="'progress-1'"><span
+																	class="badge badge-warning">접수</span></span> <span th:case="2"
+																th:class="'progress-2'"><span
+																	class="badge badge-success">진행</span></span> <span th:case="3"
+																th:class="'progress-3'"><span
+																	class="badge badge-primary">완료</span></span> <span th:case="4"
+																th:class="'progress-4'"><span
+																	class="badge badge-primary">완료</span></span>
+														</span></td>
+														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
+													</tr>
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+	<script>
+		function checkPassword(complainNo, complainPwd) {
+			return $.ajax({
+				type : 'POST',
+				url : '/checkPwd',
+				data : JSON.stringify({
+					complainNo : complainNo,
+					complainPwd : complainPwd
+				}),
+				contentType : 'application/json',
+				dataType : 'json',
+			});
+		}
+
+		//제이쿼리 객체 생성
+		$('tbody > tr').on(
+				'click',
+				function(event) {
+					let trTag = event.currentTarget;
+					let complainNo = $(trTag).children().first().text().trim();
+					//let complainPwd = $(trTag).children().eq(7).text().trim(); 
+
+					swal({
+						title : "비밀번호를 입력하세요",
+						content : {
+							element : "input",
+							attributes : {
+								placeholder : "비밀번호 8자리를 입력하세요.",
+								type : "password",
+								id : "input-field",
+								className : "form-control",
+							},
+						},
+						buttons : {
+							confirm : {
+								text : "확인",
+								className : "btn btn-success",
+							},
+							cancel : {
+								text : "취소",
+								visible : true,
+								className : "btn btn-danger",
+							},
+						},
+					}).then(
+							function(value) {
+
+								if (value) {
+									let inputPwd = $("#input-field").val();
+									$.ajax({
+										url : `/complainPwdCheck?complainNo=`
+												+ complainNo,
+										type : 'POST',
+										data : {
+											complainNo : complainNo,
+											inputPwd : inputPwd,
+										},
+										success : function(response) {
+											if (response == "success") {
+												swal({
+														title:"비밀번호확인완료",
+														icon: "success"}).then(
+														function() {
+															window.location.href = "/complain/complainInfo?complainNo="+complainNo
+														});
+											}else{
+												swal("오류", "비밀번호를 확인해주세요.", "error")
+												.then(function() {
+													location.reload();
+												})
+											}
+										},
+										error : function() {
+											swal("오류", "비밀번호를 확인해주세요.", "error")
+													.then(function() {
+														location.reload();
+													})
+										}
+
+									})
+								} else {
+								}
+							});
+				});
+
+		//$('#example').DataTable();
+		$(document).ready(function() {
+			var table = $('#example').DataTable();
+
+			// 고객불편
+			$('#customerIssueBtn').on('click', function() {
+				table.column(4).search('고객불편').draw();
+			});
+
+			// 운영장애
+			$('#operationIssueBtn').on('click', function() {
+				table.column(4).search('운영장애').draw();
+			});
+
+		});
+	</script>
+
+
+
+
+
+</body>
+</html>

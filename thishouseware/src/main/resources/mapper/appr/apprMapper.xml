@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.appr.mapper.ApprMapper">
+
+	<!-- 결재라인 전체조회 -->
+	<select id="apprLineAllList" resultType="ApprLineVO">
+		SELECT approval_line_no
+			, id
+			, approval_line_name
+			, create_dt
+			,
+			recent_used_dt
+			, referrer
+			, favorite_chk
+		FROM approval_line
+		<where>
+			<if test="approvalLineNo != null and !approvalLineNo.equals('')">
+				approval_line_no = #{approvalLineNo}
+			</if>
+			<if test="id != null and !id.equals('')">
+				id = #{id}
+			</if>
+			<if
+				test="approvalLineName != null and !approvalLineName.equals('')">
+				approval_line_name = #{approvalLineName}
+			</if>
+		</where>
+		ORDER BY create_dt
+	</select>
+	
+	<!-- 결재라인 단건조회 -->
+	<select id="apprLineInfo" parameterType="ApprLineVO" resultType="ApprLineVO">
+	    SELECT 
+	          approval_line_no 
+	        , id
+	        , approval_line_name
+	        , create_dt 
+	        , recent_used_dt 
+	        , referrer
+	        , favorite_chk 
+	    FROM 
+	        approval_lines
+	    WHERE 
+	        approval_line_no = #{approvalLineNo}
+	</select>
+	
+	<!-- 결재라인 등록 -->
+	<insert id="insertApprLine" parameterType="ApprLineVO">
+		<selectKey keyProperty="approvalLineNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(approval_line_no), 0) + 1
+			FROM approval_lines
+		</selectKey>
+		INSERT INTO approval_lines
+		(
+			approval_line_no
+			, id
+			, approval_line_name
+			,
+			create_dt
+			, recent_used_dt
+			<if test="referrer != null">
+				, referrer
+			</if>
+			<if test="favoriteChk != null">
+				, favorite_chk
+			</if>
+		)
+		VALUES
+		(
+			#{approvalLineNo}
+			, #{id}
+			, #{approvalLineName}
+			, #{createDt}
+			,
+			#{recentUsedDt}
+		<if test="referrer != null">
+			, #{referrer}
+		</if>
+		<if test="favoriteChk != null">
+			, #{favoriteChk}
+		</if>
+		)
+	</insert>
+	
+	<!-- 결재라인 삭제 -->
+	<delete id="deleteApprLine" parameterType="Integer">
+		DELETE FROM approval_lines
+		WHERE approval_line_no = #{approvalLineNo}
+	</delete>
+
+
+
+
+
+
+	<!-- 결재자 전체조회 -->
+	<select id="apprAllList" resultType="ApprVO">
+		SELECT approver_no
+			, approver AS id
+			, approval_order
+			, approval_status
+			, approval_dt
+			, rejected_reason
+			, edms_doc_no
+			, approval_line_no
+		FROM
+		approver
+		WHERE approval_line_no = #{apprivalLineNo}
+		ORDER BY approval_dt
+	</select>
+	
+	<!-- 결재자 단건조회 -->
+	<select id="apprInfo" parameterType="ApprVO" resultType="ApprVO">
+	    SELECT 
+	          approver_no 
+	        , approver
+	        , approval_order 
+	        , approval_status 
+	        , approval_dt 
+	        , rejected_reason 
+	        , edms_doc_no 
+	        , approval_line_no
+	    FROM 
+	        approvals
+	    WHERE 
+	        approver_no = #{approverNo}
+	</select>
+	
+	<!-- 결재자 등록 -->
+	<insert id="insertAppr" parameterType="ApprVO">
+		<selectKey keyProperty="approverNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(approver_no), 0) + 1
+			FROM approvals
+		</selectKey>
+		INSERT INTO approvals
+			(
+				approver_no
+				, approver
+				, approval_order
+				, approval_status
+				, approval_dt
+				, rejected_reason
+				, edms_doc_no
+				,
+				approval_line_no
+			)
+			VALUES
+			(
+				#{approverNo}
+				, #{approver}
+				, #{approvalOrder}
+				,
+				#{approvalStatus}
+				, #{approvalDt}
+				, #{rejectedReason}
+				, #{edmsDocNo}
+				,
+				#{approvalLineNo}
+			)
+	</insert>
+	
+	<!-- 결재자 삭제 -->
+	<delete id="deleteAppr" parameterType="Integer">
+		DELETE FROM approvals
+		WHERE approver_no = #{approverNo}
+	</delete>
+
+
+
+
+	<!-- 즐겨찾기 전체조회 -->
+	<select id="apprFavoriteAllList" resultType="ApprFavoriteVO">
+			SELECT favorite_no
+			,favorite_name
+			,create_dt
+			,update_dt
+			,approval_line_no
+			,id
+		FROM approval_line_favorite
+		<where>
+			<if test="favoriteNo != null">
+				favorite_no = #{favoriteNo}
+			</if>
+			<if test="favoriteName != null and favoriteName != ''">
+				AND favorite_name = #{favoriteName}
+			</if>
+		</where>
+		ORDER BY create_dt
+	</select>
+	
+	<!-- 즐겨찾기 단건조회 -->
+	<select id="favoriteInfo" parameterType="ApprFavoriteVO" resultType="ApprFavoriteVO">
+	    SELECT 
+	          favorite_no 
+	        , favorite_name 
+	        , approval_line_no 
+	        , id
+	        , create_dt 
+	        , update_dt 
+	    FROM 
+	        favorites
+	    WHERE 
+	        favorite_no = #{favoriteNo}
+	</select>
+	
+	<!-- 즐겨찾기 등록 -->
+	<insert id="insertFavorite" parameterType="ApprFavoriteVO">
+		<selectKey keyProperty="favoriteNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(favorite_no), 0) + 1
+			FROM favorites
+		</selectKey>
+		INSERT INTO favorites
+		(
+			favorite_no
+			, favorite_name
+			, approval_line_no
+			, id
+			, create_dt
+			, update_dt
+			)
+		VALUES
+		(
+			#{favoriteNo}
+			, #{favoriteName}
+			,
+			#{approvalLineNo}
+			, #{id}
+			, #{createDt}
+			, #{updateDt}
+			)
+	</insert>
+	
+	<!-- 즐겨찾기 삭제 -->
+	<delete id="deleteFavorite" parameterType="Integer">
+		DELETE FROM favorites
+		WHERE favorite_no = #{favoriteNo}
+	</delete>
+
+</mapper>

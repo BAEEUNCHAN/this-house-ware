@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재자 조회</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* 기본 체크박스 숨기기 */
+        .chk_box input[type="checkbox"] {
+            display: none;
+        }
+
+        /* 체크박스 스타일 */
+        .chk_box {
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* 기본 별 아이콘 색상 */
+        .chk_box .fa-star {
+            color: #6c757d;
+            font-size: 20px;
+        }
+
+        /* 체크된 상태의 별 아이콘 색상 */
+        .chk_box input[type="checkbox"]:checked + .fa-star {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재자 조회</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="checkAll"></th>
+                                        <th class=hidden style="display: none">결재자번호</th>
+                                        <th>번호</th>
+                                        <th>부서</th>
+                                        <th>직책</th>
+                                        <th>결재자 이름</th>
+                                        <th>즐겨찾기</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="${approvers}">
+                                    <th:block th:each="info,sts : ${approvers}">
+                                        <tr th:data-lineno="${info.approvalLineNo}">
+                                            <td><input type="checkbox" class="rowCheck" th:value="${info.approvalLineNo}"></td>
+                                            <!-- 자체순번 / 문서는 최근 문서순 정렬 -->
+											<td class=hidden style="display: none;">[[${{info.approverNo}}]]</td>
+                                            <td>[[${sts.count}]]</td>
+                                            <td>[[${info.departmentName}]]</td>
+                                            <td>[[${info.positionName}]]</td>
+                                            <td>[[${info.name}]]</td>
+                                            <td>
+                                                <label class="chk_box">
+                                                    <input type="checkbox" th:checked="${info.favoriteChk == 'Y'}" />
+                                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end" style="padding: 10px;">
+                                <button id="addButton" class="btn btn-info btn-sm" style="width: 80px; margin-right: 5px;">추가</button>
+                                <button id="deleteButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            	<!-- 결재자 등록 -->
+				<div class="approverInsrert">
+				</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 체크박스 전체 선택/해제 기능
+    $('#checkAll').on('click', function() {
+        $('.rowCheck').prop('checked', this.checked);
+    });
+
+ // 각 행 클릭시 리스트 및 등록 폼 출력
+    $('.approvers').on('click', 'tr', function(event) {
+			if (!$(event.target).is('input[type="checkbox"]')) {
+				let approvalLineNo =$(event.currentTarget).data("lineno")
+				$.ajax({
+					type : 'GET',
+					url : '/appr/approverInsert?approvalLineNo='+approvalLineNo,
+					
+					success : function(response) {
+						$(".approverInsrert").html(response)
+					},
+					error : function() {
+						alert('오류가 발생했습니다.');
+					}
+				});
+			}
+		});
+
+    // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
+    $('.chk_box').on('click', function(event) {
+        event.stopPropagation();
+    });
+
+    // 추가 버튼 클릭 시 동작
+    $('#addButton').on('click', function() {
+        location.href = '/appr/approverInsert';
+    });
+
+    // 삭제 버튼 클릭 시 동작
+    $('#deleteButton').on('click', function() {
+        let selectedIds = [];
+        $('.rowCheck:checked').each(function() {
+            selectedIds.push($(this).val());
+        });
+
+        if (selectedIds.length > 0) {
+            if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
+                $.ajax({
+                    type : 'POST',
+                    url : '/appr/approverDelete',
+                    data : JSON.stringify(selectedIds),
+                    contentType : 'application/json',
+                    success : function(response) {
+                        alert('삭제되었습니다.');
+                        location.reload();
+                    },
+                    error : function() {
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                });
+            }
+        } else {
+            alert('삭제할 결재자를 선택하세요.');
+        }
+    });
+</script>
+</body>
+</html>

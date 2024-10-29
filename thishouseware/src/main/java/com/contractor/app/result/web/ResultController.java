@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.company.service.ResultsVO;
 import com.contractor.app.complain.service.ComplainService;
@@ -115,4 +118,16 @@ public class ResultController {
 		return "redirect:/result/resultInfo?complainNo="+resultVO.getComplainNo();
 	}
 
+	// 관리자 삭제
+	@ResponseBody
+	@DeleteMapping("result/resultDelete")
+	public String resultDelete(@RequestParam Integer complainNo) {
+		ResultsVO resultVO = new ResultsVO();
+		ReplysVO replyVO = new ReplysVO();
+		ComplainsVO complainVO = new ComplainsVO();
+		resultService.resultDelete(complainNo);
+		replyService.replyDelete(complainNo);
+		complainService.complainDelete(complainNo);
+		return "redirect:result/resultList";
+	}
 }

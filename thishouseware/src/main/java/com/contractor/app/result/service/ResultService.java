@@ -19,4 +19,7 @@ public interface ResultService {
 	
 	// result 수정
 	public Map<String, Object> updateResult(ResultsVO resultVO);
+	
+	// 삭제
+	public int resultDelete(Integer complainNo);
 }

@@ -232,43 +232,37 @@
   <div class="collapse" id="submenu1">
     <ul class="nav nav-collapse">
       <li>
-        <a data-bs-toggle="collapse" href="#subnav1-1">
-          <span class="sub-item">Level 1</span>
-          <span class="caret"></span>
+        <a href="/board/boardMainPage">
+          <span class="sub-item">게시판</span>
         </a>
-        <div class="collapse" id="subnav1-1">
-          <ul class="nav nav-collapse subnav">
-            <li>
-              <a href="#">
-                <span class="sub-item">Level 2</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">
-                <span class="sub-item">Level 2</span>
-              </a>
-            </li>
-          </ul>
-        </div>
       </li>
       <li>
-        <a data-bs-toggle="collapse" href="#subnav1-2">
-          <span class="sub-item">Level 1</span>
-          <span class="caret"></span>
+        <a href="/board/postInsert">
+          <span class="sub-item">글쓰기</span>
         </a>
-        <div class="collapse" id="subnav1-2">
-          <ul class="nav nav-collapse subnav">
-            <li>
-              <a href="#">
-                <span class="sub-item">Level 2</span>
-              </a>
-            </li>
-          </ul>
-        </div>
+      </li>
+    </ul>
+  </div>
+</li>
+
+
+<!-- 자료실 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu6">
+    <i class="fas fa-box-open"></i>
+    <p>자료실</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu6">
+    <ul class="nav nav-collapse">
+      <li>
+        <a href="/file/fileMainPage">
+          <span class="sub-item">자료실</span>
+        </a>
       </li>
       <li>
-        <a href="#">
-          <span class="sub-item">Level 1</span>
+        <a href="/file/fileInsert">
+          <span class="sub-item">파일업로드</span>
         </a>
       </li>
     </ul>
@@ -292,7 +286,7 @@
       </li>
       <li>
         <a data-bs-toggle="collapse" href="#subnav2-2">
-          <span class="sub-item">근퇴</span>
+          <span class="sub-item">근태</span>
         </a>
         <div class="collapse" id="subnav2-2"></div>
       </li>
@@ -372,6 +366,12 @@
                <span class="sub-item">회사목록/등록</span>
         </a>
         <div class="collapse" id="subnav4-3"></div>
+      </li>
+      <li>
+        <a href="/schedule/adminCheckOthersScheduleList">
+               <span class="sub-item">직원일정확인</span>
+        </a>
+        <div class="collapse" id="subnav4-4"></div>
       </li>
     </ul>
   </div>

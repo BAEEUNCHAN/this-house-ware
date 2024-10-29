@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<style>
+.dataTables_length {
+	float: left; 
+}
+
+.dataTables_info {
+	float: left; 
+}
+
+.progress-0 {
+	color: red;
+}
+
+.progress-1 {
+	color: orange;
+}
+
+.progress-2 {
+	color: green;
+}
+
+.progress-3 {
+	color: gray;
+}
+
+.progress-4 {
+	color: blue;
+}
+</style>
+
+
+<body>
+
+
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 목록</a></li>
+				</ul>
+			</div>
+			<div></div>
+			<!-- <button class="btn btn-outline-danger" id="progress0Btn">대기</button>
+				<button class="btn btn-outline-warning" id="progress1Btn">접수</button>
+				<button class="btn btn-outline-success" id="progress2Btn">진행</button>
+				<button class="btn btn-outline-secondary" id="progress3Btn">상황완료</button>
+				<button class="btn btn-outline-dark" id="progress4Btn">보고완료</button> -->
+			<!-- 처리상황 드롭다운 메뉴 -->
+			<select class="form-select" id="progressDropdown"
+				aria-label="Progress Dropdown" style="width:100px;">
+				<option value="">선택</option>
+				<option value="3">상황완료</option>
+				<option value="4">보고완료</option>
+			</select>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">
+									불편/장애사항 목록
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<table class="display" id="example">
+											<thead>
+												<tr>
+													<th class="col-md-1" style="text-align: center;">No</th>
+													<th class="col-md-2" style="text-align: center;">제목</th>
+													<th class="col-md-1" style="text-align: center;">고객</th>
+													<th class="col-md-2" style="text-align: center;">회사명</th>
+													<th class="col-md-2" style="text-align: center;">유형</th>
+													<th class="col-md-2" style="text-align: center;">처리상황</th>
+													<th class="col-md-2" style="text-align: center;">작성날짜</th>
+													<th class="col-md-1"></th>
+													<!-- yyyy년MM월dd일 -->
+												</tr>
+											</thead>
+											<tbody>
+												<th:block th:each="info : ${complains}">
+													<!-- 조건, 반복문 있을 때 구분하기 위해 th:block -->
+													<tr>
+														<!-- 여기 onclick 넣어도 됨. -->
+														<td>[[${info.complainNo}]]</td>
+														<td>[[${info.complainTitle}]]</td>
+														<td>[[${info.customerName}]]</td>
+														<td>[[${info.companyName}]]</td>
+														<td><span th:switch="${info.complainType}"> <span
+																th:case="1">고객불편</span> <span th:case="2">운영장애</span></span>
+														<td><span th:switch="${info.progress}"> <span
+																th:case="3" th:class="'progress-3'"><span class="badge badge-primary">상황완료</span></span> <span
+																th:case="4" th:class="'progress-4'"><span class="badge badge-count">보고완료</span></span>
+														</span></td>
+														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
+
+														<td>
+															<button type="button" class="btn btn-danger alert_demo_7"
+																data-toggle="modal" data-target="#exampleModal"
+																th:value="info">
+																<i class="icon-trash"></i>
+															</button>
+														</td>
+													</tr>
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        게시물을 정말 삭제하시겠습니까?
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-primary">삭제하기</button>
+	       	<button type="button" class="btn btn-secondary" data-dismiss="modal">취소하기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+
+
+	<script>
+
+		// 삭제모달
+		 //== Class definition
+              var SweetAlert2Demo = (function () {
+                //== Demos
+                var initDemos = function () {
+                  $(".alert_demo_7").click(function (e) {
+                	  event.stopPropagation();
+                	  let complainNo = $(e.currentTarget).closest('tr').children().first().text();
+                	  //let complainNo = $(trTag).children().first().text().trim();
+                	  
+                    swal({
+                      title: "불편/장애사항 삭제",
+                      text: "문의사항을 삭제하시겠습니까?",
+                      type: "warning",
+                      buttons: {
+                        confirm: {
+                          text: "삭제",
+                          className: "btn btn-danger",
+                        },
+                        cancel: {
+                        	text: "취소",
+                          visible: true,
+                          className: "btn btn-black",
+                        },
+                      },
+                    }).then((Delete) => {
+                      if (Delete) {
+                    	  
+                    	  $.ajax({
+                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
+                              type: 'DELETE',
+                              success: function (response) {
+                                  swal({
+                                      title: "삭제완료!",
+                                      text: "해당 문의사항이 삭제되었습니다.",
+                                      icon: "success",
+                                      buttons: {
+                                          confirm: {
+                                              text: "확인",
+                                              className: "btn btn-success",
+                                          },
+                                      },
+                                  }).then(() => {
+                                      location.reload();
+                                  });
+                              },
+                              error: function (error) {
+  								swal(
+  										 {
+  									title: "오류!",
+  									text: "해당 문의를 삭제하려면 댓글을 모두 삭제해주세요.",
+  									icon: "error",
+  									buttons: {
+  										confirm: {
+  											text: "확인",
+  											className: "btn btn-danger",
+  										},
+  									},
+  								} 
+  										).then(() => {
+  									//location.reload();
+  								});
+  							}  
+                          });
+                      } else {
+                          swal.close();
+                      }
+                  });
+              });
+        
+                };
+        
+                return {
+                  //== Init
+                  init: function () {
+                    initDemos();
+                  },
+                };
+              })();
+        
+              //== Class Initialization
+              jQuery(document).ready(function () {
+                SweetAlert2Demo.init();
+              });
+
+              
+		//제이쿼리 객체 생성
+		$('tbody > tr').on('click', function(event) {
+			//event.target
+			let trTag = event.currentTarget;
+			let complainNo = $(trTag).children().first().text().trim();
+			let url = `/result/resultInfo?complainNo=${complainNo}`;
+			location.href = url;
+		});
+		
+		
+		
+	$(document).ready(function () {
+		var table = $('#example').DataTable();
+
+		$('#progressDropdown').on('change', function () {
+			var selectedProgress = $(this).val();
+		        if (selectedProgress !== "") {
+		            var statusText = "";
+		            switch (selectedProgress) {
+		                case "0":
+		                    statusText = "대기";
+		                    break;
+		                case "1":
+		                    statusText = "접수";
+		                    break;
+		                case "2":
+		                    statusText = "진행";
+		                    break;
+		                case "3":
+		                    statusText = "상황완료";
+		                    break;
+		                case "4":
+		                    statusText = "보고완료";
+		                    break;
+		            }
+		            table.column(5).search(statusText).draw();
+		        } else {
+		            table.column(5).search('').draw(); 
+		        }
+		    });
+		});
+		
+	</script>
+
+
+
+
+
+</body>
+</html>

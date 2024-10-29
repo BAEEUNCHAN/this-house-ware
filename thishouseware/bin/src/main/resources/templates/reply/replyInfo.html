@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<!-- data table -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<!-- modal -->
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
+<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<body>
+	<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
+		<div class="container">
+			<div class="page-inner">
+				<div class="page-header">
+					<h3 class="fw-bold mb-3">불편/장애사항</h3>
+					<ul class="breadcrumbs mb-3">
+						<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+						</a></li>
+						<li class="separator"><i class="icon-arrow-right"></i></li>
+						<li class="nav-item"><a href="#">고객관리</a></li>
+						<li class="separator"><i class="icon-arrow-right"></i></li>
+						<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
+					</ul>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">불편/장애사항 단건조회</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<!-- 왼쪽화면 -->
+									<div class="col-md-6 col-lg-30">
+
+										<label for="companyName">회사명 :
+											[[${complain.companyName}]]</label> <br /> <br /> <label
+											for="customerName">고객명 : [[${complain.customerName}]]</label>
+										<br /> <br /> <label for="phone">연락처 :
+											[[${complain.phone}]]</label> <br /> <br />
+
+									</div>
+									<!-- 왼쪽화면 끝-->
+									<!-- 오른쪽화면 -->
+									<div class="col-md-6 col-lg-30">
+										<label for="uploadDt">문제발생일 :
+											[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+										<br /> <span>문의구분 : [[${complain.complainType == 1 ?
+											'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황
+											: </span><label for="customerName"> <select
+											class="form-select" id="progress" name="progress"
+											aria-label="Progress Dropdown" style="width: 100px;">
+												<option th:value="0" th:selected="${complain.progress == 0}">대기</option>
+												<option th:value="1" th:selected="${complain.progress == 1}">접수</option>
+												<option th:value="2" th:selected="${complain.progress == 2}">진행</option>
+												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
+												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
+										</select>
+										</label> <br /> <br /> <label for="phone">작성일 :
+											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+										<br />
+									</div>
+								</div>
+								<div class="card-action">
+									<div class="text-center">
+										<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
+									</div>
+
+									<p style="font-weight: bold; font-size: 16px;">
+										<i class="fas fa-check-square"> 문의내용</i>
+									</p>
+									<label for="customerName">[[${complain.complainContent}]]</label>
+									<br /> <br />
+									<p style="font-weight: bold; font-size: 16px;">
+										<i class="fas fa-check-square"> 요구사항</i>
+									</p>
+									<label for="phone">[[${complain.complainRequest}]]</label> <br />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">문의답변/조치사항</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12 col-lg-12">
+										<br />
+
+
+										<th:block th:each="info : ${replys}">
+
+											<div class="timeline-panel">
+												<div class="timeline-heading">
+													<h4 class="timeline-title" style="font-weight: bold;">
+														[[${info.departmentName}]][[${info.name}]]
+														<th:block
+															th:if="${#authentication.principal.empVO.id} == ${info.id}">
+															<!-- 삭제버튼 -->
+															<i class="fas fa-times-circle"
+																style="float: right; color: gray;"
+																th:data-id="${info.replyNo}"> </i>
+															<!-- 수정버튼 -->
+															<i class="far fa-edit" style="float: right; color: gray;"
+																th:data-id="${info.replyNo}"></i>
+														</th:block>
+													</h4>
+													<p>
+														<small class="text-muted"><i
+															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
+															'yyyy년 MM월 dd일 a hh:mm')}]] </small>
+													</p>
+
+
+
+
+												</div>
+												<div class="timeline-body">
+													<p>[[${info.replyContent}]]</p>
+												</div>
+											</div>
+											<br />
+											<br />
+										</th:block>
+										<small class="text-muted"><i
+											class="far fa-paper-plane">
+												[[${#authentication.principal.empVO.departmentName}]]
+												[[${#authentication.principal.empVO.name}]]</i></small>
+										<textarea class="form-control" name="replyContent"
+											id="replyContent" rows="5" maxlength="500" wrap="soft" 
+											style="background-color: lightyellow;"></textarea>
+
+
+
+
+
+
+										<br />
+										<button type="submit" class="btn btn-primary"
+											style="float: right;">등록</button>
+										<input type="hidden" name="complainNo"
+											th:value="${complain.complainNo}"> <input
+											type="hidden" name="id"
+											th:value="${#authentication.principal.empVO.id}">
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+
+
+
+	<script>
+		
+    // 삭제버튼
+      $('.fa-times-circle').on('click', function() {
+        var replyNo = $(this).data('id');
+        //var replyNo = ('#deleteReply').val();
+        var confirmed = confirm("댓글을 삭제하시겠습니까?");
+        
+        if(confirmed) {
+            $.ajax({
+                url: `/reply/replyDelete?replyNo=` + replyNo,
+                type: 'DELETE',
+        }).then(() => {
+        	location.reload();
+        })
+        }
+    });  
+    
+    
+    
+    
+    $(".fa-edit").click(function (e) {
+    	var replyNo = $(this).data('id');
+    	var replyContent = $(this).closest('.timeline-panel').find('.timeline-body p').text().trim();
+        swal({
+          title: "",
+          text : "수정할 댓글내용을 입력하세요.",
+          content: {
+            element: "textarea",
+            attributes: {
+              value: replyContent, 
+              //type: "text",
+              id: "input-field",
+              className: "form-control",
+              wrap: "soft",
+              style: "white-space:normal !important; word-wrap:break-word !important; width: 100% !important; height: 200px !important;",
+            },
+          },
+          buttons: {
+            confirm: {
+            	text: "수정",
+              className: "btn btn-success",
+            },
+            cancel: {
+            	text: "취소",
+              visible: true,
+              className: "btn btn-danger",
+            },
+          },
+        }).then(function (value) {
+        	if(value){
+        		var updatedContent = $("#input-field").val();
+        	$.ajax({
+                url: `/reply/replyUpdate?replyNo=` + replyNo,
+                type: 'POST',
+                data: {
+				replyNo: replyNo,                	
+                replyContent: updatedContent,
+                },
+                success: function(response){
+          swal("수정 완료", "댓글이 성공적으로 수정되었습니다.", "success")
+          .then(function() {
+              location.reload();
+          });
+                },
+                error: function() {
+                    swal("오류", "댓글 수정에 실패했습니다.", "error").then(function(){
+                    	location.reload();
+                    }) } 
+                    
+        })
+        	}
+        	
+        });
+      });
+    
+    
+              
+              $(updateForm).on('submit', replyUpdateHandler)
+              function replyUpdateHandler(event){
+            	  event.preventDefault();
+            	  updateForm.submit();
+              }
+              
+              
+	
+	</script>
+</body>
+</html>

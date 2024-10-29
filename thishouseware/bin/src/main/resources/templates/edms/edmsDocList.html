@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">결재문서 목록</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>번호</th>
+											<th>기안자</th>
+											<th>제목</th>
+											<th>상신일시</th>
+											<th>결재일시</th>
+											<th>결재상태</th>
+										</tr>
+									</thead>
+									<tbody class = "edmsdoc">
+										<th:block th:each="info : ${edmsDocs}">
+											<tr>
+												<td>[[${info.edmsDocNo}]]</td>
+												<td>[[${info.id}]]</td>
+												<td>[[${info.title}]]</td>
+												<td>[[ ${ #dates.format(info.submitDt, "yyyy-MM-dd" )}]]</td>
+												<td>[[ ${ #dates.format(info.approvalDt, "yyyy-MM-dd" )}]]</td>
+												<td>[[${info.approvalStatus}]]</td>
+											</tr>
+										</th:block>
+									</tbody>  
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('.edmsdoc > tr').on('click', function(event){
+			let trTag = event.currentTarget;
+			let edno = $(trTag).children().eq(0).text();
+			let url ='edmsDocInfo?edmsDocNo=' + edno;
+			location.href=url;
+		});
+	</script>
+</body>
+</html>

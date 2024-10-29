@@ -1,5 +1,5 @@
 /**
- * calendar.js
+ * leaves.js
  * 
  * FullCalendar 이벤트 속성
  * 1) title : 해당 이벤트의 제목을 나타낸다.
@@ -71,18 +71,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	      		info.jsEvent.preventDefault(); // 브라우저 네이게이션 비활성화
 	      		
 	      		// 구글 캘린더 일정 과 다른 사람의 이벤트 제외
-	      		if(info.event.extendedProps.scheduleNo == undefined || info.event.id != id) { 	      
+	      		if(info.event.extendedProps.leaveNo == undefined || info.event.id != id) { 	      
 					return;	
 				}
 				
-				/*console.log(info.event.extendedProps.scheduleNo);
+				console.log(info.event.extendedProps.leaveNo);
 				console.log(info.event.title);
 				console.log(info.event.start);
 				console.log(info.event.end);
-				console.log(info.event.extendedProps.content);
-				console.log(info.event.backgroundColor);
-				console.log(info.event.id);*/				
-				
+				console.log(info.event.extendedProps.content);				
+				console.log(info.event.id);				
     		},
       
   			//데이터 가져오는 이벤트        
@@ -104,99 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
   	});
 });
 
-// 일정 저장
-function saveSchedule() {
-	// 서버로 data 보내기
-	let obj = new Object();
-	obj.title = $("#addEventModal #title").val();
-	obj.start = $("#addEventModal #start").val();
-    obj.end = $("#addEventModal #end").val();
-    obj.content = $("#addEventModal #content").val();
-    obj.color = $("#addEventModal #color").val();
-    obj.id = id;
-    obj.sheduleCode = 'f1';
-    obj.departmentNo = 13;    
-    $.ajax({
-		type: 'post',
-		url: '/schAdd',
-		data: JSON.stringify(obj),
-		contentType: 'application/json',
-		async: false,
-		success: function(result) {
-			if(result.success) {
-				obj.scheduleNo = result.scheduleNo;
-				alert("저장했습니다");
-		        // location.reload();
-			}
-			else {
-				alert("저장에 실패했습니다");
-				return null;
-			}
-		},
-		error: function(result) {
-			alert(result);
-			return null;
-        }
-	});
-	return obj;
-}
-
-// 일정 수정
-function updateSchedule(info) {
-	// 서버로 data 보내기
-	let obj = new Object();
-	obj.scheduleNo = info.event.extendedProps.scheduleNo;
-	obj.title = $("#eventInfoModal #title").val();
-	obj.start = $("#eventInfoModal #start").val();
-    obj.end = $("#eventInfoModal #end").val();
-    obj.content = $("#eventInfoModal #content").val();
-    obj.color = $("#eventInfoModal #color").val();
-    obj.id = id;
-    obj.sheduleCode = 'f1';
-    obj.departmentNo = 13;
-    $.ajax({
-		type: 'post',
-		url: '/schUpdate',
-		data: JSON.stringify(obj),
-		contentType: 'application/json',
-		success: function(result) {
-			if(result.success) {
-				alert("수정했습니다");
-		        // location.reload();		        
-			}
-			else {
-				alert("수정 중 오류가 발생했습니다");
-				return null;
-			}
-		},
-		error: function(result) {
-			alert(result);
-			return null;
-        }
-	});
-	return obj;
-}
-
-// 일정 삭제
-function deleteSchedule(info) {	
-	$.ajax({
-		type: 'post',
-		url: '/schDelete?no='+info.event.extendedProps.scheduleNo,
-		success: function(result) {
-      		if(result.success) {
-        		info.event.remove();
-        		alert("삭제하였습니다");
-        		// location.reload();							
-      		}                        
-      		else {
-        		alert("오류가 발생하였습니다");
-      		}
-		},
-		error: function(result) {
-			alert(result);
-		}
-	})
-}
  
 /*
 - 일정 저장시 고려해야 할 DB 테이블

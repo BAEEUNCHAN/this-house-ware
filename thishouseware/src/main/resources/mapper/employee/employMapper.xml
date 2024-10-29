@@ -85,6 +85,8 @@
 			    VALUES
 			    ( v_id);
 			    
+			    INSERT INTO LEAVE_DETAIL (ID) VALUES (v_id);
+			    
 			    p_id := v_id;
 			END ADD_NEW_EMP;
 	-->	

@@ -7,15 +7,15 @@
 	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
-				<h3 class="fw-bold mb-3">게시판</h3>
+				<h3 class="fw-bold mb-3">자료실</h3>
 				<ul class="breadcrumbs mb-3">
 					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
+					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a
-						href="/board/postList?boardsNo=${boardsNo}">글쓰기</a></li>
+						href="/file/fileList?boardsNo=${board.boardsNo}">파일 업로드</a></li>
 				</ul>
 			</div>
 			<div class="page-inner">
@@ -24,7 +24,7 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="card-title">
-									글쓰기 <a class="float-end"><button class="btn btn-primary" 
+									글쓰기 <a class="float-end"><button class="btn btn-primary"
 											type="submit">등록</button></a>
 								</div>
 							</div>
@@ -99,7 +99,7 @@
 			</div>
 		</div>
 	</div>
-	<script th:inline="javascript">
+	<script>
 		// 기본으로 게시 기간여부를 '무'로 설정
 		document.querySelector('input[name="postSetting"][value="q2"]').checked = true;
 
@@ -163,12 +163,12 @@
 		document.getElementById('postStartTime').setAttribute("min",
 				today.toISOString().substring(0, 10));
 		document.getElementById('postEndTime').setAttribute("min",
-				today.toISOString().substring(0, 10));
+				tomorrow.toISOString().substring(0, 10));
 
 		// 게시 시작/종료시간 - 오늘/다음날 날짜 설정
 		document.getElementById('postStartTime').value = today.toISOString()
 				.substring(0, 10);
-		document.getElementById('postEndTime').value = today.toISOString()
+		document.getElementById('postEndTime').value = tomorrow.toISOString()
 				.substring(0, 10);
 	</script>
 </body>

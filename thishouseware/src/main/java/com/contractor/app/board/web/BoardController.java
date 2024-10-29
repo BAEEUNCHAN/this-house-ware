@@ -70,10 +70,10 @@ public class BoardController {
 	// 게시글 등록 - 페이지 : URI - postInsert / RETURN - board/postInsert
 	@GetMapping("/postInsert")
 	public String postInsertForm(@RequestParam(value = "boardsNo", required = false) Integer boardsNo, Model model, PostsVO postsVO, Authentication authentication) {
-		// 게시판 목록 조회
+		// 게시판 목록 조회 - title
 		List<BoardsVO> list = boardService.boardList(null);
 
-		// 게시판 유형 조회
+		// 게시판 유형 조회 - boardsType
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
 		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
 		String positionCode = loginUserVO.getEmpVO().getPositionCode();

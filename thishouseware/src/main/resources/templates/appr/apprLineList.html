@@ -8,26 +8,33 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
-/* 기본 체크박스 숨기기 */
+/* 부모 요소에 고정 너비 설정 */
+.page-inner, .col-md-12 {
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+}
+
+/* 체크박스 숨기기 */
 .chk_box input[type="checkbox"] {
-	display: none; /* 체크박스 숨기기 */
+	display: none;
 }
 
 /* 체크박스 스타일 */
 .chk_box {
-	cursor: pointer; /* 커서 포인터로 변경 */
-	position: relative; /* 상대 위치 지정 */
+	cursor: pointer;
+	position: relative;
 }
 
 /* 기본 별 아이콘 색상 */
 .chk_box .fa-star {
-	color: #6c757d; /* 기본 색상 */
-	font-size: 20px; /* 별 아이콘 크기 조정 */
+	color: #6c757d;
+	font-size: 20px;
 }
 
 /* 체크된 상태의 별 아이콘 색상 */
 .chk_box input[type="checkbox"]:checked+.fa-star {
-	color: #ffc107; /* 체크 시 별 색상 변경 */
+	color: #ffc107;
 }
 </style>
 </head>
@@ -46,7 +53,7 @@
 									<thead>
 										<tr>
 											<th><input type="checkbox" id="checkAll"></th>
-											<th class=hidden style="display: none">결재라인번호</th>
+											<th class="hidden" style="display: none">결재라인번호</th>
 											<th>번호</th>
 											<th>결재라인이름</th>
 											<th>생성일자</th>
@@ -59,8 +66,7 @@
 										<th:block th:each="info,sts : ${apprLines}">
 											<tr th:data-lineno="${info.approvalLineNo}">
 												<td><input type="checkbox" class="rowCheck" th:value="${info.approvalLineNo}"></td>
-												<!-- 자체순번 / 문서는 최근 문서순 정렬 -->
-												<td class=hidden style="display: none;">[[${{info.approvalLineNo}}]]</td>
+												<td class="hidden" style="display: none;">[[${info.approvalLineNo}]]</td>
 												<td>[[${sts.count}]]</td>
 												<td>[[${info.approvalLineName}]]</td>
 												<td>[[${#dates.format(info.createDt, 'yyyy-MM-dd')}]]</td>
@@ -69,14 +75,14 @@
 												<input type="checkbox" th:checked="${info.favoriteChk == 'Y'}" />
 														<i class="fa fa-star" aria-hidden="true"></i>
 												</label></td>
-												<td><button id="modifyButton" class="btn btn-warning btn-sm" style="width: 80px; margin-right: 5px;">수정</button></td>
+												<td><button id="modifyAppLineButton" class="btn btn-warning btn-sm" style="width: 80px; margin-right: 5px;">수정</button></td>
 											</tr>
 										</th:block>
 									</tbody>
 								</table>
 								<div class="d-flex justify-content-end" style="padding: 10px;">
-									<button id="addButton" class="btn btn-info btn-sm" style="width: 80px; margin-right: 5px;">추가</button>
-									<button id="deleteButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
+									<button id="addAppLineButton" class="btn btn-info btn-sm" style="width: 80px; margin-right: 5px;">추가</button>
+									<button id="deleteAppLineButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
 								</div>
 							</div>
 						</div>
@@ -84,6 +90,7 @@
 				</div>
 				<!-- 결재자 리스트 -->
 				<div class="apprList">
+					<!-- apprList 내용이 여기 추가됩니다 -->
 				</div>
 			</div>
 		</div>
@@ -98,14 +105,10 @@
 		// 각 행 클릭시 리스트 및 등록 폼 출력
 		$('.apprLines').on('click', 'tr', function(event) {
 			if (!$(event.target).is('input[type="checkbox"]')) {
-				//let edno = $(this).children().eq(1).text();
 				let approvalLineNo =$(event.currentTarget).data("lineno")
-				//let url = 'apprLineInfo?approvalLineNo=' + edno;
-				//location.href = url;
 				$.ajax({
 					type : 'GET',
 					url : '/appr/apprList?approvalLineNo='+approvalLineNo,
-					
 					success : function(response) {
 						$(".apprList").html(response)
 					},
@@ -118,16 +121,16 @@
 
 		// 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
 		$('.chk_box').on('click', function(event) {
-			event.stopPropagation(); // 이벤트 전파 방지
+			event.stopPropagation();
 		});
 
 		// 추가 버튼 클릭 시 동작
-		$('#addButton').on('click', function() {
+		$('#addAppLineButton').on('click', function() {
 			location.href = '/appr/apprLineInsert';
 		});
 
 		// 삭제 버튼 클릭 시 동작
-		$('#deleteButton').on('click', function() {
+		$('#deleteAppLineButton').on('click', function() {
 			let selectedIds = [];
 			$('.rowCheck:checked').each(function() {
 				selectedIds.push($(this).val());

@@ -82,9 +82,9 @@ public class ScheduleController2 {
 	@GetMapping("attendance/empPage")
 	public String empPage(Model model,@RequestParam String id ,Authentication authentication) {
 		
-		if(!empAuthUtil.authChek(authentication, id)) {
-			// 권한이 없는 페이지 만들기!
-			return "home";
+		// 해당 페이지를 볼 권한이 없는경우
+		if(!empAuthUtil.authChek(authentication, id , false)) {
+			return "common/error/403";
 		}
 		
 		model.addAttribute("key", key);

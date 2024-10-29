@@ -29,7 +29,7 @@ public class LoginUserVO implements UserDetails{
 		List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
 		auths.add(new SimpleGrantedAuthority(empVO.getPositionCode()));
 		// 부서이름은 join으로 가져와 줘야한다.
-		auths.add(new SimpleGrantedAuthority(empVO.getDepartmentName()));
+		auths.add(new SimpleGrantedAuthority(empVO.getDepartmentNo()+""));
 		return auths;
 	}
 

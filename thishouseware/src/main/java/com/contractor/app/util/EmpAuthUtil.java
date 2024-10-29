@@ -33,11 +33,20 @@ public class EmpAuthUtil {
 	/**
 	 * 해당 단건 페이지에대하여 (단건 수정이나,단건 조회)
 	 * 할 수 있는 권한이 있는지 채크한다.
+	 * 아래 코드 방식으로 활용한다.
+		// 해당 페이지를 볼 권한이 없는경우 (유저만 확인)
+		if(!empAuthUtil.authChek(authentication, id , true)) {
+			return "error/403";
+		}
+		// 해당 페이지를 볼 권한이 없는경우 (권한에 따라 확인 가능)
+		if(!empAuthUtil.authChek(authentication, id , false)) {
+			return "error/403";
+		}
 	 * @param auth 스프링 시큐리티 세션 아이디
 	 * @param id 가져오고자하는 데이터의 직원 아이디
 	 * @return true 인증 성공, false 인증 실패
 	 */
-	public Boolean authChek(Authentication auth, String id) {
+	public Boolean authChek(Authentication auth, String id, Boolean isOnlyEmp ) {
 		
 		EmployeeVO authEmp = getAuthEmp(auth);
 		
@@ -46,6 +55,9 @@ public class EmpAuthUtil {
 			return true;
 		}
 		
+		if(isOnlyEmp) {
+			return false;
+		}
 		// 해당 직원이 조회대상의 팀장이거나, 본부장이거나, 부장인지 확인
 		EmployeeVO emp = new EmployeeVO();
 		emp.setId(id);

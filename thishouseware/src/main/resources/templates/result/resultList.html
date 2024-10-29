@@ -112,11 +112,14 @@
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
 
 														<td>
+														<th:block
+															th:if="${#authentication.principal.empVO.positionCode} == 'a1'">
 															<button type="button" class="btn btn-danger alert_demo_7"
 																data-toggle="modal" data-target="#exampleModal"
 																th:value="info">
 																<i class="icon-trash"></i>
 															</button>
+															</th:block>
 														</td>
 													</tr>
 												</th:block>
@@ -188,7 +191,7 @@
                       if (Delete) {
                     	  
                     	  $.ajax({
-                              url: `/complain/complainDelete?complainNo=${complainNo}`, 
+                              url: `/result/resultDelete?complainNo=${complainNo}`, 
                               type: 'DELETE',
                               success: function (response) {
                                   swal({

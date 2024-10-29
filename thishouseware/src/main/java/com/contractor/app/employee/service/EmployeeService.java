@@ -6,6 +6,8 @@ import java.util.Map;
 public interface EmployeeService {
 
 	List<DepartmentVO> getDepartmentList();
+	
+	List<EmployeeVO> getEmployeesWhereDept(EmployeeVO employeeVO);
 
 	void addEmployee(EmployeeVO empVO);
 

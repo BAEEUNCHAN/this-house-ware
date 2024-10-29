@@ -24,46 +24,46 @@ public class CompanyController {
 	}
 
 	// 회사정보 전체조회 : URI - companyLlist / return - company/companyList
-	@GetMapping("company/companyList")
+	@GetMapping("/company/companyList")
 	public String companyList(Model model) {
 		List<CompanysVO> list = companyService.companyList();
 		model.addAttribute("companys", list);
-		return "company/companyList";
+		return "/company/companyList";
 	}
 
 	// 회사(고객)정보 단건조회(고객명+연락처)
-	@GetMapping("company/companyInfo")
+	@GetMapping("/company/companyInfo")
 	public String companyInfo(CompanysVO companyVO, Model model) {
 		List<CompanysVO> list = companyService.companyInfoList(companyVO);
 		model.addAttribute("companys", list);
-		return "company/companyInfo";
+		return "/company/companyInfo";
 	}
 
 	// 회사정보 등록 : URI - insertCompany / RETURN - company/insertCompany
-	@GetMapping("company/insertCompany")
+	@GetMapping("/company/insertCompany")
 	public String insertCompanyForm(CompanysVO companyVO) {
-		return "company/insertCompany";
+		return "/company/insertCompany";
 	}
 
 	// 회사정보 등록 처리
-	@PostMapping("company/insertCompany")
+	@PostMapping("/company/insertCompany")
 	public String insertCompanyProcess(CompanysVO companyVO, Model model) {
 		boolean companyNameCheck = companyService.companyCheckName(companyVO.getCompanyName());
 
 		if (companyNameCheck) {
 			model.addAttribute("message", "이미 등록된 회사입니다.");
-			return "company/insertCompany";
+			return "/company/insertCompany";
 		}
 		int companyNo = companyService.insertCompany(companyVO);
-		return "redirect:company/companyList";
+		return "redirect:/company/companyList";
 	}
 
 	// 회사 삭제
 	@ResponseBody
-	@DeleteMapping("company/companyDelete")
+	@DeleteMapping("/company/companyDelete")
 	public String companyDelete(@RequestParam Integer companyNo) {
 		companyService.deleteCompany(companyNo);
-		return "redirect:company/companyList";
+		return "redirect:/company/companyList";
 	}
 
 }

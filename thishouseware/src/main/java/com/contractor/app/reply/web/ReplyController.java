@@ -3,6 +3,7 @@ package com.contractor.app.reply.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,10 +33,12 @@ public class ReplyController {
 		this.employeeService = employeeService;
 	}
 	
+	
 	// 문의 전체조회 : URI - replyList / return - reply/replyList
 	@GetMapping("reply/replyList")
 	public String replyList(ComplainsVO complainVO, Model model) {
-		List<ComplainsVO> list = complainService.complainList();
+		//List<ComplainsVO> list = complainService.complainList();
+		List<ComplainsVO> list = complainService.complainList0to2();
 		model.addAttribute("complains", list);
 		ComplainsVO findVO = complainService.complainInfo(complainVO);
 		model.addAttribute("complain", findVO);

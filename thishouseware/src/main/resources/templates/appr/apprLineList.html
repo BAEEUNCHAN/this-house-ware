@@ -37,7 +37,7 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
-						<div class="card-title">결재자 조회</div>
+						<div class="card-title">결재라인 조회</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -46,26 +46,30 @@
 									<thead>
 										<tr>
 											<th><input type="checkbox" id="checkAll"></th>
+											<th class=hidden style="display: none">결재라인번호</th>
 											<th>번호</th>
-											<th>결재선이름</th>
+											<th>결재라인이름</th>
 											<th>생성일자</th>
 											<th>최근사용일자</th>
 											<th>즐겨찾기</th>
+											<th></th>
 										</tr>
 									</thead>
-									<tbody class="apprs">
-										<th:block th:each="info : ${apprLines}">
-											<tr>
-												<td><input type="checkbox" class="rowCheck"
-													th:value="${info.approvalLineNo}"></td>
-												<td th:text="${info.approvalLineNo}">결재선 번호</td>
-												<td th:text="${info.approvalLineName}">결재선 이름</td>
-												<td th:text="${#dates.format(info.createDt, 'yyyy-MM-dd')}">생성일자</td>
-												<td th:text="${#dates.format(info.recentUserDt, 'yyyy-MM-dd')}">최근사용일자</td>
+									<tbody class="apprLines">
+										<th:block th:each="info,sts : ${apprLines}">
+											<tr th:data-lineno="${info.approvalLineNo}">
+												<td><input type="checkbox" class="rowCheck" th:value="${info.approvalLineNo}"></td>
+												<!-- 자체순번 / 문서는 최근 문서순 정렬 -->
+												<td class=hidden style="display: none;">[[${{info.approvalLineNo}}]]</td>
+												<td>[[${sts.count}]]</td>
+												<td>[[${info.approvalLineName}]]</td>
+												<td>[[${#dates.format(info.createDt, 'yyyy-MM-dd')}]]</td>
+												<td>[[${#dates.format(info.recentUsedDt, 'yyyy-MM-dd')}]]</td>
 												<td><label class="chk_box"> 
 												<input type="checkbox" th:checked="${info.favoriteChk == 'Y'}" />
 														<i class="fa fa-star" aria-hidden="true"></i>
 												</label></td>
+												<td><button id="modifyButton" class="btn btn-warning btn-sm" style="width: 80px; margin-right: 5px;">수정</button></td>
 											</tr>
 										</th:block>
 									</tbody>
@@ -78,23 +82,37 @@
 						</div>
 					</div>
 				</div>
+				<!-- 결재자 리스트 -->
+				<div class="apprList">
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 		// 체크박스 전체 선택/해제 기능
 		$('#checkAll').on('click', function() {
 			$('.rowCheck').prop('checked', this.checked);
 		});
 
-		// 각 행 클릭 시 상세 페이지 이동
-		$('.apprs').on('click', 'tr', function(event) {
+		// 각 행 클릭시 리스트 및 등록 폼 출력
+		$('.apprLines').on('click', 'tr', function(event) {
 			if (!$(event.target).is('input[type="checkbox"]')) {
-				let edno = $(this).children().eq(1).text();
-				let url = 'apprLineInfo?approvalLineNo=' + edno;
-				location.href = url;
+				//let edno = $(this).children().eq(1).text();
+				let approvalLineNo =$(event.currentTarget).data("lineno")
+				//let url = 'apprLineInfo?approvalLineNo=' + edno;
+				//location.href = url;
+				$.ajax({
+					type : 'GET',
+					url : '/appr/apprList?approvalLineNo='+approvalLineNo,
+					
+					success : function(response) {
+						$(".apprList").html(response)
+					},
+					error : function() {
+						alert('오류가 발생했습니다.');
+					}
+				});
 			}
 		});
 
@@ -116,7 +134,7 @@
 			});
 
 			if (selectedIds.length > 0) {
-				if (confirm('선택한 결재선을 삭제하시겠습니까?')) {
+				if (confirm('선택한 결재라인을 삭제하시겠습니까?')) {
 					$.ajax({
 						type : 'POST',
 						url : '/appr/apprLineDelete',
@@ -132,7 +150,7 @@
 					});
 				}
 			} else {
-				alert('삭제할 결재선을 선택하세요.');
+				alert('삭제할 결재라인을 선택하세요.');
 			}
 		});
 	</script>

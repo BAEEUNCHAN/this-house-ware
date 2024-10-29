@@ -8,11 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.contractor.app.appr.service.ApprFavoriteVO;
 import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.appr.service.ApprVO;
+import com.contractor.app.appr.service.ApproverVO;
 
 @Controller
 @RequestMapping("/appr")
@@ -74,10 +76,10 @@ public class ApprController {
 
 	// 결재선 즐겨찾기 전체조회
 	@GetMapping("/apprFavoriteList")
-	public void apprFavoriteList(Model model) {
+	public String apprFavoriteList(Model model) {
 		List<ApprFavoriteVO> list = apprService.apprFavoriteList();
 		model.addAttribute("apprFavorites", list);
-		// return "appr/apprFavoriteList";
+		return "appr/apprFavoriteList";
 
 	}
 
@@ -122,30 +124,30 @@ public class ApprController {
 
 	// 결재자 정보 전체조회
 	@GetMapping("/apprList")
-	public void apprList(Model model) {
-		List<ApprVO> list = apprService.apprList();
-		model.addAttribute("apprs", list);
-		// return "appr/apprFavoriteList";
+	public void apprList(@RequestParam Integer approvalLineNo, Model model) {
+		List<ApprVO> list = apprService.apprList(approvalLineNo);
+		model.addAttribute("approvers", list);
+		// return "appr/apprList";
 	}
-
+	
 	// 결재자 정보 단건조회
 	@GetMapping("/apprInfo") //
-	public String apprInfo(ApprVO apprVO, Model model) {
-		ApprVO findVO = apprService.apprInfo(apprVO);
-		model.addAttribute("apprs", findVO);
+	public String apprInfo(ApproverVO approverVO, Model model) {
+		ApproverVO findVO = apprService.apprInfo(approverVO);
+		model.addAttribute("approvers", findVO);
 		return "appr/apprInfo";
 	}
 
 	// 결재자 추가 - 페이지(GET)
-	@GetMapping("/apprInsert")
+	@GetMapping("/approverInsert")
 	public String apprForm() {
-		return "appr/apprInsert";
+		return "appr/approverInsert";
 	}
 
 	// 결재자 추가 - 처리(POST)
-	@PostMapping("/apprInsert")
-	public String apprProcess(ApprVO apprVO) {
-		int approver = apprService.apprInsert(apprVO);
+	@PostMapping("/approverInsert")
+	public String apprProcess(ApproverVO approverVO) {
+		int approver = apprService.apprInsert(approverVO);
 
 		String url = null;
 
@@ -161,7 +163,7 @@ public class ApprController {
 	}
 
 	// 결재자 삭제
-	@GetMapping("/apprDelete")
+	@GetMapping("/approverDelete")
 	public String apprDelete(Integer approverNo) {
 		apprService.apprDelete(approverNo);
 		return "redirect:apprList";

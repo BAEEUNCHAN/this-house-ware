@@ -66,9 +66,16 @@ th {
 										<tr>
 											<th>휴가종류</th>
 											<td colspan="5"><select name="leaveType" required>
+											<option value="" selected>선택</option>
+												<optgroup label="일반">
 													<option value="연차">연차</option>
 													<option value="병가">병가</option>
-													<option value="특별휴가">특별휴가</option>
+												</optgroup>
+												<optgroup label="특별">
+													<option value="특별휴가">출산휴가</option>
+													<option value="특별휴가">생리휴가</option>
+													<option value="특별휴가">경조사휴가</option>
+												</optgroup>
 											</select></td>
 										</tr>
 										<tr>

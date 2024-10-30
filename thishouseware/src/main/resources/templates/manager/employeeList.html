@@ -27,8 +27,7 @@
 					<div class="card">
 						<div class="card-header">
 							<div class="card-title">
-								불편/장애사항 목록<a href="/complain/insertComplain" class="float-end"><button
-										class="btn btn-primary">문의등록</button></a>
+								직원 리스트
 							</div>
 						</div>
 						<div class="card-body">
@@ -44,7 +43,7 @@
 																		name="min"
 										                max="2050-01-01"
 										                min="2000-01-01"
-										                value="2025-01-01">
+										                value=null>
 										        </td>
 										    </tr>
 										    <tr>
@@ -55,7 +54,7 @@
 																		name="max"
 										                max="2050-01-01"
 										                min="2000-01-01"
-										                value="2025-01-01">
+										                value=null>
 										        </td>
 										    </tr>
 									    </tbody>
@@ -79,7 +78,12 @@
 									      <td>[[${info.positionName}]]</td>
 									      <td>[[${info.departmentName}]]</td>
 									      <td>[[${#dates.format(info.hireDt, 'yyyy-MM-dd')}]]</td>
-									      <td>[[${#dates.format(info.resignDt, 'yyyy-MM-dd')}]]</td>
+									     <th:block th:if="${info.resignDt == null}">
+									     	<td>none</td>
+									     </th:block>
+									     <th:block th:unless="${info.resignDt == null}">
+									     	<td>[[${#dates.format(info.resignDt, 'yyyy-MM-dd')}]]</td>
+									     </th:block>
 									    </tr>
 									  </th:block>
 									  </tbody>
@@ -110,13 +114,13 @@ $(document).ready(function () {
     
     // 퇴직자와 근무자를 나누어 띄어주기 
 	// 근무자
-	$('workBtn').on('click', function() {
-		table.column(5).search('근무자').draw();
+	$('#workBtn').on('click', function() {
+		table.column(5).search('none').draw();
 	});
 	
 	// 퇴직자
-	$('resignBtn').on('click', function() {
-		table.column(5).search('퇴직자').draw();
+	$('#resignBtn').on('click', function() {
+		table.column(5).search('20').draw();
 	});
 
     /* Column별 검색기능 추가 */

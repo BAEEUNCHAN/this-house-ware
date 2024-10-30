@@ -13,9 +13,9 @@
 	rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <body>
-	<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
-		<div class="container">
-			<div class="page-inner">
+	<div class="container">
+		<div class="page-inner">
+			<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
 				<div class="page-header">
 					<h3 class="fw-bold mb-3">불편/장애사항</h3>
 					<ul class="breadcrumbs mb-3">
@@ -137,7 +137,7 @@
 												[[${#authentication.principal.empVO.departmentName}]]
 												[[${#authentication.principal.empVO.name}]]</i></small>
 										<textarea class="form-control" name="replyContent"
-											id="replyContent" rows="5" maxlength="500" wrap="soft" 
+											id="replyContent" rows="5" maxlength="500" wrap="soft"
 											style="background-color: lightyellow;"></textarea>
 
 
@@ -146,22 +146,25 @@
 
 
 										<br />
-										<button type="submit" class="btn btn-primary"
+
+										<button type="submit" class="btn btn-success"
 											style="float: right;">등록</button>
 										<input type="hidden" name="complainNo"
 											th:value="${complain.complainNo}"> <input
 											type="hidden" name="id"
 											th:value="${#authentication.principal.empVO.id}">
-
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			</form>
+			<div class="text-center">
+				<a href="/reply/replyList"><button class="btn btn-primary">목록</button></a>
 			</div>
 		</div>
-	</form>
+	</div>
 
 
 

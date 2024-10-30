@@ -5,30 +5,46 @@
 	<!-- 자료실 전체조회 -->
 	<select id="selectFilerooms" resultType="FileRoomsVO">
 		SELECT FILE_ROOMS_NO
-			  ,FIND_COMMON_CODE_NAME(FILE_ROOMS_TYPE) as FILE_ROOMS_TYPE
-			  ,FILE_ROOMS_NAME
-			  ,CAPACITY
-			  ,AUTHORITY
-			  ,ID
-			  ,USED_CAPACITY 		
+		,FIND_COMMON_CODE_NAME(FILE_ROOMS_TYPE) as FILE_ROOMS_TYPE
+		,FILE_ROOMS_NAME
+		,CAPACITY
+		,AUTHORITY
+		,ID
+		,USED_CAPACITY
 		FROM file_rooms
 		ORDER BY FILE_ROOMS_TYPE, FILE_ROOMS_NO DESC
 	</select>
-	
+
 	<!-- 자료실 단건조회 -->
 	<select id="selectFileroom" parameterType="FileRoomsVO"
 		resultType="FileRoomsVO">
 		SELECT FILE_ROOMS_NO
-			  ,FIND_COMMON_CODE_NAME(FILE_ROOMS_TYPE) as FILE_ROOMS_TYPE
-			  ,FILE_ROOMS_NAME
-			  ,CAPACITY
-			  ,AUTHORITY
-			  ,ID
-			  ,USED_CAPACITY 		
+		,FIND_COMMON_CODE_NAME(FILE_ROOMS_TYPE) as FILE_ROOMS_TYPE
+		,FILE_ROOMS_NAME
+		,CAPACITY
+		,AUTHORITY
+		,ID
+		,USED_CAPACITY
 		FROM file_rooms
 		WHERE FILE_ROOMS_NO = #{fileRoomsNo}
 	</select>
-	
+
+	<!-- 자료실별 폴더 전체조회 -->
+	<select id="selectFolders" parameterType="FolderVO"
+		resultType="FolderVO">
+		SELECT FOLDER_NO
+		,FOLDER_NAME
+		,FOLDER_SIZE
+		,AUTHORITY
+		,FILE_ROOMS_NO
+		,FIND_COMMON_CODE_NAME(SHARE_CHK) as SHARE_CHK
+		,FOLDER_PATH
+		,ID
+		FROM folder
+		WHERE FILE_ROOMS_NO = #{fileRoomsNo}
+		ORDER BY FOLDER_NO
+	</select>
+
 	<!-- 자료실별 폴더, 파일 전체조회 -->
 	<select id="selectFolderFile" resultType="FolderFileVO">
 		SELECT *
@@ -79,7 +95,8 @@
 	<!-- 폴더/파일 총 갯수 출력 -->
 	<select id="countFolerFile" resultType="int">
 		SELECT
-		(SELECT COUNT(*) FROM folder
+		(SELECT COUNT(*)
+		FROM folder
 		fd WHERE fd.FILE_ROOMS_NO =
 		#{folderFileVO.fileRoomsNo}) +
 		(SELECT

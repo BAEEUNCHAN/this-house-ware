@@ -107,6 +107,7 @@
 		, CONTENT
 		, AUTHORITY
 		, ID
+		, DISPLAY
 		FROM posts
 		ORDER BY POSTS_NO
 	</select>
@@ -133,6 +134,7 @@
 		, p.AUTHORITY
 		,
 		FIND_NAME(p.ID) as NAME
+		, P.DISPLAY
 		, case POSTS_TYPE when 'p2' then '1'
 		when 'p1'
 		then '2'
@@ -141,6 +143,7 @@
 		ON
 		p.BOARDS_NO = b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{postsVO.boardsNo}
+		AND p.DISPLAY = 'q1'  <!-- 'q1'인 게시글만 조회 -->
 		<!-- 검색어 있을 때 조건 추가 -->
 		<if
 			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
@@ -174,6 +177,7 @@
 		, p.AUTHORITY
 		,
 		FIND_NAME(p.ID) as NAME
+		, P.DISPLAY
 		FROM posts p JOIN boards b
 		ON p.BOARDS_NO =
 		b.BOARDS_NO
@@ -181,7 +185,7 @@
 	</select>
 
 	<!-- 게시글 등록 -->
-	<insert id="insertPostInfo" parameterType="PostsVO">
+	<insert id="insertPostInfo" parameterType="PostsVO" useGeneratedKeys="true" keyProperty="postsNo">
 		<selectKey keyProperty="postsNo" resultType="Integer"
 			order="BEFORE">
 			SELECT NVL(MAX(POSTS_NO), 1) + 1

@@ -163,4 +163,38 @@ public class ManagerController {
 	    return answer;
 	}
 
+	/**
+	 * 이메일이 존재하는 지 체크한다.
+	 * @param input 에 입력한 email값
+	 * @return 이메일이 존재할시 1, 존재하지 않을시 0 반환
+	 */
+	@PostMapping("manager/emailCheck")
+	@ResponseBody
+	public int emailCheck(@RequestParam("email") String email) {
+		EmployeeVO empVo = new EmployeeVO();
+		empVo.setEmail(email);
+		try {
+			empVo = employeeService.getEmployeeByEmail(empVo);
+			if(empVo.getId() != null) {
+				return 1;
+			}
+			return 0;
+		}catch (Exception e) {
+			return 0;
+		}
+	}
+	
+	@PostMapping("manager/resignEmp")
+	@ResponseBody
+	public String resignEmp(@RequestParam("id") String id) {
+		try {
+			if(employeeService.resignEmp(id)) {
+				return "success";
+			}
+		} catch (Exception e) {
+			return "error1";
+		}
+		
+		return "error1";
+	}
 }

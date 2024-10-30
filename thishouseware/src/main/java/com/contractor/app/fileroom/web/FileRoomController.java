@@ -15,7 +15,7 @@ import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FolderFileVO;
-import com.contractor.app.security.service.LoginUserVO;
+import com.contractor.app.fileroom.service.FolderVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -74,16 +74,21 @@ public class FileRoomController {
 	// 파일 업로드 - 페이지 : URI - fileInsert / RETURN - file/fileInsert
 	@GetMapping("/fileInsert")
 	public String fileInsertForm(@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo,
-			Model model, FileRoomsVO fileRoomsVO, Authentication authentication) {
+			Model model, FileRoomsVO fileRoomsVO, FolderVO folderVO, Authentication authentication) {
 		// 자료실 유형 조회
 		List<CommonCodeVO> fileRoomsType = commonCodeService.selectCommonCode("0R");
 
 		// 자료실 전체조회 - fileRoomsName
-		List<FileRoomsVO> list = fileRoomService.selectFilerooms(null);
+		List<FileRoomsVO> fileRooms = fileRoomService.selectFilerooms(null);
+
+		// 자료실별 폴더 전체조회 - folderName, fileRoomsNo
+		List<FolderVO> folders = fileRoomService.selectFolders(folderVO);
 
 		// 페이지에 전달
+		model.addAttribute("selectedfileRoomsNo", fileRoomsNo);
 		model.addAttribute("fileRoomsType", fileRoomsType);
-		model.addAttribute("list", list);
+		model.addAttribute("fileRooms", fileRooms);
+		model.addAttribute("folders", folders);
 
 		return "fileroom/fileInsert";
 		// classpath:/templates/board/postInsert.html => 실제 경로

@@ -82,4 +82,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.selectEmployeesWhereDept(employeeVO);
 	}
 
+	@Override
+	public boolean resignEmp(String id) {
+		return employeeMapper.updateEmployeeForResign(id);
+	}
+
 }

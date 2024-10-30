@@ -207,4 +207,9 @@
 		            RETURN -1;
 		END CAN_CHANGE_PW;
 	 -->
+	 <update id="updateEmployeeForResign" parameterType="String">
+	 	UPDATE EMPLOYEES 
+	 	SET RESIGN_DT = SYSDATE 
+	 	WHERE id = #{id}
+	 </update>
 </mapper>

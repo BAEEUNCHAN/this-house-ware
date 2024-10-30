@@ -77,8 +77,9 @@ button {
 <div class="table-container">
     <div class="text-center">
         <div class="table-header">
-            결재자 조회
+            결재자 조회  
         </div>
+        <input type ="hidden" name="approvalLineNo" th:value="${param.approvalLineNo}">
         <table class="table">
             <thead>
                 <tr>
@@ -98,7 +99,7 @@ button {
                         <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
                         <td>[[${sts.count}]]</td>
                         <td>[[${info.departmentName}]]</td>
-                        <td>[[${info.positionName}]]</td>
+                        <td>[[${info.positionCode}]]</td>
                         <td>[[${info.name}]]</td>
                         <td>
                             <label class="chk_box">
@@ -123,7 +124,7 @@ button {
         $('.rowCheck').prop('checked', this.checked);
     });
 
-    // 각 행 클릭시 리스트 및 등록 폼 출력
+    /* // 각 행 클릭시 리스트 및 등록 폼 출력
     $('.approvers').on('click', 'tr', function(event) {
         if (!$(event.target).is('input[type="checkbox"]')) {
             let approvalLineNo = $(event.currentTarget).data("lineno");
@@ -138,7 +139,7 @@ button {
                 }
             });
         }
-    });
+    }); */
 
     // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
     $('.chk_box').on('click', function(event) {
@@ -147,7 +148,8 @@ button {
 
     // 추가 버튼 클릭 시 동작
     $('#addApproverButton').on('click', function() {
-        location.href = '/appr/approverInsert';
+    	let approvalLineNo = $('[name="approvalLineNo"]').val();
+        location.href = '/appr/approverInsert?approvalLineNo='+approvalLineNo;
     });
 
     // 삭제 버튼 클릭 시 동작

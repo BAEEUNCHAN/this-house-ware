@@ -6,7 +6,6 @@
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <style>
@@ -121,7 +120,8 @@
                                         <tr>
 										    <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td> 
 										    <td class="count">[[${sts.count}]]</td> 
-										    <td class="departmentNo">[[${info.departmentNo}]]</td>
+										    <td class="departmentNo" style="display: none;">[[${info.departmentNo}]]</td>
+										    <td class="departmentName">[[${info.departmentName}]]</td>
 										    <td class="title">[[${info.title}]]</td> 
 										    <td class="id">[[${info.id}]]</td> 
 										    <td class="submitDt">[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td> 

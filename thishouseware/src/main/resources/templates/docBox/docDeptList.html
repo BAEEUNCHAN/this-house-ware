@@ -7,6 +7,8 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<link href="/park/DataTables/datatables.min.css" rel="stylesheet">
+	<script src="/park/DataTables/datatables.min.js"></script>
 </head>
 <style>
 /* 기본 체크박스 숨기기 */
@@ -93,78 +95,103 @@
 </style>
 
 <body>
-<div class="page-inner">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">부서문서함</div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="text-center">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="hidden" style="display: none">문서번호</th>
-                                        <th>번호</th>
-                                        <th>부서명</th>
-                                        <th>제목</th>
-                                        <th>기안자</th>
-                                        <th>작성일자</th>
-                                        <th>중요문서</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="docBox">
-                                    <th:block th:each="info, sts : ${docBoxs}">
-                                        <tr>
-										    <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td> 
-										    <td class="count">[[${sts.count}]]</td> 
-										    <td class="departmentNo" style="display: none;">[[${info.departmentNo}]]</td>
-										    <td class="departmentName">[[${info.departmentName}]]</td>
-										    <td class="title">[[${info.title}]]</td> 
-										    <td class="id">[[${info.id}]]</td> 
-										    <td class="submitDt">[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td> 
-										    <td>
-										        <label class="chk_box">
-										            <input type="checkbox" th:checked="${info.important}" />
-										            <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
-										        </label>
-										    </td>
-										</tr>
-                                    </th:block>
-                                </tbody>
-                            </table>
-	                         <button type="button" class="btn btn-info btn-sm" 
-        						th:onclick="|location.href='@{/docBox/docDeptStatusList(approvalStatus='결재완료', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">결재완료</button>
-	                         <button type="button" class="btn btn-success btn-sm"
-        						th:onclick="|location.href='@{/docBox/docDeptImportantList(important='true', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">중요문서</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="page-inner">
+	    <div class="row">
+	        <div class="col-md-12">
+	            <div class="card">
+	                <div class="card-header">
+	                    <div class="card-title">부서문서함</div>
+	                </div>
+	                <div class="card-body">
+	                    <div class="row">
+	                        <div class="text-center">
+	                            <table class="table" id="myTable">
+	                                <thead>
+	                                    <tr>
+	                                        <th class="hidden" style="display: none">문서번호</th>
+	                                        <th>번호</th>
+	                                        <th class="hidden" style="display: none">부서번호</th>
+	                                        <th>부서명</th>
+	                                        <th>제목</th>
+	                                        <th>기안자</th>
+	                                        <th>작성일자</th>
+	                                        <th>중요문서</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody class="docBox">
+	                                    <th:block th:each="info, sts : ${docBoxs}">
+	                                        <tr>
+											    <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td> 
+											    <td class="count">[[${sts.count}]]</td> 
+											    <td class="departmentNo" style="display: none;">[[${info.departmentNo}]]</td>
+											    <td class="departmentName">[[${info.departmentName}]]</td>
+											    <td class="title">[[${info.title}]]</td> 
+											    <td class="id">[[${info.id}]]</td> 
+											    <td class="submitDt">[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td> 
+											    <td>
+											        <label class="chk_box">
+											            <input type="checkbox" th:checked="${info.important}" />
+											            <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
+											        </label>
+											    </td>
+											</tr>
+	                                    </th:block>
+	                                </tbody>
+	                            </table>
+		                         <button type="button" class="btn btn-info btn-sm" 
+	        						th:onclick="|location.href='@{/docBox/docDeptStatusList(approvalStatus='결재완료', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">결재완료</button>
+		                         <button type="button" class="btn btn-success btn-sm"
+	        						th:onclick="|location.href='@{/docBox/docDeptImportantList(important='true', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">중요문서</button>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<script th:inline="javascript">
+	    // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
+	    var deptNo = [[${#authentication.principal.empVO.departmentNo}]]
+	    var id = [[${#authentication.principal.empVO.id}]]
+	    
+	    $('.docBox > tr').on('click', function(event) {
+	        let trTag = event.currentTarget;
+	        let edno = $(trTag).children().eq(0).text();
+	        // URL에 문서 번호, fromDocList, id, 부서 번호 포함
+	        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocDeptList=true&id=${id}&deptNo=${deptNo}`; 
+	        location.href = url;
+	    });
+	
+	    // 체크박스 클릭 시 상세보기로 넘어가지 않도록 설정
+	    $('.chk_box').on('click', function(event) {
+	        event.stopPropagation(); // 이벤트 전파 방지
+	    });
+	    
+	    $(document).ready(function () {
+		    var table = $('#myTable').DataTable({
+				// 표시건수 기능 숨기기
+			  	lengthChange: false,
+			  	// 검색 기능 숨기기
+			  	// searching: false,
+			  	// 정렬 기능 숨기기
+			  	ordering: false,
+			  	// 정보 표시 숨기기
+			  	info: false,
+		    });
 
-<script th:inline="javascript">
-    // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
-    var deptNo = [[${#authentication.principal.empVO.departmentNo}]]
-    var id = [[${#authentication.principal.empVO.id}]]
-    
-    $('.docBox > tr').on('click', function(event) {
-        let trTag = event.currentTarget;
-        let edno = $(trTag).children().eq(0).text();
-        // URL에 문서 번호, fromDocList, id, 부서 번호 포함
-        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocDeptList=true&id=${id}&deptNo=${deptNo}`; 
-        location.href = url;
-    });
-
-    // 체크박스 클릭 시 상세보기로 넘어가지 않도록 설정
-    $('.chk_box').on('click', function(event) {
-        event.stopPropagation(); // 이벤트 전파 방지
-    });
-</script>
-<script src="/assets/js/chan/importantModal.js"></script>
+		    /* Column별 검색기능 추가 */
+		    $('#myTable_filter').prepend('<select id="select"></select>');
+		    $('#myTable > thead > tr').children().each(function (indexInArray, valueOfElement) { 
+		        $('#select').append('<option>'+valueOfElement.innerHTML+'</option>');
+		    });
+		    
+		    $('.dataTables_filter input').unbind().bind('keyup', function () {
+		        var colIndex = document.querySelector('#select').selectedIndex;
+		        table.column(colIndex).search(this.value).draw();
+		    });
+		});
+	</script>
+	<script src="/assets/js/chan/importantModal.js"></script>
 </body>
 </html>

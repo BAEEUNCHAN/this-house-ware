@@ -6,11 +6,12 @@
           <div class="logo-header" data-background-color="dark">
             <a href="index.html" class="logo">
               <img
-                src="assets/img/kaiadmin/logo_light.svg"
-                alt="navbar brand"
-                class="navbar-brand"
-                height="20"
-              />
+                  src="/yerim/img/image-removebg-preview (8).png"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                  style="width:40px; height:40px;"
+                />
             </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
@@ -231,6 +232,7 @@
   </a>
   <div class="collapse" id="submenu1">
     <ul class="nav nav-collapse">
+    
       <li>
         <a href="/board/boardMainPage">
           <span class="sub-item">게시판</span>
@@ -285,10 +287,25 @@
         <div class="collapse" id="subnav2-1"></div>
       </li>
       <li>
-        <a data-bs-toggle="collapse" href="#subnav2-2">
+    <li sec:authorize="isAuthenticated()">
+        <a data-bs-toggle="collapse" href="#subnav2-1">
           <span class="sub-item">근태</span>
+          <span class="caret"></span>
         </a>
-        <div class="collapse" id="subnav2-2"></div>
+        <div class="collapse" id="subnav2-1">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/attendance/emps">
+                <span class="sub-item">근태리스트</span>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/attendance/empPage(id=${#authentication.principal.empVO.id})}">
+                <span class="sub-item">개인근태기록</span>
+              </a>
+            </li>
+          </ul>
+        </div>
       </li>
       <li>
         <a data-bs-toggle="collapse" href="#subnav2-3">
@@ -351,7 +368,7 @@
     <ul class="nav nav-collapse">
       <li>
         <a href="/manager/addEmp">
-                <span class="sub-item">관리자</span>
+                <span class="sub-item">직원추가</span>
               </a>
         <div class="collapse" id="subnav4-1"></div>
       </li>

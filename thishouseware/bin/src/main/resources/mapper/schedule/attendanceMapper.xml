@@ -51,4 +51,17 @@
 		    ,#{id}
 		)
 	</insert>
+	
+	<!-- 직원의 근태기록 조회하기 -->
+	<select id="selectAttendancesById" resultType="AttendanceVO"  parameterType="string">
+		SELECT 
+			ATTENDANCES_NO,
+			ATTENDANCES_CODE,
+			DEPARTMENT_NO,
+			TIME,
+			WORKING_TIME,
+			ID
+		FROM attendances
+		WHERE id = #{id}
+	</select>
 </mapper>

@@ -107,6 +107,7 @@
 		, CONTENT
 		, AUTHORITY
 		, ID
+		, DISPLAY
 		FROM posts
 		ORDER BY POSTS_NO
 	</select>
@@ -133,6 +134,7 @@
 		, p.AUTHORITY
 		,
 		FIND_NAME(p.ID) as NAME
+		, P.DISPLAY
 		, case POSTS_TYPE when 'p2' then '1'
 		when 'p1'
 		then '2'
@@ -141,10 +143,13 @@
 		ON
 		p.BOARDS_NO = b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{postsVO.boardsNo}
+		AND p.DISPLAY = 'q1'  <!-- 'q1'인 게시글만 조회 -->
 		<!-- 검색어 있을 때 조건 추가 -->
-		<if test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
+		<if
+			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
 			AND ((p.TITLE LIKE '%' || #{pagingVO.searchWord} || '%')
-			OR (FIND_NAME(p.ID) LIKE '%' || #{pagingVO.searchWord} || '%'))
+			OR
+			(FIND_NAME(p.ID) LIKE '%' || #{pagingVO.searchWord} || '%'))
 		</if>
 		ORDER BY type, p.POSTS_NO DESC
 		) A
@@ -172,6 +177,7 @@
 		, p.AUTHORITY
 		,
 		FIND_NAME(p.ID) as NAME
+		, P.DISPLAY
 		FROM posts p JOIN boards b
 		ON p.BOARDS_NO =
 		b.BOARDS_NO
@@ -179,7 +185,7 @@
 	</select>
 
 	<!-- 게시글 등록 -->
-	<insert id="insertPostInfo" parameterType="PostsVO">
+	<insert id="insertPostInfo" parameterType="PostsVO" useGeneratedKeys="true" keyProperty="postsNo">
 		<selectKey keyProperty="postsNo" resultType="Integer"
 			order="BEFORE">
 			SELECT NVL(MAX(POSTS_NO), 1) + 1
@@ -189,30 +195,45 @@
 		( POSTS_NO
 		, BOARDS_NO
 		, POSTS_TYPE
+		, TITLE
+		, CONTENT
 		, POST_SETTING
 		<if test="postSetting == 'q1'">
 			, POST_STARTTIME
 			, POST_ENDTIME
 		</if>
-		, TITLE
-		, CONTENT
 		<!-- 기본값 admin 설정 -->
-		<!-- , AUTHORITY , ID -->
+		, AUTHORITY
+		, ID
+		, SUBMIT_DT
+		, DISPLAY
 		)
 		VALUES ( #{postsNo}
 		,#{boardsNo}
 		,#{postsType}
-		,#{postSetting}
-		<if test="postSetting == 'q1'">
-			,SYSDATE
-			,#{postEndTime}
-		</if>
 		,#{title}
 		,#{content}
+		,#{postSetting}
+		<if test="postSetting == 'q1'">
+			,#{postStartTime}
+			,#{postEndTime}
+		</if>
 		<!-- 기본값 admin 설정 -->
-		<!-- ,#{authority} ,#{id} -->
+		,'admin'
+		,#{id}
+		,SYSDATE
+		,#{display}
 		)
 	</insert>
+
+	<!-- 게시글 수정 -->
+	<update id="updatePostInfo" parameterType="PostsVO">
+		UPDATE posts
+		SET title
+		= #{title},
+		content = #{content}
+		WHERE posts_no = #{postsNo}
+	</update>
 
 	<!-- 게시글 삭제 -->
 	<delete id="deleteBoradInfo" parameterType="int">
@@ -261,6 +282,20 @@
 		)
 	</insert>
 
+	<!-- 댓글 수정 -->
+	<update id="updateCommentInfo" parameterType="CommentsVO">
+		UPDATE comments
+		SET
+		content = #{content}
+		WHERE comments_no = #{commentsNo}
+	</update>
+
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		DELETE FROM comments
+		WHERE COMMENTS_NO = #{commentsNo}
+	</delete>
+
 	<!-- 총 게시글 갯수 출력 -->
 	<select id="countPost" resultType="int">
 		SELECT COUNT(*)
@@ -268,4 +303,9 @@
 		WHERE BOARDS_NO = #{boardsNo}
 	</select>
 
+	<!-- 댓글 번호 조회 -->
+	<select id="selectCommentNo" parameterType="int"
+		resultType="CommentsVO">
+		SELECT * FROM comments WHERE comments_no = #{commentsNo}
+	</select>
 </mapper>

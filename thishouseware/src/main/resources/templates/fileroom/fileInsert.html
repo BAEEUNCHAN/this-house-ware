@@ -9,8 +9,7 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">자료실</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
-					</a></li>
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i></a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
@@ -28,13 +27,14 @@
 								<div class="row">
 									<div class="text-center">
 										<form name="insertForm" th:action="@{/file/fileInsert}"
-											method="post">
-											<input type="hidden" name="id" th:value="${#authentication.principal.empVO.id}">
+											method="post" enctype="multipart/form-data">
+											<input type="hidden" name="id"
+												th:value="${#authentication.principal.empVO.id}"> <input
+												type="hidden" name="extension" id="fileExtension">
 											<table class="table">
 												<tr>
 													<th>자료실 선택</th>
 													<td><select class="form-select" name="fileRoomsNo"
-														aria-label="Default select example"
 														onchange="filterFoldersByRooms()">
 															<option value="">선택</option>
 															<optgroup th:each="optgrp : ${fileRoomsType}"
@@ -61,7 +61,9 @@
 												</tr>
 												<tr>
 													<th>첨부파일</th>
-													<td><input type="file" id="attatch" name="fileName"></td>
+													<td><input type="file" name="file" id="fileInput"
+														onchange="updateFileInfo()"> <input type="hidden"
+														name="fileName" id="fileNameInput"></td>
 												</tr>
 											</table>
 											<button class="btn btn-primary" type="submit">등록</button>
@@ -77,57 +79,85 @@
 	</div>
 	<script th:inline="javascript">
 	function filterFoldersByRooms() {
-        const selectedFileRoomsNo = document.querySelector('select[name="fileRoomsNo"]').value;
-        const folderOptions = document.querySelectorAll('select[name="folderName"] option');
+	    const selectedFileRoomsNo = document.querySelector('select[name="fileRoomsNo"]').value;
 
-        folderOptions.forEach(option => {
-            const fileRoomsNo = option.getAttribute('data-fileRoomsNo');
-            // 선택된 자료실 번호와 일치하는 폴더만 표시, 선택되지 않으면 전체 표시
-            option.style.display = (fileRoomsNo === selectedFileRoomsNo || selectedFileRoomsNo === '') ? 'block' : 'none';
-        });
-    }
+	    // 선택된 자료실 번호가 유효한지 확인
+	    if (!selectedFileRoomsNo) {
+	        // 자료실 번호가 선택되지 않은 경우 처리
+	        const folderSelect = document.querySelector('select[name="folderNo"]');
+	        folderSelect.innerHTML = '<option value="">선택</option>'; // 초기화
+	        return; // 함수 종료
+	    }
 
-    // 페이지 로드 시 초기 필터링 수행
-    document.addEventListener('DOMContentLoaded', filterFoldersByRooms);
-    
- 	// submit을 하기 전 자료실, 첨부파일 확인
-	$(insertForm).on('submit', fileInsertHandler);
-
-	function fileInsertHandler(event) {
-		event.preventDefault();
-
-		let fileRoomsNo = $('form [name="fileRoomsNo"]');
-		if (fileRoomsNo.val() == '') {
-			alert('게시글 유형이 입력되지 않았습니다.');
-			fileRoomsNo.focus();
-			return;
-		}
-
-		let title = $('form [name="title"]');
-		if (title.val() == '') {
-			alert('제목이 입력되지 않았습니다.');
-			title.focus();
-			return;
-		}
-
-		let content = $('form [name="content"]');
-		if (content.val() == '') {
-			alert('내용이 입력되지 않았습니다.');
-			content.focus();
-			return;
-		}
-
-		let postSetting = $('form [name="postSetting"]');
-		if (postSetting.val() == '') {
-			alert('게시 기간여부가 입력되지 않았습니다.');
-			postSetting.focus();
-			return;
-		}
-
-		alert('게시글이 등록되었습니다.');
-		insertForm.submit();
+	    // AJAX 호출로 폴더 리스트 업데이트
+	    fetch(`/file/getFoldersByFileRoomsNo?fileRoomsNo=${selectedFileRoomsNo}`)
+	        .then(response => {
+	            if (!response.ok) {
+	                throw new Error('Network response was not ok');
+	            }
+	            return response.json();
+	        })
+	        .then(data => {
+	            if (Array.isArray(data)) { // 응답이 배열인지 확인
+	                const folderSelect = document.querySelector('select[name="folderNo"]');
+	                folderSelect.innerHTML = '<option value="">선택</option>'; // 초기화
+	                data.forEach(folder => {
+	                    const option = document.createElement('option');
+	                    option.value = folder.folderNo;
+	                    option.textContent = folder.folderName;
+	                    folderSelect.appendChild(option);
+	                });
+	            } else {
+	                console.error('응답 데이터가 배열이 아닙니다:', data);
+	            }
+	        })
+	        .catch(error => console.error('Error fetching folders:', error));
 	}
-	</script>
 
+
+        // 페이지 로드 시 초기 필터링 수행
+        document.addEventListener('DOMContentLoaded', filterFoldersByRooms);
+
+        // 파일 정보 업데이트
+        function updateFileInfo() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameInput = document.getElementById('fileNameInput');
+            const fileExtensionInput = document.getElementById('fileExtension');
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileNameInput.value = file.name; // 파일 이름 저장
+                fileExtensionInput.value = file.name.split('.').pop(); // 파일 확장자 저장
+            } else {
+                fileNameInput.value = '';
+                fileExtensionInput.value = '';
+            }
+        }
+
+        // submit을 하기 전 자료실, 첨부파일 확인
+        const insertForm = document.forms['insertForm'];
+        insertForm.addEventListener('submit', fileInsertHandler);
+
+        function fileInsertHandler(event) {
+            event.preventDefault();
+
+            let fileRoomsNo = document.querySelector('form [name="fileRoomsNo"]');
+            if (fileRoomsNo.value == '') {
+                alert('자료실이 입력되지 않았습니다.');
+                fileRoomsNo.focus();
+                return;
+            }
+
+            let fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert('첨부파일이 등록되지 않았습니다.');
+                fileInput.focus();
+                return;
+            }
+
+            alert('파일이 등록되었습니다.');
+            insertForm.submit();
+        }
+    </script>
 </body>
 </html>

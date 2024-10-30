@@ -14,6 +14,21 @@
 	pointer-events: none; /* 비활성화된 링크 클릭 방지 */
 	color: #6c757d; /* 비활성화된 페이지의 글자색 */
 }
+
+.container {
+	display: flex; /* 플렉스 박스 사용 */
+	justify-content: space-between; /* 테이블 간격 조정 */
+}
+
+.folder-section, .file-section {
+    height: 300px; /* 원하는 높이 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed; /* 고정된 테이블 레이아웃 사용 */
+}
 </style>
 <body>
 	<div class="container">
@@ -31,7 +46,7 @@
 				</ul>
 			</div>
 
-			<div class="page-inner file">
+			<div class="page-inner">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
@@ -43,13 +58,15 @@
 								</div>
 
 							</div>
-							<!-- <div class="card-body">
+							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
 										<form name="frmSearch" id="frmSearch">
 											<input name="nowPage" type="hidden"
-												th:value="${paging.nowPage}"> <input name="fileRoomsNo"
-												type="hidden" th:value="${fileRoom.fileRoomsNo}"> <input
+												th:value="${paging.nowPage}"> <input
+												name="fileRoomsNo" type="hidden"
+												th:value="${fileRoom.fileRoomsNo}"> 
+												<input
 												name="cntPerPage" type="hidden"
 												th:value="${paging.cntPerPage}">
 											<div style="text-align: right;">
@@ -58,63 +75,82 @@
 												<button type="submit">검색</button>
 											</div>
 										</form>
-										<span>게시글 수 [[${#lists.size(posts)}]]</span>
-										<table class="table">
-											<thead>
-												<tr>
-													<th>폴더 번호</th>
-													<th>폴더 이름</th>
-												</tr>
-											</thead>
-											<tbody>
-												<th:block th:each="info : ${list}">
+										<div class="folder-section folder">
+											<table class="table">
+												<thead>
 													<tr>
-														<td>[[ ${info.folderNo}]]</td>
-														<td>[[ ${info.folderName}]]</td>
+														<th>폴더 번호</th>
+														<th>폴더 이름</th>
 													</tr>
-												</th:block>
-											</tbody>
-										</table>
+												</thead>
+												<tbody>
+													<th:block th:each="info : ${folders}">
+														<tr>
+															<td>[[ ${info.folderNo}]]</td>
+															<td>[[ ${info.folderName}]]</td>
+														</tr>
+													</th:block>
+												</tbody>
+											</table>
+										</div>
+										<div class="file-section file">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>파일 번호</th>
+														<th>파일 이름</th>
+													</tr>
+												</thead>
+												<tbody>
+													<th:block th:each="info : ${files}">
+														<tr>
+															<td>[[ ${info.fileNo}]]</td>
+															<td>[[ ${info.fileName}]]</td>
+														</tr>
+													</th:block>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
-							</div> -->
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="card-body" style="margin-top: -30px;">
-				<div class="row">
-					<div class="text-center">
-						<!-- 페이지 네이션 -->
-						<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
-						<nav aria-label="Page navigation" class="text-center mx-auto">
-							<ul class="pagination justify-content-center">
-								<li class="page-item"
-									th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
-									class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
-								<li class="page-item"
-									th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
-									class="page-link"
-									th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
-								<li
-									th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
-									class="page-item"
-									th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
-									class="page-link" th:href="|javascript:gopage(${num})|"
-									th:text="${num}"></a></li>
+				<div class="card-body" style="margin-top: -30px;">
+					<div class="row">
+						<div class="text-center">
+							<!-- 페이지 네이션 -->
+							<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
+							<nav aria-label="Page navigation" class="text-center mx-auto">
+								<ul class="pagination justify-content-center">
+									<li class="page-item"
+										th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
+										class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
+									<li class="page-item"
+										th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
+										class="page-link"
+										th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
+									<li
+										th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
+										class="page-item"
+										th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
+										class="page-link" th:href="|javascript:gopage(${num})|"
+										th:text="${num}"></a></li>
 
-								<li class="page-item"
-									th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
-									<a class="page-link"
-									th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
-								</li>
-								<li class="page-item"
-									th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
-									<a class="page-link"
-									th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
-								</li>
-							</ul>
-						</nav>
+									<li class="page-item"
+										th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
+										<a class="page-link"
+										th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
+									</li>
+									<li class="page-item"
+										th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
+										<a class="page-link"
+										th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -125,11 +161,22 @@
 		// 파일 업로드 자료실 번호 받아오기
 		let fileRoomsNo = /*[[${fileRoom.fileRoomsNo}]]*/'';
 
-		// 파일 업로드 클릭 이벤트
-		$('.file button.btn.btn-primary').on('click', function() {
-			let url = '/file/fileInsert?fileRoomsNo=' + fileRoomsNo;
-			location.href = url;
+		$(document).ready(function() {
+		    // 파일 업로드 클릭 이벤트
+		    $('.file button.btn.btn-primary').on('click', function() {
+		        let url = '/file/fileInsert?fileRoomsNo=' + fileRoomsNo;
+		        location.href = url;
+		    });
+
+		    // 폴더 선택 클릭 이벤트
+		    $('.folder tbody > tr').on('click', function(event) {
+		        let folderNo = $(this).find('td:first').text();
+		        let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo + '&folderNo=' + folderNo;
+		        location.href = url;
+		    });
 		});
+
+		// 파일 선택
 
 		// 페이징
 		function gopage(p) {

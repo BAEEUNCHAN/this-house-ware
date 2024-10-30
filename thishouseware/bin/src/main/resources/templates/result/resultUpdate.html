@@ -168,12 +168,12 @@
 												<textarea class="form-control" name="resultSolution"
 													id="resultSolution" rows="3" maxlength="300"
 													style="background-color: lightyellow;"
-													th:text="result.resultSolution"></textarea>
+													th:text="${result.resultSolution}"></textarea>
 												<br /> <i class="fas fa-check-square"> 피드백내용 </i>
 												<textarea class="form-control" name="resultFeedback"
 													id="resultFeedback" rows="3" maxlength="300"
 													style="background-color: lightyellow;"
-													th:text="result.resultFeedback"></textarea>
+													th:text="${result.resultFeedback}"></textarea>
 												<br /> <input type="hidden" name="complainNo"
 													th:value="${complain.complainNo}">
 

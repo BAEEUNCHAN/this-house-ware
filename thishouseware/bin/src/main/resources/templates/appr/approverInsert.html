@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재자 등록</title>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재자 등록</div>
+                </div>
+                <div class="card-body">
+                   <form action="/appr/approverInsert" method="post">
+                    <input type = "hidden" name = "approvalLineNo" th:value ="${param.approvalLineNo}">
+                           <div class="form-group">
+                            <label for="approver">결재 타입</label>
+                            <select id="approver" name="approver" class="form-control" required>
+                                <option value="">선택</option>
+                                <option value="approval">결재</option>
+                                <option value="reference">참조</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentName">부서 이름</label>
+                            <select id="departmentName" name="departmentName" class="form-control" required>
+                                <option value="">선택</option>
+                                <option value="dept1">부서 1</option>
+                                <option value="dept2">부서 2</option>
+                                <option value="dept3">부서 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">직원 이름</label>
+                            <select id="name" name="name" class="form-control" required>
+                                <option value="">선택</option>
+                                <option value="employee1">직원 1</option>
+                                <option value="employee2">직원 2</option>
+                                <option value="employee3">직원 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="positionName">직급 이름</label>
+                            <select id="positionName" name="positionName" class="form-control" required>
+                                <option value="">선택</option>
+                                <option value="position1">직급 1</option>
+                                <option value="position2">직급 2</option>
+                                <option value="position3">직급 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="approvalOrder">결재 순서</label>
+                            <select id="approvalOrder" name="approvalOrder" class="form-control" required>
+                                <option value="">선택</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-between" style="padding-top: 10px;">
+						    <a href="/appr/apprList" class="btn btn-secondary btn-sm">목록으로</a>
+						    <button type="submit" class="btn btn-primary btn-sm">등록</button>
+						</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

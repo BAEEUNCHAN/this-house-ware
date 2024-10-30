@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재자 상세 정보</title>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재자 상세 정보</div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>결재자 번호</th>
+                            <td th:text="${approvers.approverNo}">결재자 번호</td>
+                        </tr>
+                        <tr>
+                            <th>결재자 이름</th>
+                            <td th:text="${approvers.approver}">결재자 이름</td>
+                        </tr>
+                        <tr>
+                            <th>결재 순서</th>
+                            <td th:text="${approvers.approvalOrder}">결재 순서</td>
+                        </tr>
+                        <tr>
+                            <th>결재 상태</th>
+                            <td th:text="${approvers.approvalStatus}">결재 상태</td>
+                        </tr>
+                        <tr>
+                            <th>결재 일자</th>
+                            <td th:text="${#dates.format(approvers.approvalDt, 'yyyy-MM-dd')}">결재 일자</td>
+                        </tr>
+                        <tr>
+                            <th>반려 사유</th>
+                            <td th:text="${approvers.rejectedReason}">반려 사유</td>
+                        </tr>
+                        <tr>
+                            <th>결재 문서 번호</th>
+                            <td th:text="${approvers.edmsDocNo}">결재 문서 번호</td>
+                        </tr>
+                        <tr>
+                            <th>결재선 번호</th>
+                            <td th:text="${approvers.approvalLineNo}">결재선 번호</td>
+                        </tr>
+                    </table>
+                    <div class="text-right">
+                        <a href="/appr/apprList" class="btn btn-secondary">목록으로</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

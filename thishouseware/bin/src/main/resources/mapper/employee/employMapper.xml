@@ -22,6 +22,27 @@
         on (e.department_no = d.department_no)
 		order by id
 	</select>
+	<select id="selectEmployeesWhereDept" resultType="EmployeeVO" parameterType="EmployeeVO">
+		select 
+		    id,
+		    name,
+		    email,
+		    password,
+		    hire_dt,
+		    phone,
+		    image_link,
+		    e.department_no,
+		    position_code,
+		    RESIGN_DT,
+    		D_SIGNATURE,
+            d.department_name
+		FROM
+		    employees e
+        JOIN 
+            department d
+        on (e.department_no = d.department_no)
+		where department_name = #{departmentName}
+	</select>
 	<select id="insertEmployee" statementType="CALLABLE" parameterType="EmployeeVO">
 		{
 			call ADD_NEW_EMP(
@@ -84,6 +105,8 @@
 			    ( id)
 			    VALUES
 			    ( v_id);
+			    
+			    INSERT INTO LEAVE_DETAIL (ID) VALUES (v_id);
 			    
 			    p_id := v_id;
 			END ADD_NEW_EMP;
@@ -184,4 +207,9 @@
 		            RETURN -1;
 		END CAN_CHANGE_PW;
 	 -->
+	 <update id="updateEmployeeForResign" parameterType="String">
+	 	UPDATE EMPLOYEES 
+	 	SET RESIGN_DT = SYSDATE 
+	 	WHERE id = #{id}
+	 </update>
 </mapper>

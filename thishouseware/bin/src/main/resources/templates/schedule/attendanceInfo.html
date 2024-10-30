@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+  <!-- 화면 해상도에 따라 글자 크기 대응(모바일 대응) -->
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <!-- jquery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- fullcalendar CDN -->  
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+  <!-- fullcalendar 언어 CDN -->
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
+  <!-- Google Calendar API CDN -->
+  <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.14/index.global.min.js'></script>
+  <style>
+	
+	/* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
+	.fc-header-toolbar {
+	  padding-top: 1em;
+	  padding-left: 1em;
+	  padding-right: 1em;
+	}
+	
+	/* Bootstrap 5 theme 적용 후 안되어서 우선순위 둠 */
+	/* 일요일 날짜: 빨간색 */
+	.fc-day-sun a {
+		color: red !important;
+	}
+	/* 토요일 날짜: 파란색 */
+	.fc-day-sat a {
+		color: blue !important;
+	}
+	.fc-day-mon a{
+		color: black;
+	}
+	.fc-day-tue a{
+		color: black;
+	}
+	.fc-day-wed a {
+		color: black;
+	}
+	.fc-day-thu a {
+		color: black;
+	}
+	.fc-day-fri a {
+		color: black;
+	}
+	
+	.fc-list-table .fc-event {
+		color: black !important;
+	}
+  </style>
+</head>
+<body style="padding:30px;">
+  <!-- calendar 태그 -->
+  <div id='calendar-container'>
+    <div id='calendar'></div>
+  </div>
+  <script th:inline="javascript">
+  	let id = [[${id}]] 
+  	let key = [[${key}]];
+    /**
+     * calendar.js
+     * 
+     * FullCalendar 이벤트 속성
+     * 1) title : 해당 이벤트의 제목을 나타낸다.
+     * 2) color : 이벤트의 색상을 변경한다.
+     * 3) textColor : 이벤트 내용의 텍스트의 색상을 변경한다.
+     * 4) backgroundColor : 이벤트 배경색의 색상만을 변경한다.
+     * 5) borderColor : 이벤트 테두리의 색상만을 변경한다.
+     * 6) rendering : "bakground"라고 입력하면 color, backgroundColor의 색상으로 해당일 전체의 내용이 채워진다.
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+    	var calendarEl = document.getElementById('calendar');    
+      	fetch('/attendance/empData?id='+id, {
+        	method: "GET",
+      	})
+      	.then(result => result.json())
+      	.then(result => {
+        	console.log(result);
+        	allEvents = result;
+
+        	// full-calendar 생성하기
+        	var calendar = new FullCalendar.Calendar(calendarEl, {
+    			themeSystem: 'bootstrap5', // Bootstrap 5 Theming
+          		googleCalendarApiKey: key, // 구글캘린더 api키 입력하시면 됩니다.
+          		height: '600px', // calendar 높이 설정
+          		expandRows: true, // 화면에 맞게 높이 재설정
+          		slotMinTime: '00:00', // Day 캘린더에서 시작 시간
+          		slotMaxTime: '23:59', // Day 캘린더에서 종료 시간
+          		// eventTextColor: 'black', // 이벤트 텍스트 컬러
+          		customButtons:{
+            		
+          		},
+          		// 해더에 표시할 툴바
+          		headerToolbar: {
+            		left: 'prev,next today',
+            		center: 'title',
+            		right: 'dayGridMonth,timeGridWeek,timeGridDay listWeek'
+          		},
+          		buttonText: {
+    				// 해더 툴바 텍스트 변경시
+    			},
+          		initialView: 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+          		// initialDate: '2024-10-15', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
+          		// slotDuration: '01:00:00', // 기본 30분 단위가 아니라 1시간 단위로 일정(일) 설정
+          		navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+          		editable: true, // default : false 이벤트 드래그 등의 편집여부를 설정함
+          		selectable: false, // 달력 일자 드래그 설정가능
+          		nowIndicator: true, // 현재 시간 마크
+          		allDaySlot:false, // timegrid 화면에서  allday 슬롯 제외하기
+          		dayMaxEvents: false, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+          		locale: 'ko', // 한국어 설정
+
+          		eventAdd: function (obj) {      // 이벤트 추가 시 발생하는 이벤트
+            		console.log("eventAdd : " + obj);
+          		},
+          		
+          		eventChange: function (obj) {    // 이벤트 수정 시 발생하는 이벤트
+            		console.log("eventChange : " + obj);
+          		},
+          		
+          		eventRemove: function (obj) {     // 이벤트 삭제 시 발생하는 이벤트
+            		console.log("eventRemove : " + obj);
+          		},
+          		
+          		eventClick: function (info) {      // 일정 클릭 시	      			      		
+    	      		info.jsEvent.preventDefault(); // 브라우저 네이게이션 비활성화
+        		},
+          
+      			//데이터 가져오는 이벤트        
+      			eventSources:[
+        			{
+        				events: allEvents,        
+        			},
+        			{
+          				googleCalendarId : 'ko.south_korea.official#holiday@group.v.calendar.google.com',
+          				backgroundColor: 'red',
+        			}
+      			]
+        	});
+        	
+    		// 캘린더 랜더링
+        	calendar.render();
+      	});
+    });
+
+  </script>
+</body>
+</html>

@@ -17,7 +17,7 @@ public class PagingVO {
 	private int start; // SQL쿼리에 쓸 start
 	private int end; // SQL쿼리에 쓸 end
 	private int cntPage = 10;
-	
+
 	private String searchWord; // 검색
 
 	public PagingVO() {
@@ -51,19 +51,19 @@ public class PagingVO {
 
 	// DB 쿼리에서 사용할 start, end값 계산
 	public void calcStartEnd(int nowPage, int cntPerPage, int total) {
-	    setEnd(nowPage * cntPerPage);
-	    
-	    // 총 게시글 수를 넘지 않도록 설정
-	    if (getEnd() > total) {
-	        setEnd(total); 
-	    }
-	    
-	    setStart(getEnd() - cntPerPage + 1);
-	    
-	    // start가 1보다 작을 수 없도록 설정
-	    if (getStart() < 1) {
-	        setStart(1);
-	    }
+		setEnd(nowPage * cntPerPage);
+
+		// 총 게시글 수를 넘지 않도록 설정
+		if (getEnd() > total) {
+			setEnd(total);
+		}
+
+		setStart(getEnd() - cntPerPage + 1);
+
+		// start가 1보다 작을 수 없도록 설정
+		if (getStart() < 1) {
+			setStart(1);
+		}
 	}
 
 	@Override

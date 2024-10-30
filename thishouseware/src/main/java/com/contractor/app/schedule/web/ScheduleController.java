@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
+import com.contractor.app.schedule.service.LeaveDetailVO;
+import com.contractor.app.schedule.service.LeavesService;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
@@ -25,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleController {
 	private final ScheduleService scheduleService;
 	private final EmployeeService employeeService;
+	
+	private final LeavesService leavesService;
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
@@ -120,7 +125,7 @@ public class ScheduleController {
 	public Map<String, Object> schDelete(Integer no) {
 		Map<String, Object> result = new HashMap<>();
 		try {
-			if(scheduleService.ScheduleDelete(no)) {
+			if(scheduleService.scheduleDelete(no)) {
 				result.put("success", true);
 				System.out.println("Success");
 			}
@@ -134,10 +139,24 @@ public class ScheduleController {
 		return result;
 	}
 	
+
+	// 휴가 전체 조회 페이지
+	@GetMapping("schedule/leavesList")
+	public String leavesList(Model model) {		
+		model.addAttribute("key", key);
+		return "schedule/leavesList";
+	}
+	
+	// DB서버의 휴가 가져오기 AJAX
+	@PostMapping("leaveListAll")
+	@ResponseBody
+	public List<Map<String, Object>> leaveListJSON() {		
+		return leavesService.leaveListAll();
+
+  }
 	
 	
-	
-	
+
 	
 	// 관리자 => 팀원 일정확인 리스트
 	@GetMapping("schedule/adminCheckOthersScheduleList")
@@ -150,5 +169,6 @@ public class ScheduleController {
 		model.addAttribute("emps", list);
 		model.addAttribute("empsdepts", list2);
 		return "schedule/adminCheckOthersScheduleList";
+
 	}
 }

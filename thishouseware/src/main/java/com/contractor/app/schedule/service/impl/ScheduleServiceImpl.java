@@ -53,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	// 일정 삭제
 	@Override
-	public boolean ScheduleDelete(Integer no) {
+	public boolean scheduleDelete(Integer no) {
 		return scheduleMapper.deleteSchedule(no) == 1;
 	}
 	

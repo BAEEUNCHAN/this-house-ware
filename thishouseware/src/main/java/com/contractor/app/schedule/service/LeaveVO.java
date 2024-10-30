@@ -6,7 +6,7 @@ import java.util.Date;
 
 import lombok.Data;
 @Data
-public class LeavesVO {
+public class LeaveVO {
 	Integer leaveNo; 	// 휴가 번호
 	String id; 			// 아이디
 	String leaveStartDt; // 휴가 시작일시

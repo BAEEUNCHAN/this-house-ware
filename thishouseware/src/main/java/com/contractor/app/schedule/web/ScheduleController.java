@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
-import com.contractor.app.schedule.service.LeaveDetailVO;
-import com.contractor.app.schedule.service.LeavesService;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
+
+import com.contractor.app.schedule.service.LeaveDetailService;
+import com.contractor.app.schedule.service.LeaveDetailVO;
+import com.contractor.app.schedule.service.LeaveService;
+
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 
@@ -30,11 +32,14 @@ public class ScheduleController {
 	private final ScheduleService scheduleService;
 	private final EmployeeService employeeService;
 	
-	private final LeavesService leavesService;
+	private final LeaveService leaveService;
+	private final LeaveDetailService leaveDetailService;
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
 	String key;
+	
+	String id = "emp102"; // 실제 로그인 id 가져오기
 	
 	// 스케쥴 페이지 화면
 	@GetMapping("schedule/scheduleList")
@@ -155,22 +160,28 @@ public class ScheduleController {
 		return result;
 	}
 	
-
-	// 휴가 전체 조회 페이지
-	@GetMapping("schedule/leavesList")
-	public String leavesList(Model model) {		
+	// 휴가 조회 페이지
+	@GetMapping("schedule/leaveList")
+	public String leavesList(LeaveDetailVO leaveDetailVO, Model model) {		
+		LeaveDetailVO ldInfo = leaveDetailService.leaveDetailSelect(id);		
+		model.addAttribute("ldInfo", ldInfo);
 		model.addAttribute("key", key);
-		return "schedule/leavesList";
+		return "schedule/leaveList";
 	}
 	
 	// DB서버의 휴가 가져오기 AJAX
 	@PostMapping("leaveListAll")
 	@ResponseBody
 	public List<Map<String, Object>> leaveListJSON() {		
-		return leavesService.leaveListAll();
-
-  }
-
+		return leaveService.leaveListAll();
+	}
+	
+	// DB서버의 자신의 휴가 가져오기 AJAX
+	@PostMapping("getLeave")
+	@ResponseBody
+	public List<Map<String, Object>> getLeaveJSON() {		
+		return leaveService.leaveList(id);
+	}
 		
 	// 관리자 => 팀원 일정확인 리스트
 	@GetMapping("/schedule/adminCheckOthersScheduleList")
@@ -182,7 +193,8 @@ public class ScheduleController {
 		model.addAttribute("depts", deptList);
 		model.addAttribute("emps", list);
 		model.addAttribute("empsdepts", list2);
-		return "/schedule/adminCheckOthersScheduleList";
+
+		return "schedule/adminCheckOthersScheduleList";
 
 	}
 	

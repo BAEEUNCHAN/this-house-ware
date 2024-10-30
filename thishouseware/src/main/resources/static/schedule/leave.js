@@ -11,7 +11,7 @@
  */
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');    
-  	fetch('/leaveListAll', {
+  	fetch('/getLeave', {
     	method: "POST",
     	headers: {
         	"Content-Type": "application/json",            

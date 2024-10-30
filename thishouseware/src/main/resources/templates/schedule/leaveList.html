@@ -22,7 +22,7 @@
   <!-- FullCalendar용 폰트 컬러 css-->
   <link href="/schedule/calendar.css" rel='stylesheet'>
   <!-- FullCalendar용 자바스크립트 -->
-  <script src="/schedule/leaves.js"></script>
+  <script src="/schedule/leave.js"></script>
 
 <body style="padding:30px;">
   <div>
@@ -37,10 +37,10 @@
   	  </thead>
   	  <tbody>
   	    <tr>
-  	      <td></td>
-  	      <td></td>
-  	      <td></td>
-  	      <td></td>
+  	      <td>[[${ldInfo.leaveTotalDays}]]</td>
+  	      <td>[[${ldInfo.leaveUsedDays}]]</td>
+  	      <td>[[${ldInfo.leaveRemainDays}]]</td>
+  	      <td>[[${#dates.format(ldInfo.leaveEndDt, 'yyyy-MM-dd')}]]</td>
   	    </tr>
   	  </tbody>
   	</table>

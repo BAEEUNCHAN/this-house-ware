@@ -18,7 +18,7 @@ public interface FileRoomService {
 	public List<FolderFileVO> selectFolderFile(PagingVO pagingVO, FolderFileVO folderFileVO);
 
 	// 총 폴더/파일 갯수
-	public int countFolerFile(FolderFileVO folderFileVO);
+	public int countFolderFile(FolderFileVO folderFileVO);
 
 	// 파일 업로드
 	public int insertFile(FilesVO filesVO);

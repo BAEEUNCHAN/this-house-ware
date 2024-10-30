@@ -43,8 +43,8 @@ public class FileRoomServiceImpl implements FileRoomService {
 	}
 
 	@Override
-	public int countFolerFile(FolderFileVO folderFileVO) {
-		return fileRoomMapper.countFolerFile(folderFileVO);
+	public int countFolderFile(FolderFileVO folderFileVO) {
+		return fileRoomMapper.countFolderFile(folderFileVO);
 	}
 	
 	@Override

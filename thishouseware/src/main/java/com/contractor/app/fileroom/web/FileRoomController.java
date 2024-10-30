@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,6 +15,7 @@ import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
+import com.contractor.app.fileroom.service.FilesVO;
 import com.contractor.app.fileroom.service.FolderFileVO;
 import com.contractor.app.fileroom.service.FolderVO;
 
@@ -48,7 +50,7 @@ public class FileRoomController {
 			@RequestParam(required = false) String searchWord) {
 
 		// 폴더/파일 총 개수 가져오기
-		int total = fileRoomService.countFolerFile(folderFileVO);
+		int total = fileRoomService.countFolderFile(folderFileVO);
 
 		// 페이징 및 검색어 설정
 		pagingVO = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
@@ -69,6 +71,14 @@ public class FileRoomController {
 		model.addAttribute("list", list);
 
 		return "fileroom/folderFileList";
+	}
+
+	// 파일 업로드 - 처리 : URI - fileInsert / PARAMETER - FilesVO(QueryString)
+	// RETURN - 단건조회 다시 호출
+	@PostMapping("/fileInsert")
+	public String fileInsertProcess(FilesVO filesVO) { // <form/> 활용한 submit
+		fileRoomService.insertFile(filesVO);
+		return "redirect:folderFileList";
 	}
 
 	// 파일 업로드 - 페이지 : URI - fileInsert / RETURN - file/fileInsert

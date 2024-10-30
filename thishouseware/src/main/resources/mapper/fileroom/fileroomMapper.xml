@@ -93,7 +93,7 @@
 	</select>
 
 	<!-- 폴더/파일 총 갯수 출력 -->
-	<select id="countFolerFile" resultType="int">
+	<select id="countFolderFile" resultType="int">
 		SELECT
 		(SELECT COUNT(*)
 		FROM folder
@@ -112,7 +112,7 @@
 			SELECT NVL(MAX(FILE_NO), 1) + 1
 			FROM files
 		</selectKey>
-		INSERT INTO posts
+		INSERT INTO files
 		( FILE_NO
 		,FILE_NAME
 		,EXTENSION
@@ -131,7 +131,7 @@
 		,#{fileSize}
 		,SYSDATE
 		,#{id}
-		,#{folerNo}
+		,#{folderNo}
 		,#{fileRoomsNo}
 		)
 	</insert>

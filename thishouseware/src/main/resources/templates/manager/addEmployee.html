@@ -3,6 +3,18 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
+	<style>
+		.okEmail{
+			display : none;
+			color : blue;
+		}
+		.noEmail{
+			color : red;
+		}
+	</style>
+</head>
+<body>
 	<div class="row">
 	  <div class="col-md-12">
 	    <form class="card">
@@ -14,7 +26,9 @@
 	          <div class="col-md-8">
 	            <div class="form-group">
 	              <label for="email">이메일</label>
-	              <input type="email" class="form-control" id="email" name="email" placeholder="이메일">
+	              <input type="email" class="form-control" id="email" name="email" placeholder="이메일" oninput = "checkEmail()">
+	              <span class="okEmail">사용가능한 이메일 입니다.</span>
+	              <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
 	            </div>
 	            <!-- inline -->
 	            <div class="form-group">
@@ -92,10 +106,24 @@ function valueCheck(){
         return false;
     }
 }
+function emailValueCheck(){
+	
+	if($('.okEmail').css('display') == "none"){
+		return false;
+	}else{
+		return true;
+	}
+	
+}
+// 직원 추가
 $('#addEmployee').on('click', function(event){
 	
 	if(!valueCheck()){
 		alert("입력값이 부족합니다.");
+		return null;
+	}
+	if(!emailValueCheck()){
+		alert("email 을 사용할 수 없습니다.");
 		return null;
 	}
 	
@@ -138,5 +166,33 @@ $('#addEmployee').on('click', function(event){
 		}
 	})
 	.fail(err => console.log(err));
-	});
+});
+// 이메일 체크
+function checkEmail(){
+    var email = $('#email').val(); 
+    if(email.length <= 0){
+        $('.noEmail').css("display","inline-block");
+        $('.okEmail').css("display", "none");
+    	return null;
+    }
+    $.ajax({
+        url:'/manager/emailCheck', 
+        type:'post', 
+        data:{"email":email},
+        success:function(answer){ 
+            if(answer == 0){ // 사용가능한경우
+                $('.okEmail').css("display","inline-block"); 
+                $('.noEmail').css("display", "none");
+            } else { // 사용불가능한경우
+                $('.noEmail').css("display","inline-block");
+                $('.okEmail').css("display", "none");
+            }
+        },
+        error:function(){
+            $('.noEmail').css("display","inline-block");
+            $('.okEmail').css("display", "none");
+        }
+    });
+};
 </script>
+</body>

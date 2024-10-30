@@ -23,4 +23,5 @@ public interface ScheduleMapper {
 	
 	// 일정 삭제
 	int deleteSchedule(Integer no);
+	
 }

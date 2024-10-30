@@ -30,6 +30,10 @@ public class ComplainServiceImpl implements ComplainService {
 	public List<ComplainsVO> complainList() {
 		return complainMapper.selectComplainAll();
 	}
+	@Override
+	public List<ComplainsVO> complainList0to2() {
+		return complainMapper.selectComplainAll0To2();
+	}
 	// 문의 상황완료 보고완료만 전체조회
 	@Override
 	public List<ComplainsVO> complainResultList() {
@@ -91,7 +95,10 @@ public class ComplainServiceImpl implements ComplainService {
 	 // 문의 삭제
 	 @Override public int deleteComplain(int ComplainNo) {
 		 return complainMapper.deleteComplainInfo(ComplainNo); }
-	 
+	 @Override
+	public int complainDelete(Integer complainNo) {
+		return complainMapper.complainDelete(complainNo);
+	}
 	@Override
 	public ComplainsVO getComplainPwd(int complainNo) {
 		return complainMapper.getComplainPwd(complainNo);

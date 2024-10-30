@@ -14,8 +14,7 @@
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a
-						href="/board/postList?boardsNo=${boardsNo}">글쓰기</a></li>
+					<li class="nav-item"><a href="/board/postInsert">글쓰기</a></li>
 				</ul>
 			</div>
 			<div class="page-inner">
@@ -23,16 +22,15 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<div class="card-title">
-									글쓰기 <a class="float-end"><button class="btn btn-primary" 
-											type="submit">등록</button></a>
-								</div>
+								<div class="card-title">글쓰기</div>
 							</div>
 							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
 										<form name="insertForm" th:action="@{/board/postInsert}"
 											method="post">
+											<input type="hidden" name="id"
+												th:value="${#authentication.principal.empVO.id}">
 											<table class="table">
 												<tr>
 													<th>게시판 선택</th>
@@ -89,6 +87,7 @@
 													<td><textarea name="content"></textarea></td>
 												</tr>
 											</table>
+											<button class="btn btn-primary" type="submit">등록</button>
 										</form>
 									</div>
 								</div>
@@ -155,17 +154,26 @@
 			insertForm.submit();
 		}
 
-		// 오늘 날짜와 다음 날 날짜 설정
+		// 오늘 날짜 설정
 		const today = new Date();
-		const tomorrow = new Date(today);
-		tomorrow.setDate(today.getDate() + 1);
 
 		document.getElementById('postStartTime').setAttribute("min",
 				today.toISOString().substring(0, 10));
 		document.getElementById('postEndTime').setAttribute("min",
 				today.toISOString().substring(0, 10));
 
-		// 게시 시작/종료시간 - 오늘/다음날 날짜 설정
+		document
+				.getElementById('postStartTime')
+				.addEventListener(
+						'change',
+						function() {
+							const postStartTimeValue = this.value;
+							document.getElementById('postEndTime')
+									.setAttribute("min", postStartTimeValue);
+							document.getElementById('postEndTime').value = postStartTimeValue;
+						});
+
+		// 게시 시작/종료시간 - 오늘 날짜 설정
 		document.getElementById('postStartTime').value = today.toISOString()
 				.substring(0, 10);
 		document.getElementById('postEndTime').value = today.toISOString()

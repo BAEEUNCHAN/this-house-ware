@@ -199,7 +199,7 @@
 			, POST_ENDTIME
 		</if>
 		<!-- 기본값 admin 설정 -->
-		<!-- , AUTHORITY-->
+		, AUTHORITY
 		, ID
 		, SUBMIT_DT
 		, DISPLAY
@@ -215,7 +215,7 @@
 			,#{postEndTime}
 		</if>
 		<!-- 기본값 admin 설정 -->
-		<!-- ,#{authority} -->
+		,'admin'
 		,#{id}
 		,SYSDATE
 		,#{display}

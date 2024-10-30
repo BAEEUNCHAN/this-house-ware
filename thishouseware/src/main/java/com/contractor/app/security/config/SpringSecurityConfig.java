@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
 					-> authorize
 					.requestMatchers("/login","/login/**").permitAll() // 로그인 관련 요청은 허가한다. 로그아웃도 추가할것!
 					// 그외에도 허가하고 싶은 경로들
-//					.requestMatchers("").permitAll()
+					.requestMatchers("/flutter/**").permitAll()
 					.requestMatchers("/assets/**","/park/**","/templates/**").permitAll() // 정적파일 경로허가
 					// 메니저 기능은 사장과 관리자만 들어갈 수 있게한다.
 					.requestMatchers("/manager/**").hasAnyAuthority("a1","a2")

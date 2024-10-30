@@ -3,8 +3,7 @@ DROP SEQUENCE attendances_seq;
 CREATE SEQUENCE attendances_seq;
 
 select 
-    department_no,
-    department_name
+*
 from department;
 
 -- 직원 조회
@@ -134,6 +133,8 @@ values (
     ,'emp100'
 );
 
+-- leave_detail 데이터 추가
+INSERT INTO LEAVE_DETAIL (ID) VALUES ('emp101');
 -- 수정문 실행후 commit 하자
 commit;
 

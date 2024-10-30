@@ -10,7 +10,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.contractor.app.employee.service.DepartmentVO;
+import com.contractor.app.employee.service.EmployeeService;
+import com.contractor.app.employee.service.EmployeeVO;
+
+import com.contractor.app.schedule.service.LeaveDetailService;
+import com.contractor.app.schedule.service.LeaveDetailVO;
+import com.contractor.app.schedule.service.LeaveService;
 
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
@@ -21,10 +30,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleController {
 	private final ScheduleService scheduleService;
+	private final EmployeeService employeeService;
+	
+	private final LeaveService leaveService;
+	private final LeaveDetailService leaveDetailService;
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
 	String key;
+	
+	String id = "emp102"; // 실제 로그인 id 가져오기
 	
 	// 스케쥴 페이지 화면
 	@GetMapping("schedule/scheduleList")
@@ -36,8 +51,23 @@ public class ScheduleController {
 	// DB서버의 일정 가져오기 AJAX
 	@PostMapping("schListAll")
 	@ResponseBody
-	public List<Map<String, Object>> schListJSON() {		
-		return scheduleService.scheduleListAll();
+	public List<ScheduleVO> schListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {
+		//return scheduleService.scheduleListAll();
+		System.out.println(id);
+		System.out.println(positionCode);
+		System.out.println(departmentNo);
+		
+		if(positionCode.equals("a1") || positionCode.equals("a2") || positionCode.equals("a3")) {
+			// 직급 a1(사장), a2(관리자), a3(본부장)은 모든 일정확인가능
+			return scheduleService.scheduleListAll();
+		}else if(positionCode.equals("a4")) {
+			// a4(팀장)은 자신의 부서 모든 일정 확인가능
+			return scheduleService.scheduleListWhereDepartmentNo(departmentNo);
+		} else{
+			// 그 외 자신이 등록한 일정만 확인가능(인턴, 사원..)
+			return scheduleService.scheduleList(id);
+		}
+		
 	}
 	
 	// 일정 등록
@@ -116,7 +146,7 @@ public class ScheduleController {
 	public Map<String, Object> schDelete(Integer no) {
 		Map<String, Object> result = new HashMap<>();
 		try {
-			if(scheduleService.ScheduleDelete(no)) {
+			if(scheduleService.scheduleDelete(no)) {
 				result.put("success", true);
 				System.out.println("Success");
 			}
@@ -129,4 +159,44 @@ public class ScheduleController {
 		}
 		return result;
 	}
+	
+	// 휴가 조회 페이지
+	@GetMapping("schedule/leaveList")
+	public String leavesList(LeaveDetailVO leaveDetailVO, Model model) {		
+		LeaveDetailVO ldInfo = leaveDetailService.leaveDetailSelect(id);		
+		model.addAttribute("ldInfo", ldInfo);
+		model.addAttribute("key", key);
+		return "schedule/leaveList";
+	}
+	
+	// DB서버의 휴가 가져오기 AJAX
+	@PostMapping("leaveListAll")
+	@ResponseBody
+	public List<Map<String, Object>> leaveListJSON() {		
+		return leaveService.leaveListAll();
+	}
+	
+	// DB서버의 자신의 휴가 가져오기 AJAX
+	@PostMapping("getLeave")
+	@ResponseBody
+	public List<Map<String, Object>> getLeaveJSON() {		
+		return leaveService.leaveList(id);
+	}
+		
+	// 관리자 => 팀원 일정확인 리스트
+	@GetMapping("/schedule/adminCheckOthersScheduleList")
+	public String adminCheckOthersScheduleList(EmployeeVO employeeVO, Model model) {
+		model.addAttribute("key", key);
+		List<DepartmentVO> deptList = employeeService.getDepartmentList();
+		List<EmployeeVO> list = employeeService.getEmployees();
+		List<EmployeeVO> list2 = employeeService.getEmployeesWhereDept(employeeVO);
+		model.addAttribute("depts", deptList);
+		model.addAttribute("emps", list);
+		model.addAttribute("empsdepts", list2);
+
+		return "schedule/adminCheckOthersScheduleList";
+
+	}
+	
+
 }

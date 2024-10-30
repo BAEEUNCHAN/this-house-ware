@@ -76,5 +76,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public DepartmentVO getDepartmentBydeptNo(int departmentNo) {	
 		return departmentMapper.selectDepartmentBydeptNo(departmentNo);
 	}
+	
+	@Override
+	public List<EmployeeVO> getEmployeesWhereDept(EmployeeVO employeeVO) {
+		return employeeMapper.selectEmployeesWhereDept(employeeVO);
+	}
+
+	@Override
+	public boolean resignEmp(String id) {
+		return employeeMapper.updateEmployeeForResign(id);
+	}
 
 }

@@ -92,4 +92,10 @@
 					,result_feedback	= #{resultFeedback}
 		WHERE		 complain_no		= #{complainNo}
 	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteResult" parameterType="Integer">
+		DELETE FROM results
+		WHERE		complain_no = #{complainNo}
+	</delete>
 </mapper>

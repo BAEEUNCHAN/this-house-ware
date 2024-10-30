@@ -12,6 +12,7 @@ import com.contractor.app.appr.service.ApprFavoriteVO;
 import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.appr.service.ApprVO;
+import com.contractor.app.appr.service.ApproverVO;
 
 @Service
 public class ApprServiceImpl implements ApprService {
@@ -50,6 +51,27 @@ public class ApprServiceImpl implements ApprService {
 		}
 		return map;
 	}
+	// 결재선 수정
+	@Override
+	public Map<String, Object> apprLineUpdate(ApprLineVO apprLineVO) {
+	    Map<String, Object> map = new HashMap<>();
+	    boolean isSuccessed = false;
+
+	    // 기본값 설정: approvalLineName이 null일 경우 기본값으로 "기본결재라인명"을 사용
+	    if (apprLineVO.getApprovalLineName() == null || apprLineVO.getApprovalLineName().trim().isEmpty()) {
+	        apprLineVO.setApprovalLineName("기본결재라인명");
+	    }
+
+	    int result = apprMapper.updateApprLine(apprLineVO);
+
+	    if (result == 1) {
+	        isSuccessed = true;
+	    }
+
+	    map.put("result", isSuccessed);
+	    map.put("target", apprLineVO);
+	    return map;
+	}
 
 	// 결재선 즐겨찾기 전체조회
 	@Override
@@ -82,8 +104,8 @@ public class ApprServiceImpl implements ApprService {
 
 	// 결재자 등록 정보 전체조회
 	@Override
-	public List<ApprVO> apprList() {
-		return apprMapper.apprAllList();
+	public List<ApproverVO> apprList(int approvalLineNo) {
+		return apprMapper.apprAllList(approvalLineNo);
 	}
 	// 결재자 단건 조회
 	@Override
@@ -106,6 +128,23 @@ public class ApprServiceImpl implements ApprService {
 		if (result == 1) {
 			map.put("approverNo", approverNo);
 		}
+		return map;
+	}
+	// 결재자 수정
+	@Override
+	public Map<String, Object> apprUpdate(ApprVO apprVO) {
+		Map<String, Object> map = new HashMap<>();
+		boolean isSuccessed = false;
+		
+		int result 
+		= apprMapper.updateAppr(apprVO);
+		
+		if(result == 1) {
+			isSuccessed = true;
+		}
+		
+		map.put("result", isSuccessed);
+		map.put("target", apprVO);
 		return map;
 	}
 }// 끝

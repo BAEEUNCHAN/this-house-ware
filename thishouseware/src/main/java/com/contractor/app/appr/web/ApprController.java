@@ -1,18 +1,23 @@
 package com.contractor.app.appr.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.contractor.app.appr.service.ApprFavoriteVO;
 import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.appr.service.ApprVO;
+import com.contractor.app.appr.service.ApproverVO;
 
 @Controller
 @RequestMapping("/appr")
@@ -72,12 +77,27 @@ public class ApprController {
 		return "redirect:apprLineList";
 	}
 
+	// 결재선 수정 폼 조회 - GET 요청
+	@GetMapping("/apprLineModify")
+	public String apprLineUpdateForm(ApprLineVO apprLineVO, Model model) {
+		ApprLineVO apprLineData = apprService.apprLineInfo(apprLineVO);
+		model.addAttribute("apprLine", apprLineData);
+		return "appr/apprLineModify";
+	}
+
+	// 결재선 수정 처리 - POST 요청
+	@PostMapping("/apprLineModify")
+	@ResponseBody // AJAX
+	public Map<String, Object> apprLineUpdateAJAXJSON(@RequestBody ApprLineVO apprLineVO) {
+		return apprService.apprLineUpdate(apprLineVO);
+	}
+
 	// 결재선 즐겨찾기 전체조회
 	@GetMapping("/apprFavoriteList")
-	public void apprFavoriteList(Model model) {
+	public String apprFavoriteList(Model model) {
 		List<ApprFavoriteVO> list = apprService.apprFavoriteList();
 		model.addAttribute("apprFavorites", list);
-		// return "appr/apprFavoriteList";
+		return "appr/apprFavoriteList";
 
 	}
 
@@ -122,28 +142,28 @@ public class ApprController {
 
 	// 결재자 정보 전체조회
 	@GetMapping("/apprList")
-	public void apprList(Model model) {
-		List<ApprVO> list = apprService.apprList();
-		model.addAttribute("apprs", list);
-		// return "appr/apprFavoriteList";
+	public void apprList(@RequestParam Integer approvalLineNo, Model model) {
+		List<ApproverVO> list = apprService.apprList(approvalLineNo);
+		model.addAttribute("approvers", list);
+		// return "appr/apprList";
 	}
 
 	// 결재자 정보 단건조회
 	@GetMapping("/apprInfo") //
 	public String apprInfo(ApprVO apprVO, Model model) {
 		ApprVO findVO = apprService.apprInfo(apprVO);
-		model.addAttribute("apprs", findVO);
+		model.addAttribute("approvers", findVO);
 		return "appr/apprInfo";
 	}
 
 	// 결재자 추가 - 페이지(GET)
-	@GetMapping("/apprInsert")
+	@GetMapping("/approverInsert")
 	public String apprForm() {
-		return "appr/apprInsert";
+		return "appr/approverInsert";
 	}
 
 	// 결재자 추가 - 처리(POST)
-	@PostMapping("/apprInsert")
+	@PostMapping("/approverInsert")
 	public String apprProcess(ApprVO apprVO) {
 		int approver = apprService.apprInsert(apprVO);
 
@@ -161,9 +181,22 @@ public class ApprController {
 	}
 
 	// 결재자 삭제
-	@GetMapping("/apprDelete")
+	@GetMapping("/approverDelete")
 	public String apprDelete(Integer approverNo) {
 		apprService.apprDelete(approverNo);
 		return "redirect:apprList";
+	}
+
+	// 결재자 수정
+	@GetMapping("/apprModify")
+	public Map<String, Object> apprUpdateAJAXQueryString(ApprVO apprVO, Model model) {
+		model.addAttribute("approvers", apprVO);
+		return apprService.apprUpdate(apprVO);
+	}
+
+	@PostMapping("/apprModify")
+	@ResponseBody // AJAX
+	public Map<String, Object> apprUpdateAJAXJSON(@RequestBody ApprVO apprVO) {
+		return apprService.apprUpdate(apprVO);
 	}
 }// 끝

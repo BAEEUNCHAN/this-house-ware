@@ -19,18 +19,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	// 일정 전체 조회
 	@Override
-	public List<Map<String, Object>> scheduleListAll() {		
-		List<Map<String, Object>> schedules = scheduleMapper.listScheduleAll();
+	public List<ScheduleVO> scheduleListAll() {		
+		//List<Map<String, Object>> schedules = scheduleMapper.listScheduleAll();
 		
-		return schedules;
+		//return schedules;
+		return scheduleMapper.listScheduleAll();
 	}
 	
 	// 일정 개인별 조회
 	@Override
-	public List<ScheduleVO> scheduleList() {
-		return scheduleMapper.listSchedule();
+	public List<ScheduleVO> scheduleList(String id) {
+		return scheduleMapper.listSchedule(id);
 	}
 
+	// 일정 부서별 조회
+	@Override
+	public List<ScheduleVO> scheduleListWhereDepartmentNo(int departmentNo) {
+		return scheduleMapper.scheduleListWhereDepartmentNo(departmentNo);
+	}
+	
 	// 일정 등록
 	@Override
 	public int scheduleInsert(ScheduleVO scheduleVO) {
@@ -53,7 +60,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 	
 	// 일정 삭제
 	@Override
-	public boolean ScheduleDelete(Integer no) {
+	public boolean scheduleDelete(Integer no) {
 		return scheduleMapper.deleteSchedule(no) == 1;
 	}
+	
 }

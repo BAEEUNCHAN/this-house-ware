@@ -12,7 +12,7 @@
 		,ID
 		,USED_CAPACITY
 		FROM file_rooms
-		ORDER BY FILE_ROOMS_TYPE, FILE_ROOMS_NO DESC
+		ORDER BY FILE_ROOMS_NO
 	</select>
 
 	<!-- 자료실 단건조회 -->

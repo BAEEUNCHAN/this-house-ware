@@ -1,20 +1,50 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
-
-<link
-	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
-	rel="stylesheet">
-<script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
-
-
-
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
 <body>
-	
-<script th:inline="javascript">
-
-</script>
+	<div class="text-center">
+		<h3>자료실 목록</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>자료실 번호</th>
+					<th>자료실 유형</th>
+					<th>자료실 이름</th>
+					<th>전체용량</th>
+					<th>권한</th>
+					<th>아이디</th>
+					<th>사용량</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="info : ${list}">
+				<!--  BoardsVO => <tr/> -->
+				<tr>
+					<td>[[ ${info.fileRoomsNo}]]</td>
+					<td>[[ ${info.fileRoomsType}]]</td>
+					<td>[[ ${info.fileRoomsName}]]</td>
+					<td>[[ ${info.capacity}]]</td>
+					<td>[[ ${info.authority}]]</td>
+					<td>[[ ${info.id}]]</td>
+					<td>[[ ${info.usedCapacity}]]</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script>
+		// 제이쿼리 객체 생성
+		$('tbody > tr').on('click', function(event) {
+			let trTag = event.currentTarget;
+			let fileRoomsNo = $(trTag).children().eq(0).text();
+			let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
+			location.href=url;
+		});
+	</script>
 </body>
 </html>

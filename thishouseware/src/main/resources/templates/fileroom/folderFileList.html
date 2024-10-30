@@ -19,37 +19,37 @@
 	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
-				<h3 class="fw-bold mb-3">게시판</h3>
+				<h3 class="fw-bold mb-3">자료실</h3>
 				<ul class="breadcrumbs mb-3">
 					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
+					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a
-						href="/board/postList?boardsNo=${board.boardsNo}">[[${board.title}]]</a></li>
+						href="/file/folderFileList?fileRoomsNo=${fileRoom.fileRoomsNo}">[[${fileRoom.fileRoomsName}]]</a></li>
 				</ul>
 			</div>
 
-			<div class="page-inner post">
+			<div class="page-inner file">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<div class="card-title">
-									[[${board.title}]] <a class="float-end">
-										<button class="btn btn-primary">글쓰기</button>
+									[[${fileRoom.fileRoomsName}]] <a class="float-end">
+										<button class="btn btn-primary">파일업로드</button>
 									</a>
 								</div>
 
 							</div>
-							<div class="card-body">
+							<!-- <div class="card-body">
 								<div class="row">
 									<div class="text-center">
 										<form name="frmSearch" id="frmSearch">
 											<input name="nowPage" type="hidden"
-												th:value="${paging.nowPage}"> <input name="boardsNo"
-												type="hidden" th:value="${board.boardsNo}"> <input
+												th:value="${paging.nowPage}"> <input name="fileRoomsNo"
+												type="hidden" th:value="${fileRoom.fileRoomsNo}"> <input
 												name="cntPerPage" type="hidden"
 												th:value="${paging.cntPerPage}">
 											<div style="text-align: right;">
@@ -58,37 +58,26 @@
 												<button type="submit">검색</button>
 											</div>
 										</form>
-										<!-- <span>게시글 수 [[${#lists.size(posts)}]]</span> -->
+										<span>게시글 수 [[${#lists.size(posts)}]]</span>
 										<table class="table">
 											<thead>
 												<tr>
-													<th>게시글 번호</th>
-													<th>머리글</th>
-													<th>제목</th>
-													<th>작성자</th>
-													<th>등록날짜</th>
+													<th>폴더 번호</th>
+													<th>폴더 이름</th>
 												</tr>
 											</thead>
 											<tbody>
-												<th:block th:each="info : ${posts}">
-													<!--  PostsVO => <tr/> -->
-													<tr th:if="${info.display == 'q1'}">
-														<td>[[ ${info.postsNo}]]</td>
-														<td>[[ ${info.postsType}]]</td>
-														<td>[[ ${info.title}]]</td>
-														<td>[[ ${info.name}]]</td>
-														<td><span
-															th:text="(${info.postSetting == '유'} and ${info.display == 'q2'}) 
-																		? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} 
-																		: ${#dates.format(info.submitDT, 'yyyy-MM-dd')}">
-														</span></td>
+												<th:block th:each="info : ${list}">
+													<tr>
+														<td>[[ ${info.folderNo}]]</td>
+														<td>[[ ${info.folderName}]]</td>
 													</tr>
 												</th:block>
 											</tbody>
 										</table>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 				</div>
@@ -133,20 +122,12 @@
 	</div>
 	<script th:inline="javascript">
 		// 제이쿼리 객체 생성
-		// 글쓰기 게시판 번호 받아오기
-		let boardsNo = /*[[${board.boardsNo}]]*/'';
+		// 파일 업로드 자료실 번호 받아오기
+		let fileRoomsNo = /*[[${fileRoom.fileRoomsNo}]]*/'';
 
-		// 글쓰기 클릭 이벤트
-		$('.post button.btn.btn-primary').on('click', function() {
-			let url = '/board/postInsert?boardsNo=' + boardsNo;
-			location.href = url;
-		});
-
-		// 게시글 선택
-		$('.post tbody > tr').on('click', function(event) {
-			let trTag = event.currentTarget;
-			let postsNo = $(trTag).children().eq(0).text();
-			let url = '/board/postInfo?postsNo=' + postsNo;
+		// 파일 업로드 클릭 이벤트
+		$('.file button.btn.btn-primary').on('click', function() {
+			let url = '/file/fileInsert?fileRoomsNo=' + fileRoomsNo;
 			location.href = url;
 		});
 

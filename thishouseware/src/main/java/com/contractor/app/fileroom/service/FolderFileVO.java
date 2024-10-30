@@ -5,7 +5,11 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Data
 public class FolderFileVO {
 	private Integer folderNo; //폴더 번호

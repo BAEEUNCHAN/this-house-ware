@@ -78,18 +78,40 @@
 		DELETE FROM approval_line
 		WHERE approval_line_no = #{approvalLineNo}
 	</delete>
+	
+	<!--  결재라인 수정 -->
+	<update id="updateApprLine" parameterType="ApprLineVO">
+	    UPDATE approval_line
+	    SET 
+	        id = #{id}
+	        , approval_line_name = 
+	            <if test="approvalLineName != null">
+	                #{approvalLineName}
+	            </if>
+	            <if test="approvalLineName == null">
+	                '기본결재라인명' <!-- 기본값 설정 -->
+	            </if>
+	        , create_dt = #{createDt}
+	        , recent_used_dt = #{recentUsedDt}
+	        , referrer = #{referrer}
+	        , favorite_chk = #{favoriteChk}
+	    WHERE 
+	        approval_line_no = #{approvalLineNo}
+	</update>
 
 	<!-- 결재자 전체조회 -->
 	<select id="apprAllList" resultType="ApproverVO">
-		SELECT approver_no
-		       , approver
-		       , department_name
-		       , name
-		       , position_name
-		       , approval_order
-		FROM approver
-		WHERE approval_line_no = #{approvalLineNo}
-		ORDER BY approval_dt
+		SELECT a.approver_no,
+	       a.approver,
+	       d.department_name,
+	       e.name,
+	       e.position_code,
+	       a.approval_order
+		FROM approver a
+		JOIN employees e ON a.approver = e.id
+		JOIN department d ON e.department_no = d.department_no  
+		WHERE a.approval_line_no = #{approvalLineNo}
+		ORDER BY a.approval_dt
 	</select>
 	
 	<!-- 결재자 단건조회 -->
@@ -139,7 +161,21 @@
 		DELETE FROM approver
 		WHERE approver_no = #{approverNo}
 	</delete>
-
+	
+	<!--  결재자 수정 -->
+	<update id="updateAppr" >
+		UPDATE approver
+		SET approver_no
+			, approver
+			, approval_order
+			, approval_status
+			, approval_dt
+			, rejected_reason
+			, edms_doc_no
+			, approval_line_no
+		WHERE approval_line_no = #{approvalLineNo}
+	</update>
+	
 	<!-- 즐겨찾기 전체조회 -->
 	<select id="apprFavoriteAllList" resultType="ApprFavoriteVO">
 		SELECT favorite_no

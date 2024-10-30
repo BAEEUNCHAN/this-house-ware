@@ -27,4 +27,6 @@ public class DocJoinVO { // 문서함
  private Date approvalDt;// 결재일시
  private String important; // 중요문서
 
+ // DepartmentVO
+ private String departmentName; // 부서 이름
 }

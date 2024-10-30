@@ -16,9 +16,9 @@ public class PostsVO {
 	private String title; // 제목
 	private String content; // 내용
 	private String postSetting; // 게시 기간 여부 (q1: 게시, q2: 비게시)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date postStartTime; // 게시 시작시간
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date postEndTime; // 게시 종료시간
 	private String authority; // 권한
 	private String id; // 아이디

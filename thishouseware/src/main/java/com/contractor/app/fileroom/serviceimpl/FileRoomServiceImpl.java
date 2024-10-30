@@ -11,6 +11,7 @@ import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
 import com.contractor.app.fileroom.service.FolderFileVO;
+import com.contractor.app.fileroom.service.FolderVO;
 
 @Service
 public class FileRoomServiceImpl implements FileRoomService {
@@ -32,6 +33,11 @@ public class FileRoomServiceImpl implements FileRoomService {
 	}
 	
 	@Override
+	public List<FolderVO> selectFolders(FolderVO folderVO) {
+		return fileRoomMapper.selectFolders(folderVO);
+	}
+	
+	@Override
 	public List<FolderFileVO> selectFolderFile(PagingVO pagingVO, FolderFileVO folderFileVO) {
 		return fileRoomMapper.selectFolderFile(pagingVO, folderFileVO);
 	}
@@ -45,4 +51,5 @@ public class FileRoomServiceImpl implements FileRoomService {
 	public int insertFile(FilesVO filesVO) {
 		return fileRoomMapper.insertFile(filesVO);
 	}
+
 }

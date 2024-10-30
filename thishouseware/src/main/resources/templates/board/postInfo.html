@@ -3,7 +3,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-
 <body>
 	<div class="container">
 		<div class="page-inner">
@@ -55,9 +54,11 @@
 												<td>[[ ${post.name} ]]
 											</tr>
 											<tr>
-												<th>작성일자</th>
-												<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd
-													HH:mm")} ]]</td>
+												<th>등록날짜</th>
+												<td><span th:text="(${post.postSetting == '유'} and ${post.display == 'q2'}) 
+																		? ${#dates.format(post.postStartTime, 'yyyy-MM-dd')} 
+																		: ${#dates.format(post.submitDT, 'yyyy-MM-dd')}">
+															</span></td>
 											</tr>
 											<tr>
 												<th>내용</th>
@@ -91,8 +92,8 @@
 													<tr>
 														<td>[[ ${info.commentsNo} ]]</td>
 														<td>[[ ${info.name} ]]</td>
-														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd HH:mm")}
-															]]</td>
+														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd
+															HH:mm")} ]]</td>
 														<td>[[ ${info.content} ]]</td>
 														<td><button type="button" class="btn btn-success"
 																th:style="${info.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
@@ -110,12 +111,7 @@
 						<div class="card">
 							<div class="card-body">
 								<div class="card-header">
-									<div class="card-title">
-										댓글 등록 <a class="float-end">
-											<button type="submit" class="btn btn-success"
-												th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">등록</button>
-										</a>
-									</div>
+									<div class="card-title">댓글 등록</div>
 								</div>
 								<div class="row">
 									<div class="text-center">
@@ -135,6 +131,10 @@
 													<td><textarea name="content"></textarea></td>
 												</tr>
 											</table>
+											<div>
+												<button type="submit" class="btn btn-success"
+													th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">등록</button>
+											</div>
 										</form>
 									</div>
 								</div>

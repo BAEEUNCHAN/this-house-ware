@@ -1,5 +1,7 @@
 package com.contractor.app.board.serviceimpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +29,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectBoardAll(boardsVO);
 	}
 
-
 	@Override
 	public PostsVO postInfo(PostsVO postsVO) {
 		return boardMapper.selectPostInfo(postsVO);
@@ -35,19 +36,29 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int insertPost(PostsVO postsVO) {
-		//현재 날짜 구하기 
+		// 현재 날짜에서 시간 제거 후 날짜만 남기기
 		Date now = new Date();
-		System.out.println("now : " + now);
-		
-		if (postsVO.getPostStartTime().compareTo(now) <= 0 
-		 && postsVO.getPostEndTime().compareTo(now) >= 0) {
-			postsVO.setDisplay("q1"); // 게시
-		} else if (postsVO.getPostStartTime().compareTo(now) > 0) {
-			postsVO.setDisplay("q2"); // 비게시
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date nowDate = null;
+		try {
+			nowDate = dateFormat.parse(dateFormat.format(now));
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		int result = boardMapper.insertPostInfo(postsVO);
-		System.out.println("result : " + result);
-		return result;
+
+		if (postsVO.getPostSetting() == "q1") {
+			if (postsVO.getPostStartTime().compareTo(nowDate) <= 0
+					&& postsVO.getPostEndTime().compareTo(nowDate) >= 0) {
+				postsVO.setDisplay("q1"); // 게시
+			} else if (postsVO.getPostStartTime().compareTo(nowDate) > 0) {
+				postsVO.setDisplay("q2"); // 비게시
+			}
+		} else {
+			postsVO.setDisplay("q1"); // 기본적으로 게시 상태로 설정
+		}
+
+		boardMapper.insertPostInfo(postsVO);
+		return postsVO.getPostsNo();
 	}
 
 	@Override
@@ -65,7 +76,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectBoard(boardsVO);
 	}
 
-
 	@Override
 	public int insertCommentInfo(CommentsVO commentsVO) {
 		return boardMapper.insertCommentInfo(commentsVO);
@@ -75,7 +85,6 @@ public class BoardServiceImpl implements BoardService {
 	public int countPost(PostsVO postsVO) {
 		return boardMapper.countPost(postsVO);
 	}
-
 
 	@Override
 	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO) {
@@ -94,7 +103,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int updatePostInfo(PostsVO postsVO) {
-		return boardMapper.updatePostInfo(postsVO); 
+		return boardMapper.updatePostInfo(postsVO);
 	}
 
 	@Override

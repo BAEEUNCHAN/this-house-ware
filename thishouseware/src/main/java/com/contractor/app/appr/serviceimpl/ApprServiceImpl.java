@@ -83,19 +83,19 @@ public class ApprServiceImpl implements ApprService {
 
 	// 결재자 등록 정보 전체조회
 	@Override
-	public List<ApprVO> apprList(int approvalLineNo) {
+	public List<ApproverVO> apprList(int approvalLineNo) {
 		return apprMapper.apprAllList(approvalLineNo);
 	}
 	// 결재자 단건 조회
 	@Override
-	public ApproverVO apprInfo(ApproverVO approverVO) {
-		return apprMapper.apprInfo(approverVO);
+	public ApprVO apprInfo(ApprVO apprVO) {
+		return apprMapper.apprInfo(apprVO);
 	}
 	// 결재자 추가
 	@Override
-	public int apprInsert(ApproverVO approverVO) {
-		int result = apprMapper.insertAppr(approverVO);
-		return result == 1 ? approverVO.getApproverNo() : -1;
+	public int apprInsert(ApprVO apprVO) {
+		int result = apprMapper.insertAppr(apprVO);
+		return result == 1 ? apprVO.getApproverNo() : -1;
 	}
 
 	// 결재자 삭제

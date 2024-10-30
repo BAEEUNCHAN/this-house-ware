@@ -27,11 +27,11 @@ public interface ApprMapper {
 	public int deleteFavorite(int favoriteNo);
 	
 	// 결재자 등록 정보 전체조회
-	public List<ApprVO> apprAllList(int approvalLineNo);
+	public List<ApproverVO> apprAllList(int approvalLineNo);
 	// 결재자 단건조회
-	public ApproverVO apprInfo(ApproverVO approverVO);
+	public ApprVO apprInfo(ApprVO apprVO);
 	// 결재자 추가 
-	public int insertAppr(ApproverVO approverVO);
+	public int insertAppr(ApprVO apprVO);
 	// 결재자 삭제
 	public int deleteAppr(int approverNo);
 }

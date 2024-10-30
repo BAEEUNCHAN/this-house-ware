@@ -20,7 +20,8 @@ public class ApproverVO {
  private Integer approvalLineNo; // 결재라인 번호
  private String favoriteChk; // 즐찾여부
  
- 
+//직급 이름
+ private String positionName; // 포지션 이름
  
 	
 

@@ -5,6 +5,17 @@
 <head>
     <meta charset="UTF-8">
     <title>결재자 상세 정보</title>
+<style>
+/* 버튼 스타일링 */
+.btn-center {
+	display: block;
+	margin: 20px auto;
+	font-size: 0.9rem;
+	padding: 6px 12px;
+	width: 80px;
+	text-align: center;
+}
+</style>
 </head>
 <body>
 <div class="page-inner">
@@ -49,8 +60,8 @@
                             <td th:text="${approvers.approvalLineNo}">결재선 번호</td>
                         </tr>
                     </table>
-                    <div class="text-right">
-                        <a href="/appr/apprList" class="btn btn-secondary">목록으로</a>
+                    <div class="d-flex justify-content-center" style="padding: 10px;">
+                        <button onclick="location.href='/appr/apprLineList'" class="btn btn-secondary btn-sm" style="width: 80px;">목록</button>
                     </div>
                 </div>
             </div>

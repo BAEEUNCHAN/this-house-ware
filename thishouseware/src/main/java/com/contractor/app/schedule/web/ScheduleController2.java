@@ -125,10 +125,14 @@ public class ScheduleController2 {
 	@GetMapping("attendance/emps")
 	public String empsPage(Model model,Authentication authentication) {
 		List<Integer> deptNos = empAuthUtil.searchDeptNos(authentication);
-		deptNos.forEach(System.out::println);
 		List<EmployeeVO> emps = employeeService.getEmployees();
 		
 		if(empAuthUtil.getAuthEmp(authentication).getDepartmentNo() == 1) {
+			emps.forEach(obj -> {
+				String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
+				obj.setPositionName(positionName);
+			});
+			
 			model.addAttribute("employees" , emps);
 			return "schedule/empsAttendances";
 		}

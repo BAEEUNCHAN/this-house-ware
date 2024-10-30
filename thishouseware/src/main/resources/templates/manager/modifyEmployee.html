@@ -92,13 +92,15 @@
                                입사일 : [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]<br>
                                [[${employee.phone}]] <br>
                             </p>
+                            <div class="separator-solid"></div>
+                            <button type="button" id="resignEmployee" class="btn btn-danger">퇴사 처리</button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-action">
-                    <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
+                    <button type="button" id="#modifyEmployee" class="btn btn-success">수정하기</button>
                   </div>
                 </form>
               </div>
@@ -214,4 +216,20 @@ function checkEmail(){
         }
     });
 };
+// 직원 퇴사처리
+$('#resignEmployee').on('click', function(event){
+	// $.Ajax 방식 
+	$.ajax('/manager/resignEmp?id='+$('#id').val(),{
+		type : 'post',				
+	})
+	.done(result => {
+		if(result == 'error1'){
+			alert("서버문제로 퇴사처리가 실패하였습니다.");
+		}else{
+			alert("퇴사 처리가 완료되었습니다.");
+			location.reload();
+		}
+	})
+	.fail(err => console.log(err));
+});
 </script>

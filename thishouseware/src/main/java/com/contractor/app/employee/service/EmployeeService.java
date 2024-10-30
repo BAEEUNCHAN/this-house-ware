@@ -27,5 +27,7 @@ public interface EmployeeService {
 
 	DepartmentVO getDepartmentBydeptNo(int departmentNo);
 
+	boolean resignEmp(String id);
+
 	
 }

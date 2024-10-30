@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import com.contractor.app.schedule.service.LeaveDetailVO;
 import com.contractor.app.schedule.service.LeavesService;
+import com.contractor.app.employee.service.DepartmentVO;
+import com.contractor.app.employee.service.EmployeeService;
+import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 
@@ -23,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleController {
 	private final ScheduleService scheduleService;
+	private final EmployeeService employeeService;
 	
 	private final LeavesService leavesService;
 	
@@ -134,6 +139,7 @@ public class ScheduleController {
 		return result;
 	}
 	
+
 	// 휴가 전체 조회 페이지
 	@GetMapping("schedule/leavesList")
 	public String leavesList(Model model) {		
@@ -146,5 +152,23 @@ public class ScheduleController {
 	@ResponseBody
 	public List<Map<String, Object>> leaveListJSON() {		
 		return leavesService.leaveListAll();
+
+  }
+	
+	
+
+	
+	// 관리자 => 팀원 일정확인 리스트
+	@GetMapping("schedule/adminCheckOthersScheduleList")
+	public String adminCheckOthersScheduleList(EmployeeVO employeeVO, Model model) {
+		model.addAttribute("key", key);
+		List<DepartmentVO> deptList = employeeService.getDepartmentList();
+		List<EmployeeVO> list = employeeService.getEmployees();
+		List<EmployeeVO> list2 = employeeService.getEmployeesWhereDept(employeeVO);
+		model.addAttribute("depts", deptList);
+		model.addAttribute("emps", list);
+		model.addAttribute("empsdepts", list2);
+		return "schedule/adminCheckOthersScheduleList";
+
 	}
 }

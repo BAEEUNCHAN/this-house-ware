@@ -22,4 +22,5 @@ public interface ScheduleService {
 	
 	// 일정 삭제
 	boolean scheduleDelete(Integer no);
+
 }

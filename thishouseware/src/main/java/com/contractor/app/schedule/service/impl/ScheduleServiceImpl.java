@@ -56,4 +56,5 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public boolean scheduleDelete(Integer no) {
 		return scheduleMapper.deleteSchedule(no) == 1;
 	}
+	
 }

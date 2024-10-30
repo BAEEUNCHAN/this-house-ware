@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<body>
+
+<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">거래처</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">거래처목록</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">회사등록</a></li>
+				</ul>
+			</div>
+
+	<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">회사등록</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<form name="insertForm" th:action="@{/company/insertCompany}"
+									method="post">
+									<table class="table">
+										<tr>
+											<th class="col-md-6">회사명</th>
+											<td><input type="text" name="companyName" aria-label="Username"
+                              					 aria-describedby="basic-addon1"></td>
+                              					 <div th:if="${message}" style="color: red;" th:text="${message}"/>
+										</tr>
+									</table>
+									<button class="btn btn-success" type="submit">등록</button>
+									<a href="/company/companyList"><button type="button" class="btn btn-danger" onclick="window.location.href='/company/companyList'">취소</button></a>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+	<script>
+		// submit을 하기 전 제목, 작성자, 작성일자 확인, 값이 없는 경우 등록되지 않도록 이벤트걸기.
+		// Form 태그 네임속성 활용해서 이벤트 걸기
+		$(insertForm).on('submit', companyInsertHandler)
+		
+		function companyInsertHandler(event){
+			event.preventDefault(); // submit stop
+			
+			let companyName = $('form [name="companyName"]'); // 공백은 하위요소 찾는 것.
+			if(companyName.val() == ''){
+				alert('회사명이 입력되지 않았습니다.');
+				companyName.focus();
+				return;
+			}
+			
+		
+			//alert('게시글이 등록되었습니다.');
+			insertForm.submit();
+		}
+	</script>
+</body>
+</html>

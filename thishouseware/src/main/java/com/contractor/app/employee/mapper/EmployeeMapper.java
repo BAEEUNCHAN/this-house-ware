@@ -22,4 +22,5 @@ public interface EmployeeMapper {
 
 	int updateEmployeeByEmp(EmployeeVO empVO);
 
+	List<EmployeeVO> selectEmployeesWhereDept(EmployeeVO employeeVO);
 }

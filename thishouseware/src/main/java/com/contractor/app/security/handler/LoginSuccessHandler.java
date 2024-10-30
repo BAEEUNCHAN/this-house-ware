@@ -38,6 +38,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             session.setAttribute("attendance",attendanceVO);
             System.out.println(attendanceVO.getAttendancesCode());
             getRedirectStrategy().sendRedirect(request,response,"/");
+            return;
         }catch (Exception e) {
 			System.out.println("서버오류");
 		}

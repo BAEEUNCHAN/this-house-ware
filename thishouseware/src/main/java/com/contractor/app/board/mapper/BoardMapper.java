@@ -52,5 +52,4 @@ public interface BoardMapper {
 	
 	// 댓글 번호 가져오기
 	public CommentsVO selectCommentNo(int commentsNo);
-
 }

@@ -14,8 +14,7 @@
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a
-						href="/board/postList?boardsNo=${board.boardsNo}">글쓰기</a></li>
+					<li class="nav-item"><a href="/board/postInsert">글쓰기</a></li>
 				</ul>
 			</div>
 			<div class="page-inner">
@@ -23,16 +22,15 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<div class="card-title">
-									글쓰기 <a class="float-end"><button class="btn btn-primary"
-											type="submit">등록</button></a>
-								</div>
+								<div class="card-title">글쓰기</div>
 							</div>
 							<div class="card-body">
 								<div class="row">
 									<div class="text-center">
 										<form name="insertForm" th:action="@{/board/postInsert}"
 											method="post">
+											<input type="hidden" name="id"
+												th:value="${#authentication.principal.empVO.id}">
 											<table class="table">
 												<tr>
 													<th>게시판 선택</th>
@@ -43,7 +41,9 @@
 																th:label="${optgrp.commonCodeName}">
 																<option th:each="opt : ${boards}"
 																	th:if="${optgrp.commonCodeName} == ${opt.boardsType}"
-																	th:text="${opt.title}" th:value="${opt.boardsNo}"></option>
+																	th:text="${opt.title}" th:value="${opt.boardsNo}"
+																	th:selected="${opt.boardsNo} == ${selectedBoardsNo}">
+																</option>
 															</optgroup>
 													</select></td>
 												</tr>
@@ -65,8 +65,10 @@
 													<th>게시 기간여부</th>
 													<td><span th:each="radio : ${postSetting}"> <input
 															class="form-check-input" type="radio" name="postSetting"
-															id="postSetting" th:value="${radio.commonCodeId}" /> <label
-															class="form-check-label" for="postSetting"
+															th:value="${radio.commonCodeId}"
+															th:onclick="checkPostSetting(this);"
+															th:checked="${radio.commonCodeId == 'q2'}" /> <label
+															class="form-check-label"
 															th:text="${radio.commonCodeName}"></label>
 													</span></td>
 												</tr>
@@ -85,6 +87,7 @@
 													<td><textarea name="content"></textarea></td>
 												</tr>
 											</table>
+											<button class="btn btn-primary" type="submit">등록</button>
 										</form>
 									</div>
 								</div>
@@ -95,19 +98,21 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		// postSetting 값 확인 -- q1:O q2:X 
-		$('form [name="postSetting"]').on('change', checkPostSetting);
+	<script th:inline="javascript">
+		// 기본으로 게시 기간여부를 '무'로 설정
+		document.querySelector('input[name="postSetting"][value="q2"]').checked = true;
 
-		function checkPostSetting(event) {
-			event.preventDefault();
+		// 게시 기간 여부 체크
+		function checkPostSetting(element) {
+			const postStartTime = document.getElementById('postStartTime');
+			const postEndTime = document.getElementById('postEndTime');
 
-			if (event.target.value == 'q2') {
-				$('form [name="postStartTime"], form [name="postEndTime"]')
-						.attr("disabled", true);
-			} else if (event.target.value == 'q1') {
-				$('form [name="postStartTime"], form [name="postEndTime"]')
-						.attr("disabled", false);
+			if (element.value == 'q1') { // '유'가 선택된 경우
+				postStartTime.removeAttribute("disabled");
+				postEndTime.removeAttribute("disabled");
+			} else { // '무'가 선택된 경우
+				postStartTime.setAttribute("disabled", "disabled");
+				postEndTime.setAttribute("disabled", "disabled");
 			}
 		}
 
@@ -149,16 +154,29 @@
 			insertForm.submit();
 		}
 
-		// 게시 기간설정 - 오늘, 이전 날짜 선택 X
+		// 오늘 날짜 설정
+		const today = new Date();
+
 		document.getElementById('postStartTime').setAttribute("min",
-				getTodayDate());
+				today.toISOString().substring(0, 10));
 		document.getElementById('postEndTime').setAttribute("min",
-				getTodayDate());
+				today.toISOString().substring(0, 10));
+
+		document
+				.getElementById('postStartTime')
+				.addEventListener(
+						'change',
+						function() {
+							const postStartTimeValue = this.value;
+							document.getElementById('postEndTime')
+									.setAttribute("min", postStartTimeValue);
+							document.getElementById('postEndTime').value = postStartTimeValue;
+						});
 
 		// 게시 시작/종료시간 - 오늘 날짜 설정
-		document.getElementById('postStartTime').value = new Date()
-				.toISOString().substring(0, 10);
-		document.getElementById('postEndTime').value = new Date().toISOString()
+		document.getElementById('postStartTime').value = today.toISOString()
+				.substring(0, 10);
+		document.getElementById('postEndTime').value = today.toISOString()
 				.substring(0, 10);
 	</script>
 </body>

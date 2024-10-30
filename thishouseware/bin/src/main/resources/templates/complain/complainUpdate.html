@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<style>
+.card .card-action {
+	margin-top: 20px;
+}
+</style>
+<body>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 수정</a></li>
+				</ul>
+			</div>
+			<div class="row">
+				<form name="updateForm" th:action="@{/complain/complainUpdate}"
+					method="post">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">불편/장애사항 수정</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<!-- 왼쪽화면 -->
+									<div class="col-md-6 col-lg-30">
+										<!-- <div class="card-title">회사명</div> -->
+										<br />
+										<label for="companyNo" th:value="companyNo">회사명 : [[${complain.companyName}]]</label> 
+										
+
+
+										<!-- <button class="btn btn-primary" width="120px">회사등록</button> -->
+
+										<!-- <div class="card-title">고객명</div> -->
+										<br /><br /><br /> <label for="customerName">고객명 : [[${complain.customerName}]]</label> <br /> <br /><br />
+										<!-- <div class="card-title">연락처</div> -->
+										<label for="phone">연락처 : [[${complain.phone}]]</label> <br />
+
+
+									</div>
+									<!-- 왼쪽화면 끝 -->
+
+
+									<!-- 오른쪽화면 -->
+									<div class="col-md-6 col-lg-30">
+
+										<br />
+										<!-- <div class="card-title">문제발생일시</div> -->
+										<label for="complainDt">문제발생일시 : [[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+										<br /><br />
+
+										<!-- <div class="card-title">문의구분</div> -->
+											<label for="customerName"> <span>문의구분 :
+											[[${complain.complainType == 0 ? '고객불편' :
+											(complain.complainType == 1 ? '운영장애' : '')}]]</span> 
+									</label>
+									<br /><br /><br />
+									<label for="progress">
+										<span
+										th:switch="${complain.progress}">처리상황 :  <span th:case="0">대기</span>
+											<span th:case="1">접수</span> <span th:case="2">진행</span> <span
+											th:case="3">상황완료</span> <span th:case="4">보고완료</span><br />
+									</span>
+									</label>
+									
+										</div>
+
+
+
+
+									</div>
+									<!-- 오른쪽화면 끝 -->
+								</div>
+								<div class="card-action">
+
+									<label for="complainTitle">제목 : </label> <input type="text"
+										name="complainTitle" aria-label="Username" size=70
+										maxlength=70 id="complainTitle"
+										aria-describedby="basic-addon1" placeholder="제목을 입력하세요."
+										th:value="${complain.complainTitle}"><br />
+									<br /> <p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>문의내용</p>
+									<textarea class="form-control" name="complainContent"
+										id="complainContent" rows="5" placeholder="600자 이내로 입력하세요." 
+										th:text="${complain.complainContent}"></textarea>
+
+									<p style="font-weight: bold; font-size: 16px;"><i class="fas fa-check-square"></i>요구사항</p>
+									<textarea class="form-control" name="complainRequest"
+										id="complainRequest" rows="5" placeholder="600자 이내로 입력하세요."
+										th:text="${complain.complainRequest}"></textarea>
+						 <input type="hidden" id="complainNo" name="complainNo" th:value="${complain.complainNo}">
+									<br />
+									비밀번호 : <input type="password" name="complainPwd" id="complainPwd" maxlength="8" placeholder="최대 8자리" th:value="${complain.complainPwd}"><br/><br/>
+									<div class="text-center">
+									<a><button type="submit" class="btn btn-success">등록</button></a>
+									<button type="button" class="btn btn-danger" th:onclick='|location.href="@{/complainList}"|'>취소</button></a>
+									</div>
+								</div>
+							</div>
+						</div>
+				</form>
+					</div>
+					<br />
+			</div>
+		</div>
+	
+	<script>
+	
+	$(updateForm).on('submit', complainUpdateHandler)
+	
+	function complainUpdateHandler(event){
+		event.preventDefault(); 
+		
+		let title = $('form [name="complainTitle"]');
+		if(title.val() == ''){
+			alert('제목이 입력되지 않았습니다.');
+			title.focus();
+			return;
+		}
+		
+		let content = $('form [name="complainContent"]'); 
+		if(content.val() == ''){
+			alert('문의내용이 입력되지 않았습니다.');
+			content.focus();
+			return;
+		}
+		
+		let request = $('form [name="complainRequest"]'); 
+		if(request.val() == ''){
+			alert('요청사항이 입력되지 않았습니다.');
+			request.focus();
+			return;
+		} 
+		
+		let pwd = $('form [name="complainPwd"]'); 
+		if(pwd.val() == ''){
+			alert('비밀번호를 입력해주세요.');
+			pwd.focus();
+			return;
+		} 
+	
+		alert('게시글이 등록되었습니다.');
+		updateForm.submit();
+	}
+	</script>
+</body>
+</html>

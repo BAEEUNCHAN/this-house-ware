@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재선 즐겨찾기 조회</title>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재선 즐겨찾기 조회</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                    	<th class=hidden style="display: none">즐겨찾기번호</th>
+                                        <th>번호</th>
+                                        <th>이름</th>
+                                        <th>생성일자</th>
+                                        <th>수정일자</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="favorites">
+                                    <th:block th:each="info, sts : ${apprFavorites}">
+                                        <tr>
+                                        	<!-- 자체순번 / 문서는 최근 문서순 정렬 -->
+											<td class=hidden style="display: none;">[[${info.favoriteNo}]]</td>
+                                            <td>[[${sts.count}]]</td>
+                                            <td>[[${info.favoriteName}]]</td>
+                                            <td>[[${#dates.format(info.createDt, 'yyyy-MM-dd')}]]</td>
+                                            <td>[[${#dates.format(info.updateDt, 'yyyy-MM-dd')}]]</td>
+                                        </tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-end" style="padding: 10px;">
+                                <button id="deleteButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.favorites > tr').on('click', function(event) {
+        let trTag = event.currentTarget;
+        let fno = $(trTag).children().eq(0).text();
+        let url = 'apprFavoriteInfo?favoriteNo=' + fno;
+        location.href = url;
+    });
+</script>
+</body>
+</html>

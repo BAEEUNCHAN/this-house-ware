@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{common/layouts/default_layout}"
+    layout:fragment="Content">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<style>
+/* 기본 체크박스 숨기기 */
+.chk_box input[type="checkbox"] {
+    display: none; /* 체크박스 숨기기 */
+}
+
+/* 체크박스 스타일 */
+.chk_box {
+    cursor: pointer; /* 커서 포인터로 변경 */
+    position: relative; /* 상대 위치 지정 */
+}
+
+/* 기본 별 아이콘 색상 */
+.chk_box .fa-star {
+    color: #6c757d; /* 기본 색상 */
+    font-size: 20px; /* 별 아이콘 크기 조정 */
+}
+
+/* 체크된 상태의 별 아이콘 색상 */
+.chk_box input[type="checkbox"]:checked + .fa-star {
+    color: #ffc107; /* 체크 시 별 색상 변경 */
+}
+/* 모달 버튼 */
+.custom-confirm-btn {
+    background-color: #4a90e2; /* 차분한 파란색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 15px; /* 버튼 간격 추가 */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-confirm-btn:hover {
+    background-color: #357ABD; /* 파란색 어두운 버전 */
+}
+
+.custom-cancel-btn {
+    background-color: #6c757d; /* 중간 회색 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.custom-success-btn {
+    background-color: #28a745; /* 녹색 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.custom-success-btn:hover {
+    background-color: #218838; /* Hover 시 어두운 녹색 */
+}
+/* 오류 발생 모달 확인 버튼 스타일 */
+.custom-error-btn {
+    background-color: #e74c3c; /* 붉은색 계열 */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px; /* 둥근 모서리 */
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-error-btn:hover {
+    background-color: #c0392b; /* 호버 시 어두운 붉은색 */
+}
+</style>
+
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">부서문서함</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="hidden" style="display: none">문서번호</th>
+                                        <th>번호</th>
+                                        <th>부서명</th>
+                                        <th>제목</th>
+                                        <th>기안자</th>
+                                        <th>작성일자</th>
+                                        <th>중요문서</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="docBox">
+                                    <th:block th:each="info, sts : ${docBoxs}">
+                                        <tr>
+										    <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td> 
+										    <td class="count">[[${sts.count}]]</td> 
+										    <td class="departmentNo">[[${info.departmentNo}]]</td>
+										    <td class="title">[[${info.title}]]</td> 
+										    <td class="id">[[${info.id}]]</td> 
+										    <td class="submitDt">[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td> 
+										    <td>
+										        <label class="chk_box">
+										            <input type="checkbox" th:checked="${info.important}" />
+										            <i class="fa fa-star" aria-hidden="true" style="font-size: 16px;"></i>
+										        </label>
+										    </td>
+										</tr>
+                                    </th:block>
+                                </tbody>
+                            </table>
+	                         <button type="button" class="btn btn-info btn-sm" 
+        						th:onclick="|location.href='@{/docBox/docDeptStatusList(approvalStatus='결재완료', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">결재완료</button>
+	                         <button type="button" class="btn btn-success btn-sm"
+        						th:onclick="|location.href='@{/docBox/docDeptImportantList(important='true', departmentNo=${#authentication.principal.empVO.departmentNo})}'|">중요문서</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
+    var deptNo = [[${#authentication.principal.empVO.departmentNo}]]
+    var id = [[${#authentication.principal.empVO.id}]]
+    
+    $('.docBox > tr').on('click', function(event) {
+        let trTag = event.currentTarget;
+        let edno = $(trTag).children().eq(0).text();
+        // URL에 문서 번호, fromDocList, id, 부서 번호 포함
+        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocDeptList=true&id=${id}&deptNo=${deptNo}`; 
+        location.href = url;
+    });
+
+    // 체크박스 클릭 시 상세보기로 넘어가지 않도록 설정
+    $('.chk_box').on('click', function(event) {
+        event.stopPropagation(); // 이벤트 전파 방지
+    });
+</script>
+<script src="/assets/js/chan/importantModal.js"></script>
+</body>
+</html>

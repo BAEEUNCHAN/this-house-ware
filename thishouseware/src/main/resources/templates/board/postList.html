@@ -20,15 +20,17 @@
 				</ul>
 			</div>
 
-			<div class="page-inner">
+			<div class="page-inner post">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<div class="card-title">
-									[[${board.title}]] <a href="/board/postInsert"
-										class="float-end"><button class="btn btn-primary">글쓰기</button></a>
+									[[${board.title}]] <a class="float-end">
+										<button class="btn btn-primary" >글쓰기</button>
+									</a>
 								</div>
+
 							</div>
 							<div class="card-body">
 								<div class="row">
@@ -64,7 +66,7 @@
 														<td>[[ ${info.postsType}]]</td>
 														<td>[[ ${info.title}]]</td>
 														<td>[[ ${info.name}]]</td>
-														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")}
+														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd HH:mm")}
 															]]</td>
 													</tr>
 												</th:block>
@@ -114,9 +116,19 @@
 			</div>
 		</div>
 	</div>
-	<script>
+	<script th:inline="javascript">
 		// 제이쿼리 객체 생성
-		$('tbody > tr').on('click', function(event) {
+		// 글쓰기 게시판 번호 받아오기
+		let boardsNo = /*[[${board.boardsNo}]]*/'';
+		
+		// 글쓰기 클릭 이벤트
+	    $('.post button.btn.btn-primary').on('click', function() {
+	        let url = '/board/postInsert?boardsNo=' + boardsNo;
+	        location.href = url;
+	    });
+
+		// 게시글 선택
+		$('.post tbody > tr').on('click', function(event) {
 			let trTag = event.currentTarget;
 			let postsNo = $(trTag).children().eq(0).text();
 			let url = '/board/postInfo?postsNo=' + postsNo;

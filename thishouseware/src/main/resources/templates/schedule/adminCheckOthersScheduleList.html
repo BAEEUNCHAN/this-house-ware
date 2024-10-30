@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+
+<body>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">
+					<i class="fas fa-calendar-check"> 일정확인</i>
+				</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">관리자</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">일정확인</a></li>
+				</ul>
+			</div>
+			<select class="form-select" id="progressDropdown"
+				onchange="filterDepartments()" aria-label="Progress Dropdown"
+				style="width: 130px;">
+				<option value="">부서선택</option>
+				<th:block th:each="info : ${depts}">
+					<option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
+				</th:block>
+			</select><br />
+
+
+			<div class="row">
+				<div class="col-md-12">
+					<th:block th:each="dept : ${depts}">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">(No.[[${dept.departmentNo}]])
+									[[${dept.departmentName}]]</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<table class="table table-striped mt-3"
+											th:id="${dept.departmentNo}">
+											<thead>
+												<tr>
+													<th class="col-md-2">이름</th>
+													<th class="col-md-1">직급</th>
+													<th class="col-md-3">연락처</th>
+													<th class="col-md-3">이메일</th>
+													<th class="col-md-2">입사일</th>
+												</tr>
+											</thead>
+											<tbody>
+												<!-- 부서별로 사원 필터링 후 반복 출력 -->
+												<th:block th:each="emp : ${emps}"
+													th:if="${emp.departmentName} == ${dept.departmentName}">
+													<tr>
+														<td>[[${emp.name}]]</td>
+														<td><span th:switch=${emp.positionCode}> <span
+																th:case="a6" th:class="a6"><span
+																	class="badge badge-count">인턴</span></span> <span th:case="a5"
+																th:class="a5"><span class="badge badge-primary">사원</span></span>
+																<span th:case="a4" th:class="a4"><span
+																	class="badge badge-success">팀장</span></span> <span
+																th:case="a3" th:class="a3"><span
+																	class="badge badge-warning">본부장</span></span> <span
+																th:case="a2" th:class="a2"><span
+																	class="badge badge-danger">관리자</span></span> <span
+																th:case="a1" th:class="a1"><span
+																	class="badge badge-black">사장</span></span>
+														</span></td>
+														<td>[[${emp.phone}]]</td>
+														<td>[[${emp.email}]]</td>
+														<td>[[${#dates.format(emp.hireDt, 'yyyy년 MM월 dd일')}]]</td>
+													</tr>
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</th:block>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		//제이쿼리 객체 생성
+		$('tbody > tr').on('click', function(event) {
+			//event.target
+			let trTag = event.currentTarget;
+			let id = $(trTag).children().first().text().trim();
+			let url = `/schedule/scheduleList?id=${id}`;
+			location.href = url;
+		});
+
+		$(document).ready(function() {
+			var table = $('#1').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#2').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#3').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#4').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#5').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#6').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#7').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#8').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#9').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#10').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#11').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#12').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+			var table = $('#13').DataTable({
+				pageLength : 5,
+				lengthChange : false,
+				ordering : false,
+				info : false,
+			});
+		});
+
+		function filterDepartments() {
+			var selectedDept = document.getElementById("progressDropdown").value;
+
+			document.querySelectorAll('.card').forEach(function(card) {
+				var deptNo = card.querySelector('table').getAttribute('id');
+				if (selectedDept === "" || selectedDept === deptNo) {
+					card.style.display = "block";
+				} else {
+					card.style.display = "none";
+				}
+			});
+		}
+	</script>
+</body>
+</html>

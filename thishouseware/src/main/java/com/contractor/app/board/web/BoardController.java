@@ -1,6 +1,5 @@
 package com.contractor.app.board.web;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
-import com.contractor.app.complain.service.ComplainsVO;
 import com.contractor.app.security.service.LoginUserVO;
 
 import lombok.RequiredArgsConstructor;
@@ -71,11 +69,11 @@ public class BoardController {
 
 	// 게시글 등록 - 페이지 : URI - postInsert / RETURN - board/postInsert
 	@GetMapping("/postInsert")
-	public String postInsertForm(Model model, PostsVO postsVO, Authentication authentication) {
-		// 게시판 목록 조회
+	public String postInsertForm(@RequestParam(value = "boardsNo", required = false) Integer boardsNo, Model model, PostsVO postsVO, Authentication authentication) {
+		// 게시판 목록 조회 - title
 		List<BoardsVO> list = boardService.boardList(null);
 
-		// 게시판 유형 조회
+		// 게시판 유형 조회 - boardsType
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
 		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
 		String positionCode = loginUserVO.getEmpVO().getPositionCode();
@@ -94,6 +92,7 @@ public class BoardController {
 		List<CommonCodeVO> postSetting = commonCodeService.selectCommonCode("0Q");
 
 		// 페이지에 전달
+		model.addAttribute("selectedBoardsNo", boardsNo);
 		model.addAttribute("boardsType", boardsType);
 		model.addAttribute("boards", list);
 		model.addAttribute("postsType", postsType);

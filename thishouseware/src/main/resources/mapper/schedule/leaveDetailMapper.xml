@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.schedule.mapper.LeaveDetailMapper">
+
+	<!-- 휴가 상세 조회 -->
+	<select id="listLeaveDetail" resultType="LeaveDetailVO">
+		SELECT id
+		       , leave_total_days
+		       , leave_used_days
+		       , leave_remain_days
+		       , leave_start_dt
+		       , leave_end_dt 
+		FROM leave_detail
+	</select>
+	
+	<!-- 휴가 상세 단건 조회 -->
+	<select id="getLeaveDetail" resultType="LeaveDetailVO">
+		SELECT leave_total_days
+		       , leave_used_days
+		       , leave_remain_days
+		       , leave_start_dt
+		       , leave_end_dt 
+		FROM leave_detail
+		WHERE id = #{id}
+	</select>
+	
+	<!-- 휴가 상세 추가 -->
+	<insert id="insertLeaveDetail" parameterType="LeaveDetailVO">		
+		INSERT INTO leave_detail(
+						  		 id
+						  		 , id
+						  		 , leave_total_days
+						  		 , leave_used_days
+						  		 , leave_remain_days
+						  		 , leave_start_dt
+						  		 , leave_end_dt
+						  		)
+		VALUES (				
+				#{id}
+				, #{leaveTotalDays}
+				, #{leaveUsedDays}
+				, #{leaveRemainDays}
+				, TO_DATE(#{leaveStartDt}, 'YYYY-MM-DD')
+				, TO_DATE(#{leaveEndDt}, 'YYYY-MM-DD')
+				)
+	</insert>
+	
+	<!-- 휴가 상세 수정 -->
+	<update id="updateLeaveDetail" parameterType="LeaveDetailVO">
+		UPDATE leave_detail
+		SET 
+			<if test="leaveTotalDays != null and !leaveTotalDays.equals('')">
+			leave_total_days = #{leaveTotalDays}
+			</if>
+			<if test="leaveUsedDays != null and !leaveUsedDays.equals('')">
+			, leave_used_days = #{leaveUsedDays}
+			</if>
+			<if test="leaveRemainDays != null and !leaveRemainDays.equals('')">
+			, leave_remain_days = #{leaveRemainDays}
+			</if>
+			<if test="leaveStartDt != null and !leaveStartDt.equals('')">
+			, leave_start_dt = TO_DATE(#{leaveStartDt}, 'YYYY-MM-DD')
+			</if>
+			<if test="leaveEndDt != null and !leaveEndDt.equals('')">
+			, leave_end_dt = TO_DATE(#{leaveEndDt}, 'YYYY-MM-DD')
+			</if>
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 휴가 상세 삭제 -->
+	<delete id="deleteLeaveDetail" parameterType="string">
+		DELETE FROM leave_detail
+		WHERE id = #{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+  <input type="hidden" id="id" th:value="${employee.id}" placeholder="연락처">
+  <div class="page-inner">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="card" id="modifyEmployeeForm">
+          
+          <div class="card-header">
+            <div class="card-title">직원 수정</div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-8">                 
+                <div class="form-group">
+                  <label for="phone" class="col-md-3 col-form-label">연락처 변경</label>
+                  <input type="text" class="form-control input-full" id="phone" placeholder="연락처">
+                </div>  
+                <div class="form-group">
+                  <label for="newPassword" class="col-md-3 col-form-label">비밀번호 변경</label>
+                  <input type="text" class="form-control input-full" id="newPassword" placeholder="새 비밀번호">
+                </div>  
+                <div class="form-group">
+                  <label for="newPassword" class="col-md-3 col-form-label">비밀번호 변경 확인</label>
+                  <input type="text" class="form-control input-full" id="checkNewPassword" placeholder="새 비밀번호 확인">
+                </div>  
+                <div class="form-group">
+                  <label for="password" class="col-md-3 col-form-label">변경 확인</label>
+                  <input type="text" class="form-control input-full" id="checkPassword" placeholder="기존 비밀번호">
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="card-action">
+            <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<script>
+let id = document.querySelector("#id");
+let phoneInput = document.querySelector("#phone");
+let newPasswordInput = document.querySelector("#newPassword");
+let checkNewPasswordInput = document.querySelector("#checkNewPassword");
+let checkPasswordInput = document.querySelector("#checkPassword");
+
+function passwordCheck(){
+	if(newPasswordInput.value == checkNewPasswordInput.value)
+	{
+		return true;
+	}else{
+		return false;
+	}	
+}
+
+// 회원 정보 수정하기
+$('#modifyEmployee').on('click', function(event){
+	
+	let formData = new FormData();
+	formData.append('id', id);
+	formData.append('phone', phoneInput.value);
+	formData.append('newPassword', newPasswordInput.value);
+	formData.append('checkNewPassword', checkNewPasswordInput.value);
+	formData.append('checkPassword', checkPasswordInput.value);
+	
+	if(!passwordCheck()){
+		 alert("새 비밀번호 가 확인과 불일치 합니다.");
+	     return null;
+	}
+	// $.Ajax 방식 
+	$.ajax('/employee/modify/'+id.value,{
+		type : 'post',
+	    enctype: 'multipart/form-data',
+	    processData: false,
+	    contentType: false,
+	    // dataType : // 받는 값은 기본값으로 할 것이다.
+	    data : formData
+	})
+	.done(result => {
+		console.log(result);
+		if(result == 'error1'){
+			alert("본인확인 비밀번호가 틀립니다.");
+		}else if(result == 'error2'){
+			alert("변경되는 정보가 없습니다.");
+		}else if(result == 'error3'){
+			alert("서버오류가 발생하였습니다.");
+		}else{
+			alert("회원 정보 수정이 성공하셧습니다.");
+			location.href = "/employee/info/"+ id.value;
+		}
+	})
+	.fail(err => console.log(err));
+	});
+</script>

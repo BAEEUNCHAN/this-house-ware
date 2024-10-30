@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title></title>
+  <th:block th:replace="~{common/configs/default_config2 :: 'ConfigFrag'}"></th:block>
+  <style>
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .main-panel {
+        margin: 0 auto;
+        width: 80%; /* 원하는 너비로 설정 */
+        max-width: 1200px; /* 페이지 최대 너비 */
+        flex: 1; /* 남은 공간을 모두 차지 */
+    }
+
+    .main-header, .footer {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto; /* 중앙 정렬 */
+    }
+
+    .container {
+        flex: 1; /* 남은 공간을 채움 */
+    }
+  </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main-panel"> 
+            <div class="main-header" th:insert="~{common/fragments/home2_header :: 'HeaderFrag'}"></div>  
+            <div class="container">
+                <div class="page-inner" layout:fragment="Content"></div>
+            </div>
+            <footer class="footer" th:insert="~{common/fragments/home2_footer :: 'FooterFrag'}"></footer>
+        </div> 
+    </div>
+    <th:block th:replace="~{common/configs/script_config :: 'ConfigScript'}"></th:block>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+	th:fragment="SidebarFrag">
+ 		<div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="dark">
+            <a href="index.html" class="logo">
+              <img
+                src="assets/img/kaiadmin/logo_light.svg"
+                alt="navbar brand"
+                class="navbar-brand"
+                height="20"
+              />
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <th:block sec:authorize="isAuthenticated()">
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+            </th:block>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item active">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-home"></i>
+                  <p>HOME</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="login">
+                        <span class="sub-item">로그인</span>
+                      </a>
+                    </li>
+                    
+                  </ul>
+                </div>
+              </li>
+              
+
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">ThisHouseWare</h4>
+              </li>
+
+
+<!-- 문서함 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu-documents">
+    <i class="far fa-folder"></i>
+    <p>문서함</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu-documents">
+    <ul class="nav nav-collapse">
+      <!-- 개인문서함 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-personal">
+          <span class="sub-item">개인문서함</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-personal">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">임시저장</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재대기</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재수신</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재완료</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <!-- 부서문서함 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-department">
+          <span class="sub-item">부서문서함</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-department">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재완료</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">중요문서</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">공유문서</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <!-- 문서함설정 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-settings">
+          <span class="sub-item">문서함설정</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-settings">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">공유폴더</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">접근권한</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</li>
+
+<!-- 전자결재 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu-approval">
+    <i class="fas fa-calculator"></i>
+    <p>전자결재</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu-approval">
+    <ul class="nav nav-collapse">
+      <!-- 결재양식 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-form">
+          <span class="sub-item">결재양식</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-form">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재양식목록</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <!-- 결재문서 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-documents">
+          <span class="sub-item">결재문서</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-documents">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재문서등록</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <!-- 결재라인 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-line">
+          <span class="sub-item">결재라인</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-line">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">결재라인설정</span>
+              </a>
+            </li>
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">즐겨찾기등록</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</li>
+
+
+
+<!-- 게시판 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu1">
+    <i class="far fa-file-alt"></i>
+    <p>게시판</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu1">
+    <ul class="nav nav-collapse">
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav1-1">
+          <span class="sub-item">Level 1</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav1-1">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="#">
+                <span class="sub-item">Level 2</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="sub-item">Level 2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav1-2">
+          <span class="sub-item">Level 1</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav1-2">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="#">
+                <span class="sub-item">Level 2</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <a href="#">
+          <span class="sub-item">Level 1</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</li>
+
+<!-- 일정관리 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu2">
+    <i class="fas fa-calendar-check"></i>
+    <p>일정관리</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu2">
+    <ul class="nav nav-collapse">
+      <li>
+        <a href="/schedule/scheduleList">
+                <span class="sub-item">일정</span>
+        </a>
+        <div class="collapse" id="subnav2-1"></div>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav2-2">
+          <span class="sub-item">근퇴</span>
+        </a>
+        <div class="collapse" id="subnav2-2"></div>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav2-3">
+          <span class="sub-item">휴가</span>
+        </a>
+        <div class="collapse" id="subnav2-3"></div>
+      </li>
+    </ul>
+  </div>
+</li>
+
+
+
+<!-- 고객관리/문의사항 -->
+<li class="nav-item">
+  <a data-bs-toggle="collapse" href="#submenu3">
+    <i class="fas fa-question"></i>
+    <p>고객관리/문의사항</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu3">
+    <ul class="nav nav-collapse">
+      <li>
+        <a href="/complain/complainList">
+                <span class="sub-item">문의목록/등록</span>
+        </a>
+      </li>
+      <li sec:authorize="isAuthenticated()">
+        <a data-bs-toggle="collapse" href="#subnav3-2">
+          <span class="sub-item">문의진행상황</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav3-2">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/reply/replyList">
+                <span class="sub-item">대기/접수/진행</span>
+              </a>
+            </li>
+            <li>
+              <a href="/result/resultList">
+                <span class="sub-item">상황완료/보고완료</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</li>
+
+<!-- 관리자 관리 -->
+<li class="nav-item" sec:authorize="isAuthenticated()">
+  <a data-bs-toggle="collapse" href="#submenu4">
+    <i class="fas fa-user-check"></i>
+    <p>관리자 관리</p>
+    <span class="caret"></span>
+  </a>
+  <div class="collapse" id="submenu4">
+    <ul class="nav nav-collapse">
+      <li>
+        <a href="/manager/addEmp">
+                <span class="sub-item">관리자</span>
+              </a>
+        <div class="collapse" id="subnav4-1"></div>
+      </li>
+      <li>
+        <a href="/manager/emps">
+                <span class="sub-item">직원리스트</span>
+              </a>
+        <div class="collapse" id="subnav4-2"></div>
+      </li>
+      <li>
+        <a href="/company/companyList">
+               <span class="sub-item">회사목록/등록</span>
+        </a>
+        <div class="collapse" id="subnav4-3"></div>
+      </li>
+    </ul>
+  </div>
+</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+</th:block>
+
+ <!--   Core JS Files   -->
+    <script src="assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+    <!-- Chart JS -->
+    <script src="assets/js/plugin/chart.js/chart.min.js"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Chart Circle -->
+    <script src="assets/js/plugin/chart-circle/circles.min.js"></script>
+
+    <!-- Datatables -->
+    <script src="assets/js/plugin/datatables/datatables.min.js"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    <script src="assets/js/plugin/jsvectormap/world.js"></script>
+
+    <!-- Sweet Alert -->
+    <script src="assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="assets/js/kaiadmin.min.js"></script>
+
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="assets/js/setting-demo.js"></script>
+    <script src="assets/js/demo.js"></script>
+    <script>
+      $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#177dff",
+        fillColor: "rgba(23, 125, 255, 0.14)",
+      });
+
+      $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#f3545d",
+        fillColor: "rgba(243, 84, 93, .14)",
+      });
+
+      $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+        type: "line",
+        height: "70",
+        width: "100%",
+        lineWidth: "2",
+        lineColor: "#ffa534",
+        fillColor: "rgba(255, 165, 52, .14)",
+      });
+    </script>

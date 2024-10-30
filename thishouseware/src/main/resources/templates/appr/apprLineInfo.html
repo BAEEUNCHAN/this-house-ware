@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}" layout:fragment="Content">
+<head>
+    <meta charset="UTF-8">
+    <title>결재선 상세 정보</title>
+</head>
+<body>
+<div class="page-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재선 상세 정보</div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>결재선 번호</th>
+                            <td th:text="${apprLines.approvalLineNo}">결재선 번호</td>
+                        </tr>
+                        <tr>
+                            <th>결재선 이름</th>
+                            <td th:text="${apprLines.approvalLineName}">결재선 이름</td>
+                        </tr>
+                        <tr>
+                            <th>생성일자</th>
+                            <td th:text="${#dates.format(apprLines.createDt, 'yyyy-MM-dd')}">생성일자</td>
+                        </tr>
+                        <tr>
+                            <th>최근 사용일자</th>
+                            <td th:text="${#dates.format(apprLines.recentUsedDt, 'yyyy-MM-dd')}">최근 사용일자</td>
+                        </tr>
+                        <tr>
+                            <th>참조자</th>
+                            <td th:text="${apprLines.referrer}">참조자</td>
+                        </tr>
+                        <tr>
+                            <th>즐겨찾기 여부</th>
+                            <td th:text="${apprLines.favoriteChk}">즐겨찾기 여부</td>
+                        </tr>
+                    </table>
+                    <div class="text-right">
+                        <a href="/appr/apprLineList" class="btn btn-secondary">목록으로</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

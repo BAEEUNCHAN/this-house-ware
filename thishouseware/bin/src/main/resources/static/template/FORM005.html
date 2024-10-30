@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>근로계약서 양식</title>
+<style>
+.table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid #000;
+	padding: 10px;
+	text-align: left;
+}
+
+th {
+	background-color: #f4f4f4;
+}
+
+.buttons {
+	margin-top: 20px;
+}
+</style>
+</head>
+<body>
+	<div class="page-inner">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<div class="card-title">근로계약서 양식</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="text-center">
+								<form action="/submitEducation" method="post">
+									<table class="table">
+										<tr>
+											<th>신청서 번호</th>
+											<td></td>
+											<th>결재선 지정</th>
+											<td></td>
+										</tr>
+										<tr>
+											<th>신청자</th>
+											<td></td>
+											<th>신청일</th>
+											<td></td>
+										</tr>
+										<tr>
+											<th>부서이름</th>
+											<td></td>
+											<th>직책</th>
+											<td></td>
+										</tr>
+									</table>
+									<!-- 고정 내용 끝 -->
+
+									<h2>표준 근로계약서(계약직)</h2>
+									<form action="#" method="post">
+										<table border="1"
+											style="border-collapse: collapse; width: 100%; margin: 0 auto;">
+											<tr>
+												<th>1. 근로계약기간</th>
+												<td colspan="2"><input type="date" name="startcontract"
+													>일부터</td>
+												<td colspan="2"><input type="date" name="endcontract"
+													>일까지</td>
+											</tr>
+											<tr>
+												<th>2. 근무장소</th>
+												<td colspan="3"><input type="text" name="workplace"
+													></td>
+											</tr>
+											<tr>
+												<th>3. 업무의 내용</th>
+												<td colspan="3"><input type="text"
+													name="job_description" ></td>
+											</tr>
+											<tr>
+												<th>4. 소정근로시간</th>
+												<td><input type="time" name="start_hour"
+													class="half-input">부터</td>
+												<td><input type="time" name="end_hour"
+													class="half-input">까지</td>
+												<td>(휴게시간: <input type="time" name="break_time"
+													class="half-input"> ~ <input type="time"
+													name="break_end_time" class="half-input">)
+												</td>
+											</tr>
+											<tr>
+												<th>5. 근무일/휴일</th>
+												<td colspan="3">매주 <input type="text" name="work_days"
+													class="half-input" readonly>일 근무, 주휴일 매주 <input
+													type="text" name="rest_day" class="half-input" >일
+												</td>
+											</tr>
+											<tr>
+												<th>6. 임금</th>
+												<td colspan="3">월급(원, 시간급): <input type="text"
+													name="salary" class="half-input" > 원<br>
+													상여금: <label><input type="radio" name="bonus"
+														value="있음"> 있음</label> <label><input type="radio"
+														name="bonus" value="없음"> 없음</label> <br> (금액: <input
+													type="text" name="bonus_amount" class="half-input" >
+													원)<br> 기타급여: <label><input type="radio"
+														name="other_salary" value="있음"> 있음</label> <label><input
+														type="radio" name="other_salary" value="없음"> 없음</label>
+												</td>
+											</tr>
+											<tr>
+												<th>7. 연차유급휴가</th>
+												<td colspan="3">연차유급휴가는 근로기준법에서 정하는 바에 따라 부여함</td>
+											</tr>
+											<tr>
+												<th>8. 사회보험 적용여부</th>
+												<td colspan="3">
+													<div class="checkbox-group">
+														<label><input type="radio" name="insurance"
+															value="고용보험"> 고용보험</label> <label><input
+															type="radio" name="insurance" value="국민연금"> 국민연금</label>
+														<label><input type="radio" name="insurance"
+															value="건강보험"> 건강보험</label>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<th>9. 근로계약의 해고</th>
+												<td colspan="3">사업주는 근로계약을 체결함과 동시에 본 계약서를 사본하여 근로자의
+													요구가 있을 때 근로계약서에 고지함.</td>
+											</tr>
+											<tr>
+												<th>10. 근로계약의 성실 이행 의무</th>
+												<td colspan="3">사업주와 근로자는 각각 근로계약, 취업규칙, 단체협약을 성실히 지켜야
+													함</td>
+											</tr>
+											<tr>
+												<th>11. 기타</th>
+												<td colspan="3">이 계약에 정함이 없는 사항은 근로기준법에 의함</td>
+											</tr>
+											<tr>
+												<th>사 업 주</th>
+												<td colspan="3">사업체명: <input type="text"
+													name="employer_name" class="half-input" ><br>
+													주&nbsp;&nbsp;소: <input type="text" name="employer_address"
+													><br> 전&nbsp;&nbsp;화: <input
+													type="text" name="employer_phone" class="half-input"
+													>
+												</td>
+											</tr>
+											<tr>
+												<th>근 로 자</th>
+												<td colspan="3">주소: <input type="text"
+													name="employee_address" ><br> 성명: <input
+													type="text" name="employee_name" class="half-input"
+													>&nbsp;&nbsp;&nbsp;&nbsp; (서명)
+												</td>
+											</tr>
+										</table>
+									</form>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

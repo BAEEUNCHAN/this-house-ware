@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.contractor.app.result.mapper.ResultMapper">
+	<select id="selectResultAll" resultType="ResultsVO">
+	
+		SELECT 		r.result_cost
+					,r.result_people
+					,r.receive_dt
+					,r.complete_dt
+					,r.result_solution
+					,r.result_feedback
+					,r.result_dt
+					,r.department_no
+					,c.complain_no
+					,c.company_no
+					,c.complain_content
+		FROM 		results r JOIN complains c
+		ON			r.complain_no = c.complain_no
+		WHERE		c.complain_no = #{complainNo}
+	
+	</select>
+	<select id="selectResultAllThing" resultType="ResultsVO">
+	
+		SELECT 		result_cost
+					result_people
+					receive_dt
+					complete_dt
+					result_solution
+					result_feedback
+					result_dt
+					department_no
+					complain_no
+					company_no
+					complain_content
+		FROM 		results 
+		WHERE		complain_no = #{complainNo}
+	
+	</select>
+	
+	<!-- result 단건조회 -->
+	<select id="selectResultInfo" resultType="ResultsVO" parameterType="ResultsVO">
+		
+		SELECT 		result_cost
+					,result_people
+					,receive_dt
+					,complete_dt
+					,result_solution
+					,result_feedback
+					,complain_no
+					,company_no
+					,department_no
+		FROM		results
+		WHERE		complain_no = #{complainNo}
+		
+	</select>
+	
+	
+	<insert id="insertResult" parameterType="ResultsVO">
+		 
+		INSERT INTO results(
+							result_cost
+							,result_people
+							,receive_dt
+							,complete_dt
+							,result_solution
+							,result_feedback
+							,complain_no
+							,company_no
+							,department_no)
+		VALUES				(
+							#{resultCost}
+							,#{resultPeople}
+							,#{receiveDt}
+							,#{completeDt}
+							,#{resultSolution}
+							,#{resultFeedback}
+							,#{complainNo}
+							,#{companyNo}
+							,#{departmentNo})
+		
+		
+	</insert> 
+	
+	<!-- 보고 수정 -->
+	<update id="updateResultInfo" parameterType="ResultsVO">
+		UPDATE 		 results
+		SET			 result_cost 		= #{resultCost} 
+					,result_people		= #{resultPeople}
+					,receive_dt			= #{receiveDt}
+					,complete_dt		= #{completeDt}
+					,result_solution	= #{resultSolution}
+					,result_feedback	= #{resultFeedback}
+		WHERE		 complain_no		= #{complainNo}
+	</update>
+</mapper>

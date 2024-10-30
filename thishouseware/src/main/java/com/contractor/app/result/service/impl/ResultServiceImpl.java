@@ -58,4 +58,10 @@ public class ResultServiceImpl implements ResultService {
 		 map.put("target", resultVO);
 		 return map;
 	}
+	
+	// 삭제
+	@Override
+	public int resultDelete(Integer complainNo) {
+		return resultMapper.deleteResult(complainNo);
+	}
 }

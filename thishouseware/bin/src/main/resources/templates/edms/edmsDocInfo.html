@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<style>
+/* 테이블 스타일 */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 20px 0;
+	font-size: 16px;
+	text-align: left;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 테이블 헤더 스타일 */
+th, td {
+	padding: 12px;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+}
+
+/* 라벨 스타일 */
+label {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+/* 테이블 데이터 스타일 */
+td span {
+	display: block;
+	color: #333;
+}
+
+/* 테이블 행 배경색 (홀수 행 스타일) */
+tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
+/* 버튼을 가운데 정렬 */
+.button-container {
+	text-align: center; /* 컨테이너를 가운데 정렬 */
+	margin-top: 20px; /* 버튼 상단에 여백 추가 */
+}
+
+button {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+</style>
+<div class="page-inner">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div class="card-title">결재문서 조회</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="text-center">
+							<table class="table">
+								<div>
+									<table class="table">
+										<tr>
+											<td><label for="dno">문서번호</label></td>
+											<td><span th:text="${edmsDocs.edmsDocNo}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="did">기안자</label></td>
+											<td><span th:text="${edmsDocs.id}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dtitle">제목</label></td>
+											<td><span th:text="${edmsDocs.title}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dcontent">내용</label></td>
+											<input name="imageLink" type="hidden"  th:value="${edmsDocs.fileName}" />
+											<td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px"></td>
+										</tr>
+										<tr>
+										    <td><label for="datt">첨부파일명</label></td>
+										    <td>
+										        <a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+										        <br>
+										    </td>
+										</tr>
+										<tr>
+											<td><label for="dsub">상신일시</label></td>
+											<td><span
+												th:text="${#dates.format(edmsDocs.submitDt, 'yyyy-MM-dd')}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dappr">결재일시</label></td>
+											<td><span
+												th:text="${#dates.format(edmsDocs.approvalDt, 'yyyy-MM-dd')}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dstate">결재상태</label></td>
+											<td><span th:text="${edmsDocs.approvalStatus}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dformn">결재양식번호</label></td>
+											<td><span th:text="${edmsDocs.edmsFormNo}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dshare">공유폴더 여부</label></td>
+											<td><span th:text="${edmsDocs.shareStatus}"></span></td>
+										</tr>
+										<tr>
+											<td><label for="dsharen">공유폴더 번호</label></td>
+											<td><span th:text="${edmsDocs.shareFolderNo}"></span></td>
+										</tr>
+									</table>
+								</div>
+								<div class="button-container">
+								    <button type="button" id="listButton">목록</button>
+								</div>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			<script th:inline="javascript">
+			//이미지 링크용 스크립트
+			const imgLink = $('input[name=imageLink]').val();
+			$('#edmsImg').attr({src: "/upload/"+imgLink});
+			/*
+			*
+			// 다운로드 링크
+			const downLoadLink = $('input[name=downLoadLink]').val();
+			//다운로드 알림창
+			$('#downLoad').on('click', function(event){
+				//th:href="@{http://localhost:8099/edms/}+${edmsDocs.attatch}"
+				// $.Ajax 방식 
+				$.ajax('/edms/fileDownload?fileLink='+downLoadLink,{
+					type : 'get',
+				})
+				.done(result => {
+						alert("다운로드가 완료되었습니다");
+				});
+			});
+			*/
+			
+				//문서함에서 문서를 클릭했을때 나오는 목록 버튼으로 문서함 이동하기
+						$(document).ready(function() {
+					    // URL의 쿼리 파라미터에서 fromDocList와 fromDocDeptList 값을 확인
+					    let params = new URLSearchParams(window.location.search);
+					    let fromDocList = params.get('fromDocList');
+					    let fromDocDeptList = params.get('fromDocDeptList');
+					    let id = /*[[${#authentication.principal.empVO.id}]]*/ 'default_id'; // 로그인한 사용자 ID
+					    let deptNo = /*[[${#authentication.principal.empVO.departmentNo}]]*/ 'default_deptNo'; // 부서 번호
+					
+					    // 문서함에서 왔을 때 목록 버튼을 문서함 페이지로 연결
+					    $('#listButton').on('click', function() {
+					        if (fromDocList === 'true') {
+					            // 문서함에서 왔을 때
+					            location.href = '/docBox/docList?id=' + id; // 로그인 ID 추가
+					        } else if (fromDocDeptList === 'true') {
+					            // 부서문서함에서 왔을 때
+					            location.href = '/docBox/docDeptList?id=' + id + '&departmentNo=' + deptNo;  // 부서문서함 목록으로 이동
+					        } else {
+					            // 기본은 결재 문서 목록으로 연결
+					            location.href = '/edms/edmsDocList';
+					        }
+					    });
+					});
+		</script>
+	</body>
+	</html>

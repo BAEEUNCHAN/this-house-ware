@@ -9,6 +9,7 @@ public interface ComplainService {
 
 	// 문의사항 조회
 	public List<ComplainsVO> complainList();
+	public List<ComplainsVO> complainList0to2();
 	// 처리상황 상황완료/보고완료 리스트(where progress = 3 OR 4)
 	public List<ComplainsVO> complainResultList();
 	public List<ComplainsVO> resultList(ComplainsVO complainVO);
@@ -28,6 +29,7 @@ public interface ComplainService {
 	 
 	// 삭제 
 	public int deleteComplain(int ComplainNo);
+	public int complainDelete(Integer complainNo);
 	
 	ComplainsVO getComplainPwd(int complainNo);
 	

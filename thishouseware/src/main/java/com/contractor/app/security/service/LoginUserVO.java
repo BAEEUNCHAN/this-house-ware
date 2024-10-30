@@ -60,10 +60,13 @@ public class LoginUserVO implements UserDetails{
 
 	/**
 	 * 계정 잠금 여부
+	 * 여기서는 퇴작한 대상의 계정을 잠글 것이다.
 	 */
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
+		if(empVO.getResignDt() != null) {
+			return false;
+		}
 		return true;
 	}
 

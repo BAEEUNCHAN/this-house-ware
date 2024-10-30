@@ -9,9 +9,12 @@
  * 5) borderColor : 이벤트 테두리의 색상만을 변경한다.
  * 6) rendering : "bakground"라고 입력하면 color, backgroundColor의 색상으로 해당일 전체의 내용이 채워진다.
  */
+var calendar;
+
+ 
 document.addEventListener('DOMContentLoaded', function() {
-	var calendarEl = document.getElementById('calendar');    
-  	fetch('/schListAll', {
+	var calendarEl = document.getElementById('calendardiv');    
+  	/*fetch('/schListAll', {
     	method: "POST",
     	headers: {
         	"Content-Type": "application/json",            
@@ -19,10 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
   	})
   	.then(result => result.json())
   	.then(result => {
-    	allEvents = result;
-
+    	*/
+			allEvents = [];
+			console.log(allEvents);
     	// full-calendar 생성하기
-    	var calendar = new FullCalendar.Calendar(calendarEl, {
+    	 	calendar =  new FullCalendar.Calendar(calendarEl, {
 			themeSystem: 'bootstrap5', // Bootstrap 5 Theming
       		googleCalendarApiKey: key, // 구글캘린더 api키 입력하시면 됩니다.
       		height: '600px', // calendar 높이 설정
@@ -211,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		// 캘린더 랜더링
     	calendar.render();
-  	});
+  	//});
 });
 
 // 일정 저장

@@ -7,10 +7,13 @@ import com.contractor.app.schedule.service.ScheduleVO;
 
 public interface ScheduleMapper {
 	// 전체 일정 조회
-	List<Map<String, Object>> listScheduleAll();
+	List<ScheduleVO> listScheduleAll();
 	
 	// 사원별 일정 조회
-	List<ScheduleVO> listSchedule();
+	List<ScheduleVO> listSchedule(String id);
+	
+	// 부서별 일정 조회
+	List<ScheduleVO> scheduleListWhereDepartmentNo(int departmentNo);
 	
 	// 일정 단건 조회
 	Map<String, Object> infoSchedule();

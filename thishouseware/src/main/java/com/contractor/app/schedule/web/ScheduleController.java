@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -45,8 +46,23 @@ public class ScheduleController {
 	// DB서버의 일정 가져오기 AJAX
 	@PostMapping("schListAll")
 	@ResponseBody
-	public List<Map<String, Object>> schListJSON() {		
-		return scheduleService.scheduleListAll();
+	public List<ScheduleVO> schListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {
+		//return scheduleService.scheduleListAll();
+		System.out.println(id);
+		System.out.println(positionCode);
+		System.out.println(departmentNo);
+		
+		if(positionCode.equals("a1") || positionCode.equals("a2") || positionCode.equals("a3")) {
+			// 직급 a1(사장), a2(관리자), a3(본부장)은 모든 일정확인가능
+			return scheduleService.scheduleListAll();
+		}else if(positionCode.equals("a4")) {
+			// a4(팀장)은 자신의 부서 모든 일정 확인가능
+			return scheduleService.scheduleListWhereDepartmentNo(departmentNo);
+		} else{
+			// 그 외 자신이 등록한 일정만 확인가능(인턴, 사원..)
+			return scheduleService.scheduleList(id);
+		}
+		
 	}
 	
 	// 일정 등록
@@ -154,12 +170,10 @@ public class ScheduleController {
 		return leavesService.leaveListAll();
 
   }
-	
-	
 
-	
+		
 	// 관리자 => 팀원 일정확인 리스트
-	@GetMapping("schedule/adminCheckOthersScheduleList")
+	@GetMapping("/schedule/adminCheckOthersScheduleList")
 	public String adminCheckOthersScheduleList(EmployeeVO employeeVO, Model model) {
 		model.addAttribute("key", key);
 		List<DepartmentVO> deptList = employeeService.getDepartmentList();
@@ -168,7 +182,9 @@ public class ScheduleController {
 		model.addAttribute("depts", deptList);
 		model.addAttribute("emps", list);
 		model.addAttribute("empsdepts", list2);
-		return "schedule/adminCheckOthersScheduleList";
+		return "/schedule/adminCheckOthersScheduleList";
 
 	}
+	
+
 }

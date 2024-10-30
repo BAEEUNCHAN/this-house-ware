@@ -5,11 +5,14 @@ import java.util.Map;
 
 public interface ScheduleService {
 	// 전체 일정 조회
-	// List<ScheduleVO> scheduleListAll();
-	public List<Map<String, Object>> scheduleListAll();
+	 List<ScheduleVO> scheduleListAll();
+	//public List<Map<String, Object>> scheduleListAll();
 	
 	// 사원별 일정 조회
-	List<ScheduleVO> scheduleList();
+	List<ScheduleVO> scheduleList(String id);
+	
+	// 부셔별 일정 조회
+	List<ScheduleVO> scheduleListWhereDepartmentNo(int departmentNo);
 	
 	// 일정 저장
 	public int scheduleInsert(ScheduleVO scheduleVO);

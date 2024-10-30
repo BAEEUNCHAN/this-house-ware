@@ -77,8 +77,9 @@ button {
 <div class="table-container">
     <div class="text-center">
         <div class="table-header">
-            결재자 조회
+            결재자 조회  
         </div>
+        <input type ="hidden" name="approvalLineNo" th:value="${param.approvalLineNo}">
         <table class="table">
             <thead>
                 <tr>
@@ -118,99 +119,65 @@ button {
 </div>
 
 <script>
-    $(document).ready(function () {
-        // URL에서 approvalLineNo 가져오기
-        const url = new URLSearchParams(window.location.search);
-        let approvalLineNo = url.get('approvalLineNo'); // URL에서 읽어온 approvalLineNo
+    // 체크박스 전체 선택/해제 기능
+    $('#checkAll').on('click', function() {
+        $('.rowCheck').prop('checked', this.checked);
+    });
 
-        // 만약 URL에 approvalLineNo가 없으면, 사용자가 클릭한 행에서 가져옴
-        function updateApprovalLineNo(newApprovalLineNo) {
-            approvalLineNo = newApprovalLineNo;
-        }
-
-        if (approvalLineNo) {
-            // approvalLineNo가 존재하면 해당 결재자 데이터를 로드
-            loadApprovers(approvalLineNo);
-        }
-
-        function loadApprovers(approvalLineNo) {
+    /* // 각 행 클릭시 리스트 및 등록 폼 출력
+    $('.approvers').on('click', 'tr', function(event) {
+        if (!$(event.target).is('input[type="checkbox"]')) {
+            let approvalLineNo = $(event.currentTarget).data("lineno");
             $.ajax({
-                type: 'GET',
-                url: '/appr/approverList?approvalLineNo=' + approvalLineNo,
-                success: function(response) {
-                    $(".approvers").html(response);
+                type : 'GET',
+                url : '/appr/approverInsert?approvalLineNo=' + approvalLineNo,
+                success : function(response) {
+                    $(".approverInsert").html(response);
                 },
-                error: function() {
-                    alert('결재자 정보를 불러오는 중 오류가 발생했습니다.');
+                error : function() {
+                    alert('오류가 발생했습니다.');
                 }
             });
         }
+    }); */
 
-        // 체크박스 전체 선택/해제 기능
-        $('#checkAll').on('click', function() {
-            $('.rowCheck').prop('checked', this.checked);
+    // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
+    $('.chk_box').on('click', function(event) {
+        event.stopPropagation();
+    });
+
+    // 추가 버튼 클릭 시 동작
+    $('#addApproverButton').on('click', function() {
+    	let approvalLineNo = $('[name="approvalLineNo"]').val();
+        location.href = '/appr/approverInsert?approvalLineNo='+approvalLineNo;
+    });
+
+    // 삭제 버튼 클릭 시 동작
+    $('#deleteApproverButton').on('click', function() {
+        let selectedIds = [];
+        $('.rowCheck:checked').each(function() {
+            selectedIds.push($(this).val());
         });
 
-        // 각 행 클릭 시 리스트 및 등록 폼 출력, 그리고 approvalLineNo 갱신
-        $('.approvers').on('click', 'tr', function(event) {
-            if (!$(event.target).is('input[type="checkbox"]')) {
-                let selectApprovalLineNo = $(event.currentTarget).data("lineno");
-                updateApprovalLineNo(selectApprovalLineNo); // 클릭한 행의 approvalLineNo 저장
-                
+        if (selectedIds.length > 0) {
+            if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
                 $.ajax({
-                    type: 'GET',
-                    url: '/appr/approverInsert?approvalLineNo=' + selectApprovalLineNo,
-                    success: function(response) {
-                        $(".approverInsert").html(response);
+                    type : 'POST',
+                    url : '/appr/approverDelete',
+                    data : JSON.stringify(selectedIds),
+                    contentType : 'application/json',
+                    success : function(response) {
+                        alert('삭제되었습니다.');
+                        location.reload();
                     },
-                    error: function() {
-                        alert('오류가 발생했습니다.');
+                    error : function() {
+                        alert('삭제 중 오류가 발생했습니다.');
                     }
                 });
             }
-        });
-
-        // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
-        $('.chk_box').on('click', function(event) {
-            event.stopPropagation();
-        });
-
-        // 추가 버튼 클릭 시 동작
-        $('#addApproverButton').on('click', function() {
-            if (approvalLineNo) {
-                location.href = '/appr/approverInsert?approvalLineNo=' + approvalLineNo;
-            } else {
-                alert("먼저 결재선을 선택하세요.");
-            }
-        });
-
-        // 삭제 버튼 클릭 시 동작
-        $('#deleteApproverButton').on('click', function() {
-            let selectedIds = [];
-            $('.rowCheck:checked').each(function() {
-                selectedIds.push($(this).val());
-            });
-
-            if (selectedIds.length > 0) {
-                if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/appr/approverDelete',
-                        data: JSON.stringify(selectedIds),
-                        contentType: 'application/json',
-                        success: function(response) {
-                            alert('삭제되었습니다.');
-                            location.reload();
-                        },
-                        error: function() {
-                            alert('삭제 중 오류가 발생했습니다.');
-                        }
-                    });
-                }
-            } else {
-                alert('삭제할 결재자를 선택하세요.');
-            }
-        });
+        } else {
+            alert('삭제할 결재자를 선택하세요.');
+        }
     });
 </script>
 </body>

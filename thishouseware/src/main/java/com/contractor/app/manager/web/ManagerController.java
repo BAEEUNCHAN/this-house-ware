@@ -183,4 +183,18 @@ public class ManagerController {
 			return 0;
 		}
 	}
+	
+	@PostMapping("manager/resignEmp")
+	@ResponseBody
+	public String resignEmp(@RequestParam("id") String id) {
+		try {
+			if(employeeService.resignEmp(id)) {
+				return "success";
+			}
+		} catch (Exception e) {
+			return "error1";
+		}
+		
+		return "error1";
+	}
 }

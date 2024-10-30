@@ -82,9 +82,7 @@ public class DocController {
 	@ResponseBody
 	public ResponseEntity<String> updateDeptImportant(@RequestParam String edmsDocNo, @RequestParam String important,
 			@RequestParam int departmentNo) {
-
 		docService.docUpdateImportant(edmsDocNo, important); // 중요 상태 업데이트
-
 		return ResponseEntity.ok("중요문서로 설정 완료");
 	}
 

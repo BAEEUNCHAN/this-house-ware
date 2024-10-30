@@ -15,8 +15,11 @@ public class ApproverVO {
  private String approver; // 결재 순서
  private String departmentName; // 부서번호
  private String name; // 직원이름
- private String positionName; // 직급이름
+ private String positionCode; // 직급이름
  private Integer approvalOrder; // 결재 순서
+ private Integer approvalLineNo; // 결재라인 번호
+ private String favoriteChk; // 즐찾여부
+ 
  
  
 	

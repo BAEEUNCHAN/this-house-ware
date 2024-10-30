@@ -13,6 +13,8 @@ public interface ApprService {
 	public int apprLineInsert(ApprLineVO apprLineVO);
 	// 결재선 삭제
 	public Map<String, Object> apprLineDelete(int approvalLineNo);
+	// 결재선 수정
+	public Map<String, Object> apprLineUpdate(ApprLineVO apprLineVO);
 	
 	// 결재선 즐겨찾기 전체조회
 	public List<ApprFavoriteVO> apprFavoriteList();
@@ -24,13 +26,14 @@ public interface ApprService {
 	public Map<String, Object> favoriteDelete(int favoriteNo);
 	
 	// 결재자 등록 정보 전체조회
-	public List<ApprVO> apprList(int approvalLineNo);
+	public List<ApproverVO> apprList(int approvalLineNo);
 	// 결재자 단건조회
-	public ApproverVO apprInfo(ApproverVO approverVO);
+	public ApprVO apprInfo(ApprVO apprVO);
 	// 결재자 추가
-	public int apprInsert(ApproverVO approverVO);
+	public int apprInsert(ApprVO apprVO);
 	// 결재자 삭제
 	public Map<String, Object> apprDelete(int approverNo);
-	
+	// 결재자 수정
+	public Map<String, Object> apprUpdate(ApprVO apprVO);
 
 }

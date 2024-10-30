@@ -37,6 +37,7 @@ public class BoardServiceImpl implements BoardService {
 	public int insertPost(PostsVO postsVO) {
 		//현재 날짜 구하기 
 		Date now = new Date();
+		System.out.println("now : " + now);
 		
 		if (postsVO.getPostStartTime().compareTo(now) <= 0 
 		 && postsVO.getPostEndTime().compareTo(now) >= 0) {
@@ -44,7 +45,9 @@ public class BoardServiceImpl implements BoardService {
 		} else if (postsVO.getPostStartTime().compareTo(now) > 0) {
 			postsVO.setDisplay("q2"); // 비게시
 		}
-		return boardMapper.insertPostInfo(postsVO);
+		int result = boardMapper.insertPostInfo(postsVO);
+		System.out.println("result : " + result);
+		return result;
 	}
 
 	@Override

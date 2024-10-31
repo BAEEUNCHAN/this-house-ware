@@ -41,6 +41,9 @@ public interface BoardService {
 
 	// 게시판별 게시글 전체 조회
 	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO);
+	
+	// 공지사항만 가져오기
+	public List<PostsVO> postListBoardNo1(PostsVO postsVO);
 
 	// 댓글 번호 가져오기
 	public CommentsVO selectCommentNo(int commentsNo);

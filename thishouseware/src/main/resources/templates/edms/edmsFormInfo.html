@@ -97,9 +97,9 @@ button:hover {
 						</div>
 					</div>
 					<div class="edmsForm"></div>
-					<script th:inline="javascript">
-					let url= '/template/'+[[${edmsForms.edmsFormNo}]] +'.html'
-					$('.edmsForm').load(url)
+					<script th:inline="javascript">				
+					let url= '/template/'+[[${edmsForms.edmsFormNo}]] +'.html';					
+					$('.edmsForm').load(url);					
 					</script>
 				</div>
 			</div>

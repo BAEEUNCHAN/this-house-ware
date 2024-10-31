@@ -158,7 +158,6 @@ public class ApprController {
 			String positionName = EmployeeUtil.getPostionName(approver.getPositionCode());
 			approver.setPositionName(positionName); // 변환된 이름 설정
 		}
-
 		model.addAttribute("approvers", list);
 	}
 

@@ -90,6 +90,10 @@ public class BoardServiceImpl implements BoardService {
 	public List<PostsVO> postListBoard(PagingVO pagingVO, PostsVO postsVO) {
 		return boardMapper.selectPostBoard(pagingVO, postsVO);
 	}
+	@Override
+	public List<PostsVO> postListBoardNo1(PostsVO postsVO) {
+		return boardMapper.selectPostBoardNo1(postsVO);
+	}
 
 	@Override
 	public List<CommentsVO> selectCommentsPost(CommentsVO commentsVO) {

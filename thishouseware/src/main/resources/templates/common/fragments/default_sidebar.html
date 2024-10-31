@@ -4,14 +4,14 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="/main?boardsNo=1" class="logo" style="color:white;">
               <img
                   src="/yerim/img/image-removebg-preview (8).png"
                   alt="navbar brand"
                   class="navbar-brand"
                   height="20"
                   style="width:40px; height:40px;"
-                />
+                />　ThisHoseWare
             </a>
             <div class="nav-toggle">
               <button class="btn btn-toggle toggle-sidebar">
@@ -82,22 +82,22 @@
         <div class="collapse" id="subnav-personal">
           <ul class="nav nav-collapse subnav">
             <li>
-              <a href="/reply/replyList">
+              <a href="/docBox/docApprovalStatusList">
                 <span class="sub-item">임시저장</span>
               </a>
             </li>
             <li>
-              <a href="/reply/replyList">
+              <a href="/docBox/docApprovalStatusList">
                 <span class="sub-item">결재대기</span>
               </a>
             </li>
             <li>
-              <a href="/reply/replyList">
+              <a href="/docBox/docApprovalStatusList">
                 <span class="sub-item">결재수신</span>
               </a>
             </li>
             <li>
-              <a href="/reply/replyList">
+              <a href="/docBox/docApprovalStatusList">
                 <span class="sub-item">결재완료</span>
               </a>
             </li>
@@ -105,7 +105,7 @@
         </div>
       </li>
       <!-- 부서문서함 -->
-      <li>
+      <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-department">
           <span class="sub-item">부서문서함</span>
           <span class="caret"></span>
@@ -129,6 +129,11 @@
             </li>
           </ul>
         </div>
+      </li> -->
+      <li>
+        <a href="/docBox/docDeptList?departmentNo=${#authentication.principal.empVO.departmentNo}">
+          <span class="sub-item">부서문서함</span>
+        </a>
       </li>
       <!-- 문서함설정 -->
       <li>
@@ -164,24 +169,8 @@
   </a>
   <div class="collapse" id="submenu-approval">
     <ul class="nav nav-collapse">
-      <!-- 결재양식 -->
-      <li>
-        <a data-bs-toggle="collapse" href="#subnav-form">
-          <span class="sub-item">결재양식</span>
-          <span class="caret"></span>
-        </a>
-        <div class="collapse" id="subnav-form">
-          <ul class="nav nav-collapse subnav">
-            <li>
-              <a href="/reply/replyList">
-                <span class="sub-item">결재양식목록</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </li>
-      <!-- 결재문서 -->
-      <li>
+          <!-- 결재문서 -->
+      <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-documents">
           <span class="sub-item">결재문서</span>
           <span class="caret"></span>
@@ -195,9 +184,14 @@
             </li>
           </ul>
         </div>
+      </li> -->
+      <li>
+        <a href="/edms/edmsDocList">
+          <span class="sub-item">결재문서</span>
+        </a>
       </li>
       <!-- 결재라인 -->
-      <li>
+      <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-line">
           <span class="sub-item">결재라인</span>
           <span class="caret"></span>
@@ -216,7 +210,44 @@
             </li>
           </ul>
         </div>
+      </li> -->
+      <li>
+        <a href="/edms/edmsInsert">
+          <span class="sub-item">결재문서등록</span>
+        </a>
       </li>
+      <!-- 결재양식 -->
+      <li>
+        <a data-bs-toggle="collapse" href="#subnav-form">
+          <span class="sub-item">결재양식</span>
+          <span class="caret"></span>
+        </a>
+        <div class="collapse" id="subnav-form">
+          <ul class="nav nav-collapse subnav">
+            <li>
+              <a href="/appr/apprLineList">
+                <span class="sub-item">결재라인</span>
+              </a>
+            </li>
+            <li>
+              <a href="/appr/apprLineList">
+                <span class="sub-item">결재라인등록</span>
+              </a>
+            </li>
+            <li>
+              <a href="/appr/apprList">
+                <span class="sub-item">결재자등록</span>
+              </a>
+            </li>
+            <li>
+              <a href="/appr/apprFavoriteList">
+                <span class="sub-item">즐겨찾기등록</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
     </ul>
   </div>
 </li>
@@ -308,7 +339,7 @@
         </div>
       </li>
       <li>
-        <a data-bs-toggle="collapse" href="#subnav2-3">
+        <a href="/schedule/leaveList">
           <span class="sub-item">휴가</span>
         </a>
         <div class="collapse" id="subnav2-3"></div>

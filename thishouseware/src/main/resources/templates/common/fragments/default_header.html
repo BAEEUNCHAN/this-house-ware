@@ -2,12 +2,12 @@
 	th:fragment="HeaderFrag">
 	
 <style>
-/* .main-header {
-    background-color: #1a2036; 
+ .main-header {
+    /* background-color: #1a2036; */
+    /* background-color: #5bb5f9;  */
+    background-color: #dde3f7;
     color:white;
 }
-.container-fluid{
-color:white;} */
 </style>
 <div class="main-header-logo">
             <!-- Logo Header -->
@@ -134,12 +134,12 @@ color:white;} */
                     <div class="avatar-sm">
                       <img
                         th:src="@{/upload/}+${#authentication.principal.empVO.imageLink}"
-                        alt="..."
+                        alt=""
                         class="avatar-img rounded-circle"
                       />
                     </div>
                     <span class="profile-username">
-                      <span class="op-7">안영하십니까</span>
+                      <span class="op-7">안녕하십니까</span>
                       <span class="fw-bold" th:text="${#authentication.principal.empVO.name}">이름</span>
                       <span class="op-7">님</span>
                     </span>

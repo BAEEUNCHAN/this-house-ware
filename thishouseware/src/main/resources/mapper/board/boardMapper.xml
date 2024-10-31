@@ -157,6 +157,26 @@
 		WHERE RN BETWEEN #{pagingVO.start}
 		AND #{pagingVO.end}
 	</select>
+	
+	<!-- 공지사항만 가져옴 -->
+	<select id="selectPostBoardNo1" resultType="PostsVO">
+		SELECT   
+				<!--  posts_no
+				,boards_no
+				,posts_type --> 
+				distinct title
+				<!-- ,post_setting
+				,post_starttime
+				,post_endtime
+				,authority
+				,id
+				,submit_dt
+				,display -->
+		FROM	 posts
+		ORDER BY title DESC
+		
+		
+	</select>
 
 	<!-- 게시글 단건조회 -->
 	<select id="selectPostInfo" resultType="PostsVO">

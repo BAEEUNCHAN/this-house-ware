@@ -221,4 +221,6 @@ public class BoardController {
 		
 		return "redirect:postInfo?postsNo=" + commentsVO.getPostsNo();
 	}
+	
+	
 }

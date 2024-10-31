@@ -3,8 +3,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<link href="/park/DataTables/datatables.min.css" rel="stylesheet">
+<script src="/park/DataTables/datatables.min.js"></script>
 
-<div class="page-inner">
+<body>
+	<div class="page-inner">
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card">
@@ -14,11 +17,12 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="text-center">
-								<table class="table">
+								<table class="table" id="myTable">
 									<thead>
 										<tr>
 											<th class=hidden style="display: none">문서번호</th>
 											<th>번호</th>
+											<th class=hidden style="display: none">부서번호</th>
 											<th>부서명</th>
 											<th>제목</th>
 											<th>기안자</th>
@@ -53,21 +57,46 @@
 								        
 								<button type="button" class="btn btn-danger btn-sm" th:data-id="${#authentication.principal.empVO.id}" 
 								        th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재수신'}, id=${#authentication.principal.empVO.id})}'|">결재수신</button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>	
 	</div>
-				<script th:inline="javascript">
-			    // 문서함에서 문서 클릭 시 문서함 목록으로 이동하기
-			    $('.docBox > tr').on('click', function(event) {
-			        let trTag = event.currentTarget;
-			        let edno = $(trTag).children().eq(0).text();
-			        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 id
-			        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocList=true&id=${id}`; 
-			        location.href = url;
-			    });
-			</script>
-</div>
+	<script th:inline="javascript">
+	    // 문서함에서 문서 클릭 시 문서함 목록으로 이동하기
+	    $('.docBox > tr').on('click', function(event) {
+	        let trTag = event.currentTarget;
+	        let edno = $(trTag).children().eq(0).text();
+	        let id = [[${#authentication.principal.empVO.id}]]; // 로그인한 사용자 id
+	        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocList=true&id=${id}`; 
+	        location.href = url;
+	    });
+	    
+	    $(document).ready(function () {
+		    var table = $('#myTable').DataTable({
+				// 표시건수 기능 숨기기
+			  	lengthChange: false,
+			  	// 검색 기능 숨기기
+			  	// searching: false,
+			  	// 정렬 기능 숨기기
+			  	ordering: false,
+			  	// 정보 표시 숨기기
+			  	info: false,			  	
+		    });
+	
+		    /* Column별 검색기능 추가 */
+		    $('#myTable_filter').prepend('<select id="select"></select>');
+		    $('#myTable > thead > tr').children().each(function (indexInArray, valueOfElement) { 
+		        $('#select').append('<option>'+valueOfElement.innerHTML+'</option>');
+		    });
+		    
+		    $('.dataTables_filter input').unbind().bind('keyup', function () {
+		        var colIndex = document.querySelector('#select').selectedIndex;
+		        table.column(colIndex).search(this.value).draw();
+		    });
+		});
+	</script>
+</body>
 </html>

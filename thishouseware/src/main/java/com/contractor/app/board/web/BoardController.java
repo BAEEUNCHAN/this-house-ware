@@ -17,7 +17,9 @@ import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
+import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.security.service.LoginUserVO;
+import com.contractor.app.util.EmpAuthUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +33,7 @@ public class BoardController {
 
 	private final BoardService boardService;
 	private final CommonCodeService commonCodeService;
+	private final EmpAuthUtil empAuthUtil;
 
 //	@Autowired
 //	public BoardController(BoardService boardService, CommonCodeService commonCodeService) {
@@ -40,12 +43,14 @@ public class BoardController {
 
 	// 메인페이지 : URI - boardMainPage / RETURN - board/boardMainPage
 	@GetMapping("/boardMainPage")
-	public String boardMainPage(Model model, BoardsVO boardsVO, PostsVO postsVO) {
+	public String boardMainPage(Model model, BoardsVO boardsVO, PostsVO postsVO ,Authentication authentication) {
+		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 		// 게시판 목록 조회
 		List<BoardsVO> boards = boardService.selectBoardMain(boardsVO);
 
 		// 페이지에 전달
 		model.addAttribute("boards", boards);
+		model.addAttribute("employeeVO", employeeVO);
 
 		return "board/boardMainPage";
 	}

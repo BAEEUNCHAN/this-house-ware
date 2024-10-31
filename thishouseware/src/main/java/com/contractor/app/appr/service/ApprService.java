@@ -43,5 +43,8 @@ public interface ApprService {
 	public Map<String, Object> apprDelete(int approverNo);
 	// 결재자 수정
 	public Map<String, Object> apprUpdate(ApprVO apprVO);
+	// 결재자 순서 변경
+	public void updateApprovalOrder(String approverNo, Integer approvalOrder);
+	
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,10 +79,13 @@ public class ApprController {
 	}
 
 	// 결재선 삭제
-	@GetMapping("/apprLineDelete")
-	public String apprLineDelete(Integer approvalLineNo) {
-		apprService.apprLineDelete(approvalLineNo);
-		return "redirect:apprLineList";
+	@PostMapping("/apprLineDelete")
+	@ResponseBody
+	public ResponseEntity<String> apprLineDelete(@RequestBody List<Integer> approvalLineNos) {
+		for (Integer approvalLineNo : approvalLineNos) {
+			apprService.apprLineDelete(approvalLineNo);
+		}
+		return ResponseEntity.ok("삭제 완료");
 	}
 
 	// 결재선 수정 폼 조회 - GET 요청
@@ -111,25 +115,24 @@ public class ApprController {
 	// 결재선 즐겨찾기 업데이트
 	@PostMapping("/favoriteUpdate")
 	@ResponseBody
-	public ResponseEntity<String> updateFavorite(@RequestParam int approvalLineNo, 
-	                                             @RequestParam String id, 
-	                                             @RequestParam String favoriteChk) {
-	    ApprFavoriteVO favorite = new ApprFavoriteVO();
-	    favorite.setApprovalLineNo(approvalLineNo);
-	    favorite.setId(id);
+	public ResponseEntity<String> updateFavorite(@RequestParam int approvalLineNo, @RequestParam String id,
+												@RequestParam String favoriteChk) {
+		ApprFavoriteVO favorite = new ApprFavoriteVO();
+		favorite.setApprovalLineNo(approvalLineNo);
+		favorite.setId(id);
 
-	    if ("Y".equals(favoriteChk)) {
-	        boolean exists = apprService.ifFavorite(approvalLineNo, id);
-	        if (exists) {
-	            apprService.favoriteUpdate(favorite);  // 이미 존재하는 경우 업데이트
-	        } else {
-	            apprService.insertFavorite(favorite);  // 없는 경우 새로운 즐겨찾기 추가
-	        }
-	    } else {
-	        apprService.favoriteDelete(approvalLineNo, id);  // 'N'이면 즐겨찾기 삭제
-	    }
+		if ("Y".equals(favoriteChk)) {
+			boolean exists = apprService.ifFavorite(approvalLineNo, id);
+			if (exists) {
+				apprService.favoriteUpdate(favorite); // 이미 존재하는 경우 업데이트
+			} else {
+				apprService.insertFavorite(favorite); // 없는 경우 새로운 즐겨찾기 추가
+			}
+		} else {
+			apprService.favoriteDelete(approvalLineNo, id); // 'N'이면 즐겨찾기 삭제
+		}
 
-	    return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
+		return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
 	}
 
 	// 즐겨찾기 삭제
@@ -218,14 +221,11 @@ public class ApprController {
 		return url;
 	}
 
-	// 결재선 삭제
-	@PostMapping("/apprLineDelete")
-	@ResponseBody
-	public ResponseEntity<String> apprLineDelete(@RequestBody List<Integer> approvalLineNos) {
-	    for (Integer approvalLineNo : approvalLineNos) {
-	        apprService.apprLineDelete(approvalLineNo);
-	    }
-	    return ResponseEntity.ok("삭제 완료");
+	// 결재자 삭제
+	@GetMapping("/apprDelete")
+	public String apprDelete(Integer approverNo) {
+		apprService.apprDelete(approverNo);
+		return "redirect:apprList";
 	}
 
 	// 결재자 수정
@@ -240,4 +240,25 @@ public class ApprController {
 	public Map<String, Object> apprUpdateAJAXJSON(@RequestBody ApprVO apprVO) {
 		return apprService.apprUpdate(apprVO);
 	}
+	
+	//결재자 순서 변경
+	@PostMapping("/updateApprovalOrder")
+    public ResponseEntity<String> updateApprovalOrder(@RequestBody List<Map<String, Object>> orderData) {
+        try {
+            // orderData의 각 항목에서 approverNo와 approvalOrder를 추출하여 서비스로 전달
+            for (Map<String, Object> data : orderData) {
+                String approverNo = (String) data.get("approverNo");
+                Integer approvalOrder = (Integer) data.get("approvalOrder");
+
+                // 서비스의 순서 업데이트 메서드 호출
+                apprService.updateApprovalOrder(approverNo, approvalOrder);
+            }
+            return ResponseEntity.ok("순서가 성공적으로 업데이트되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("순서 저장 중 오류가 발생했습니다.");
+        }
+    }
+	
+	
 }// 끝

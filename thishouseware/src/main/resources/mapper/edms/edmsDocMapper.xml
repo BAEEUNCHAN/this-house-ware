@@ -100,6 +100,19 @@
 				)
 	</insert>
 	
+	<!-- 결재 상태 업데이트 -->
+		<update id="updateApprovalStatus" parameterType="EdmsDocVO">
+		    UPDATE edms_doc
+		    SET approval_status = #{approvalStatus}, reject_reason = #{rejectReason}
+		    WHERE edms_doc_no = #{edmsDocNo}
+		</update>
+		
+	<!-- 결재 라인에서 다음 결재자 조회 -->
+		<select id="getNextApprover" parameterType="String" resultType="String">
+		    SELECT approver_id
+		    FROM approval_line
+		    WHERE edms_doc_no = #{edmsDocNo} AND approval_order = #{currentOrder} + 1
+		</select>
 	
 	
 

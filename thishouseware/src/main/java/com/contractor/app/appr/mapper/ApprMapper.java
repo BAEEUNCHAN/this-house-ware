@@ -48,5 +48,8 @@ public interface ApprMapper {
 	public int deleteAppr(int approverNo);
 	// 결재자 수정
 	public int updateAppr(@Param("apprVO") ApprVO apprVO);
+	// 결재자 순서 변경
+	public void updateApprovalOrder(@Param("approverNo") String approverNo, @Param("approvalOrder") Integer approvalOrder);
+	
 	
 }

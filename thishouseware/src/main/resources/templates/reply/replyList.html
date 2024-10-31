@@ -4,7 +4,9 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 
-<link href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css" rel="stylesheet">
+<link
+	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
+	rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <style>
 .dataTables_length {
@@ -54,24 +56,21 @@
 				</ul>
 			</div>
 			<div></div>
-			<!-- <button class="btn btn-outline-danger" id="progress0Btn">대기</button>
-				<button class="btn btn-outline-warning" id="progress1Btn">접수</button>
-				<button class="btn btn-outline-success" id="progress2Btn">진행</button>
-				<button class="btn btn-outline-secondary" id="progress3Btn">상황완료</button>
-				<button class="btn btn-outline-dark" id="progress4Btn">보고완료</button> -->
-			<!-- 처리상황 드롭다운 메뉴 -->
-			<select class="form-select" id="progressDropdown"
-				aria-label="Progress Dropdown" style="width: 100px;">
-				<option value="">선택</option>
-				<option value="0">대기</option>
-				<option value="1">접수</option>
-				<option value="2">진행</option>
-			</select>
+
 			<div class="page-inner">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
+								<!-- 처리상황 드롭다운 메뉴 -->
+								<select class="form-select" id="progressDropdown"
+									aria-label="Progress Dropdown"
+									style="width: 100px; float: right;">
+									<option value="">선택</option>
+									<option value="0">대기</option>
+									<option value="1">접수</option>
+									<option value="2">진행</option>
+								</select>
 								<div class="card-title">불편/장애사항 목록</div>
 							</div>
 							<div class="card-body">
@@ -108,18 +107,16 @@
 																th:class="'progress-1'"><span
 																	class="badge badge-warning">접수</span></span> <span th:case="2"
 																th:class="'progress-2'"><span
-																	class="badge badge-success">진행</span></span>
-																	
-																<!-- <span th:case="3" th:class="'progress-3'">
+																	class="badge badge-success">진행</span></span> <!-- <span th:case="3" th:class="'progress-3'">
 																<span class="badge badge-primary">상황완료</span></span>
 																<span th:case="4" th:class="'progress-4'">
 																<span class="badge badge-count">보고완료</span></span> -->
-																
+
 														</span></td>
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
 
 														<td>
-														
+
 															<button type="button" class="btn btn-danger alert_demo_7"
 																data-toggle="modal" data-target="#exampleModal"
 																th:value="info">

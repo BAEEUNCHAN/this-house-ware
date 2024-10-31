@@ -2,7 +2,6 @@ package com.contractor.app.employee.service.impl;
 
 import java.util.List;
 
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
 import com.contractor.app.employee.mapper.AuthenticationMapper;
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-	
+
 	private final AuthenticationMapper authenticationMapper;
 	private final DepartmentMapper departmentMapper;
 	private final EmployeeMapper employeeMapper;
@@ -64,7 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public String canChangePw(String id, String authenticationsValue) {
-		return employeeMapper.canChangePwFunc(id,authenticationsValue);
+		return employeeMapper.canChangePwFunc(id, authenticationsValue);
 	}
 
 	@Override
@@ -73,10 +72,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public DepartmentVO getDepartmentBydeptNo(int departmentNo) {	
+	public DepartmentVO getDepartmentBydeptNo(int departmentNo) {
 		return departmentMapper.selectDepartmentBydeptNo(departmentNo);
 	}
-	
+
 	@Override
 	public List<EmployeeVO> getEmployeesWhereDept(EmployeeVO employeeVO) {
 		return employeeMapper.selectEmployeesWhereDept(employeeVO);
@@ -87,4 +86,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeMapper.updateEmployeeForResign(id);
 	}
 
+	@Override
+	public List<EmployeeVO> getEmpDept(int departmentNo) {
+		return employeeMapper.selectEmpByDept(departmentNo);
+	} // 은찬 추가 결재자 리스트에 부서별 직원 조회
 }

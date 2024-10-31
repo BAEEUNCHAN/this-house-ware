@@ -84,26 +84,26 @@ button {
 					<tr>
 						<th><input type="checkbox" id="checkAll"></th>
 						<th class="hidden" style="display: none">결재자번호</th>
-						<th>번호</th>
+						<th>결재 순서</th>
 						<th>부서</th>
 						<th>직책</th>
+						<th>결재타입</th>
 						<th>결재자 이름</th>
 						<th>즐겨찾기</th>
 					</tr>
 				</thead>
 				<tbody class="approvers">
-					<th:block th:each="info,sts : ${approvers}">
+					<th:block th:each="info : ${approvers}">
 						<tr th:data-lineno="${info.approvalLineNo}">
 							<td><input type="checkbox" class="rowCheck"
 								th:value="${info.approvalLineNo}"></td>
 							<td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
-							<td>[[${sts.count}]]</td>
+							<td>[[${info.approvalOrder}]]</td>
 							<td>[[${info.departmentName}]]</td>
-							<td>[[${info.positionCode}]]</td>
+							<td>[[${info.positionName}]]</td>
+							<td>[[${info.approvalType}]]</td>
 							<td>[[${info.name}]]</td>
-							<td><label class="chk_box"> <input type="checkbox"
-									th:checked="${info.favoriteChk == 'Y'}" /> <i
-									class="fa fa-star" aria-hidden="true"></i>
+							<td><label class="chk_box"> <input type="checkbox" th:checked="${info.favoriteChk == 'Y'}" /> <i class="fa fa-star" aria-hidden="true"></i>
 							</label></td>
 						</tr>
 					</th:block>

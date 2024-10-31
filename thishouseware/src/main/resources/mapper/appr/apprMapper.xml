@@ -75,11 +75,16 @@
 		)
 	</insert>
 
-	<!-- 결재라인 삭제 -->
+	<!-- APPROVER 테이블에서 결재선 번호 삭제 -->
+	<delete id="deleteApproversByLineNo" parameterType="Integer">
+	    DELETE FROM approver
+	    WHERE approval_line_no = #{approvalLineNo}
+	</delete>
+	
+	<!-- APPROVAL_LINE 테이블에서 결재선 번호 삭제 -->
 	<delete id="deleteApprLine" parameterType="Integer">
-		DELETE FROM
-		approval_line
-		WHERE approval_line_no = #{approvalLineNo}
+	    DELETE FROM approval_line
+	    WHERE approval_line_no = #{approvalLineNo}
 	</delete>
 
 	<!-- 결재라인 수정 -->

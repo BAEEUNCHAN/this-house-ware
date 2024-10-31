@@ -163,8 +163,7 @@
                 }
             });
         });
-
-        // 삭제 버튼 클릭 시 삭제 기능
+     // 삭제 버튼 클릭 시 삭제 기능
         $('#deleteAppLineButton').on('click', function() {
             let selectId = [];
             $('.rowCheck:checked').each(function() {
@@ -191,7 +190,7 @@
                 alert('삭제할 결재라인을 선택하세요.');
             }
         });
-    });
+    }); // document.ready 종료
 </script>
 </body>
 </html>

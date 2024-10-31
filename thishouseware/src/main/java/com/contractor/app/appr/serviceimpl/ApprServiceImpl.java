@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.contractor.app.appr.mapper.ApprMapper;
 import com.contractor.app.appr.service.ApprFavoriteVO;
@@ -52,6 +53,15 @@ public class ApprServiceImpl implements ApprService {
 			map.put("approvalLineNo", approvalLineNo);
 		}
 		return map;
+	}
+	
+	@Transactional
+	public void deleteApprovalLineAndRelatedRecords(Integer approvalLineNo) {
+	    // APPROVER 테이블에서 approvalLineNo 삭제
+	    apprMapper.deleteApproversByLineNo(approvalLineNo);
+	    
+	    // APPROVAL_LINE 테이블에서 approvalLineNo 삭제
+	    apprMapper.deleteApprLine(approvalLineNo);
 	}
 
 	// 결재선 수정

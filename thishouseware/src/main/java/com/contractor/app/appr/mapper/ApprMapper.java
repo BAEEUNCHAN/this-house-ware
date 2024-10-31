@@ -19,6 +19,10 @@ public interface ApprMapper {
 	public int insertApprLine(ApprLineVO apprLineVO);
 	// 결재선 삭제
 	public int deleteApprLine(int approvalLineNo);
+	// APPROVER 테이블에서 approvalLineNo 삭제
+	public void deleteApproversByLineNo(Integer approvalLineNo);
+	// APPROVAL_LINE 테이블에서 approvalLineNo 삭제
+	public void deleteApprLine(Integer approvalLineNo);
 	// 결재선 수정
 	public int updateApprLine(ApprLineVO apprLineVO);
 	

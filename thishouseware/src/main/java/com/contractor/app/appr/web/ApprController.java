@@ -218,11 +218,14 @@ public class ApprController {
 		return url;
 	}
 
-	// 결재자 삭제
-	@GetMapping("/approverDelete")
-	public String apprDelete(Integer approverNo) {
-		apprService.apprDelete(approverNo);
-		return "redirect:apprList";
+	// 결재선 삭제
+	@PostMapping("/apprLineDelete")
+	@ResponseBody
+	public ResponseEntity<String> apprLineDelete(@RequestBody List<Integer> approvalLineNos) {
+	    for (Integer approvalLineNo : approvalLineNos) {
+	        apprService.apprLineDelete(approvalLineNo);
+	    }
+	    return ResponseEntity.ok("삭제 완료");
 	}
 
 	// 결재자 수정

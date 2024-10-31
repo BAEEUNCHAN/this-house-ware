@@ -26,7 +26,7 @@
 }
 
 /* 체크된 상태의 별 아이콘 색상 */
-.chk_box input[type="checkbox"]:checked+.fa-star {
+.chk_box input[type="checkbox"]:checked + .fa-star {
 	color: #ffc107;
 }
 
@@ -82,7 +82,7 @@ button {
 			<table class="table">
 				<thead>
 					<tr>
-						<th><input type="checkbox" id="checkAll"></th>
+						<th><input type="checkbox" id="checkAllApprovers"></th>
 						<th class="hidden" style="display: none">결재자번호</th>
 						<th>결재 순서</th>
 						<th>부서</th>
@@ -92,10 +92,10 @@ button {
 						<th>즐겨찾기</th>
 					</tr>
 				</thead>
-				<tbody class="approvers">
+				<tbody class="approverRows">
 					<th:block th:each="info : ${approvers}">
 						<tr th:data-lineno="${info.approvalLineNo}">
-							<td><input type="checkbox" class="rowCheck"
+							<td><input type="checkbox" class="approverCheck"
 								th:value="${info.approvalLineNo}"></td>
 							<td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
 							<td>[[${info.approvalOrder}]]</td>
@@ -120,9 +120,9 @@ button {
 
 <script>
 $(document).ready(function() {
-    // 체크박스 전체 선택/해제 기능
-    $('#checkAll').on('click', function() {
-        $('.rowCheck').prop('checked', this.checked);
+    // 결재자 조회의 체크박스 전체 선택/해제 기능
+    $('#checkAllApprovers').on('click', function() {
+        $('.approverCheck').prop('checked', this.checked);
     });
 
     // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
@@ -131,7 +131,7 @@ $(document).ready(function() {
     });
 
  	// 각 행 클릭 시 approverInfo 페이지로 이동
-	$('.approvers').on('click', 'tr', function(event) {
+	$('.approverRows').on('click', 'tr', function(event) {
 	    if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('chk_box')) {
 	        // 현재 클릭한 행에서 approverNo 값 가져오기
 	        let approverNo = $(this).find('td.hidden').text().trim(); // hidden 클래스를 가진 td에서 가져옴
@@ -142,13 +142,13 @@ $(document).ready(function() {
     // 추가 버튼 클릭 시 동작
     $('#addApproverButton').on('click', function() {
         let approvalLineNo = $('[name="approvalLineNo"]').val();
-        location.href = '/appr/insertAapprover?approvalLineNo=' + approvalLineNo;
+        location.href = '/appr/approverInsert?approvalLineNo=' + approvalLineNo;
     });
 
     // 삭제 버튼 클릭 시 동작
     $('#deleteApproverButton').on('click', function() {
         let selectedIds = [];
-        $('.rowCheck:checked').each(function() {
+        $('.approverCheck:checked').each(function() {
             selectedIds.push($(this).val());
         });
 

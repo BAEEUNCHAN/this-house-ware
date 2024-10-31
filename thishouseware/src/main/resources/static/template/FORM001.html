@@ -38,13 +38,13 @@ th {
 					<div class="card-body">
 						<div class="row">
 							<div class="text-center">
-								<form action="/submitEducation" method="post">
+								<form action="/submitEducation" method="post">									
 									<table class="table">
 										<tr>
 											<th>신청서 번호</th>
 											<td></td>
 											<th>결재선 지정</th>
-											<td></td>
+											<td><span id="apprLineSel"></span></td>											
 										</tr>
 										<tr>
 											<th>신청자</th>
@@ -95,5 +95,12 @@ th {
 			</div>
 		</div>
 	</div>
+	<script>	
+		// 결재선 지정 버튼 클릭시 appr/apprLineList로 이동(모달창으로 띄우는게 좋을듯)
+		$('#apprLineBtn').on('click', function(event) {
+	    	let edmsFormNo = 'FORM001';	        
+	        location.href = '../appr/apprLineList';	    	
+		});
+	</script>
 </body>
 </html>

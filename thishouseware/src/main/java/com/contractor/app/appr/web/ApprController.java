@@ -144,6 +144,7 @@ public class ApprController {
 	@GetMapping("/apprList")
 	public void apprList(@RequestParam Integer approvalLineNo, Model model) {
 		List<ApproverVO> list = apprService.apprList(approvalLineNo);
+		System.out.println(list);
 		model.addAttribute("approvers", list);
 		// return "appr/apprList";
 	}

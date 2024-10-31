@@ -7,7 +7,7 @@
     <title>결재자 조회</title>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-   <style>
+ <style>
 /* 기본 체크박스 숨기기 */
 .chk_box input[type="checkbox"] {
 	display: none;
@@ -74,82 +74,75 @@ button {
 </style>
 </head>
 <body>
-<div class="table-container">
-    <div class="text-center">
-        <div class="table-header">
-            결재자 조회  
-        </div>
-        <input type ="hidden" name="approvalLineNo" th:value="${param.approvalLineNo}">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="checkAll"></th>
-                    <th class="hidden" style="display: none">결재자번호</th>
-                    <th>번호</th>
-                    <th>부서</th>
-                    <th>직책</th>
-                    <th>결재자 이름</th>
-                    <th>즐겨찾기</th>
-                </tr>
-            </thead>
-            <tbody class="approvers">
-                <th:block th:each="info,sts : ${approvers}">
-                    <tr th:data-lineno="${info.approvalLineNo}">
-                        <td><input type="checkbox" class="rowCheck" th:value="${info.approvalLineNo}"></td>
-                        <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
-                        <td>[[${sts.count}]]</td>
-                        <td>[[${info.departmentName}]]</td>
-                        <td>[[${info.positionCode}]]</td>
-                        <td>[[${info.name}]]</td>
-                        <td>
-                            <label class="chk_box">
-                                <input type="checkbox" th:checked="${info.favoriteChk == 'Y'}" />
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </label>
-                        </td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
-        <div class="d-flex justify-content-end" style="padding: 10px;">
-            <button id="addApproverButton" class="btn btn-info btn-sm" style="width: 80px;">추가</button>
-            <button id="deleteApproverButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
-        </div>
-    </div>
-</div>
+	<div class="table-container">
+		<div class="text-center">
+			<div class="table-header">결재자 조회</div>
+			<input type="hidden" name="approvalLineNo"
+				th:value="${param.approvalLineNo}">
+			<table class="table">
+				<thead>
+					<tr>
+						<th><input type="checkbox" id="checkAll"></th>
+						<th class="hidden" style="display: none">결재자번호</th>
+						<th>번호</th>
+						<th>부서</th>
+						<th>직책</th>
+						<th>결재자 이름</th>
+						<th>즐겨찾기</th>
+					</tr>
+				</thead>
+				<tbody class="approvers">
+					<th:block th:each="info,sts : ${approvers}">
+						<tr th:data-lineno="${info.approvalLineNo}">
+							<td><input type="checkbox" class="rowCheck"
+								th:value="${info.approvalLineNo}"></td>
+							<td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
+							<td>[[${sts.count}]]</td>
+							<td>[[${info.departmentName}]]</td>
+							<td>[[${info.positionCode}]]</td>
+							<td>[[${info.name}]]</td>
+							<td><label class="chk_box"> <input type="checkbox"
+									th:checked="${info.favoriteChk == 'Y'}" /> <i
+									class="fa fa-star" aria-hidden="true"></i>
+							</label></td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-end" style="padding: 10px;">
+				<button id="addApproverButton" class="btn btn-info btn-sm"
+					style="width: 80px;">추가</button>
+				<button id="deleteApproverButton" class="btn btn-success btn-sm"
+					style="width: 80px;">삭제</button>
+			</div>
+		</div>
+	</div>
 
 <script>
+$(document).ready(function() {
     // 체크박스 전체 선택/해제 기능
     $('#checkAll').on('click', function() {
         $('.rowCheck').prop('checked', this.checked);
     });
-
-    /* // 각 행 클릭시 리스트 및 등록 폼 출력
-    $('.approvers').on('click', 'tr', function(event) {
-        if (!$(event.target).is('input[type="checkbox"]')) {
-            let approvalLineNo = $(event.currentTarget).data("lineno");
-            $.ajax({
-                type : 'GET',
-                url : '/appr/approverInsert?approvalLineNo=' + approvalLineNo,
-                success : function(response) {
-                    $(".approverInsert").html(response);
-                },
-                error : function() {
-                    alert('오류가 발생했습니다.');
-                }
-            });
-        }
-    }); */
 
     // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
     $('.chk_box').on('click', function(event) {
         event.stopPropagation();
     });
 
+ 	// 각 행 클릭 시 approverInfo 페이지로 이동
+	$('.approvers').on('click', 'tr', function(event) {
+	    if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('chk_box')) {
+	        // 현재 클릭한 행에서 approverNo 값 가져오기
+	        let approverNo = $(this).find('td.hidden').text().trim(); // hidden 클래스를 가진 td에서 가져옴
+	        location.href = '/appr/apprInfo?approverNo=' + approverNo;
+	    }
+	});
+
     // 추가 버튼 클릭 시 동작
     $('#addApproverButton').on('click', function() {
-    	let approvalLineNo = $('[name="approvalLineNo"]').val();
-        location.href = '/appr/approverInsert?approvalLineNo='+approvalLineNo;
+        let approvalLineNo = $('[name="approvalLineNo"]').val();
+        location.href = '/appr/approverInsert?approvalLineNo=' + approvalLineNo;
     });
 
     // 삭제 버튼 클릭 시 동작
@@ -162,15 +155,15 @@ button {
         if (selectedIds.length > 0) {
             if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
                 $.ajax({
-                    type : 'POST',
-                    url : '/appr/approverDelete',
-                    data : JSON.stringify(selectedIds),
-                    contentType : 'application/json',
-                    success : function(response) {
+                    type: 'POST',
+                    url: '/appr/approverDelete',
+                    data: JSON.stringify(selectedIds),
+                    contentType: 'application/json',
+                    success: function(response) {
                         alert('삭제되었습니다.');
                         location.reload();
                     },
-                    error : function() {
+                    error: function() {
                         alert('삭제 중 오류가 발생했습니다.');
                     }
                 });
@@ -179,6 +172,7 @@ button {
             alert('삭제할 결재자를 선택하세요.');
         }
     });
+});
 </script>
 </body>
 </html>

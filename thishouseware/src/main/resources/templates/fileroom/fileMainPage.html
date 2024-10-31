@@ -5,12 +5,11 @@
 	layout:fragment="Content">
 <head>
 <style>
-/* 자료실 제목과 폴더, 파일 목록 사이 간격 추가 */
 .card-title {
 	margin-bottom: 15px;
 }
-/* 폴더, 파일 목록 앞 점 제거 */
-.folder-list {
+
+.folder-list, .file-list {
 	list-style-type: none;
 	padding-left: 0;
 }
@@ -44,28 +43,31 @@
 								<div class="board-container">
 									<div class="row">
 										<!-- 자료실 목록 출력 -->
-										<div th:each="info : ${list}" class="col-md-6 mb-4">
+										<div th:each="fileRoom : ${fileRooms}" class="col-md-6 mb-4">
 											<div class="card">
 												<div class="fileroom-header">
-													<a th:text="${info.fileRoomsNo}" class="fileroom-header"
-														th:style="${info.fileRoomsNo != null ? 'display:none' : 'display:inline-block'}"></a>
-													<h4 th:text="${info.fileRoomsName}" class="card-title"></h4>
+													<span th:text="${fileRoom.fileRoomsNo}"
+														style="display: none;"></span>
+													<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
 												</div>
-												<ul class="folder-list"
-													style="list-style-type: none; padding-left: 0;">
-													<li th:each="post : ${board.posts}" class="post-item"
-														id="posts"><a th:text="${post.postsNo}"
-														class="post-header"
-														th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
-														<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
-														<a th:text="${post.title}" class="post-title"
-														style="display: inline-tblock; width: 200px; text-align: left;">게시글
-															제목</a></li>
+												<ul class="folder-list">
+													<li th:each="folder : ${fileRoom.folders}"
+														class="folder-item"><span
+														th:text="${folder.folderNo}" style="display: none;"></span>
+														<strong>폴더</strong> <span th:text="${folder.folderName}"
+														style="display: inline-block; width: 200px; text-align: left;"></span>
+													</li>
 												</ul>
-
+												<ul class="file-list" th:if="${files != null}">
+													<li th:each="file : ${files}" class="file-item"><span
+														th:text="${file.fileNo}" style="display: none;"></span> <strong>파일</strong>
+														<span th:text="${file.fileName}"
+														style="display: inline-block; width: 200px; text-align: left;"></span>
+													</li>
+												</ul>
 											</div>
 										</div>
-										<!-- /게시판 목록 -->
+										<!-- /자료실 목록 -->
 									</div>
 								</div>
 							</div>
@@ -75,22 +77,24 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		// 게시글 클릭 시 게시글 단건조회 페이지 이동
-		$('#posts.post-item').on('click', function(event) {
-			let liTag = event.currentTarget;
-			let postsNo = $(liTag).children().eq(0).text();
-			console.log(postsNo);
-			let url = '/board/postInfo?postsNo=' + postsNo;
-			location.href = url;
-		});
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			// 파일 클릭 시 파일 다운로드
+			$('.file-item').on('click', function(event) {
+				let fileNo = $(this).find("span").first().text();
+				console.log("File No:", fileNo);
+				let url = '/file/fileInfo?fileNo=' + fileNo;
+				location.href = url;
+			});
 
-		// 게시판 클릭 시 해당 게시판 이동
-		$('div.board-header').on('click', function(event) {
-			let hTag = event.currentTarget;
-			let boardsNo = $(hTag).children().eq(0).text();
-			let url = '/board/postList?boardsNo=' + boardsNo;
-			location.href = url;
+			// 자료실 클릭 시 해당 자료실 이동
+			$('.fileroom-header').on('click', function(event) {
+				let fileRoomsNo = $(this).find("span").first().text();
+				console.log("File Rooms No:", fileRoomsNo);
+				let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
+				location.href = url;
+			});
 		});
 	</script>
 </body>

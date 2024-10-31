@@ -8,7 +8,7 @@
 			column="boards_no" ofType="PostsVO" select="selectPostRecent" />
 	</resultMap>
 
-	<!-- 게시판 메인페이지 -->
+	<!-- 게시판 전체조회 -->
 	<select id="selectBoardMain" parameterType="BoardsVO"
 		resultMap="boardResult">
 		SELECT BOARDS_NO,

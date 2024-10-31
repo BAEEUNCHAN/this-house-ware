@@ -43,7 +43,7 @@ public class BoardController {
 
 	// 메인페이지 : URI - boardMainPage / RETURN - board/boardMainPage
 	@GetMapping("/boardMainPage")
-	public String boardMainPage(Model model, BoardsVO boardsVO, PostsVO postsVO ,Authentication authentication) {
+	public String boardMainPage(Model model, BoardsVO boardsVO, PostsVO postsVO, Authentication authentication) {
 		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 		// 게시판 목록 조회
 		List<BoardsVO> boards = boardService.selectBoardMain(boardsVO);

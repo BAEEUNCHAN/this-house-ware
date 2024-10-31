@@ -47,9 +47,11 @@ public class SpringSecurityConfig {
 							"/complain/complainUpdate",
 							"/complain/complainDelete",
 							"/complainPwdCheck").permitAll()
-					.requestMatchers("/assets/**","/park/**","/templates/**").permitAll() // 정적파일 경로허가
+					.requestMatchers("/assets/**","/park/**","/templates/**","/static/**").permitAll() // 정적파일 경로허가
 					// 메니저 기능은 사장과 관리자만 들어갈 수 있게한다.
 					.requestMatchers("/manager/**").hasAnyAuthority("a1","a2")
+					// 회사 추가 수정 기능은 관리자만 접근가능하다.
+					.requestMatchers("/company/**").hasAnyAuthority("a1","a2")
 					// 직원 리스트 관련 조회는 팀장 이상급만 접근하게 한다.(부서별 제한은 자바 Util 클래스가 담당)
 					.requestMatchers("/attendance/emps").hasAnyAuthority("a1","a2","a3","a4")
 					.anyRequest().authenticated()

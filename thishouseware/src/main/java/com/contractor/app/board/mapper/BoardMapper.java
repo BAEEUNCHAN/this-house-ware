@@ -16,6 +16,9 @@ public interface BoardMapper {
 
 	// 게시판별 게시글 전체조회
 	public List<PostsVO> selectPostBoard(PagingVO pagingVO, PostsVO postsVO);
+	
+	// 공지사항만 가져옴
+	public List<PostsVO> selectPostBoardNo1(PostsVO postsVO);
 
 	// 게시글 단건조회 : 조건 - postsNo
 	public PostsVO selectPostInfo(PostsVO postsVO);

@@ -51,9 +51,9 @@
 											<th:block th:each="info : ${results}">
 												<th:block th:if="${info.resultCost != null}">
 													<span th:if="${complain.progress == 3}"
-														class="badge badge-warning"> 상황완료</span>
+														class="badge badge-primary"> 상황완료</span>
 													<span th:if="${complain.progress == 4}"
-														class="badge badge-primary"> 보고완료</span>
+														class="badge badge-count"> 보고완료</span>
 												</th:block>
 											</th:block>
 

@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
       		
       		eventClick: function (info) {      // 일정 클릭 시	      			      		
 	      		info.jsEvent.preventDefault(); // 브라우저 네이게이션 비활성화
+	      		console.log(info.event.id);
 	      		
 	      		// 구글 캘린더 일정 과 다른 사람의 이벤트 제외
 	      		if(info.event.extendedProps.scheduleNo == undefined || info.event.id != id) { 	      

@@ -61,7 +61,7 @@
 												</tr>
 												<tr>
 													<th>첨부파일</th>
-													<td><input type="file" name="file" id="fileInput"
+													<td><input type="file" name="uploadFile" id="attatch"
 														onchange="updateFileInfo()"> <input type="hidden"
 														name="fileName" id="fileNameInput"></td>
 												</tr>
@@ -120,14 +120,14 @@
 
         // 파일 정보 업데이트
         function updateFileInfo() {
-            const fileInput = document.getElementById('fileInput');
+            const attatch = document.getElementById('attatch');
             const fileNameInput = document.getElementById('fileNameInput');
             const fileExtensionInput = document.getElementById('fileExtension');
 
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fileNameInput.value = file.name; // 파일 이름 저장
-                fileExtensionInput.value = file.name.split('.').pop(); // 파일 확장자 저장
+            if (attatch.files.length > 0) {
+                const uploadFile = attatch.files[0];
+                fileNameInput.value = uploadFile.name; // 파일 이름 저장
+                fileExtensionInput.value = uploadFile.name.split('.').pop(); // 파일 확장자 저장
             } else {
                 fileNameInput.value = '';
                 fileExtensionInput.value = '';
@@ -148,10 +148,10 @@
                 return;
             }
 
-            let fileInput = document.getElementById('fileInput');
-            if (fileInput.files.length === 0) {
+            let attatch = document.getElementById('attatch');
+            if (attatch.files.length === 0) {
                 alert('첨부파일이 등록되지 않았습니다.');
-                fileInput.focus();
+                attatch.focus();
                 return;
             }
 

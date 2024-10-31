@@ -33,8 +33,18 @@ public class FileRoomServiceImpl implements FileRoomService {
 	}
 	
 	@Override
-	public List<FolderVO> selectFolders(FolderVO folderVO) {
-		return fileRoomMapper.selectFolders(folderVO);
+	public List<FolderVO> selectFolders(Integer fileRoomsNo) {
+		return fileRoomMapper.selectFolders(fileRoomsNo);
+	}
+	
+	@Override
+	public FolderVO selectFolder(FolderVO folderVO) {
+		return fileRoomMapper.selectFolder(folderVO);
+	}
+	
+	@Override
+	public List<FilesVO> selectFiles(Integer fileRoomsNo) {
+		return fileRoomMapper.selectFiles(fileRoomsNo);
 	}
 	
 	@Override
@@ -43,8 +53,13 @@ public class FileRoomServiceImpl implements FileRoomService {
 	}
 
 	@Override
-	public int countFolerFile(FolderFileVO folderFileVO) {
-		return fileRoomMapper.countFolerFile(folderFileVO);
+	public int countFolder(Integer fileRoomsNo) {
+		return fileRoomMapper.countFolder(fileRoomsNo);
+	}
+	
+	@Override
+	public int countFile(Integer fileRoomsNo) {
+		return fileRoomMapper.countFile(fileRoomsNo);
 	}
 	
 	@Override

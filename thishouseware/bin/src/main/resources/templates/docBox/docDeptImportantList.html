@@ -48,6 +48,7 @@
                                     <tr>
                                         <th class="hidden" style="display: none">문서번호</th>
                                         <th>번호</th>
+                                        <th class=hidden style="display: none">부서번호</th>
                                         <th>부서명</th>
                                         <th>제목</th>
                                         <th>기안자</th>
@@ -60,7 +61,8 @@
                                         <tr>
                                             <td class="hidden1" style="display: none;">[[${info.edmsDocNo}]]</td>
                                             <td>[[${sts.count}]]</td>
-                                            <td>[[${info.departmentNo}]]</td>
+                                            <td class="departmentNo" style="display: none;">[[${info.departmentNo}]]</td>
+                                            <td>[[${info.departmentName}]]</td>
                                             <td>[[${info.title}]]</td>
                                             <td>[[${info.id}]]</td>
                                             <td>[[${#dates.format(info.submitDt, 'yyyy-MM-dd')}]]</td>

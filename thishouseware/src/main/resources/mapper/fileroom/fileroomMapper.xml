@@ -12,7 +12,7 @@
 		,ID
 		,USED_CAPACITY
 		FROM file_rooms
-		ORDER BY FILE_ROOMS_TYPE, FILE_ROOMS_NO DESC
+		ORDER BY FILE_ROOMS_NO
 	</select>
 
 	<!-- 자료실 단건조회 -->
@@ -30,7 +30,7 @@
 	</select>
 
 	<!-- 자료실별 폴더 전체조회 -->
-	<select id="selectFolders" parameterType="FolderVO"
+	<select id="selectFolders" parameterType="Integer"
 		resultType="FolderVO">
 		SELECT FOLDER_NO
 		,FOLDER_NAME
@@ -42,67 +42,96 @@
 		,ID
 		FROM folder
 		WHERE FILE_ROOMS_NO = #{fileRoomsNo}
+		ORDER BY
+		FOLDER_NO
+	</select>
+	
+	<!-- 자료실별 폴더 단건조회 -->
+	<select id="selectFolder" resultType="FolderVO">
+		SELECT FOLDER_NO
+		,FOLDER_NAME
+		,FOLDER_SIZE
+		,AUTHORITY
+		,FILE_ROOMS_NO
+		,FIND_COMMON_CODE_NAME(SHARE_CHK) as SHARE_CHK
+		,FOLDER_PATH
+		,ID
+		FROM folder
+		WHERE FILE_ROOMS_NO = #{fileRoomsNo}
+		AND FOLDER_NO = #{folderNo}
 		ORDER BY FOLDER_NO
 	</select>
-
+	
+	<!-- 자료실별 파일 전체조회 -->
+	<select id="selectFiles" parameterType="Integer"
+		resultType="FilesVO">
+		SELECT FILE_NO
+			  ,FILE_NAME
+			  ,EXTENSION
+			  ,PATH
+			  ,FILE_SIZE
+			  ,UPLOAD_DT
+			  ,ID
+			  ,FOLDER_NO
+			  ,FILE_ROOMS_NO
+		FROM files
+		WHERE FILE_ROOMS_NO = #{fileRoomsNo}
+		AND FOLDER_NO IS NULL
+		ORDER BY FILE_NO DESC
+	</select>
+	
 	<!-- 자료실별 폴더, 파일 전체조회 -->
-	<select id="selectFolderFile" resultType="FolderFileVO">
+	<select id="selectFolderFile" parameterType="map" resultType="FolderFileVO">
 		SELECT *
 		FROM (
 		SELECT
 		ROWNUM RN, A.*
 		FROM (
-		SELECT
-		fd.FOLDER_NO,
-		fd.FOLDER_NAME,
-		fd.FOLDER_SIZE,
-		fd.AUTHORITY,
-		fd.FILE_ROOMS_NO AS
-		FOLDER_FILE_ROOMS_NO,
-		fd.SHARE_CHK,
-		fd.FOLDER_PATH,
-		fd.ID AS FOLDER_ID,
-		f.FILE_NO,
-		f.FILE_NAME,
-		f.EXTENSION,
-		f.PATH AS FILE_PATH,
-		f.FILE_SIZE,
-		f.UPLOAD_DT,
-		f.ID AS FILE_ID,
-		f.FOLDER_NO AS FILE_FOLDER_NO,
-		f.FILE_ROOMS_NO AS FILE_FILE_ROOMS_NO
-		FROM
-		folder fd LEFT JOIN files f
-		ON fd.FOLDER_NO = f.FOLDER_NO
-		WHERE
-		fd.FILE_ROOMS_NO =
-		#{folderFileVO.fileRoomsNo}
+		SELECT DISTINCT
+		fd.FOLDER_NO AS folderNo,
+		fd.FOLDER_NAME AS folderName,
+		<!-- fd.FOLDER_SIZE AS folderSize,
+		fd.AUTHORITY AS authority,-->
+		fd.FILE_ROOMS_NO AS fileRoomsNo, 
+		<!-- fd.SHARE_CHK AS shareChk,
+		fd.FOLDER_PATH AS folderPath,
+		fd.ID AS folderId,  -->
+		f.FILE_NO AS fileNo,
+		f.FILE_NAME AS fileName,
+		f.EXTENSION AS extension,
+		f.PATH AS path,
+		f.FILE_SIZE AS fileSize,
+		f.UPLOAD_DT AS uploadDT,
+		f.ID AS fileId
+		FROM folder fd LEFT JOIN files f
+		ON fd.FILE_ROOMS_NO = f.FILE_ROOMS_NO
+		WHERE fd.FILE_ROOMS_NO = #{folderFileVO.fileRoomsNo}
 		<!-- 검색어 있을 때 조건 추가 -->
 		<if
 			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
-			AND ((fd.FOLDER_NAME '%' || #{pagingVO.searchWord} || '%')
-			OR
-			(f.FILE_NAME LIKE '%' || #{pagingVO.searchWord} || '%'))
+			AND ((fd.FOLDER_NAME LIKE '%' || #{pagingVO.searchWord} || '%')
+			OR (f.FILE_NAME LIKE '%' || #{pagingVO.searchWord} || '%'))
 		</if>
-		ORDER BY fd.FOLDER_NO, f.UPLOAD_DT DESC
+		ORDER BY f.UPLOAD_DT DESC
 		) A
 		)
-		WHERE RN BETWEEN
-		#{pagingVO.start}
-		AND #{pagingVO.end}
+		WHERE RN BETWEEN #{pagingVO.start} AND #{pagingVO.end}
 	</select>
 
-	<!-- 폴더/파일 총 갯수 출력 -->
-	<select id="countFolerFile" resultType="int">
-		SELECT
-		(SELECT COUNT(*)
+
+	<!-- 자료실별 폴더 총 갯수 출력 -->
+	<select id="countFolder" resultType="Integer">
+		SELECT COUNT(*)
 		FROM folder
-		fd WHERE fd.FILE_ROOMS_NO =
-		#{folderFileVO.fileRoomsNo}) +
-		(SELECT
-		COUNT(*) FROM files f WHERE f.FILE_ROOMS_NO =
-		#{folderFileVO.fileRoomsNo}) AS total_count
-		FROM dual
+		WHERE FILE_ROOMS_NO = #{folderVO.fileRoomsNo}
+	</select>
+	
+	<!-- 자료실별 파일 총 갯수 출력 -->
+	<select id="countFile" resultType="Integer">
+		SELECT COUNT(*) 
+		FROM files
+		WHERE FILE_ROOMS_NO = #{filesVO.fileRoomsNo}
+		AND FOLDER_NO IS NULL
 	</select>
 
 	<!-- 파일 업로드 -->
@@ -112,7 +141,7 @@
 			SELECT NVL(MAX(FILE_NO), 1) + 1
 			FROM files
 		</selectKey>
-		INSERT INTO posts
+		INSERT INTO files
 		( FILE_NO
 		,FILE_NAME
 		,EXTENSION
@@ -131,7 +160,7 @@
 		,#{fileSize}
 		,SYSDATE
 		,#{id}
-		,#{folerNo}
+		,#{folderNo}
 		,#{fileRoomsNo}
 		)
 	</insert>

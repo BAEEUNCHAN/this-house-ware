@@ -3,6 +3,17 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
+	<style>
+		.okEmail{
+			color : blue;
+		}
+		.noEmail{
+			display : none;
+			color : red;
+		}
+	</style>
+</head>
             <div class="row">
               <div class="col-md-12">
                 <form class="card" th:object="${employee}">
@@ -14,7 +25,9 @@
                       <div class="col-md-8">
                         <div class="form-group">
                           <label for="email">이메일 변경</label>
-                          <input type="text" class="form-control" th:field="*{email}">
+                          <input type="text" class="form-control" th:field="*{email}" oninput = "checkEmail()">
+                          <span class="okEmail">사용가능한 이메일 입니다.</span>
+	                      <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
                         </div>
                         <input type="hidden"  th:field="*{id}" >
                         <input type="hidden"  th:field="*{imageLink}" >
@@ -79,19 +92,23 @@
                                입사일 : [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]<br>
                                [[${employee.phone}]] <br>
                             </p>
+                            <div class="separator-solid"></div>
+                            <button type="button" id="resignEmployee" class="btn btn-danger">퇴사 처리</button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-action">
-                    <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
+                    <button type="button" id="#modifyEmployee" class="btn btn-success">수정하기</button>
                   </div>
                 </form>
               </div>
             </div>
 <script>
 let emailInput = document.querySelector("#email");
+let originEmail = emailInput.value; 
+console.log(originEmail);
 let nameInput = document.querySelector("#name");
 let phoneInput = document.querySelector("#phone");
 // 입력값 확인
@@ -107,6 +124,14 @@ function valueCheck(){
         return false;
     }
 }
+function emailValueCheck(){
+	if($('.okEmail').css('display') == "none"){
+		return false;
+	}else{
+		return true;
+	}
+	
+}
 // 이미지 링크용 스크립트
 const imgLink = $('input[name=imageLink]').val();
 $('#empImg').attr({src: "/upload/"+imgLink});
@@ -116,6 +141,10 @@ $('#modifyEmployee').on('click', function(event){
 
 	if(!valueCheck()){
 		alert("수정값이 잘못되었습니다.");
+		return null;
+	}
+	if(!emailValueCheck()){
+		alert("email 을 사용할 수 없습니다.");
 		return null;
 	}
 	let formData = new FormData(); 
@@ -154,5 +183,53 @@ $('#modifyEmployee').on('click', function(event){
 		}
 	})
 	.fail(err => console.log(err));
-	});
+});
+// 이메일 체크
+function checkEmail(){
+    var email = $('#email').val(); 
+    if(email.length <= 0){
+        $('.noEmail').css("display","inline-block");
+        $('.okEmail').css("display", "none");
+    	return null;
+    }
+    if(originEmail == email){
+    	$('.okEmail').css("display","inline-block"); 
+        $('.noEmail').css("display", "none");
+        return null;
+    }
+    $.ajax({
+        url:'/manager/emailCheck', 
+        type:'post', 
+        data:{"email":email},
+        success:function(answer){ 
+            if(answer == 0){ // 사용가능한경우
+                $('.okEmail').css("display","inline-block"); 
+                $('.noEmail').css("display", "none");
+            } else { // 사용불가능한경우
+                $('.noEmail').css("display","inline-block");
+                $('.okEmail').css("display", "none");
+            }
+        },
+        error:function(){
+            $('.noEmail').css("display","inline-block");
+            $('.okEmail').css("display", "none");
+        }
+    });
+};
+// 직원 퇴사처리
+$('#resignEmployee').on('click', function(event){
+	// $.Ajax 방식 
+	$.ajax('/manager/resignEmp?id='+$('#id').val(),{
+		type : 'post',				
+	})
+	.done(result => {
+		if(result == 'error1'){
+			alert("서버문제로 퇴사처리가 실패하였습니다.");
+		}else{
+			alert("퇴사 처리가 완료되었습니다.");
+			location.reload();
+		}
+	})
+	.fail(err => console.log(err));
+});
 </script>

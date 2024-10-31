@@ -3,6 +3,7 @@ package com.contractor.app.fileroom.service;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 @Data
@@ -15,6 +16,10 @@ public class FilesVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Date uploadDT; //등록 날짜
 	private String id; //아이디
-	private Integer folerNo; //폴더 번호
+	private Integer folderNo; //폴더 번호
 	private Integer fileRoomsNo; //자료실 번호
+	
+	private MultipartFile file; // 실제 파일
+	
+	private FilesVO filesVO;
 }

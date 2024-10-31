@@ -4,8 +4,19 @@
 	<select id="selectDepartmentAll" resultType="DepartmentVO">
 		select 
 		    department_no,
-		    department_name
+		    department_name,
+		    department_level,
+		    upper_department_no
 		from department
 		order by department_no
+	</select>
+	<select id="selectDepartmentBydeptNo" resultType="DepartmentVO" parameterType="int">
+		select 
+		    department_no,
+		    department_name,
+		    department_level,
+		    upper_department_no
+		from department
+		where department_no  = #{departmentNo}
 	</select>
 </mapper>

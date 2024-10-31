@@ -3,81 +3,116 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
-<title></title>
-</head>
 <body>
-	<div class="text-center">
-		<form name="insertForm" th:action="@{/board/postInsert}" method="post">
-			<h3>게시글 작성</h3>
-			<table class="table">
-				<tr>
-					<th>게시판 선택</th>
-					<td><select class="form-select" name="boardsNo"
-						aria-label="Default select example">
-							<option value="">선택</option>
-							<optgroup th:each="optgrp : ${boardsType}"
-								th:label="${optgrp.commonCodeName}">
-								<option th:each="opt : ${boards}"
-									th:if="${optgrp.commonCodeName} == ${opt.boardsType}"
-									th:text="${opt.title}" th:value="${opt.boardsNo}"></option>
-							</optgroup>
-					</select></td>
-				</tr>
-				<tr>
-					<th>머리글</th>
-					<td><select class="form-select"
-						aria-label="Default select example" name="postsType">
-							<option value="">선택</option>
-							<option th:each="opt : ${postsType}"
-								th:value="${opt.commonCodeId}" th:text="${opt.commonCodeName}"></option>
-					</select></td>
-				</tr>
-				<tr>
-					<th>제목</th>
-					<td><input type="text" name="title"></td>
-				</tr>
-				<tr>
-					<th>게시 기간여부</th>
-					<td><span th:each="radio : ${postSetting}"> <input
-							class="form-check-input" type="radio" name="postSetting"
-							id="postSetting" th:value="${radio.commonCodeId}" /> <label
-							class="form-check-label" for="postSetting"
-							th:text="${radio.commonCodeName}"></label>
-					</span></td>
-				</tr>
-				<tr>
-					<th>게시 시작시간</th>
-					<td><input type="date" name="postStartTime" id="postStartTime"
-						disabled></td>
-				</tr>
-				<tr>
-					<th>게시 종료시간</th>
-					<td><input type="date" name="postEndTime" id="postEndTime"
-						disabled></td>
-				</tr>
-				<tr>
-					<th>내용</th>
-					<td><textarea name="content"></textarea></td>
-				</tr>
-			</table>
-			<button type="submit">등록</button>
-		</form>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">게시판</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/board/postInsert">글쓰기</a></li>
+				</ul>
+			</div>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">글쓰기</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<form name="insertForm" th:action="@{/board/postInsert}"
+											method="post">
+											<input type="hidden" name="id"
+												th:value="${#authentication.principal.empVO.id}">
+											<table class="table">
+												<tr>
+													<th>게시판 선택</th>
+													<td><select class="form-select" name="boardsNo"
+														aria-label="Default select example">
+															<option value="">선택</option>
+															<optgroup th:each="optgrp : ${boardsType}"
+																th:label="${optgrp.commonCodeName}">
+																<option th:each="opt : ${boards}"
+																	th:if="${optgrp.commonCodeName} == ${opt.boardsType}"
+																	th:text="${opt.title}" th:value="${opt.boardsNo}"
+																	th:selected="${opt.boardsNo} == ${selectedBoardsNo}">
+																</option>
+															</optgroup>
+													</select></td>
+												</tr>
+												<tr>
+													<th>머리글</th>
+													<td><select class="form-select"
+														aria-label="Default select example" name="postsType">
+															<option value="">선택</option>
+															<option th:each="opt : ${postsType}"
+																th:value="${opt.commonCodeId}"
+																th:text="${opt.commonCodeName}"></option>
+													</select></td>
+												</tr>
+												<tr>
+													<th>제목</th>
+													<td><input type="text" name="title"></td>
+												</tr>
+												<tr>
+													<th>게시 기간여부</th>
+													<td><span th:each="radio : ${postSetting}"> <input
+															class="form-check-input" type="radio" name="postSetting"
+															th:value="${radio.commonCodeId}"
+															th:onclick="checkPostSetting(this);"
+															th:checked="${radio.commonCodeId == 'q2'}" /> <label
+															class="form-check-label"
+															th:text="${radio.commonCodeName}"></label>
+													</span></td>
+												</tr>
+												<tr>
+													<th>게시 시작시간</th>
+													<td><input type="date" name="postStartTime"
+														id="postStartTime" disabled></td>
+												</tr>
+												<tr>
+													<th>게시 종료시간</th>
+													<td><input type="date" name="postEndTime"
+														id="postEndTime" disabled></td>
+												</tr>
+												<tr>
+													<th>내용</th>
+													<td><textarea name="content"></textarea></td>
+												</tr>
+											</table>
+											<button class="btn btn-primary" type="submit">등록</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<script>
-		// postSetting 값 확인 -- q1:O q2:X 
-		$('form [name="postSetting"]').on('change', checkPostSetting);
+	<script th:inline="javascript">
+		// 기본으로 게시 기간여부를 '무'로 설정
+		document.querySelector('input[name="postSetting"][value="q2"]').checked = true;
 
-		function checkPostSetting(event) {
-			event.preventDefault();
+		// 게시 기간 여부 체크
+		function checkPostSetting(element) {
+			const postStartTime = document.getElementById('postStartTime');
+			const postEndTime = document.getElementById('postEndTime');
 
-			if (event.target.value == 'q2') {
-				$('form [name="postStartTime"], form [name="postEndTime"]')
-						.attr("disabled", true);
-			} else if (event.target.value == 'q1') {
-				$('form [name="postStartTime"], form [name="postEndTime"]')
-						.attr("disabled", false);
+			if (element.value == 'q1') { // '유'가 선택된 경우
+				postStartTime.removeAttribute("disabled");
+				postEndTime.removeAttribute("disabled");
+			} else { // '무'가 선택된 경우
+				postStartTime.setAttribute("disabled", "disabled");
+				postEndTime.setAttribute("disabled", "disabled");
 			}
 		}
 
@@ -118,14 +153,31 @@
 			alert('게시글이 등록되었습니다.');
 			insertForm.submit();
 		}
-		
-		// 게시 기간설정 - 오늘, 이전 날짜 선택 X
-		document.getElementById('postStartTime').setAttribute("min", getTodayDate());
-		document.getElementById('postEndTime').setAttribute("min", getTodayDate());
-		
+
+		// 오늘 날짜 설정
+		const today = new Date();
+
+		document.getElementById('postStartTime').setAttribute("min",
+				today.toISOString().substring(0, 10));
+		document.getElementById('postEndTime').setAttribute("min",
+				today.toISOString().substring(0, 10));
+
+		document
+				.getElementById('postStartTime')
+				.addEventListener(
+						'change',
+						function() {
+							const postStartTimeValue = this.value;
+							document.getElementById('postEndTime')
+									.setAttribute("min", postStartTimeValue);
+							document.getElementById('postEndTime').value = postStartTimeValue;
+						});
+
 		// 게시 시작/종료시간 - 오늘 날짜 설정
-		document.getElementById('postStartTime').value = new Date().toISOString().substring(0, 10);
-		document.getElementById('postEndTime').value = new Date().toISOString().substring(0, 10);
+		document.getElementById('postStartTime').value = today.toISOString()
+				.substring(0, 10);
+		document.getElementById('postEndTime').value = today.toISOString()
+				.substring(0, 10);
 	</script>
 </body>
 </html>

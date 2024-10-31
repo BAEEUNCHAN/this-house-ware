@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<style>
+.pagination .active .page-link {
+	background-color: #007bff; /* 활성 페이지의 배경색 */
+	color: white; /* 활성 페이지의 글자색 */
+	border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
+}
+
+.pagination .page-item.disabled .page-link {
+	pointer-events: none; /* 비활성화된 링크 클릭 방지 */
+	color: #6c757d; /* 비활성화된 페이지의 글자색 */
+}
+</style>
+<body>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">자료실</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a
+						href="/file/folderFileList?fileRoomsNo=${fileRoom.fileRoomsNo}">[[${fileRoom.fileRoomsName}]]</a></li>
+				</ul>
+			</div>
+
+			<div class="page-inner file">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">
+									[[${fileRoom.fileRoomsName}]] <a class="float-end">
+										<button class="btn btn-primary">파일업로드</button>
+									</a>
+								</div>
+
+							</div>
+							<!-- <div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<form name="frmSearch" id="frmSearch">
+											<input name="nowPage" type="hidden"
+												th:value="${paging.nowPage}"> <input name="fileRoomsNo"
+												type="hidden" th:value="${fileRoom.fileRoomsNo}"> <input
+												name="cntPerPage" type="hidden"
+												th:value="${paging.cntPerPage}">
+											<div style="text-align: right;">
+												<input name="searchWord" type="text"
+													th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
+												<button type="submit">검색</button>
+											</div>
+										</form>
+										<span>게시글 수 [[${#lists.size(posts)}]]</span>
+										<table class="table">
+											<thead>
+												<tr>
+													<th>폴더 번호</th>
+													<th>폴더 이름</th>
+												</tr>
+											</thead>
+											<tbody>
+												<th:block th:each="info : ${list}">
+													<tr>
+														<td>[[ ${info.folderNo}]]</td>
+														<td>[[ ${info.folderName}]]</td>
+													</tr>
+												</th:block>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-body" style="margin-top: -30px;">
+				<div class="row">
+					<div class="text-center">
+						<!-- 페이지 네이션 -->
+						<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
+						<nav aria-label="Page navigation" class="text-center mx-auto">
+							<ul class="pagination justify-content-center">
+								<li class="page-item"
+									th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
+									class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
+								<li class="page-item"
+									th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
+									class="page-link"
+									th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
+								<li
+									th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
+									class="page-item"
+									th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
+									class="page-link" th:href="|javascript:gopage(${num})|"
+									th:text="${num}"></a></li>
+
+								<li class="page-item"
+									th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
+									<a class="page-link"
+									th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
+								</li>
+								<li class="page-item"
+									th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
+									<a class="page-link"
+									th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+		// 제이쿼리 객체 생성
+		// 파일 업로드 자료실 번호 받아오기
+		let fileRoomsNo = /*[[${fileRoom.fileRoomsNo}]]*/'';
+
+		// 파일 업로드 클릭 이벤트
+		$('.file button.btn.btn-primary').on('click', function() {
+			let url = '/file/fileInsert?fileRoomsNo=' + fileRoomsNo;
+			location.href = url;
+		});
+
+		// 페이징
+		function gopage(p) {
+			frmSearch.nowPage.value = p;
+			frmSearch.submit();
+		}
+	</script>
+</body>
+</html>

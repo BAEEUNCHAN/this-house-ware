@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<body>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">자료실</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/file/fileInsert">파일 업로드</a></li>
+				</ul>
+			</div>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">파일 업로드</div>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="text-center">
+										<form name="insertForm" th:action="@{/file/fileInsert}"
+											method="post">
+											<input type="hidden" name="id" th:value="${#authentication.principal.empVO.id}">
+											<table class="table">
+												<tr>
+													<th>자료실 선택</th>
+													<td><select class="form-select" name="fileRoomsNo"
+														aria-label="Default select example"
+														onchange="filterFoldersByRooms()">
+															<option value="">선택</option>
+															<optgroup th:each="optgrp : ${fileRoomsType}"
+																th:label="${optgrp.commonCodeName}">
+																<option th:each="opt : ${fileRooms}"
+																	th:if="${optgrp.commonCodeName} == ${opt.fileRoomsType}"
+																	th:text="${opt.fileRoomsName}"
+																	th:value="${opt.fileRoomsNo}"
+																	th:selected="${opt.fileRoomsNo} == ${selectedfileRoomsNo}">
+																</option>
+															</optgroup>
+													</select></td>
+												</tr>
+												<tr>
+													<th>폴더 선택</th>
+													<td><select class="form-select" name="folderNo"
+														aria-label="Default select example">
+															<option value="">선택</option>
+															<option th:each="opt : ${folders}"
+																th:data-fileRoomsNo="${opt.fileRoomsNo}"
+																th:value="${opt.folderNo}" th:text="${opt.folderName}">
+															</option>
+													</select></td>
+												</tr>
+												<tr>
+													<th>첨부파일</th>
+													<td><input type="file" id="attatch" name="fileName"></td>
+												</tr>
+											</table>
+											<button class="btn btn-primary" type="submit">등록</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script th:inline="javascript">
+	function filterFoldersByRooms() {
+        const selectedFileRoomsNo = document.querySelector('select[name="fileRoomsNo"]').value;
+        const folderOptions = document.querySelectorAll('select[name="folderName"] option');
+
+        folderOptions.forEach(option => {
+            const fileRoomsNo = option.getAttribute('data-fileRoomsNo');
+            // 선택된 자료실 번호와 일치하는 폴더만 표시, 선택되지 않으면 전체 표시
+            option.style.display = (fileRoomsNo === selectedFileRoomsNo || selectedFileRoomsNo === '') ? 'block' : 'none';
+        });
+    }
+
+    // 페이지 로드 시 초기 필터링 수행
+    document.addEventListener('DOMContentLoaded', filterFoldersByRooms);
+    
+ 	// submit을 하기 전 자료실, 첨부파일 확인
+	$(insertForm).on('submit', fileInsertHandler);
+
+	function fileInsertHandler(event) {
+		event.preventDefault();
+
+		let fileRoomsNo = $('form [name="fileRoomsNo"]');
+		if (fileRoomsNo.val() == '') {
+			alert('게시글 유형이 입력되지 않았습니다.');
+			fileRoomsNo.focus();
+			return;
+		}
+
+		let title = $('form [name="title"]');
+		if (title.val() == '') {
+			alert('제목이 입력되지 않았습니다.');
+			title.focus();
+			return;
+		}
+
+		let content = $('form [name="content"]');
+		if (content.val() == '') {
+			alert('내용이 입력되지 않았습니다.');
+			content.focus();
+			return;
+		}
+
+		let postSetting = $('form [name="postSetting"]');
+		if (postSetting.val() == '') {
+			alert('게시 기간여부가 입력되지 않았습니다.');
+			postSetting.focus();
+			return;
+		}
+
+		alert('게시글이 등록되었습니다.');
+		insertForm.submit();
+	}
+	</script>
+
+</body>
+</html>

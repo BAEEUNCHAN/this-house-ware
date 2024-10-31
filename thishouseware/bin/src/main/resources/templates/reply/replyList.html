@@ -66,8 +66,6 @@
 				<option value="0">대기</option>
 				<option value="1">접수</option>
 				<option value="2">진행</option>
-				<option value="3">상황완료</option>
-				<option value="4">보고완료</option>
 			</select>
 			<div class="page-inner">
 				<div class="row">
@@ -110,15 +108,18 @@
 																th:class="'progress-1'"><span
 																	class="badge badge-warning">접수</span></span> <span th:case="2"
 																th:class="'progress-2'"><span
-																	class="badge badge-success">진행</span></span> <span th:case="3"
-																th:class="'progress-3'"><span
-																	class="badge badge-primary">상황완료</span></span> <span
-																th:case="4" th:class="'progress-4'"><span
-																	class="badge badge-count">보고완료</span></span>
+																	class="badge badge-success">진행</span></span>
+																	
+																<!-- <span th:case="3" th:class="'progress-3'">
+																<span class="badge badge-primary">상황완료</span></span>
+																<span th:case="4" th:class="'progress-4'">
+																<span class="badge badge-count">보고완료</span></span> -->
+																
 														</span></td>
 														<td>[[${#dates.format(info.uploadDt, 'yyyy-MM-dd')}]]</td>
 
 														<td>
+														
 															<button type="button" class="btn btn-danger alert_demo_7"
 																data-toggle="modal" data-target="#exampleModal"
 																th:value="info">

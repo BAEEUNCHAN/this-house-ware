@@ -206,49 +206,58 @@ button:hover {
 					</div>
 					</div>
 				</div>
-				<script th:inline="javascript">
-				var userId = [[${#authentication.principal.empVO.id}]]
-				document.querySelector('#edmsFormNo').addEventListener('change',function(e){
-				let url= '/template/'+event.target.value +'.html'
-				$('#edmsContent').load(url)				
-				});
-
-			    const sendScreenshot = (img) => {
-			      let data = new FormData(document.insertForm);
-			      data.append('screenshot', img);
-			      fetch('/edms/edmsInsert', {
-			        method: "post",
-			        body: data
-			      })
-			      .then(res => {
-			    	    if (res.ok) {
-			    	      // 요청이 성공하면 페이지 이동
-			    	      location.href = '/edms/edmsDocList';
-			    	    } else {
-			    	        // 실패시 alert
-			    	        alert('스크린샷 업로드에 실패했습니다.');
-			    	      }
-			    	    })
-			    	    .catch(error => {
-			    	      alert('오류가 발생했습니다: ' + error.message);
-			    	    });
-			    	  }
-			    
-			    document.querySelector(".btnSubmit").addEventListener("click", function () {
-			
-			      const input = document.getElementById('edmsContent');
-			      html2canvas(input).then(canvas => {
-			        //document.body.appendChild(canvas);
-			        const imgData = canvas.toDataURL('image/png');
-			        sendScreenshot(imgData)
-			      })
-			      
-			      
-			    });
-		  		</script>
+					<script th:inline="javascript">
+				    // 로그인된 사용자 ID를 가져옴
+				    var userId = [[${#authentication.principal.empVO.id}]];
+				
+				    document.querySelector('#edmsFormNo').addEventListener('change', function(e) {
+				        let selectedValue = e.target.value;
+				
+				        // 양식이 선택되었으면 저장 버튼을 보이고, 선택이 없으면 숨김
+				        if (selectedValue) {
+				            $('.btnSave').show();
+				        } else {
+				            $('.btnSave').hide();
+				        }
+				
+				        // 선택된 양식에 따라 URL을 설정하고 #edmsContent에 HTML 템플릿을 로드
+				        let url = '/template/' + selectedValue + '.html';
+				        $('#edmsContent').load(url);
+				    });
+				
+				    const sendScreenshot = (img) => {
+				        let data = new FormData(document.insertForm);
+				        data.append('screenshot', img);
+				        
+				        fetch('/edms/edmsInsert', {
+				            method: "post",
+				            body: data
+				        })
+				        .then(res => {
+				            if (res.ok) {
+				                // 요청이 성공하면 페이지 이동
+				                location.href = '/edms/edmsDocList';
+				            } else {
+				                // 실패 시 alert
+				                alert('스크린샷 업로드에 실패했습니다.');
+				            }
+				        })
+				        .catch(error => {
+				            alert('오류가 발생했습니다: ' + error.message);
+				        });
+				    };
+				
+				    document.querySelector(".btnSubmit").addEventListener("click", function () {
+				        const input = document.getElementById('edmsContent');
+				        html2canvas(input).then(canvas => {
+				            const imgData = canvas.toDataURL('image/png');
+				            sendScreenshot(imgData);
+				        });
+				    });
+				</script>
 		  		<!-- 임시저장 모달 -->
 				<script src="/assets/js/chan/insertSave.js"></script>
-				<script src="/assets/js/chan/insertSaveButton.js"></script>
+				<!--<script src="/assets/js/chan/insertSaveButton.js"></script>-->
 			</div>
 		</div>
 	</div>

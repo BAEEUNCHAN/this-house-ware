@@ -17,6 +17,8 @@ import lombok.ToString;
 public class ApprVO {
 	private Integer approverNo; // 결재자번호 Primary Key / not null
 	private String approver; // 결재자 / not null
+	private String approverName; // 결재자 이름
+	private String approvalType; // 결재타입
 	private Integer approvalOrder; // 결재 순서 / not null
 	private String approvalStatus; // 결재상태
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

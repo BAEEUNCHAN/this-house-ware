@@ -212,4 +212,13 @@
 	 	SET RESIGN_DT = SYSDATE 
 	 	WHERE id = #{id}
 	 </update>
+	 
+	 <!-- 은찬추가 -->
+	 <select id="selectEmpByDept" parameterType="Integer" resultType="EmployeeVO">
+	    SELECT e.id
+	    	  , e.name
+	    	  , e.position_code
+	    FROM employees e
+	    WHERE e.department_no = #{departmentNo}
+	</select>
 </mapper>

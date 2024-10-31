@@ -1,9 +1,11 @@
 package com.contractor.app.appr.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +20,21 @@ import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.appr.service.ApprVO;
 import com.contractor.app.appr.service.ApproverVO;
+import com.contractor.app.employee.service.DepartmentVO;
+import com.contractor.app.employee.service.EmployeeService;
+import com.contractor.app.employee.service.EmployeeVO;
+import com.contractor.app.util.EmployeeUtil;
 
 @Controller
 @RequestMapping("/appr")
 public class ApprController {
-
+	private final EmployeeService employeeService;
 	private final ApprService apprService;
 
 	@Autowired
-	ApprController(ApprService apprService) {
+	ApprController(ApprService apprService, EmployeeService employeeService) {
 		this.apprService = apprService;
+		this.employeeService = employeeService;
 	}
 
 	// 결재선 전체조회
@@ -101,51 +108,58 @@ public class ApprController {
 
 	}
 
-	// 즐겨찾기 단건조회
-	@GetMapping("/favoriteInfo") //
-	public String favoriteInfo(ApprFavoriteVO apprFavoriteVO, Model model) {
-		ApprFavoriteVO findVO = apprService.favoriteInfo(apprFavoriteVO);
-		model.addAttribute("apprFavorites", findVO);
-		return "appr/favoriteInfo";
-	}
+	// 결재선 즐겨찾기 업데이트
+	@PostMapping("/favoriteUpdate")
+	@ResponseBody
+	public ResponseEntity<String> updateFavorite(@RequestParam int approvalLineNo, 
+	                                             @RequestParam String id, 
+	                                             @RequestParam String favoriteChk) {
+	    ApprFavoriteVO favorite = new ApprFavoriteVO();
+	    favorite.setApprovalLineNo(approvalLineNo);
+	    favorite.setId(id);
 
-	// 즐겨찾기 추가 - 페이지(GET)
-	@GetMapping("/favoriteInsert")
-	public String favoriteForm() {
-		return "appr/favoriteInsert";
-	}
+	    if ("Y".equals(favoriteChk)) {
+	        boolean exists = apprService.ifFavorite(approvalLineNo, id);
+	        if (exists) {
+	            apprService.favoriteUpdate(favorite);  // 이미 존재하는 경우 업데이트
+	        } else {
+	            apprService.insertFavorite(favorite);  // 없는 경우 새로운 즐겨찾기 추가
+	        }
+	    } else {
+	        apprService.favoriteDelete(approvalLineNo, id);  // 'N'이면 즐겨찾기 삭제
+	    }
 
-	// 즐겨찾기 추가 - 처리(POST)
-	@PostMapping("/favoriteInsert")
-	public String favoriteProcess(ApprFavoriteVO apprFavoriteVO) {
-		int favorite = apprService.favoriteInsert(apprFavoriteVO);
-
-		String url = null;
-
-		if (favorite > -1) {
-			// 정상적으로 등록된 경우
-			url = "redirect:favoriteInfo?favoriteNo=" + favorite;
-			// "redirect:" 가 가능한 경우 GetMapping
-		} else {
-			// 등록되지 않은 경우
-			url = "redirect:apprFavoriteList";
-		}
-		return url;
+	    return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
 	}
 
 	// 즐겨찾기 삭제
 	@GetMapping("/favoriteDelete")
-	public String favoriteDelete(Integer favoriteNo) {
-		apprService.favoriteDelete(favoriteNo);
+	public String favoriteDelete(Integer favoriteNo, String id) {
+		apprService.favoriteDelete(favoriteNo, id);
 		return "redirect:apprFavoriteList";
 	}
 
-	// 결재자 정보 전체조회
+	/*
+	 * // 결재자 정보 전체조회
+	 * 
+	 * @GetMapping("/apprList") public void apprList(@RequestParam Integer
+	 * approvalLineNo, Model model) { List<ApproverVO> list =
+	 * apprService.apprList(approvalLineNo); model.addAttribute("approvers", list);
+	 * // return "appr/apprList"; }
+	 */
+
+	// 결재자 정보 전체조회(직급 포함)
 	@GetMapping("/apprList")
 	public void apprList(@RequestParam Integer approvalLineNo, Model model) {
 		List<ApproverVO> list = apprService.apprList(approvalLineNo);
+
+		// 직급 코드에 따른 직급 이름 설정
+		for (ApproverVO approver : list) {
+			String positionName = EmployeeUtil.getPostionName(approver.getPositionCode());
+			approver.setPositionName(positionName); // 변환된 이름 설정
+		}
+
 		model.addAttribute("approvers", list);
-		// return "appr/apprList";
 	}
 
 	// 결재자 정보 단건조회
@@ -158,8 +172,33 @@ public class ApprController {
 
 	// 결재자 추가 - 페이지(GET)
 	@GetMapping("/approverInsert")
-	public String apprForm() {
+	public String apprForm(Model model) {
+		List<EmployeeVO> emps = new ArrayList<EmployeeVO>();
+		emps = employeeService.getEmployees();
+		emps.forEach(obj -> {
+			String positionName = EmployeeUtil.getPostionName(obj.getPositionCode());
+			obj.setPositionName(positionName);
+		});
+		model.addAttribute("employees", emps);
+		List<DepartmentVO> departments = employeeService.getDepartmentList();
+		model.addAttribute("departments", departments);
 		return "appr/approverInsert";
+	}
+
+	// 부서별 직원 목록 조회
+	@GetMapping("/getEmpDept")
+	@ResponseBody
+	public List<EmployeeVO> getEmpDept(@RequestParam("departmentNo") Integer departmentNo) {
+		// 부서에 맞는 직원 리스트 가져오기
+		List<EmployeeVO> employees = employeeService.getEmpDept(departmentNo);
+
+		// 직급이름 설정
+		employees.forEach(employee -> {
+			String positionName = EmployeeUtil.getPostionName(employee.getPositionCode());
+			employee.setPositionName(positionName);
+		});
+
+		return employees;
 	}
 
 	// 결재자 추가 - 처리(POST)

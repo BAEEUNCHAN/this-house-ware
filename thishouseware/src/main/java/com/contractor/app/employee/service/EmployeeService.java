@@ -29,5 +29,9 @@ public interface EmployeeService {
 
 	boolean resignEmp(String id);
 
+	//은찬 추가 결재자 리스트에 부서별 직원 조회	
+	List<EmployeeVO> getEmpDept(int departmentNo);
+	
+
 	
 }

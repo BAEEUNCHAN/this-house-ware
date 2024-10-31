@@ -1,6 +1,7 @@
 package com.contractor.app.appr.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -23,12 +24,14 @@ public interface ApprMapper {
 	
 	// 결재선 즐겨찾기 전체조회
 	public List<ApprFavoriteVO> apprFavoriteAllList();
-	// 즐겨찾기 단건조회
-	public ApprFavoriteVO favoriteInfo(ApprFavoriteVO apprFavoriteVO);
-	// 즐겨찾기 추가
-	public int insertFavorite(ApprFavoriteVO apprFavoriteVO);
+	// 즐겨찾기 존재 여부 확인 메서드
+	int ifFavorite(Map<String, Object> params);
+    // 즐겨찾기 업데이트
+	public void updateFavorite(ApprFavoriteVO favorite);
+    // 즐겨찾기 추가
+	public void insertFavorite(ApprFavoriteVO favorite);
 	// 즐겨찾기 삭제
-	public int deleteFavorite(int favoriteNo);
+	public int deleteFavorite(Map<String, Object> params);
 	
 		
 	// 결재자 등록 정보 전체조회

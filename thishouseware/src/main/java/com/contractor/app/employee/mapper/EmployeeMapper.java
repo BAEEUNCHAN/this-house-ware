@@ -25,4 +25,7 @@ public interface EmployeeMapper {
 	List<EmployeeVO> selectEmployeesWhereDept(EmployeeVO employeeVO);
 
 	boolean updateEmployeeForResign(String id);
+
+	//은찬 추가 결재자 리스트에 부서별 직원 조회	
+	List<EmployeeVO> selectEmpByDept(int departmentNo);
 }

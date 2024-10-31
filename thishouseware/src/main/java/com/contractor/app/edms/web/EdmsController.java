@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.contractor.app.appr.service.ApprLineVO;
+import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.common.service.Base64ToImgDecodeUtil;
 import com.contractor.app.edms.service.EdmsDocVO;
 import com.contractor.app.edms.service.EdmsFormVO;
@@ -43,10 +45,13 @@ public class EdmsController {
 	private String uploadPath;
 
 	private final EdmsService edmsService;
+	
+	private final ApprService apprService;
 
 	@Autowired
-	EdmsController(EdmsService edmsService) {
+	EdmsController(EdmsService edmsService, ApprService apprService) {
 		this.edmsService = edmsService;
+		this.apprService = apprService;
 	}
 
 	// 결재문서 전체조회
@@ -67,7 +72,9 @@ public class EdmsController {
 
 	// 결재문서 등록 - 페이지
 	@GetMapping("/edmsInsert")
-	public String empInsertForm() {
+	public String empInsertForm(Model model) {
+		List<ApprLineVO> list = apprService.apprLineList();
+		model.addAttribute("apprLines", list);
 		return "edms/edmsInsert";
 	}
 
@@ -187,7 +194,7 @@ public class EdmsController {
 	@GetMapping("/edmsFormInfo")
 	public void empInfo(EdmsFormVO edmsFormVO, Model model) {
 		EdmsFormVO findVO = edmsService.edmsFormInfo(edmsFormVO);
-		model.addAttribute("edmsForms", findVO);
+		model.addAttribute("edmsForms", findVO);		
 		// return "edms/edmsFormInfo";
 	}
 

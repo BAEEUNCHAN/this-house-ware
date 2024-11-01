@@ -10,7 +10,7 @@
  * 6) rendering : "bakground"라고 입력하면 color, backgroundColor의 색상으로 해당일 전체의 내용이 채워진다.
  */
 document.addEventListener('DOMContentLoaded', function() {
-	var calendarEl = document.getElementById('calendar');    
+	var calendarEl = document.getElementById('calendardiv');    
   	fetch('/getLeave', {
     	method: "POST",
     	headers: {
@@ -80,9 +80,22 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log(info.event.start);
 				console.log(info.event.end);
 				console.log(info.event.extendedProps.content);				
-				console.log(info.event.id);				
+				console.log(info.event.id);		
+				
+						
+      		// 모달창에 현재 이벤트 정보 출력
+      		let startDt = new Date(info.event.start - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);
+			let endDt = new Date(info.event.end - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);								
+			$("#eventInfoModal #leaveStartDt").val(leaveStartDt);    		
+			$("#eventInfoModal #leaveType").val(leaveType);    		
+			$("#eventInfoModal #id").val(id);    		
+			$("#eventInfoModal #color").val(info.event.backgroundColor).prop("selected",true); 		
+			$("#eventInfoModal").modal("show");
+			
+			
     		},
       
+				
   			//데이터 가져오는 이벤트        
   			eventSources:[
     			{

@@ -1,6 +1,7 @@
 package com.contractor.app.doc.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +13,8 @@ public interface DocMapper {
 	// 문서함 문서 개인전체조회
 	public List<DocJoinVO> selectDocJoinList(String id);
 	// 문서결과별 문서 조회
-	public List<DocJoinVO> getApprovalStatus(String approvalStatus,String id);
+	public List<DocJoinVO> getApprovalStatus(String approvalStatus, String userId);
+
 
 	// 부서문서함
 	// 문서함 문서 부서전체조회

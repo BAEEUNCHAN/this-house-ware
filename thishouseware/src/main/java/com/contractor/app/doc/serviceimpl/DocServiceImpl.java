@@ -35,8 +35,8 @@ public class DocServiceImpl implements DocService {
 	} // 문서함 문서 전체조회
 
 	@Override
-	public List<DocJoinVO> docApprovalStatusList(String approvalStatus, String id) {
-		List<DocJoinVO> list = docMapper.getApprovalStatus(approvalStatus, id);
+	public List<DocJoinVO> docApprovalStatusList(String approvalStatus, String userId) {
+		List<DocJoinVO> list = docMapper.getApprovalStatus(approvalStatus, userId);
 		for (int i = 0; i < list.size(); i++) {
 			int deptNo = list.get(i).getDepartmentNo();
 			list.get(i).setDepartmentName(DepartmentNameUtil.getDepartmentName(deptNo));

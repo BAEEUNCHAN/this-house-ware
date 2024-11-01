@@ -78,7 +78,7 @@
 														<td>[[ ${info.title}]]</td>
 														<td>[[ ${info.name}]]</td>
 														<td><span
-															th:text="(${info.postSetting == '유'} and ${info.display == 'q2'}) 
+															th:text="(${info.postSetting == 'q1'} and ${info.display == 'q2'}) 
 																		? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} 
 																		: ${#dates.format(info.submitDT, 'yyyy-MM-dd')}">
 														</span></td>

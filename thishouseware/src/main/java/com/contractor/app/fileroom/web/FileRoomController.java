@@ -23,10 +23,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
+import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
 import com.contractor.app.fileroom.service.FolderVO;
+import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.FileUploadUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,14 +48,23 @@ public class FileRoomController {
 
 	private final FileRoomService fileRoomService;
 	private final CommonCodeService commonCodeService;
+	private final EmpAuthUtil empAuthUtil;
 
 	// 메인페이지 : URI - fileMainPage / RETURN - file/fileMainPage
 	@GetMapping("/fileMainPage")
-	public String fileMainPage(Model model) {
+	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, 
+					Authentication authentication, FolderVO folderVO,
+					@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
+		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
+		
 		// 자료실 전체조회
-		List<FileRoomsVO> list = fileRoomService.selectFilerooms(null);
-
-		model.addAttribute("list", list);
+		List<FileRoomsVO> fileRooms = fileRoomService.selectFilerooms(fileRoomsVO);
+		// 자료실별 파일 전체조회
+		List<FilesVO> files = fileRoomService.selectFiles(fileRoomsNo);
+		
+		model.addAttribute("fileRooms", fileRooms);
+		model.addAttribute("files", files);
+		model.addAttribute("employeeVO", employeeVO);
 
 		return "fileroom/fileMainPage";
 	}
@@ -97,8 +108,8 @@ public class FileRoomController {
 	// 파일 업로드 - 페이지 : URI - fileInsert / RETURN - file/fileInsert
 	@GetMapping("/fileInsert")
 	public String fileInsertForm(@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo,
-			@RequestParam(value = "folderNo", required = false) Integer folderNo, Model model,
-			FileRoomsVO fileRoomsVO, FolderVO folderVO, Authentication authentication) {
+			@RequestParam(value = "folderNo", required = false) Integer folderNo, Model model, FileRoomsVO fileRoomsVO,
+			FolderVO folderVO, Authentication authentication) {
 		// 자료실 유형 조회
 		List<CommonCodeVO> fileRoomsType = commonCodeService.selectCommonCode("0R");
 
@@ -107,7 +118,7 @@ public class FileRoomController {
 
 		// 자료실별 폴더 전체조회 - folderName, fileRoomsNo
 		List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
-		
+
 		// 페이지에 전달
 		model.addAttribute("selectedfileRoomsNo", fileRoomsNo);
 		model.addAttribute("selectedfolderNo", folderNo);

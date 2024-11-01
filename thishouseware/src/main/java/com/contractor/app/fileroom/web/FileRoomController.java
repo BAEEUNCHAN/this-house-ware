@@ -52,17 +52,21 @@ public class FileRoomController {
 
 	// 메인페이지 : URI - fileMainPage / RETURN - file/fileMainPage
 	@GetMapping("/fileMainPage")
-	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, 
-					Authentication authentication, FolderVO folderVO,
-					@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
+	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, Authentication authentication, FolderVO folderVO,
+			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
 		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
-		
+
 		// 자료실 전체조회
 		List<FileRoomsVO> fileRooms = fileRoomService.selectFilerooms(fileRoomsVO);
+
+		// 자료실별 폴더 전체조회 - folderName, fileRoomsNo
+		List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
+
 		// 자료실별 파일 전체조회
 		List<FilesVO> files = fileRoomService.selectFiles(fileRoomsNo);
-		
+
 		model.addAttribute("fileRooms", fileRooms);
+		model.addAttribute("folders", folders);
 		model.addAttribute("files", files);
 		model.addAttribute("employeeVO", employeeVO);
 

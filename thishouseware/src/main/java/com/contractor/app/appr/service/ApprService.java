@@ -13,6 +13,8 @@ public interface ApprService {
 	public int apprLineInsert(ApprLineVO apprLineVO);
 	// 결재선 삭제
 	public Map<String, Object> apprLineDelete(int approvalLineNo);
+	// 결재선 및 관련 레코드 삭제 메서드
+	public void deleteApprovalLineAndRelatedRecords(Integer approvalLineNo);
 	// 결재선 수정
 	public Map<String, Object> apprLineUpdate(ApprLineVO apprLineVO);
 	
@@ -41,5 +43,8 @@ public interface ApprService {
 	public Map<String, Object> apprDelete(int approverNo);
 	// 결재자 수정
 	public Map<String, Object> apprUpdate(ApprVO apprVO);
+	// 결재자 순서 변경
+	public void updateApprovalOrder(String approverNo, Integer approvalOrder);
+	
 
 }

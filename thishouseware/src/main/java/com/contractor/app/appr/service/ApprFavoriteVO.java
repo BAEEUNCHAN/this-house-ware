@@ -23,4 +23,6 @@ public class ApprFavoriteVO {
     private Date createDt;            // 생성일시   
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateDt;            // 수정일시
+    private String favoriteChk;       // 즐겨찾기 체크
+    
 }

@@ -47,6 +47,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     	HttpSession session = request.getSession();
         session.setAttribute("attendance",attendanceVO);
         System.out.println(attendanceVO.getAttendancesCode());
-        getRedirectStrategy().sendRedirect(request,response,"/main?boardNo=1");
+        getRedirectStrategy().sendRedirect(request,response,"/main?boardsNo=1");
     }
 }

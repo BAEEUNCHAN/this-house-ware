@@ -47,7 +47,7 @@ public class SpringSecurityConfig {
 							"/complain/complainUpdate",
 							"/complain/complainDelete",
 							"/complainPwdCheck").permitAll()
-					.requestMatchers("/assets/**","/park/**","/templates/**","/static/**").permitAll() // 정적파일 경로허가
+					.requestMatchers("/assets/**","/park/**","/templates/**","/yerim/**").permitAll() // 정적파일 경로허가
 					// 메니저 기능은 사장과 관리자만 들어갈 수 있게한다.
 					.requestMatchers("/manager/**").hasAnyAuthority("a1","a2")
 					// 회사 추가 수정 기능은 관리자만 접근가능하다.

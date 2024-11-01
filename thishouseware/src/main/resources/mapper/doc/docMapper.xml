@@ -21,21 +21,22 @@
 		</select>
 		
 		<!-- 문서결과별 문서 조회-->
-		<select id="getApprovalStatus" parameterType="String" resultType="DocJoinVO">
+		<select id="getApprovalStatus" parameterType="map" resultType="DocJoinVO">
 		    SELECT 
-		        e.department_no
-		        ,d.edms_doc_no
-		        ,d.title 
-		        ,e.id
-		        ,d.submit_dt
-		        ,d.approval_status
+		          e.department_no
+		        , d.edms_doc_no
+		        , d.title
+		        , e.id
+		        , d.submit_dt
+		        , d.approval_status
 		    FROM 
 		        edms_doc d
 		    JOIN 
 		        employees e ON d.id = e.id
 		    WHERE 
 		        d.approval_status = #{approvalStatus}
-		    AND e.id = #{id}
+		    AND 
+		        e.id = #{userId}
 		    ORDER BY 
 		        d.submit_dt DESC
 		</select>

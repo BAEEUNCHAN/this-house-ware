@@ -69,7 +69,7 @@ public class ApprController {
 
 		if (apprLine > -1) {
 			// 정상적으로 등록된 경우
-			url = "redirect:apprLineInfo?approvalLineNo=" + apprLine;
+			url = "redirect:apprLineList";
 			// "redirect:" 가 가능한 경우 GetMapping
 		} else {
 			// 등록되지 않은 경우
@@ -115,24 +115,29 @@ public class ApprController {
 	// 결재선 즐겨찾기 업데이트
 	@PostMapping("/favoriteUpdate")
 	@ResponseBody
-	public ResponseEntity<String> updateFavorite(@RequestParam int approvalLineNo, @RequestParam String id,
-												@RequestParam String favoriteChk) {
-		ApprFavoriteVO favorite = new ApprFavoriteVO();
-		favorite.setApprovalLineNo(approvalLineNo);
-		favorite.setId(id);
+	public ResponseEntity<String> updateFavorite(@RequestBody ApprFavoriteVO favorite) {
+	    int approvalLineNo = favorite.getApprovalLineNo();
+	    String id = favorite.getId();
+	    String favoriteChk = favorite.getFavoriteChk();
 
-		if ("Y".equals(favoriteChk)) {
-			boolean exists = apprService.ifFavorite(approvalLineNo, id);
-			if (exists) {
-				apprService.favoriteUpdate(favorite); // 이미 존재하는 경우 업데이트
-			} else {
-				apprService.insertFavorite(favorite); // 없는 경우 새로운 즐겨찾기 추가
-			}
-		} else {
-			apprService.favoriteDelete(approvalLineNo, id); // 'N'이면 즐겨찾기 삭제
-		}
+	    // favoriteName을 approvalLineName으로 설정
+	    if (favorite.getFavoriteName() == null || favorite.getFavoriteName().isEmpty()) {
+	        String approvalLineName = apprService.getApprovalLineName(approvalLineNo); // approvalLineNo로 이름 가져오기
+	        favorite.setFavoriteName(approvalLineName);
+	    }
 
-		return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
+	    if ("Y".equals(favoriteChk)) {
+	        boolean exists = apprService.ifFavorite(approvalLineNo, id);
+	        if (exists) {
+	            apprService.favoriteUpdate(favorite); // 이미 존재하는 경우 업데이트
+	        } else {
+	            apprService.insertFavorite(favorite); // 없는 경우 새로운 즐겨찾기 추가
+	        }
+	    } else {
+	        apprService.favoriteDelete(approvalLineNo, id); // 'N'이면 즐겨찾기 삭제
+	    }
+
+	    return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
 	}
 
 	// 즐겨찾기 삭제
@@ -163,7 +168,7 @@ public class ApprController {
 		}
 		model.addAttribute("approvers", list);
 	}
-	
+
 	// 결재자 정보 가져오기(AJAX)
 	@PostMapping("/apprList")
 	@ResponseBody
@@ -220,7 +225,7 @@ public class ApprController {
 
 		if (approver > -1) {
 			// 정상적으로 등록된 경우
-			url = "redirect:apprInfo?approverNo=" + approver;
+			url = "redirect:apprLineList";
 			// "redirect:" 가 가능한 경우 GetMapping
 		} else {
 			// 등록되지 않은 경우
@@ -248,25 +253,24 @@ public class ApprController {
 	public Map<String, Object> apprUpdateAJAXJSON(@RequestBody ApprVO apprVO) {
 		return apprService.apprUpdate(apprVO);
 	}
-	
-	//결재자 순서 변경
-	@PostMapping("/updateApprovalOrder")
-    public ResponseEntity<String> updateApprovalOrder(@RequestBody List<Map<String, Object>> orderData) {
-        try {
-            // orderData의 각 항목에서 approverNo와 approvalOrder를 추출하여 서비스로 전달
-            for (Map<String, Object> data : orderData) {
-                String approverNo = (String) data.get("approverNo");
-                Integer approvalOrder = (Integer) data.get("approvalOrder");
 
-                // 서비스의 순서 업데이트 메서드 호출
-                apprService.updateApprovalOrder(approverNo, approvalOrder);
-            }
-            return ResponseEntity.ok("순서가 성공적으로 업데이트되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("순서 저장 중 오류가 발생했습니다.");
-        }
-    }
-	
-	
+	// 결재자 순서 변경
+	@PostMapping("/updateApprovalOrder")
+	public ResponseEntity<String> updateApprovalOrder(@RequestBody List<Map<String, Object>> orderData) {
+		try {
+			// orderData의 각 항목에서 approverNo와 approvalOrder를 추출하여 서비스로 전달
+			for (Map<String, Object> data : orderData) {
+				String approverNo = (String) data.get("approverNo");
+				Integer approvalOrder = (Integer) data.get("approvalOrder");
+
+				// 서비스의 순서 업데이트 메서드 호출
+				apprService.updateApprovalOrder(approverNo, approvalOrder);
+			}
+			return ResponseEntity.ok("순서가 성공적으로 업데이트되었습니다.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("순서 저장 중 오류가 발생했습니다.");
+		}
+	}
+
 }// 끝

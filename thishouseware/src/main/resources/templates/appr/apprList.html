@@ -5,83 +5,84 @@
 <head>
     <meta charset="UTF-8">
     <title>결재자 조회</title>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <style>
-        /* 기본 체크박스 숨기기 */
-        .chk_box input[type="checkbox"] {
-            display: none;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- jQuery 라이브러리 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- jQuery UI 라이브러리 -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<style>
+/* 기본 체크박스 숨기기 */
+.chk_box input[type="checkbox"] {
+	display: none;
+}
 
-        /* 체크박스 스타일 */
-        .chk_box {
-            cursor: pointer;
-            position: relative;
-        }
+/* 체크박스 스타일 */
+.chk_box {
+	cursor: pointer;
+	position: relative;
+}
 
-        /* 기본 별 아이콘 색상 */
-        .chk_box .fa-star {
-            color: #6c757d;
-            font-size: 20px;
-        }
+/* 기본 별 아이콘 색상 */
+.chk_box .fa-star {
+	color: #6c757d;
+	font-size: 20px;
+}
 
-        /* 체크된 상태의 별 아이콘 색상 */
-        .chk_box input[type="checkbox"]:checked + .fa-star {
-            color: #ffc107;
-        }
+/* 체크된 상태의 별 아이콘 색상 */
+.chk_box input[type="checkbox"]:checked+.fa-star {
+	color: #ffc107;
+}
 
-        /* 테이블 컨테이너 스타일 */
-        .table-container {
-            width: 100%;
-            max-width: 2400px; /* 최대 너비 조정 */
-            margin: 0 auto;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background-color: #ffffff;
-            margin-bottom: 20px;
-        }
+/* 테이블 컨테이너 스타일 */
+.table-container {
+	width: 100%;
+	max-width: 2400px; /* 최대 너비 조정 */
+	margin: 0 auto;
+	padding: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	background-color: #ffffff;
+	margin-bottom: 20px;
+}
 
-        /* 테이블 제목 스타일 */
-        .table-header {
-            padding: 10px 20px;
-            font-size: 1.25em;
-            font-weight: bold;
-            color: #4a4a4a;
-            border-bottom: 1px solid #e5e5e5;
-            text-align: left; /* 왼쪽 정렬 */
-        }
+/* 테이블 제목 스타일 */
+.table-header {
+	padding: 10px 20px;
+	font-size: 1.25em;
+	font-weight: bold;
+	color: #4a4a4a;
+	border-bottom: 1px solid #e5e5e5;
+	text-align: left; /* 왼쪽 정렬 */
+}
 
-        /* 테이블 스타일 */
-        .table {
-            width: 100%;
-            margin: 0;
-            border-collapse: collapse;
-        }
+/* 테이블 스타일 */
+.table {
+	width: 100%;
+	margin: 0;
+	border-collapse: collapse;
+}
 
-        /* 테이블 헤더 스타일 */
-        .table th, .table td {
-            padding: 12px 15px;
-            text-align: center;
-            border-bottom: 1px solid #e5e5e5;
-        }
+/* 테이블 헤더 스타일 */
+.table th, .table td {
+	padding: 12px 15px;
+	text-align: center;
+	border-bottom: 1px solid #e5e5e5;
+}
 
-        /* 버튼 스타일 */
-        button {
-            margin-top: 10px;
-            margin-right: 5px;
-        }
+/* 버튼 스타일 */
+button {
+	margin-top: 10px;
+	margin-right: 5px;
+}
 
-        /* 드래그 중 강조 효과 */
-        .sortable-placeholder {
-            background-color: #d3f3ff;
-            border: 1px dashed #99d1ff;
-            height: 50px;
-        }
-    </style>
+/* 드래그 중 강조 효과 */
+.sortable-placeholder {
+	background-color: #d3f3ff;
+	border: 1px dashed #99d1ff;
+	height: 50px;
+}
+</style>
 </head>
 <body>
 <div class="table-container">
@@ -130,7 +131,7 @@
 
 <script>
     $(document).ready(function() {
-        // 각 행을 드래그 앤 드롭으로 이동 가능하게 설정
+        // 드래그 앤 드롭 기능을 초기화하여 페이지 로드 시 즉시 활성화
         $(".approverRows").sortable({
             placeholder: "sortable-placeholder",
             update: function(event, ui) {
@@ -148,13 +149,13 @@
             event.stopPropagation();
         });
 
-        // 각 행 클릭 시 approverInfo 페이지로 이동
+       /*  // 각 행 클릭 시 approverInfo 페이지로 이동
         $('.approverRows').on('click', 'tr', function(event) {
             if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('chk_box')) {
                 let approverNo = $(this).find('td.hidden').text().trim();
                 location.href = '/appr/apprInfo?approverNo=' + approverNo;
             }
-        });
+        }); */
 
         // 추가 버튼 클릭 시 동작
         $('#addApproverButton').on('click', function() {

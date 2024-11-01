@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.contractor.app.appr.mapper.ApprMapper;
 import com.contractor.app.appr.service.ApprFavoriteVO;
@@ -52,6 +53,15 @@ public class ApprServiceImpl implements ApprService {
 			map.put("approvalLineNo", approvalLineNo);
 		}
 		return map;
+	}
+
+	@Transactional
+	public void deleteApprovalLineAndRelatedRecords(Integer approvalLineNo) {
+		// APPROVER 테이블에서 approvalLineNo 삭제
+		apprMapper.deleteApproversByLineNo(approvalLineNo);
+
+		// APPROVAL_LINE 테이블에서 approvalLineNo 삭제
+		apprMapper.deleteApprLine(approvalLineNo);
 	}
 
 	// 결재선 수정
@@ -104,10 +114,10 @@ public class ApprServiceImpl implements ApprService {
 	// 즐겨찾기 삭제
 	@Override
 	public void favoriteDelete(int approvalLineNo, String id) {
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("approvalLineNo", approvalLineNo);
-	    params.put("id", id);
-	    apprMapper.deleteFavorite(params);
+		Map<String, Object> params = new HashMap<>();
+		params.put("approvalLineNo", approvalLineNo);
+		params.put("id", id);
+		apprMapper.deleteFavorite(params);
 	}
 
 	// 결재자 등록 정보 전체조회
@@ -157,4 +167,12 @@ public class ApprServiceImpl implements ApprService {
 		map.put("target", apprVO);
 		return map;
 	}
+
+	// 결재자 순서 변경
+	@Override
+	@Transactional
+	public void updateApprovalOrder(String approverNo, Integer approvalOrder) {
+		apprMapper.updateApprovalOrder(approverNo, approvalOrder);
+	}
+
 }// 끝

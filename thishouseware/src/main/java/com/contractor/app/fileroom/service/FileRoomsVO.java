@@ -1,5 +1,7 @@
 package com.contractor.app.fileroom.service;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -11,4 +13,8 @@ public class FileRoomsVO {
 	private String authority; //권한
 	private String id; //아이디
 	private Double usedCapacity; //사용량
+	
+	List<FolderVO> folders;
+	
+	List<FilesVO> files;
 }

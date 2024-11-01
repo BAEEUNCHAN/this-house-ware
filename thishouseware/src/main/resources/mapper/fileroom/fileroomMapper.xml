@@ -89,11 +89,6 @@
 	<!-- 자료실별 폴더, 파일 전체조회 -->
 	<select id="selectFolderFile" parameterType="map"
 		resultType="FolderFileVO">
-		SELECT *
-		FROM (
-		SELECT
-		ROWNUM RN, A.*
-		FROM (
 		SELECT DISTINCT
 		fd.FOLDER_NO AS
 		folderNo,
@@ -107,23 +102,12 @@
 		f.PATH AS path,
 		f.FILE_SIZE AS fileSize,
 		f.UPLOAD_DT AS uploadDT,
-		f.ID AS
-		fileId
+		f.ID AS fileId
 		FROM folder fd LEFT JOIN files f
 		ON fd.FILE_ROOMS_NO =
 		f.FILE_ROOMS_NO
 		WHERE fd.FILE_ROOMS_NO = #{folderFileVO.fileRoomsNo}
-		<!-- 검색어 있을 때 조건 추가 -->
-		<if
-			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
-			AND ((fd.FOLDER_NAME LIKE '%' || #{pagingVO.searchWord} || '%')
-			OR (f.FILE_NAME LIKE '%' || #{pagingVO.searchWord} || '%'))
-		</if>
 		ORDER BY f.UPLOAD_DT DESC
-		) A
-		)
-		WHERE RN BETWEEN #{pagingVO.start} AND
-		#{pagingVO.end}
 	</select>
 
 

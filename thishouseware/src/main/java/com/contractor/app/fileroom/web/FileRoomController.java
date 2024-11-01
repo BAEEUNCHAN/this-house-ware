@@ -27,6 +27,7 @@ import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
+import com.contractor.app.fileroom.service.FolderFileVO;
 import com.contractor.app.fileroom.service.FolderVO;
 import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.FileUploadUtil;
@@ -52,7 +53,8 @@ public class FileRoomController {
 
 	// 메인페이지 : URI - fileMainPage / RETURN - file/fileMainPage
 	@GetMapping("/fileMainPage")
-	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, Authentication authentication, FolderVO folderVO,
+	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, FolderFileVO folderFileVO,
+			Authentication authentication, FolderVO folderVO,
 			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
 		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 
@@ -65,9 +67,13 @@ public class FileRoomController {
 		// 자료실별 파일 전체조회
 		List<FilesVO> files = fileRoomService.selectFiles(fileRoomsNo);
 
+		// 자료실별 폴더, 파일 전체조회
+		//List<FolderFileVO> folderFile = fileRoomService.selectFolderFile(folderFileVO);
+		
 		model.addAttribute("fileRooms", fileRooms);
 		model.addAttribute("folders", folders);
 		model.addAttribute("files", files);
+		//model.addAttribute("folderFile", folderFile);
 		model.addAttribute("employeeVO", employeeVO);
 
 		return "fileroom/fileMainPage";
@@ -128,7 +134,7 @@ public class FileRoomController {
 		model.addAttribute("selectedfolderNo", folderNo);
 		model.addAttribute("fileRoomsType", fileRoomsType);
 		model.addAttribute("fileRooms", fileRooms);
-		model.addAttribute("folders", folders);
+		//model.addAttribute("folders", folders);
 
 		return "fileroom/fileInsert";
 	}
@@ -188,11 +194,12 @@ public class FileRoomController {
 		os.close();
 	}
 
-	@GetMapping("/getFoldersByFileRoomsNo")
-	@ResponseBody
-	public List<FolderVO> getFoldersByFileRoomsNo(@RequestParam Integer fileRoomsNo) {
-		List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
-		return folders;
-	}
+	/*
+	 * @GetMapping("/getFoldersByFileRoomsNo")
+	 * 
+	 * @ResponseBody public List<FolderVO> getFoldersByFileRoomsNo(@RequestParam
+	 * Integer fileRoomsNo) { List<FolderVO> folders =
+	 * fileRoomService.selectFolders(fileRoomsNo); return folders; }
+	 */
 
 }

@@ -2,7 +2,6 @@ package com.contractor.app.fileroom.mapper;
 
 import java.util.List;
 
-import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
 import com.contractor.app.fileroom.service.FolderFileVO;
@@ -25,7 +24,7 @@ public interface FileRoomMapper {
 	public List<FilesVO> selectFiles(Integer fileRoomsNo);
 	
 	// 자료실별 폴더, 파일 전체조회
-	public List<FolderFileVO> selectFolderFile(PagingVO pagingVO, FolderFileVO folderFileVO);
+	public List<FolderFileVO> selectFolderFile(FolderFileVO folderFileVO);
 
 	// 자료실별 폴더 총 갯수 출력
 	public int countFolder(Integer fileRoomsNo);

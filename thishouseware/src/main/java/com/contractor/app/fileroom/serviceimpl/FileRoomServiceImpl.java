@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.contractor.app.board.service.PagingVO;
 import com.contractor.app.fileroom.mapper.FileRoomMapper;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
@@ -48,8 +47,8 @@ public class FileRoomServiceImpl implements FileRoomService {
 	}
 	
 	@Override
-	public List<FolderFileVO> selectFolderFile(PagingVO pagingVO, FolderFileVO folderFileVO) {
-		return fileRoomMapper.selectFolderFile(pagingVO, folderFileVO);
+	public List<FolderFileVO> selectFolderFile(FolderFileVO folderFileVO) {
+		return fileRoomMapper.selectFolderFile(folderFileVO);
 	}
 
 	@Override

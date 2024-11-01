@@ -50,20 +50,20 @@
 														style="display: none;"></span>
 													<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
 												</div>
-												<ul class="folder-list" th:if="${folders.folderNo != null}">
-													<li th:each="folder : ${folders}" class="folder-item"><span
-														th:text="${folder.folderNo}" style="display: none;"></span>
+												<ul class="folder-list">
+													<li th:each="folder : ${folders}" class="folder-item">
+													<span th:text="${folder.folderNo}" style="display: none;"></span>
 														<strong>폴더</strong> <span th:text="${folder.folderName}"
 														style="display: inline-block; width: 200px; text-align: left;"></span>
 													</li>
 												</ul>
-												<!-- <ul class="file-list" th:if="${files != null}">
+												<ul class="file-list">
 													<li th:each="file : ${files}" class="file-item"><span
 														th:text="${file.fileNo}" style="display: none;"></span> <strong>파일</strong>
 														<span th:text="${file.fileName}"
 														style="display: inline-block; width: 200px; text-align: left;"></span>
 													</li>
-												</ul> -->
+												</ul>
 											</div>
 										</div>
 										<!-- /자료실 목록 -->

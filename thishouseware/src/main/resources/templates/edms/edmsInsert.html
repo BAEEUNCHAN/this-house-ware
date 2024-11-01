@@ -230,7 +230,7 @@ button:hover {
 				    });
 				    
 				    function getApprLines() {
-						$('#apprLineSel').html(getOptionTags());
+						$('#apprLineSel').html(getSelectTag());
 				        
 						// 결재선 선택상자 선택시 이벤트
 				        $('#approverSel').change(function() {
@@ -240,8 +240,8 @@ button:hover {
 		  					$.ajax({
 		  						type : 'POST',
 		  						url : '/appr/apprList?approvalLineNo='+no, 						
-		  					    async : true,            // 비동기화 여부 (default : true)		  					
-		  					    /*headers : {              // Http header
+		  					    async : true,			// 비동기화 여부 (default : true)		  					
+		  					    /*headers : {			// Http header
 		  					      "Content-Type" : "application/json",
 		  					      "X-HTTP-Method-Override" : "POST"
 		  					    },
@@ -252,7 +252,9 @@ button:hover {
 		  					      "nick" : nick
 		  					    }), */
 		  					    success : function(result) { // 결과 성공 콜백함수
-		  					    	console.log(result);		  					    	
+		  					    	console.log(result);
+		  					    	$('#approverSel').detach();
+		  					    	
 		  					    },
 		  					    error : function(error) { // 결과 에러 콜백함수
 		  					        console.log(error)
@@ -262,7 +264,7 @@ button:hover {
 		  				});
 					}
 				
-	  				function getOptionTags() {
+	  				function getSelectTag() {
 	  					let strHtml = '<select class="form-select" id="approverSel" name="approverSel">';
 	  					strHtml += '<option value="">결재선을 선택하세요</option>';
 	  					for(apprLine of apprLines) {
@@ -270,6 +272,10 @@ button:hover {
 	  					}
 	  					strHtml += '</select>';
 	  					return strHtml;
+	  				}
+	  				
+	  				function getTableTag() {
+	  					let strHtml = '';
 	  				}
 	  				
 				    const sendScreenshot = (img) => {

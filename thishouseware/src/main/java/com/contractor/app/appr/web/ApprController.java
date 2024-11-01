@@ -163,6 +163,14 @@ public class ApprController {
 		}
 		model.addAttribute("approvers", list);
 	}
+	
+	// 결재자 정보 가져오기(AJAX)
+	@PostMapping("/apprList")
+	@ResponseBody
+	public List<ApproverVO> getApprover(@RequestParam Integer approvalLineNo) {
+		List<ApproverVO> approvers = apprService.apprList(approvalLineNo);
+		return approvers;
+	}
 
 	// 결재자 정보 단건조회
 	@GetMapping("/apprInfo") //

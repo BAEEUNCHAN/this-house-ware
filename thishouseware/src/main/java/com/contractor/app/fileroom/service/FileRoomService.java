@@ -29,4 +29,13 @@ public interface FileRoomService {
 
 	// 파일 업로드
 	public int insertFile(FilesVO filesVO);
+
+	// 폴더 삭제
+	public int deleteFolder(int folderNo);
+
+	// 파일 삭제
+	public int deleteFile(int fileNo);
+
+	// 폴더 추가
+	public int insertFolder(FolderVO folderVO);
 }

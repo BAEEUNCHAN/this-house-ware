@@ -5,13 +5,38 @@
 	layout:fragment="Content">
 <head>
 <style>
+/* 자료실 이름과 폴더 목록 사이 간격 추가 */
 .card-title {
 	margin-bottom: 15px;
 }
 
+/* 폴더, 파일 목록 앞 점 제거 */
 .folder-list, .file-list {
 	list-style-type: none;
 	padding-left: 0;
+}
+
+/* 게시글 제목 스타일 */
+.post-title {
+	display: inline-block;
+	width: 200px;
+	text-align: left;
+	margin-left: 10px; /* 제목과 머리글 사이 간격 추가 */
+	font-weight: bold; /* 제목을 더 두껍게 */
+}
+
+/* 카드 안의 폴더 목록 가운데 정렬 */
+.folder-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.folder-item {
+	margin-top: 10px; /* 폴더 항목 간의 간격 */
+	font-size: 14px; /* 폴더 이름 폰트 크기 */
 }
 </style>
 </head>
@@ -43,30 +68,69 @@
 								<div class="board-container">
 									<div class="row">
 										<!-- 자료실 목록 출력 -->
-										<div th:each="fileRoom : ${fileRooms}" class="col-md-6 mb-4">
-											<div class="card">
-												<div class="fileroom-header">
-													<span th:text="${fileRoom.fileRoomsNo}"
-														style="display: none;"></span>
-													<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
-												</div>
-												<ul class="folder-list">
-													<li th:each="folder : ${folders}" class="folder-item">
-													<span th:text="${folder.folderNo}" style="display: none;"></span>
-														<strong>폴더</strong> <span th:text="${folder.folderName}"
-														style="display: inline-block; width: 200px; text-align: left;"></span>
-													</li>
-												</ul>
+										<!-- 전체 자료실을 출력할 조건: employeeVO.positionCode가 a1 또는 a2인 경우 -->
+										<div
+											th:if="${employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2'}">
+											<div th:each="fileRoom : ${fileRooms}" class="col-md-12 mb-4">
+												<div class="card">
+													<div class="fileroom-header"
+														th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
+														<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
+													</div>
+
+													<div class="folder-container">
+														<!-- 폴더 목록 -->
+														<ul class="folder-list">
+															<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
+																class="folder-item"
+																th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><strong>폴더</strong>
+																<span th:text="${folder.folderName}"></span></li>
+														</ul>
+													</div>
+
+													<!-- 파일 목록
 												<ul class="file-list">
-													<li th:each="file : ${files}" class="file-item"><span
-														th:text="${file.fileNo}" style="display: none;"></span> <strong>파일</strong>
-														<span th:text="${file.fileName}"
-														style="display: inline-block; width: 200px; text-align: left;"></span>
+													<li th:each="file : ${fileMap[fileRoom.fileRoomsNo]}"
+														class="file-item" data-file-no="${file.fileNo}"><strong>파일</strong>
+														<span th:text="${file.fileName}"></span>
 													</li>
-												</ul>
+												</ul> -->
+												</div>
 											</div>
 										</div>
-										<!-- /자료실 목록 -->
+
+										<!-- 특정 조건에 맞는 자료실과 폴더, 파일만 출력할 조건: boardsType이 o1(공지사항) 또는 o2(전체게시판)인 경우 및 departmentName이 board.title과 일치하는 경우 -->
+										<div
+											th:if="${employeeVO.positionCode != 'a1' and employeeVO.positionCode != 'a2'}">
+											<div th:each="fileRoom : ${fileRooms}"
+												th:if="${fileRoom.fileRoomsName == '전체자료실' or employeeVO.departmentName == fileRoom.fileRoomsName}"
+												class="col-md-12 mb-4">
+												<div class="card">
+													<div class="fileroom-header"
+														th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
+														<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
+													</div>
+
+													<div class="folder-container">
+														<!-- 폴더 목록 -->
+														<ul class="folder-list">
+															<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
+																class="folder-item"
+																th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><strong>폴더</strong>
+																<span th:text="${folder.folderName}"></span></li>
+														</ul>
+													</div>
+
+													<!-- 파일 목록
+												<ul class="file-list">
+													<li th:each="file : ${fileMap[fileRoom.fileRoomsNo]}"
+														class="file-item" data-file-no="${file.fileNo}"><strong>파일</strong>
+														<span th:text="${file.fileName}"></span>
+													</li>
+												</ul> -->
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -87,9 +151,17 @@
 				location.href = url;
 			});
 
-			// 자료실 클릭 시 해당 자료실 이동
+			// 자료실 클릭 시 해당 자료실 페이지로 이동
 			$('.fileroom-header').on('click', function(event) {
-				let fileRoomsNo = $(this).find("span").first().text();
+				let fileRoomsNo = $(this).attr("data-file-rooms-no");
+				console.log("File Rooms No:", fileRoomsNo);
+				let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
+				location.href = url;
+			});
+
+			// 폴더 클릭 시 해당 자료실 페이지로 이동
+			$('.folder-item').on('click', function(event) {
+				let fileRoomsNo = $(this).attr("data-file-rooms-no");
 				console.log("File Rooms No:", fileRoomsNo);
 				let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
 				location.href = url;

@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -17,18 +19,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.contractor.app.board.service.BoardsVO;
 import com.contractor.app.board.service.PagingVO;
+import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
-import com.contractor.app.fileroom.service.FolderFileVO;
 import com.contractor.app.fileroom.service.FolderVO;
+import com.contractor.app.security.service.LoginUserVO;
 import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.FileUploadUtil;
 
@@ -53,27 +56,47 @@ public class FileRoomController {
 
 	// 메인페이지 : URI - fileMainPage / RETURN - file/fileMainPage
 	@GetMapping("/fileMainPage")
-	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, FolderFileVO folderFileVO,
-			Authentication authentication, FolderVO folderVO,
+	public String fileMainPage(Model model, FileRoomsVO fileRoomsVO, Authentication authentication,
 			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
 		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 
 		// 자료실 전체조회
 		List<FileRoomsVO> fileRooms = fileRoomService.selectFilerooms(fileRoomsVO);
 
-		// 자료실별 폴더 전체조회 - folderName, fileRoomsNo
-		List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
+		// 자료실별 폴더와 파일을 담을 Map 생성
+		Map<Integer, List<FolderVO>> folderMap = new HashMap<>();
+		Map<Integer, List<FilesVO>> fileMap = new HashMap<>();
 
-		// 자료실별 파일 전체조회
-		List<FilesVO> files = fileRoomService.selectFiles(fileRoomsNo);
+		// fileRoomsNo가 null이 아니면 해당 자료실의 폴더와 파일만 조회
+		if (fileRoomsNo != null) {
+			System.out.println("조회할 자료실 번호: " + fileRoomsNo);
 
-		// 자료실별 폴더, 파일 전체조회
-		//List<FolderFileVO> folderFile = fileRoomService.selectFolderFile(folderFileVO);
-		
+			// 선택한 자료실의 폴더 및 파일 목록 조회
+			List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
+			List<FilesVO> files = fileRoomService.selectFiles(fileRoomsNo);
+
+			// 특정 자료실 번호에 대한 폴더와 파일을 Map에 저장
+			folderMap.put(fileRoomsNo, folders);
+			fileMap.put(fileRoomsNo, files);
+		} else {
+			// 전체 자료실의 폴더와 파일 목록 조회
+			for (FileRoomsVO fileRoom : fileRooms) {
+				Integer currentFileRoomsNo = fileRoom.getFileRoomsNo();
+
+				// 자료실별 폴더 및 파일 조회 후 Map에 저장
+				List<FolderVO> folders = fileRoomService.selectFolders(currentFileRoomsNo);
+				List<FilesVO> files = fileRoomService.selectFiles(currentFileRoomsNo);
+
+				folderMap.put(currentFileRoomsNo, folders);
+				fileMap.put(currentFileRoomsNo, files);
+			}
+		}
+
+		// 모델에 추가하여 뷰로 전달
 		model.addAttribute("fileRooms", fileRooms);
-		model.addAttribute("folders", folders);
-		model.addAttribute("files", files);
-		//model.addAttribute("folderFile", folderFile);
+		model.addAttribute("folderMap", folderMap);
+		model.addAttribute("fileMap", fileMap);
+		model.addAttribute("fileRoomsNo", fileRoomsNo);
 		model.addAttribute("employeeVO", employeeVO);
 
 		return "fileroom/fileMainPage";
@@ -81,25 +104,9 @@ public class FileRoomController {
 
 	// 자료실별 폴더, 파일 전체조회 : URI - folderFileList / RETURN - file/folderFileList
 	@GetMapping("/folderFileList")
-	public String folderFileList(Model model, FolderVO folderVO, FileRoomsVO fileRoomsVO, PagingVO pagingVO,
-			@RequestParam(value = "nowPage", defaultValue = "1", required = false) String nowPage,
-			@RequestParam(value = "cntPerPage", defaultValue = "10", required = false) String cntPerPage,
-			@RequestParam(required = false) String searchWord,
+	public String folderFileList(Model model, Authentication authentication, FolderVO folderVO, FileRoomsVO fileRoomsVO,
 			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
-
-		// 폴더, 파일 총 개수 가져오기
-		int folderTotal = fileRoomService.countFolder(fileRoomsNo);
-		int fileTotal = fileRoomService.countFile(fileRoomsNo);
-		int total = folderTotal + fileTotal;
-
-		// 페이징 및 검색어 설정
-		pagingVO = new PagingVO(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage));
-		if (searchWord != null && !searchWord.isEmpty()) {
-			pagingVO.setSearchWord(searchWord.trim());
-		}
-
-		// DB 쿼리에서 사용할 start, end값 계산 (총 개수 추가)
-		pagingVO.calcStartEnd(Integer.parseInt(nowPage), Integer.parseInt(cntPerPage), total);
+		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 
 		// 자료실, 폴더, 파일 정보 가져오기
 		FileRoomsVO fileRoom = fileRoomService.selectFileroom(fileRoomsVO);
@@ -108,9 +115,9 @@ public class FileRoomController {
 
 		// 페이지에 전달
 		model.addAttribute("fileRoom", fileRoom);
-		model.addAttribute("paging", pagingVO);
 		model.addAttribute("folders", folders);
 		model.addAttribute("files", files);
+		model.addAttribute("employeeVO", employeeVO);
 
 		return "fileroom/folderFileList";
 	}
@@ -134,7 +141,7 @@ public class FileRoomController {
 		model.addAttribute("selectedfolderNo", folderNo);
 		model.addAttribute("fileRoomsType", fileRoomsType);
 		model.addAttribute("fileRooms", fileRooms);
-		//model.addAttribute("folders", folders);
+		// model.addAttribute("folders", folders);
 
 		return "fileroom/fileInsert";
 	}
@@ -201,5 +208,40 @@ public class FileRoomController {
 	 * Integer fileRoomsNo) { List<FolderVO> folders =
 	 * fileRoomService.selectFolders(fileRoomsNo); return folders; }
 	 */
+
+	// 폴더 삭제 - 처리 : URI - folderDelete / PARAMETER - Integer
+	@GetMapping("/folderDelete") // QueryString : @RequestParam
+	public String folderDelete(@RequestParam Integer folderNo, @RequestParam Integer fileRoomsNo) {
+		fileRoomService.deleteFolder(folderNo);
+		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
+	}
+
+	// 파일 삭제 - 처리 : URI - fileDelete / PARAMETER - Integer
+	@GetMapping("/fileDelete") // QueryString : @RequestParam
+	public String fileDelete(@RequestParam Integer fileNo, @RequestParam Integer fileRoomsNo) {
+		fileRoomService.deleteFile(fileNo);
+		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
+	}
+
+	// 폴더 추가 - 처리 : URI - folderInsert / PARAMETER - FolderVO(QueryString)
+	@PostMapping("/folderInsert")
+	public String folderInsert(FolderVO folderVO) { // <form/> 활용한 submit
+		int fileRoomsNo = fileRoomService.insertFolder(folderVO);
+		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
+	}
+
+	// 폴더 추가 - 페이지 : URI - folderInsert / RETURN - file/folderInsert
+	@GetMapping("/folderInsert")
+	public String folderInsert(FileRoomsVO fileRoomsVO, Model model,
+			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
+		// 자료실 가져오기
+		FileRoomsVO fileRoom = fileRoomService.selectFileroom(fileRoomsVO);
+
+		// 모델에 추가하여 뷰로 전달
+		model.addAttribute("fileRoom", fileRoom);
+
+		return "fileRoom/folderInsert";
+	}
+
 
 }

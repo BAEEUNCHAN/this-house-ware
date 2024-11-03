@@ -81,9 +81,11 @@
 		files f
 		LEFT OUTER JOIN
 		folder fd
-		on f.FOLDER_NO = fd.FOLDER_NO
+		on
+		f.FOLDER_NO = fd.FOLDER_NO
 		WHERE f.FILE_ROOMS_NO = #{fileRoomsNo}
-		ORDER BY FILE_NO DESC
+		ORDER
+		BY FILE_NO DESC
 	</select>
 
 	<!-- 자료실별 폴더, 파일 전체조회 -->
@@ -102,7 +104,8 @@
 		f.PATH AS path,
 		f.FILE_SIZE AS fileSize,
 		f.UPLOAD_DT AS uploadDT,
-		f.ID AS fileId
+		f.ID AS
+		fileId
 		FROM folder fd LEFT JOIN files f
 		ON fd.FILE_ROOMS_NO =
 		f.FILE_ROOMS_NO
@@ -158,6 +161,47 @@
 		,#{fileRoomsNo}
 		,#{attatch}
 		)
+	</insert>
+
+	<!-- 폴더 삭제 -->
+	<delete id="deleteFolder" parameterType="int">
+		DELETE FROM folder
+		WHERE
+		folder_NO = #{folderNo}
+	</delete>
+
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM files
+		WHERE
+		file_NO = #{fileNo}
+	</delete>
+
+	<!-- 폴더 추가 -->
+	<insert id="insertFolder" parameterType="FolderVO">
+		<selectKey keyProperty="folderNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(FOLDER_NO), 1) + 1
+			FROM folder
+		</selectKey>
+		INSERT INTO folder
+		(FOLDER_NO
+		,FOLDER_NAME
+		,FOLDER_SIZE
+		,AUTHORITY
+		,FILE_ROOMS_NO
+		,SHARE_CHK
+		,FOLDER_PATH
+		,ID)
+		VALUES
+		(#{folderNo}
+		,#{folderName}
+		,0
+		,'admin'
+		,#{fileRoomsNo}
+		,'q2'
+		,#{folderPath}
+		,#{id})
 	</insert>
 
 </mapper>

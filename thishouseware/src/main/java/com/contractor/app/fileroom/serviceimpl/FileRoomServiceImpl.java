@@ -66,4 +66,19 @@ public class FileRoomServiceImpl implements FileRoomService {
 		return fileRoomMapper.insertFile(filesVO);
 	}
 
+	@Override
+	public int deleteFolder(int folderNo) {
+		return fileRoomMapper.deleteFolder(folderNo);
+	}
+
+	@Override
+	public int deleteFile(int fileNo) {
+		return fileRoomMapper.deleteFile(fileNo);
+	}
+
+	@Override
+	public int insertFolder(FolderVO folderVO) {
+		return fileRoomMapper.insertFolder(folderVO);
+	}
+
 }

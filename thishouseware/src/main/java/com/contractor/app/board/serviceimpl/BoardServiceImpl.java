@@ -119,4 +119,9 @@ public class BoardServiceImpl implements BoardService {
 	public CommentsVO selectCommentNo(int commentsNo) {
 		return boardMapper.selectCommentNo(commentsNo);
 	}
+
+	@Override
+	public List<PostsVO> getAnnouncements() {
+		return boardMapper.selectAnnouncements();
+	}
 }

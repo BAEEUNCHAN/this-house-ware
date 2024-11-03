@@ -1,49 +1,100 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
+<html lang="ko" xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title></title>
+<style>
+.card-title {
+	margin-bottom: 15px;
+}
+
+.folder-list, .file-list {
+	list-style-type: none;
+	padding-left: 0;
+}
+</style>
 </head>
 <body>
-	<div class="text-center">
-		<h3>자료실 목록</h3>
-		<table class="table">
-			<thead>
-				<tr>
-					<th>자료실 번호</th>
-					<th>자료실 유형</th>
-					<th>자료실 이름</th>
-					<th>전체용량</th>
-					<th>권한</th>
-					<th>아이디</th>
-					<th>사용량</th>
-				</tr>
-			</thead>
-			<tbody>
-				<th:block th:each="info : ${list}">
-				<!--  BoardsVO => <tr/> -->
-				<tr>
-					<td>[[ ${info.fileRoomsNo}]]</td>
-					<td>[[ ${info.fileRoomsType}]]</td>
-					<td>[[ ${info.fileRoomsName}]]</td>
-					<td>[[ ${info.capacity}]]</td>
-					<td>[[ ${info.authority}]]</td>
-					<td>[[ ${info.id}]]</td>
-					<td>[[ ${info.usedCapacity}]]</td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">자료실</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href=""> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
+				</ul>
+			</div>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">
+									자료실 <a href="/file/fileInsert" class="float-end"><button
+											class="btn btn-primary">파일 업로드</button></a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row text-center">
+								<div class="board-container">
+									<div class="row">
+										<!-- 자료실 목록 출력 -->
+										<div th:each="fileRoom : ${fileRooms}" class="col-md-6 mb-4">
+											<div class="card">
+												<div class="fileroom-header">
+													<span th:text="${fileRoom.fileRoomsNo}"
+														style="display: none;"></span>
+													<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
+												</div>
+												<ul class="folder-list">
+													<li th:each="folder : ${fileRoom.folders}"
+														class="folder-item"><span
+														th:text="${folder.folderNo}" style="display: none;"></span>
+														<strong>폴더</strong> <span th:text="${folder.folderName}"
+														style="display: inline-block; width: 200px; text-align: left;"></span>
+													</li>
+												</ul>
+												<ul class="file-list" th:if="${files != null}">
+													<li th:each="file : ${files}" class="file-item"><span
+														th:text="${file.fileNo}" style="display: none;"></span> <strong>파일</strong>
+														<span th:text="${file.fileName}"
+														style="display: inline-block; width: 200px; text-align: left;"></span>
+													</li>
+												</ul>
+											</div>
+										</div>
+										<!-- /자료실 목록 -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<script>
-		// 제이쿼리 객체 생성
-		$('tbody > tr').on('click', function(event) {
-			let trTag = event.currentTarget;
-			let fileRoomsNo = $(trTag).children().eq(0).text();
-			let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
-			location.href=url;
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			// 파일 클릭 시 파일 다운로드
+			$('.file-item').on('click', function(event) {
+				let fileNo = $(this).find("span").first().text();
+				console.log("File No:", fileNo);
+				let url = '/file/fileInfo?fileNo=' + fileNo;
+				location.href = url;
+			});
+
+			// 자료실 클릭 시 해당 자료실 이동
+			$('.fileroom-header').on('click', function(event) {
+				let fileRoomsNo = $(this).find("span").first().text();
+				console.log("File Rooms No:", fileRoomsNo);
+				let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
+				location.href = url;
+			});
 		});
 	</script>
 </body>

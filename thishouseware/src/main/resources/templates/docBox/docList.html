@@ -46,17 +46,13 @@
 										</th:block>
 									</tbody>  
 								</table>
-								<button type="button" class="btn btn-info btn-sm" th:data-id="${#authentication.principal.empVO.id}" 
-								        th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'임시저장'}, id=${#authentication.principal.empVO.id})}'|">임시저장</button>
+								<button type="button" class="btn btn-info btn-sm" th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'임시저장'})}'|">임시저장</button>
 								        
-								<button type="button" class="btn btn-success btn-sm" th:data-id="${#authentication.principal.empVO.id}" 
-								        th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재완료'}, id=${#authentication.principal.empVO.id})}'|">결재완료</button>
+								<button type="button" class="btn btn-success btn-sm" th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재완료'})}'|">결재완료</button>
 								        
-								<button type="button" class="btn btn-warning btn-sm" th:data-id="${#authentication.principal.empVO.id}" 
-								        th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재대기'}, id=${#authentication.principal.empVO.id})}'|">결재대기</button>
+								<button type="button" class="btn btn-warning btn-sm" th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재대기'})}'|">결재대기</button>
 								        
-								<button type="button" class="btn btn-danger btn-sm" th:data-id="${#authentication.principal.empVO.id}" 
-								        th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재수신'}, id=${#authentication.principal.empVO.id})}'|">결재수신</button>
+								<button type="button" class="btn btn-danger btn-sm" th:onclick="|location.href='@{/docBox/docApprovalStatusList(approvalStatus=${'결재수신'})}'|">결재수신</button>
 							</div>
 						</div>
 					</div>

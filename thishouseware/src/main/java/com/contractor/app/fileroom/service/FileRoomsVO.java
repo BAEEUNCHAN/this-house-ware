@@ -14,7 +14,11 @@ public class FileRoomsVO {
 	private String id; //아이디
 	private Double usedCapacity; //사용량
 	
+	private FileRoomsVO fileRoomsVO;
+	
 	List<FolderVO> folders;
 	
 	List<FilesVO> files;
+	
+	List<FolderFileVO> folderFile;
 }

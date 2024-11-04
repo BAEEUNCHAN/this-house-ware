@@ -230,7 +230,8 @@ button:hover {
 				    });
 				    
 				    function getApprLines() {
-						$('#apprLineSel').html(getOptionTags());
+				    	// 결재선 선택 Select 태그 호출
+						$('#apprLineSel').html(getSelectTag());
 				        
 						// 결재선 선택상자 선택시 이벤트
 				        $('#approverSel').change(function() {
@@ -240,8 +241,8 @@ button:hover {
 		  					$.ajax({
 		  						type : 'POST',
 		  						url : '/appr/apprList?approvalLineNo='+no, 						
-		  					    async : true,            // 비동기화 여부 (default : true)		  					
-		  					    /*headers : {              // Http header
+		  					    async : true,			// 비동기화 여부 (default : true)		  					
+		  					    /*headers : {			// Http header
 		  					      "Content-Type" : "application/json",
 		  					      "X-HTTP-Method-Override" : "POST"
 		  					    },
@@ -252,7 +253,11 @@ button:hover {
 		  					      "nick" : nick
 		  					    }), */
 		  					    success : function(result) { // 결과 성공 콜백함수
-		  					    	console.log(result);		  					    	
+		  					    	console.log(result);
+		  					   		// 결재선 선택 Select 태그 제거
+		  					    	$('#approverSel').detach();
+		  					   		// 결재선에 등록된 결재자 테이블로 가져오기
+		  					    	getTableTag(result);		  					    	
 		  					    },
 		  					    error : function(error) { // 결과 에러 콜백함수
 		  					        console.log(error)
@@ -261,8 +266,9 @@ button:hover {
 		  					
 		  				});
 					}
-				
-	  				function getOptionTags() {
+					
+				    // 결재선 선택 태그 생성
+	  				function getSelectTag() {
 	  					let strHtml = '<select class="form-select" id="approverSel" name="approverSel">';
 	  					strHtml += '<option value="">결재선을 선택하세요</option>';
 	  					for(apprLine of apprLines) {
@@ -270,6 +276,27 @@ button:hover {
 	  					}
 	  					strHtml += '</select>';
 	  					return strHtml;
+	  				}
+	  				
+				    // 결재선 선택시 결재자 테이블 생성
+				    // approvalOrder로 정렬하도록 apprMapper에서 지정되어있어서 순번대로 그려줌 
+	  				function getTableTag(result) {
+	  					let tableTag = $('#apprLineSel').append($("<table></table>"));
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append(approver.positionName));
+	  					}
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append(approver.name));
+	  					}
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append());
+	  					}
 	  				}
 	  				
 				    const sendScreenshot = (img) => {

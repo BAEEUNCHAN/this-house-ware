@@ -8,6 +8,7 @@ import com.contractor.app.schedule.service.LeaveVO;
 public interface LeaveMapper {
 	// 휴가 전체 조회
 	List<Map<String, Object>> listLeave();
+	List<LeaveVO> getLeaveListAll();
 	
 	// 휴가 개인별 조회
 	List<Map<String, Object>> selectLeave(String id);

@@ -154,5 +154,17 @@ a:hover {
 	</div>
 </div>
 <!-- </div> -->
+<script>
+	let errorMessage = "[[${errorMessage}]]";
+	if(errorMessage.length > 0 ){
+		if(errorMessage == "error"){
+			alert("알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.");
+		}else if(errorMessage == "error1"){
+			alert("아이디와 비밀번호가 맞지 않습니다. 다시 확인해 주십시오");
+		}else if(errorMessage == "error2"){
+			alert("퇴직처리된 계정입니다. 관리자에게 문의하세요.");
+		}
+	}
+</script>
 </body>
 </html>

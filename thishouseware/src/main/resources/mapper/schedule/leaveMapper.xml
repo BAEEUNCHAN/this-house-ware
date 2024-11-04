@@ -6,23 +6,79 @@
 	<select id="listLeave" resultType="map">
 		SELECT leave_no AS "leaveNo"
 		       , id AS "id"
-		       , leave_start_dt AS "start"
-		       , leave_end_dt AS "end"
+		       , TO_CHAR(leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
+		       , TO_CHAR(leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
 		       , id || ': ' || leave_type AS "title"
 		       , leave_reason AS "content" 
+		       , color AS "color" 
 		FROM leave
 	</select>
 	
 	<!-- 휴가 전체 조회 -->
-	<select id="getLeaveListAll" resultType="LeaveVO">
-		SELECT leave_no 
-		       , id
-		       , leave_start_dt 
-		       , leave_end_dt 
-		       , leave_type 
-		       , leave_reason
+	<select id="getLeaveListAll" resultType="map">
+		SELECT leave_no AS "leaveNo"
+		       , id AS "id"
+		       , TO_CHAR(leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
+		       , TO_CHAR(leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
+		       , id || ': ' || leave_type AS "title"
+		       , leave_reason AS "content" 
+		       , color AS "color" 
 		FROM leave
 	</select>
+	
+	<!-- 휴가 부서별 조회 -->
+	<select id="leaveListAllWhereDepartmentNo" resultType="map" parameterType="int">
+		SELECT leave_no AS "leaveNo"
+		       , id AS "id"
+		       , TO_CHAR(leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
+		       , TO_CHAR(leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
+		       , id || ': ' || leave_type AS "title"
+		       , leave_reason AS "content" 
+		       , color AS "color" 
+		FROM leave
+		<where>
+		<if test="departmentNo != null and departmentNo != ''">
+		department_no = #{departmentNo}
+		</if>
+		</where>
+	</select>
+	
+	<!-- 개인 휴가 조회 -->
+	<select id="leaveListWhereId" resultType="map" parameterType="String">
+		SELECT leave_no AS "leaveNo"
+		       , id AS "id"
+		       , TO_CHAR(leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
+		       , TO_CHAR(leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
+		       , id || ': ' || leave_type AS "title"
+		       , leave_reason AS "content"
+		       , color AS "color" 
+		FROM leave
+		<where>
+		<if test="departmentNo != null and departmentNo != ''">
+		id = #{id}
+		</if>
+		</where>
+	</select>
+	
+	<!-- 휴가 수정하기 -->
+	<update id="leaveUpdate" parameterType="LeaveVO">
+		UPDATE  leave
+		SET		
+				<if test="title != null and !title.equals('')">
+				leave_type = #{title}
+				</if>
+				, leave_start_dt = TO_DATE(#{start}, 'YYYY-MM-DD"T"HH24:MI')
+            	, leave_end_dt = TO_DATE(#{end}, 'YYYY-MM-DD"T"HH24:MI')
+				<if test="content != null">
+				, leave_reason = #{content}
+				</if>
+				<if test="color != null">
+				, color = #{color}
+				</if>
+		WHERE	leave_no = #{leaveNo}
+				
+	
+	</update>
 	
 	<!-- 휴가 개인별 조회 -->
 	<select id="selectLeave" resultType="map" parameterType="string">

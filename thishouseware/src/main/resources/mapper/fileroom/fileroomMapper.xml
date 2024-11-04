@@ -81,19 +81,16 @@
 		files f
 		LEFT OUTER JOIN
 		folder fd
-		on f.FOLDER_NO = fd.FOLDER_NO
+		on
+		f.FOLDER_NO = fd.FOLDER_NO
 		WHERE f.FILE_ROOMS_NO = #{fileRoomsNo}
-		ORDER BY FILE_NO DESC
+		ORDER
+		BY FILE_NO DESC
 	</select>
 
 	<!-- 자료실별 폴더, 파일 전체조회 -->
 	<select id="selectFolderFile" parameterType="map"
 		resultType="FolderFileVO">
-		SELECT *
-		FROM (
-		SELECT
-		ROWNUM RN, A.*
-		FROM (
 		SELECT DISTINCT
 		fd.FOLDER_NO AS
 		folderNo,
@@ -113,17 +110,7 @@
 		ON fd.FILE_ROOMS_NO =
 		f.FILE_ROOMS_NO
 		WHERE fd.FILE_ROOMS_NO = #{folderFileVO.fileRoomsNo}
-		<!-- 검색어 있을 때 조건 추가 -->
-		<if
-			test="pagingVO.searchWord != null and pagingVO.searchWord != ''">
-			AND ((fd.FOLDER_NAME LIKE '%' || #{pagingVO.searchWord} || '%')
-			OR (f.FILE_NAME LIKE '%' || #{pagingVO.searchWord} || '%'))
-		</if>
 		ORDER BY f.UPLOAD_DT DESC
-		) A
-		)
-		WHERE RN BETWEEN #{pagingVO.start} AND
-		#{pagingVO.end}
 	</select>
 
 
@@ -174,6 +161,47 @@
 		,#{fileRoomsNo}
 		,#{attatch}
 		)
+	</insert>
+
+	<!-- 폴더 삭제 -->
+	<delete id="deleteFolder" parameterType="int">
+		DELETE FROM folder
+		WHERE
+		folder_NO = #{folderNo}
+	</delete>
+
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM files
+		WHERE
+		file_NO = #{fileNo}
+	</delete>
+
+	<!-- 폴더 추가 -->
+	<insert id="insertFolder" parameterType="FolderVO">
+		<selectKey keyProperty="folderNo" resultType="Integer"
+			order="BEFORE">
+			SELECT NVL(MAX(FOLDER_NO), 1) + 1
+			FROM folder
+		</selectKey>
+		INSERT INTO folder
+		(FOLDER_NO
+		,FOLDER_NAME
+		,FOLDER_SIZE
+		,AUTHORITY
+		,FILE_ROOMS_NO
+		,SHARE_CHK
+		,FOLDER_PATH
+		,ID)
+		VALUES
+		(#{folderNo}
+		,#{folderName}
+		,0
+		,'admin'
+		,#{fileRoomsNo}
+		,'q2'
+		,#{folderPath}
+		,#{id})
 	</insert>
 
 </mapper>

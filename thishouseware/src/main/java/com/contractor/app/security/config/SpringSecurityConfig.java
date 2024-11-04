@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import com.contractor.app.security.handler.LoginFailedHandler;
 import com.contractor.app.security.handler.LoginSuccessHandler;
 
 import jakarta.servlet.ServletException;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class SpringSecurityConfig {
 	
 	private final LoginSuccessHandler loginSuccessHandler;
+	private final LoginFailedHandler loginFailedHandler;
 
 	@Bean// 비밀번호 암호화
 	PasswordEncoder passwordEncoder() {
@@ -62,7 +64,7 @@ public class SpringSecurityConfig {
 		http
 			.formLogin(formlogin-> formlogin
 					.loginPage("/login") // 로그인 페이지 지정
-					.failureUrl("/login?login=failed") // 로그인 실패시 경로
+					.failureHandler(loginFailedHandler)
 					.successHandler(loginSuccessHandler) // 로그인 성공시 실행할 핸들러
 					)
 			.logout(logout -> logout.logoutSuccessUrl("/login")

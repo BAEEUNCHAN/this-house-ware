@@ -39,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleController2 {
 	@Value("${company.ip.front}")
 	private String companyIpFront;
-	private String mainIp = "127.0.0.1";
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
@@ -49,6 +48,9 @@ public class ScheduleController2 {
 	private final EmployeeService employeeService;
 	private final EmpAuthUtil empAuthUtil;
 	
+	/**
+	 * 출근, 퇴근, 외출, 복귀 기능을 위한 메서드이다.
+	 */
 	@PostMapping("attendance/modifyCode")
 	@ResponseBody
 	public String modifyAttendanceCode(@RequestBody AttendanceVO attendanceVO,
@@ -56,12 +58,10 @@ public class ScheduleController2 {
 			HttpServletRequest request) {
 		
 		// 회사 컴퓨터로 로그인된것인지 확인한다.
-		String requestIp = GetIPUtil.getClientIp(request);
+		String requestIp = GetIPUtil.getPublicIP();
+		// System.out.println("ip"+requestIp);
 		if(!requestIp.contains(companyIpFront)) {
-			// 매인 서버용 ip 확인 (실 서비스때는 지우자.)
-			if(!requestIp.contains(mainIp)) {
-				return "error1";
-			}
+			return "error1";
 		}
 		
 		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();

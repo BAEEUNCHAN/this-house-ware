@@ -266,7 +266,8 @@ button:hover {
 		  					
 		  				});
 					}
-				
+					
+				    // 결재선 선택 태그 생성
 	  				function getSelectTag() {
 	  					let strHtml = '<select class="form-select" id="approverSel" name="approverSel">';
 	  					strHtml += '<option value="">결재선을 선택하세요</option>';
@@ -277,6 +278,8 @@ button:hover {
 	  					return strHtml;
 	  				}
 	  				
+				    // 결재선 선택시 결재자 테이블 생성
+				    // approvalOrder로 정렬하도록 apprMapper에서 지정되어있어서 순번대로 그려줌 
 	  				function getTableTag(result) {
 	  					let tableTag = $('#apprLineSel').append($("<table></table>"));
 	  					tableTag = $(tableTag).append($("<tr></tr>"));

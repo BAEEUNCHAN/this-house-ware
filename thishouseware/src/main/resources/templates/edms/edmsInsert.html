@@ -195,6 +195,9 @@ button:hover {
 										<td><input type="text" id="shareFolderNo"
 											name="shareFolderNo" required></td>
 									</tr>
+									<tr>
+										<td><span name="approverNos"></span></td>
+									</tr>
 								</table>
 								<div style="text-align: center; margin-top: 20px;">
 								    <input type="button" class="btnSave btn btn-info" value="임시저장" style="float: right; margin-right: 10px; display: none;">
@@ -210,11 +213,11 @@ button:hover {
 					<script th:inline="javascript">
 				    // 로그인된 사용자 ID를 가져옴
 				    var userId = [[${#authentication.principal.empVO.id}]];
-				    let apprLines = [[${apprLines}]];					
+				    // 결재라인 가져오기
+				    let apprLines = [[${apprLines}]];
 				
 				    document.querySelector('#edmsFormNo').addEventListener('change', function(e) {
 				        let selectedValue = e.target.value;
-				        
 				
 				        // 양식이 선택되었으면 저장 버튼을 보이고, 선택이 없으면 숨김
 				        if (selectedValue) {
@@ -257,7 +260,9 @@ button:hover {
 		  					   		// 결재선 선택 Select 태그 제거
 		  					    	$('#approverSel').detach();
 		  					   		// 결재선에 등록된 결재자 테이블로 가져오기
-		  					    	getTableTag(result);		  					    	
+		  					    	getTableTag(result);
+		  					   		// approverNo를 Input 태그의 approvers[]에 담기
+		  					    	getApprovers(result);		  					   		   		
 		  					    },
 		  					    error : function(error) { // 결과 에러 콜백함수
 		  					        console.log(error)
@@ -292,12 +297,21 @@ button:hover {
 	  						$(tableTag).append(
 	  							$("<td></td>").append(approver.name));
 	  					}
+	  					// 결재자 서명이 들어가는 tr
 	  					tableTag = $(tableTag).append($("<tr></tr>"));
 	  					for(approver of result) {
 	  						$(tableTag).append(
 	  							$("<td></td>").append());
-	  					}
+	  					}	  					
 	  				}
+				    
+				    // 결재선 선택시 approverNo를 Input 태그의 approvers[]에 담기
+				    function getApprovers(result) {
+				    	for(approver of result) {
+				    		$('span[name="approverNos"]').append(
+				    			`<input type="hidden" name="approvers" value=${approver.approverNo} />`);				    		
+				    	}
+				    }
 	  				
 				    const sendScreenshot = (img) => {
 				        let data = new FormData(document.insertForm);

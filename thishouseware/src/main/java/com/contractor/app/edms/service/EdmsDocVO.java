@@ -1,6 +1,7 @@
 package com.contractor.app.edms.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,5 +32,5 @@ public class EdmsDocVO {
 	private String shareFolderNo; // 공유 폴더 번호 / not null
 	private boolean important; // 중요문서
 	
-
+	List<Integer> approvers; // 결재라인에 있는 결재자들 번호
 }

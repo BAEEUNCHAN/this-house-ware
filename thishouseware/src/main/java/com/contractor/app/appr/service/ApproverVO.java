@@ -1,5 +1,7 @@
 package com.contractor.app.appr.service;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +26,4 @@ public class ApproverVO {
 //직급 이름
  private String positionName; // 포지션 이름
  
-	
-
 }

@@ -230,6 +230,7 @@ button:hover {
 				    });
 				    
 				    function getApprLines() {
+				    	// 결재선 선택 Select 태그 호출
 						$('#apprLineSel').html(getSelectTag());
 				        
 						// 결재선 선택상자 선택시 이벤트
@@ -253,8 +254,10 @@ button:hover {
 		  					    }), */
 		  					    success : function(result) { // 결과 성공 콜백함수
 		  					    	console.log(result);
+		  					   		// 결재선 선택 Select 태그 제거
 		  					    	$('#approverSel').detach();
-		  					    	
+		  					   		// 결재선에 등록된 결재자 테이블로 가져오기
+		  					    	getTableTag(result);		  					    	
 		  					    },
 		  					    error : function(error) { // 결과 에러 콜백함수
 		  					        console.log(error)
@@ -274,8 +277,23 @@ button:hover {
 	  					return strHtml;
 	  				}
 	  				
-	  				function getTableTag() {
-	  					let strHtml = '';
+	  				function getTableTag(result) {
+	  					let tableTag = $('#apprLineSel').append($("<table></table>"));
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append(approver.positionName));
+	  					}
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append(approver.name));
+	  					}
+	  					tableTag = $(tableTag).append($("<tr></tr>"));
+	  					for(approver of result) {
+	  						$(tableTag).append(
+	  							$("<td></td>").append());
+	  					}
 	  				}
 	  				
 				    const sendScreenshot = (img) => {

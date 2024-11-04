@@ -47,4 +47,7 @@ public interface BoardService {
 
 	// 댓글 번호 가져오기
 	public CommentsVO selectCommentNo(int commentsNo);
+
+	// 공지사항리스트만 가져오기
+	public List<PostsVO> getAnnouncements();
 }

@@ -329,4 +329,11 @@
 		resultType="CommentsVO">
 		SELECT * FROM comments WHERE comments_no = #{commentsNo}
 	</select>
+	
+	<!-- 공지사항 전체 조회 -->
+	<select id="selectAnnouncements">
+		select * from posts
+		where boards_no = 1
+		and display ='q1'
+	</select>
 </mapper>

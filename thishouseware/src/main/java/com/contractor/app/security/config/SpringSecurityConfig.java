@@ -37,9 +37,12 @@ public class SpringSecurityConfig {
 			.authorizeHttpRequests(authorize 
 					-> authorize
 					
-					.requestMatchers("/login","/login/**").permitAll() // 로그인 관련 요청은 허가한다. 로그아웃도 추가할것!
+					.requestMatchers("/login","/login/**").permitAll() // 로그인 관련 요청은 허가한다.
 					// 그외에도 허가하고 싶은 경로들
 					.requestMatchers("/flutter/**").permitAll()// 플러터 연계 파트
+					// 아이디 비번 찾기 파트
+					.requestMatchers("/employee/findId","/employee/findPassword"
+							,"/employee/getAuth","/employee/changePw").permitAll()
 					// 고객 관리 파트
 					.requestMatchers("/complain/complainList",
 							"/complain/complainInfo",

@@ -4,7 +4,8 @@
 
     <!-- 전체조회 -->
     <select id="selectDocAllList" resultType="EdmsDocVO">
-        SELECT edms_doc_no
+        SELECT 
+              edms_doc_no
             , id
             , title
             , content
@@ -38,7 +39,8 @@
 
     <!-- 단건조회 -->
     <select id="selectEdmsDocInfo" parameterType="String" resultType="EdmsDocVO">
-        SELECT edms_doc_no
+        SELECT 
+              edms_doc_no
             , id
             , title
             , content
@@ -96,24 +98,31 @@
     </insert>
 
     <!-- 결재 상태 업데이트 -->
-    <update id="updateApprovalStatus" parameterType="EdmsDocVO">
+    <update id="updateDocumentApprovalStatus" parameterType="EdmsDocVO">
         UPDATE edms_doc
-        SET approval_status = #{approvalStatus}
+        SET 
+              approval_status = #{approvalStatus}
+            , current_approver_id = #{currentApproverId}
+            , approval_order = #{approvalOrder}
             , reject_reason = #{rejectReason}
         WHERE edms_doc_no = #{edmsDocNo}
     </update>
 
-    <!-- 다음 결재자 조회 -->
-    <select id="findNextApprover" parameterType="map" resultType="String">
-        SELECT approver_id
-        FROM approval_line
+    <!-- 결재 반려 상태 업데이트 -->
+    <update id="updateDocumentRejectionStatus" parameterType="EdmsDocVO">
+        UPDATE edms_doc
+        SET 
+              approval_status = #{approvalStatus}
+            , current_approver_id = #{id} <!-- 기안자의 ID로 초기화 -->
+            , approval_order = 0 <!-- 기안자로 초기화 -->
+            , reject_reason = #{rejectReason}
         WHERE edms_doc_no = #{edmsDocNo}
-          AND approval_order = #{currentOrder} + 1
-    </select>
-    
+    </update>
+
     <!-- 특정 사용자에 대해 결재상태별 문서조회 -->
     <select id="selectDocumentsByStatusAndUserId" parameterType="map" resultType="EdmsDocVO">
-        SELECT edms_doc_no
+        SELECT 
+              edms_doc_no
             , id
             , title
             , content
@@ -128,6 +137,14 @@
         WHERE approval_status = #{approvalStatus}
           AND id = #{userId}
         ORDER BY submit_dt DESC
+    </select>
+
+    <!-- 다음 결재자 조회 -->
+    <select id="findNextApprover" parameterType="map" resultType="String">
+        SELECT approver_id
+        FROM approval_line
+        WHERE edms_doc_no = #{edmsDocNo}
+          AND approval_order = #{currentOrder} + 1
     </select>
 
 </mapper>

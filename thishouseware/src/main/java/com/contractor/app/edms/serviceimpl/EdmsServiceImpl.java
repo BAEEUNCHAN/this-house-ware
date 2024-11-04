@@ -41,6 +41,7 @@ public class EdmsServiceImpl implements EdmsService {
 	@Override
 	public String edmsInsert(EdmsDocVO edmsDocVO) {
 		edmsDocVO.setApprovalStatus(EdmsDocVO.STATUS_PENDING); // 결재대기 상태로 설정
+		edmsDocVO.setApprovalOrder(0); // 기안자(0번째)
 		int result = edmsMapper.insertEdmsInfo(edmsDocVO);
 		return result == 1 ? edmsDocVO.getEdmsDocNo() : null;
 	}
@@ -48,7 +49,7 @@ public class EdmsServiceImpl implements EdmsService {
 	// 결재문서 임시저장
 	@Override
 	public String edmsInseSave(EdmsDocVO edmsDocVO) {
-		edmsDocVO.setApprovalStatus("임시저장"); // 임시저장 상태로 설정
+		edmsDocVO.setApprovalStatus(EdmsDocVO.STATUS_TEMPORARY); // 임시저장 상태로 설정
 		edmsMapper.insertSaveDoc(edmsDocVO);
 		return edmsDocVO.getEdmsDocNo();
 	}
@@ -57,24 +58,34 @@ public class EdmsServiceImpl implements EdmsService {
 	@Override
 	public String approveDocument(String edmsDocNo) {
 		EdmsDocVO edmsDoc = edmsMapper.selectEdmsDocInfo(new EdmsDocVO(edmsDocNo));
-		String nextApprover = edmsMapper.findNextApprover(edmsDocNo, edmsDoc.getApprovalOrder());
+		int currentOrder = edmsDoc.getApprovalOrder();
+		List<Integer> approvers = edmsDoc.getApprovers();
 
-		if (nextApprover == null) { // 다음 결재자가 없는 경우
-			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED);
-			captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
-		} else { // 다음 결재자가 있는 경우
+		if (currentOrder < approvers.size() - 1) {
+			// 다음 결재자로 이동
+			edmsDoc.setApprovalOrder(currentOrder + 1);
 			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED);
+			edmsDoc.setCurrentApproverId(approvers.get(currentOrder + 1).toString());
+		} else {
+			// 모든 결재가 완료된 경우
+			completeDocumentApproval(edmsDoc);
 		}
 
 		edmsMapper.updateDocumentApprovalStatus(edmsDoc);
 		return "결재가 완료되었습니다.";
 	}
 
-	// 결재자 확인
+	// 결재 완료 시 처리 로직 분리
+	private void completeDocumentApproval(EdmsDocVO edmsDoc) {
+		edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED);
+		edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 없음
+		captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
+	}
+	
+	// 다음 결재자 조회 (있으면 결재자 ID를, 없으면 null을 반환)
 	@Override
-	public boolean hasNextApprover(String edmsDocNo, int currentOrder) {
-		String nextApprover = edmsMapper.findNextApprover(edmsDocNo, currentOrder);
-		return nextApprover != null;
+	public String findNextApprover(String edmsDocNo, int currentOrder) {
+	    return edmsMapper.findNextApprover(edmsDocNo, currentOrder);
 	}
 
 	// 결재 반려
@@ -84,6 +95,8 @@ public class EdmsServiceImpl implements EdmsService {
 		edmsDoc.setEdmsDocNo(edmsDocNo);
 		edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_REJECTED); // 반려 상태로 설정
 		edmsDoc.setRejectReason(reason); // 반려 사유 설정
+		edmsDoc.setApprovalOrder(0); // 결재 순서를 기안자로 초기화
+		edmsDoc.setCurrentApproverId(edmsDoc.getId()); // 기안자의 ID로 설정
 
 		edmsMapper.updateDocumentApprovalStatus(edmsDoc);
 		return "반려되었습니다.";
@@ -126,10 +139,10 @@ public class EdmsServiceImpl implements EdmsService {
 	}
 
 	// 결재 상태에 따라 문서 조회
-    @Override
-    public List<EdmsDocVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId) {
-        return edmsMapper.selectDocumentsByStatusAndUserId(approvalStatus, userId);
-    }
+	@Override
+	public List<EdmsDocVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId) {
+		return edmsMapper.selectDocumentsByStatusAndUserId(approvalStatus, userId);
+	}
 
 	// 파일명 업데이트
 	@Override

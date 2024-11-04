@@ -2,6 +2,8 @@ package com.contractor.app.edms.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface EdmsService { // 전자결재
 
 	// 결재문서함 전체조회
@@ -16,17 +18,15 @@ public interface EdmsService { // 전자결재
 	public String approveDocument(String edmsDocNo);
 	// 결재 반려
 	public String rejectDocument(String edmsDocNo, String reason);
-	// 결재자 확인
-	public boolean hasNextApprover(String edmsDocNo, int currentOrder);
+	// 다음 결재자 조회 (결재자가 있으면 ID 반환, 없으면 null 반환)
+	public String findNextApprover(@Param("edmsDocNo") String edmsDocNo, @Param("currentOrder") int currentOrder);
 	// 파일명 업데이트
 	public void updateFileName(EdmsDocVO edmsDocVO);
 	// 결재 상태별 문서조회
 	public List<EdmsDocVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId);
 
-
 	// 결재양식 전체조회
 	public List<EdmsFormVO> edmsFormList();
 	// 결재양식 단건조회
 	public EdmsFormVO edmsFormInfo(EdmsFormVO edmsFormVO);
-
 }

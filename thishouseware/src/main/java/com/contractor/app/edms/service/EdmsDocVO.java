@@ -41,6 +41,7 @@ public class EdmsDocVO {
     private boolean important; // 중요문서 여부
     private int approvalOrder; // 결재 순서
     private String rejectReason; // 반려 사유
+    private String currentApproverId; // 결재자 id
     
     private int departmentNo; // 부서번호
 

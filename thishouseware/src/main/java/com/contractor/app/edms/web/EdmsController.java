@@ -47,14 +47,14 @@ public class EdmsController {
 
 	private final EdmsService edmsService;
 	private final ApprService apprService;
-	private final EmpAuthUtil empAuthUtil; 
+	private final EmpAuthUtil empAuthUtil;
 
 	@Autowired
-    public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil) {
-        this.edmsService = edmsService;
-        this.apprService = apprService;
-        this.empAuthUtil = empAuthUtil; // empAuthUtil 주입
-    }
+	public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil) {
+		this.edmsService = edmsService;
+		this.apprService = apprService;
+		this.empAuthUtil = empAuthUtil; // empAuthUtil 주입
+	}
 
 	// 결재문서 전체조회
 	@GetMapping("/edmsDocList")
@@ -82,7 +82,7 @@ public class EdmsController {
 	@PostMapping("/edmsInsert")
 	public String edmsInsertProcess(EdmsDocVO edmsDocVO, @RequestParam(required = false) String screenshot,
 			@RequestPart(required = false) MultipartFile uploadFile) {
-		edmsDocVO.setApprovalStatus("결재대기"); // 결재대기 상태로 설정
+		edmsDocVO.setApprovalStatus(EdmsDocVO.STATUS_PENDING); // 결재대기 상태로 설정
 
 		// 이미지 처리
 		Map<String, Object> object = saveImage(screenshot);
@@ -101,15 +101,40 @@ public class EdmsController {
 	// 결재 승인 처리
 	@PostMapping("/approve")
 	public ResponseEntity<String> approveDocument(@RequestParam String edmsDocNo) {
-		String response = edmsService.approveDocument(edmsDocNo);
-		return ResponseEntity.ok(response);
+		EdmsDocVO edmsDoc = edmsService.edmsDocInfo(new EdmsDocVO(edmsDocNo));
+		int currentOrder = edmsDoc.getApprovalOrder();
+		List<Integer> approvers = edmsDoc.getApprovers();
+
+		// 다음 결재자 조회
+		String nextApproverId = edmsService.findNextApprover(edmsDocNo, currentOrder);
+		if (nextApproverId != null) {
+			// 다음 결재자가 있는 경우
+			edmsDoc.setApprovalOrder(currentOrder + 1);
+			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED);
+			edmsDoc.setCurrentApproverId(nextApproverId); // 다음 결재자로 설정
+		} else {
+			// 모든 결재가 완료된 경우
+			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED);
+			edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 없음
+			captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
+		}
+
+		edmsService.updateFileName(edmsDoc);
+		return ResponseEntity.ok("결재가 완료되었습니다.");
 	}
 
 	// 결재 반려 처리
 	@PostMapping("/reject")
 	public ResponseEntity<String> rejectDocument(@RequestParam String edmsDocNo, @RequestParam String reason) {
-		String response = edmsService.rejectDocument(edmsDocNo, reason);
-		return ResponseEntity.ok(response);
+		EdmsDocVO edmsDoc = new EdmsDocVO();
+		edmsDoc.setEdmsDocNo(edmsDocNo);
+		edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_REJECTED); // 반려 상태로 설정
+		edmsDoc.setRejectReason(reason); // 반려 사유 설정
+		edmsDoc.setApprovalOrder(0); // 결재 순서를 기안자로 초기화
+		edmsDoc.setCurrentApproverId(edmsDoc.getId()); // 기안자의 ID로 설정
+
+		edmsService.updateFileName(edmsDoc);
+		return ResponseEntity.ok("반려되었습니다.");
 	}
 
 	// 결재 완료 시 작성된 문서 캡처
@@ -122,7 +147,7 @@ public class EdmsController {
 	// 결재문서 임시저장
 	@PostMapping("/insertSaveDoc")
 	public ResponseEntity<String> saveTemporary(@RequestBody EdmsDocVO edmsDocVO) {
-		edmsDocVO.setApprovalStatus("임시저장"); // 결재 상태를 임시저장으로 설정
+		edmsDocVO.setApprovalStatus(EdmsDocVO.STATUS_TEMPORARY); // 결재 상태를 임시저장으로 설정
 		edmsService.edmsInseSave(edmsDocVO); // 임시 저장 메서드 호출
 		return ResponseEntity.ok().build();
 	}
@@ -177,18 +202,18 @@ public class EdmsController {
 		os.close();
 	}
 
-
 	// 결재문서별 조회
 	@GetMapping("/docApprovalStatusList")
-	public String getDocumentsByStatus(@RequestParam String approvalStatus, Model model, Authentication authentication) {
-	    EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
-	    String userId = employeeVO.getId(); // 현재 로그인된 사용자 ID
+	public String getDocumentsByStatus(@RequestParam String approvalStatus, Model model,
+			Authentication authentication) {
+		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
+		String userId = employeeVO.getId(); // 현재 로그인된 사용자 ID
 
-	    List<EdmsDocVO> documents = edmsService.getDocumentsByStatusAndUserId(approvalStatus, userId);
+		List<EdmsDocVO> documents = edmsService.getDocumentsByStatusAndUserId(approvalStatus, userId);
 
-	    model.addAttribute("documents", documents);
-	    model.addAttribute("approvalStatus", approvalStatus);
-	    return "edms/docApprovalStatusList";
+		model.addAttribute("documents", documents);
+		model.addAttribute("approvalStatus", approvalStatus);
+		return "edms/docApprovalStatusList";
 	}
 
 	// 결재양식 전체조회
@@ -203,10 +228,5 @@ public class EdmsController {
 	public void empInfo(EdmsFormVO edmsFormVO, Model model) {
 		EdmsFormVO findVO = edmsService.edmsFormInfo(edmsFormVO);
 		model.addAttribute("edmsForms", findVO);
-	}
-
-	// 다음 결재자가 있는지 확인하는 메서드
-	private boolean hasNextApprover(EdmsDocVO edmsDoc) {
-		return edmsService.hasNextApprover(edmsDoc.getEdmsDocNo(), edmsDoc.getApprovalOrder());
 	}
 }

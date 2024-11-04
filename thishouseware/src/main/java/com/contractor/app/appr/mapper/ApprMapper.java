@@ -36,7 +36,8 @@ public interface ApprMapper {
 	public void insertFavorite(ApprFavoriteVO favorite);
 	// 즐겨찾기 삭제
 	public int deleteFavorite(Map<String, Object> params);
-	
+	// 즐겨찾기 이름을 결재선 이름으로 가져오기
+	public String getApprovalLineName(@Param("approvalLineNo") int approvalLineNo);
 		
 	// 결재자 등록 정보 전체조회
 	public List<ApproverVO> apprAllList(int approvalLineNo);

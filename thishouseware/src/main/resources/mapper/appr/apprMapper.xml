@@ -64,7 +64,7 @@
 		#{approvalLineNo}
 		, #{id}
 		, #{approvalLineName}
-		, #{createDt}
+		, sysdate
 		, #{recentUsedDt}
 		<if test="referrer != null">
 			, #{referrer}
@@ -91,9 +91,9 @@
 	<update id="updateApprLine" parameterType="ApprLineVO">
 	    UPDATE approval_line
 	        SET id = #{id}
-	          , approval_line_name = NVL(NULLIF(#{approvalLineName}, ''), '기본결재라인명')  -- 기본값 설정
+	          , approval_line_name = NVL(NULLIF(#{approvalLineName}, ''), '기본결재라인명') 
 	          , create_dt = #{createDt}
-	          , recent_used_dt = #{recentUsedDt}
+	          , recent_used_dt = sysdate
 	          , referrer = #{referrer}
 	          , favorite_chk = #{favoriteChk}
 	    WHERE approval_line_no = #{approvalLineNo}
@@ -239,6 +239,13 @@
 	           , #{favoriteChk} )
 	</insert>
 	
+	<!-- 즐겨찾기 이름을 결재선 이름으로 가져오기-->
+    <select id="getApprovalLineName" parameterType="int" resultType="String">
+        SELECT approval_line_name
+        FROM approval_line
+        WHERE approval_line_no = #{approvalLineNo}
+    </select>
+    
 	<!-- 즐겨찾기 삭제 -->
 	<delete id="deleteFavorite" parameterType="map">
 	    DELETE FROM approval_line_favorite

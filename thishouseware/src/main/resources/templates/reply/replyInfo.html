@@ -128,6 +128,7 @@
 												<div class="timeline-body">
 													<p>[[${info.replyContent}]]</p>
 												</div>
+
 											</div>
 											<br />
 											<br />
@@ -171,6 +172,14 @@
 
 
 	<script>
+	
+	
+
+	// 페이지 로드 시 첫 번째 페이지 댓글 가져오기
+	$(document).ready(function() {
+	    loadReplies(0);
+	});
+
 		
     // 삭제버튼
       $('.fa-times-circle').on('click', function() {

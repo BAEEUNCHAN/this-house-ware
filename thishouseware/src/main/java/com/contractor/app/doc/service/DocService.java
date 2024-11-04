@@ -18,5 +18,4 @@ public interface DocService {
 	// 부서문서 중요문서
 	public List<DocJoinVO> docDeptImportantList(String important, int departmentNo);
 	
-	
 }

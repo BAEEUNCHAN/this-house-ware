@@ -2,120 +2,132 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.contractor.app.edms.mapper.EdmsMapper">
 
-<!-- 전체조회 -->
-<select id="selectDocAllList" resultType="EdmsDocVO">
-		SELECT edms_doc_no
-        	, id
-        	, title
-        	, content
-        	, file_name
-        	, submit_dt
-        	, approval_dt
-        	, approval_status
-        	, edms_form_No
-        	, share_status
-        	, share_folder_no
-		FROM edms_doc
-		<where>
-			<if test="edmsDocNo != null and !edmsDocNo.equals('')">
-				edms_doc_no = #{edmsDocNo}
-			</if>
-			<if test="id != null and !id.equals('')">
-				and id = #{id}
-			</if>
-			<if test="edmsFormNo != null and !edmsFormNo.equals('')">
-				and edms_form_No = #{edmsFormNo}
-			</if>
-			<if test="shareStatus != null and !shareStatus.equals('')">
-				and share_status = #{shareStatus}
-			</if>
-			<if test="shareFolderNo != null and !shareFolderNo.equals('')">
-				and share_folder_no = #{shareFolderNo}
-			</if>
-		</where>
-		ORDER BY submit_dt
-	</select>
-	
-	<!-- 단건조회 -->
-	<select id="selectEdmsDocInfo" resultType="EdmsDocVO">
-		SELECT edms_doc_no
-        	, id
-        	, title
-        	, content
-        	, file_name
-        	, attatch
-        	, submit_dt
-        	, approval_dt
-        	, approval_status
-        	, edms_form_No
-        	, share_status
-        	, share_folder_no
-		FROM edms_doc
-		WHERE edms_doc_no = #{edmsDocNo}
-	</select>
-	
-	<!-- 등록 -->
-	<insert id="insertEdmsInfo" parameterType="EdmsDocVO">
-		<selectKey keyProperty="edmsDocNo"
-				   resultType="String"
-				   order="BEFORE">
-			SELECT NVL(MAX(edms_doc_no), 0) + 1
-			FROM edms_doc
-		</selectKey>
-		INSERT INTO edms_doc
-				(	
-					edms_doc_no
-					, id
-					, title
-					, content
-					, file_name
-					, attatch
-					, submit_dt	
-					, approval_status
-					, edms_form_no
-					, share_status
-					, share_folder_no
-				)
-			VALUES
-				(
-					#{edmsDocNo}
-					<!-- employees_seq.NEXTVAL -->
-					, #{id}
-					, #{title}
-					, #{content}
-					, #{fileName}
-					, #{attatch}
-					, sysdate
-					<choose>
-						<when test="approvalStatus != '임시저장'">
-							, '결재대기'	
-						</when>
-						<otherwise>
-							, '임시저장'
-						</otherwise>
-					</choose>								
-					, #{edmsFormNo}
-					, #{shareStatus}
-					, #{shareFolderNo}
-				)
-	</insert>
-	
-	<!-- 결재 상태 업데이트 -->
-		<update id="updateApprovalStatus" parameterType="EdmsDocVO">
-		    UPDATE edms_doc
-		    SET approval_status = #{approvalStatus}, reject_reason = #{rejectReason}
-		    WHERE edms_doc_no = #{edmsDocNo}
-		</update>
-		
-	<!-- 결재 라인에서 다음 결재자 조회 -->
-		<select id="getNextApprover" parameterType="String" resultType="String">
-		    SELECT approver_id
-		    FROM approval_line
-		    WHERE edms_doc_no = #{edmsDocNo} AND approval_order = #{currentOrder} + 1
-		</select>
-	
-	
+    <!-- 전체조회 -->
+    <select id="selectDocAllList" resultType="EdmsDocVO">
+        SELECT edms_doc_no
+            , id
+            , title
+            , content
+            , file_name
+            , submit_dt
+            , approval_dt
+            , approval_status
+            , edms_form_no
+            , share_status
+            , share_folder_no
+        FROM edms_doc
+        <where>
+            <if test="edmsDocNo != null and edmsDocNo != ''">
+                edms_doc_no = #{edmsDocNo}
+            </if>
+            <if test="id != null and id != ''">
+                AND id = #{id}
+            </if>
+            <if test="edmsFormNo != null and edmsFormNo != ''">
+                AND edms_form_no = #{edmsFormNo}
+            </if>
+            <if test="shareStatus != null and shareStatus != ''">
+                AND share_status = #{shareStatus}
+            </if>
+            <if test="shareFolderNo != null and shareFolderNo != ''">
+                AND share_folder_no = #{shareFolderNo}
+            </if>
+        </where>
+        ORDER BY submit_dt
+    </select>
 
+    <!-- 단건조회 -->
+    <select id="selectEdmsDocInfo" parameterType="String" resultType="EdmsDocVO">
+        SELECT edms_doc_no
+            , id
+            , title
+            , content
+            , file_name
+            , attatch
+            , submit_dt
+            , approval_dt
+            , approval_status
+            , edms_form_no
+            , share_status
+            , share_folder_no
+            , reject_reason
+        FROM edms_doc
+        WHERE edms_doc_no = #{edmsDocNo}
+    </select>
 
+    <!-- 결재문서 등록 -->
+    <insert id="insertEdmsInfo" parameterType="EdmsDocVO">
+        <selectKey keyProperty="edmsDocNo" resultType="String" order="BEFORE">
+            SELECT NVL(MAX(edms_doc_no), 0) + 1 FROM edms_doc
+        </selectKey>
+        INSERT INTO edms_doc (
+              edms_doc_no
+            , id
+            , title
+            , content
+            , file_name
+            , attatch
+            , submit_dt
+            , approval_status
+            , edms_form_no
+            , share_status
+            , share_folder_no
+        )
+        VALUES (
+              #{edmsDocNo}
+            , #{id}
+            , #{title}
+            , #{content}
+            , #{fileName}
+            , #{attatch}
+            , SYSDATE
+            , <choose>
+                <when test="approvalStatus != '임시저장'">
+                    '결재대기'
+                </when>
+                <otherwise>
+                    '임시저장'
+                </otherwise>
+              </choose>
+            , #{edmsFormNo}
+            , #{shareStatus}
+            , #{shareFolderNo}
+        )
+    </insert>
+
+    <!-- 결재 상태 업데이트 -->
+    <update id="updateApprovalStatus" parameterType="EdmsDocVO">
+        UPDATE edms_doc
+        SET approval_status = #{approvalStatus}
+            , reject_reason = #{rejectReason}
+        WHERE edms_doc_no = #{edmsDocNo}
+    </update>
+
+    <!-- 다음 결재자 조회 -->
+    <select id="findNextApprover" parameterType="map" resultType="String">
+        SELECT approver_id
+        FROM approval_line
+        WHERE edms_doc_no = #{edmsDocNo}
+          AND approval_order = #{currentOrder} + 1
+    </select>
+    
+    <!-- 특정 사용자에 대해 결재상태별 문서조회 -->
+    <select id="selectDocumentsByStatusAndUserId" parameterType="map" resultType="EdmsDocVO">
+        SELECT edms_doc_no
+            , id
+            , title
+            , content
+            , file_name
+            , submit_dt
+            , approval_dt
+            , approval_status
+            , edms_form_no
+            , share_status
+            , share_folder_no
+        FROM edms_doc
+        WHERE approval_status = #{approvalStatus}
+          AND id = #{userId}
+        ORDER BY submit_dt DESC
+    </select>
 
 </mapper>

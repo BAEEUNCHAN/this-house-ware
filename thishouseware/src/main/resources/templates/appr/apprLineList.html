@@ -5,30 +5,33 @@
 <head>
     <meta charset="UTF-8">
     <title>결재라인 조회</title>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery 라이브러리 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI 라이브러리 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
-/* 부모 요소에 고정 너비 설정 */
 .page-inner, .col-md-12 {
     width: 100%;
     max-width: 2400px;
     margin: 0 auto;
 }
-/* 체크박스 숨기기 */
 .chk_box input[type="checkbox"] {
     display: none;
 }
-/* 체크박스 스타일 */
 .chk_box {
     cursor: pointer;
     position: relative;
 }
-/* 기본 별 아이콘 색상 */
 .chk_box .fa-star {
     color: #6c757d;
     font-size: 20px;
 }
-/* 체크된 상태의 별 아이콘 색상 */
 .chk_box input[type="checkbox"]:checked+.fa-star {
     color: #ffc107;
 }
@@ -71,7 +74,7 @@
                                             <td>[[${#dates.format(info.recentUsedDt, 'yyyy-MM-dd')}]]</td>
                                             <td>
                                                 <label class="chk_box">
-                                                    <input type="checkbox" class="favoriteCheck" th:checked="${info.favoriteChk == 'Y'}" />
+                                                    <input type="checkbox" class="favoriteCheck" th:checked="${info.favoriteChk == 'Y'}" th:data-id="${info.id}" th:data-lineno="${info.approvalLineNo}" />
                                                     <i class="fa fa-star" aria-hidden="true"></i>
                                                 </label>
                                             </td>
@@ -81,7 +84,7 @@
                                 </tbody>
                             </table>
                             <div class="d-flex justify-content-end" style="padding: 10px;">
-                                <button id="addAppLineButton" class="btn btn-info btn-sm" style="width: 80px; margin-right: 5px;">추가</button>
+                                <button id="addAppLineButton" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addApprovalLineModal" style="width: 80px; margin-right: 5px;">추가</button>
                                 <button id="deleteAppLineButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
                             </div>
                         </div>
@@ -94,18 +97,46 @@
     </div>
 </div>
 
+<!-- 모달 창 구조 -->
+<div class="modal fade" id="addApprovalLineModal" tabindex="-1" role="dialog" aria-labelledby="addApprovalLineModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addApprovalLineModalLabel">결재라인 추가</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addApprovalLineForm" action="/appr/apprLineInsert" method="post">
+                    <div class="form-group">
+                        <label for="approvalLineName">결재선 이름</label>
+                        <input type="text" class="form-control" id="approvalLineName" name="approvalLineName" required>
+                    </div>
+                    <input type="hidden" name="id" th:value="${#authentication.principal.empVO.id}">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" form="addApprovalLineForm" class="btn btn-primary">등록</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let ApprovalLineNo = "";
     let ApprovalLineName = "";
 
     $(document).ready(function() {
-        // 전체 선택 체크박스 기능
+        // 전체 선택 체크박스 기능: 상단 체크박스를 클릭하면 모든 개별 체크박스가 선택/해제됨
         $('#checkAll').on('click', function() {
             $('.rowCheck').prop('checked', this.checked);
         });
 
-        // 결재선 클릭시 결재자 리스트 출력
+        // 결재라인 클릭 시 결재자 리스트 출력
         $('.apprLines').on('click', 'tr', function(event) {
+            // 체크박스나 수정 버튼 클릭 시 이벤트를 무시하고, 다른 곳 클릭 시에만 실행
             if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('modifyAppLineButton')) {
                 ApprovalLineNo = $(this).data("lineno");
                 ApprovalLineName = $(this).find('td').eq(3).text();
@@ -125,36 +156,30 @@
                 });
             }
         });
-
-        // 결재선 등록 버튼 클릭 시 등록 기능
-        $('#addAppLineButton').on('click', function() {
-            let approvalLineNo = $(event.target).parent().data("no");
-            location.href = '/appr/apprLineInsert?approvalLineNo=' + approvalLineNo;
-        });
-
-     // 이름 수정 모드로 전환 및 수정 기능 구현
+        
+        // 결재라인 이름 수정 버튼 클릭 시 동작
         $('.apprLines').on('click', '.modifyAppLineButton', function(event) {
             event.stopPropagation();
-            
+
             let $row = $(this).closest('tr');
-            let $nameCell = $row.find('.editable-name');
-            let originalName = $nameCell.text();
-            let approvalLineNo = $row.data("lineno");
-            let id = $row.data("id");  
+            let $nameCell = $row.find('.editable-name'); 
+            let originalName = $nameCell.text(); 
+            let approvalLineNo = $row.data("lineno"); 
+            let id = $row.attr("data-id"); 
 
-            // 이름 셀을 입력 필드로 변환
+            // 결재라인 이름을 입력 필드로 변경하여 수정할 수 있도록 설정
             $nameCell.html('<input type="text" class="edit-name-input" value="' + originalName + '"/>');
-            $nameCell.find('.edit-name-input').focus();
+            $nameCell.find('.edit-name-input').focus(); // 입력 필드에 포커스 설정
 
-            // 입력 필드에서 엔터 키 누를 때 수정 요청
+            // 입력 필드에서 Enter 키를 누르면 서버로 수정된 이름을 전송, 업데이트
             $nameCell.find('.edit-name-input').on('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    let newName = $(this).val();
-                    
-                    // AJAX 
+                    let newName = $(this).val(); // 수정된 결재라인 이름
+
+                    // AJAX 요청
                     $.ajax({
                         type: 'POST',
-                        url: '/appr/apprLineModify',
+                        url: '/appr/apprLineModify', 
                         data: JSON.stringify({
                             id: id,  
                             approvalLineNo: approvalLineNo,
@@ -163,7 +188,7 @@
                         contentType: 'application/json',
                         success: function(response) {
                             alert('결재라인 이름이 업데이트되었습니다.');
-                            $nameCell.html(newName); // 수정된 이름 반영
+                            location.reload(); // 업데이트 후 페이지 새로고침
                         },
                         error: function() {
                             alert('이름 업데이트 중 오류가 발생했습니다.');
@@ -173,23 +198,26 @@
                 }
             });
 
-            // 입력 필드에서 포커스 아웃 시 원래 이름으로 복구
+            // 입력 필드에서 포커스를 잃었을 때 원래 이름으로 복구
             $nameCell.find('.edit-name-input').on('blur', function() {
                 $nameCell.html(originalName);
             });
         });
-        // 즐겨찾기 체크박스 클릭 시 즐겨찾기 업데이트
+
+     // 즐겨찾기 업데이트
         $('.apprLines').on('click', '.favoriteCheck', function(event) {
             event.stopPropagation();
 
-            let approvalLineNo = $(this).closest('tr').data("lineno");
+            let id = $(this).attr("data-id");
+            let approvalLineNo = $(this).attr("data-lineno"); 
             let favoriteChk = $(this).is(':checked') ? 'Y' : 'N';
-            let checkbox = $(this); // 현재 체크박스 참조 저장
+            let checkbox = $(this);
 
             $.ajax({
                 type: 'POST',
                 url: '/appr/favoriteUpdate',
                 data: JSON.stringify({
+                    id: id,
                     approvalLineNo: approvalLineNo,
                     favoriteChk: favoriteChk
                 }),
@@ -199,40 +227,41 @@
                 },
                 error: function() {
                     alert('즐겨찾기 상태 업데이트 중 오류가 발생했습니다.');
-                    // 실패 시 체크 상태를 원래대로 되돌림
-                    checkbox.prop('checked', !checkbox.is(':checked'));
+                    checkbox.prop('checked', !checkbox.is(':checked'));  // 오류 발생 시 체크 상태 복구
                 }
             });
         });
 
-        // 삭제 버튼 클릭 시 삭제 기능
-        $('#deleteAppLineButton').on('click', function() {
-            let selectId = [];
-            $('.rowCheck:checked').each(function() {
-                selectId.push($(this).val());
-            });
+    // 선택한 결재라인 삭제 버튼 클릭 시 동작
+    $('#deleteAppLineButton').on('click', function() {
+        let selectId = [];
+        // 체크된 각 결재라인의 ID 값을 배열에 추가
+        $('.rowCheck:checked').each(function() {
+            selectId.push($(this).val());
+        });
 
-            if (selectId.length > 0) {
-                if (confirm('선택한 결재라인을 삭제하시겠습니까?')) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/appr/apprLineDelete',
-                        data: JSON.stringify(selectId),
-                        contentType: 'application/json',
-                        success: function(response) {
-                            alert('삭제되었습니다.');
-                            location.reload();
-                        },
-                        error: function() {
-                            alert('삭제 중 오류가 발생했습니다.');
-                        }
-                    });
-                }
-            } else {
-                alert('삭제할 결재라인을 선택하세요.');
+        // 선택된 결재라인이 있는 경우에만 삭제 확인 후 서버로 삭제 요청
+        if (selectId.length > 0) {
+            if (confirm('선택한 결재라인을 삭제하시겠습니까?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/appr/apprLineDelete', // 결재라인 삭제 URL
+                    data: JSON.stringify(selectId), // 삭제할 결재라인 ID 배열 전송
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert('삭제되었습니다.');
+                        location.reload(); // 삭제 후 페이지 새로고침
+                    },
+                    error: function() {
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                });
             }
-        });
-    }); // document.ready 종료
+        } else {
+            alert('삭제할 결재라인을 선택하세요.');
+        }
+    });
+    });
 </script>
 </body>
 </html>

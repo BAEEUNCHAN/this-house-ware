@@ -119,6 +119,11 @@ public class ApprServiceImpl implements ApprService {
 		params.put("id", id);
 		apprMapper.deleteFavorite(params);
 	}
+	
+	// 즐겨찾기 이름을 결재선 이름으로 가져오기
+	public String getApprovalLineName(int approvalLineNo) {
+	    return apprMapper.getApprovalLineName(approvalLineNo);
+	}
 
 	// 결재자 등록 정보 전체조회
 	@Override

@@ -6,6 +6,7 @@ import java.util.Map;
 public interface LeaveService {
 	// 전체 휴가 조회
 	public List<Map<String, Object>> leaveListAll();
+	public List<LeaveVO> getLeaveListAll();
 	
 	// 개인별 휴가 조회
 	public List<Map<String, Object>> leaveList(String id);

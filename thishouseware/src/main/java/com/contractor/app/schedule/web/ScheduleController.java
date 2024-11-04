@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
-
 import com.contractor.app.schedule.service.LeaveDetailService;
 import com.contractor.app.schedule.service.LeaveDetailVO;
 import com.contractor.app.schedule.service.LeaveService;
-
+import com.contractor.app.schedule.service.LeaveVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
 
@@ -169,12 +168,34 @@ public class ScheduleController {
 		return "schedule/leaveList";
 	}
 	
+	
 	// DB서버의 휴가 가져오기 AJAX
 	@PostMapping("leaveListAll")
 	@ResponseBody
-	public List<Map<String, Object>> leaveListJSON() {		
+	public List<Map<String, Object>> leaveListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {		
+		System.out.println(id);
+		System.out.println(positionCode);
+		System.out.println(departmentNo);
+		
+		if(positionCode.equals("a1") || positionCode.equals("a2") || positionCode.equals("a3")) {
+			// 직급 a1(사장), a2(관리자), a3(본부장)은 모든 일정확인가능
+		}else if(positionCode.equals("a4")) {
+			// a4(팀장)은 자신의 부서 모든 일정 확인가능
+		} else{
+			// 그 외 자신이 등록한 일정만 확인가능(인턴, 사원..)
+		}
 		return leaveService.leaveListAll();
 	}
+	
+	
+	/*
+	// DB서버의 휴가 가져오기 AJAX
+	@PostMapping("leaveListAll")
+	@ResponseBody
+	public List<LeaveVO> leaveListJSON() {		
+		return leaveService.getLeaveListAll();
+	}
+	*/
 	
 	// DB서버의 자신의 휴가 가져오기 AJAX
 	@PostMapping("getLeave")
@@ -182,6 +203,7 @@ public class ScheduleController {
 	public List<Map<String, Object>> getLeaveJSON() {		
 		return leaveService.leaveList(id);
 	}
+	
 		
 	// 관리자 => 팀원 일정확인 리스트
 	@GetMapping("/schedule/adminCheckOthersScheduleList")

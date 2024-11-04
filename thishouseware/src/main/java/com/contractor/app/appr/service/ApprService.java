@@ -3,6 +3,8 @@ package com.contractor.app.appr.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface ApprService {
 	
 	// 결재선 전체조회
@@ -30,7 +32,8 @@ public interface ApprService {
     void insertFavorite(ApprFavoriteVO favorite);
 	// 즐겨찾기 삭제
 	public void favoriteDelete(int approvalLineNo, String id);
-	
+	// 즐겨찾기 이름을 결재선 이름으로 가져오기
+	public String getApprovalLineName(@Param("approvalLineNo") int approvalLineNo);
 	
 	
 	// 결재자 등록 정보 전체조회

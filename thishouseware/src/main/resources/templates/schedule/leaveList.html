@@ -69,8 +69,10 @@
           ></button>
         </div>
         <div class="modal-body">
-          연차사용날짜 : <input type="datetime-local" id="leaveStartDt" /><br />
-          연차종류 : <input type="text" id="leaveType" /><br />
+          연차사용날짜 : <input type="datetime-local" id="start" /><br />
+          연차사용날짜 : <input type="datetime-local" id="end" /><br />
+          연차사유 : <input type="text" id="content" /><br />
+          연차종류 : <input type="text" id="title" /><br />
           아이디 : <input type="text" id="id" /><br />
           배경색상 :
           <select id="color">
@@ -86,10 +88,10 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             취소
           </button>
-          <button type="button" class="btn btn-primary" id="modSchedule">
+          <button type="button" class="btn btn-primary" id="modLeave">
             수정
           </button>
-          <button type="button" class="btn btn-warning" id="delSchedule">
+          <button type="button" class="btn btn-warning" id="delLeave">
             삭제
           </button>
         </div>
@@ -104,8 +106,23 @@
     <div id='calendardiv'></div>
   </div>
   <script th:inline="javascript">
+    var id = [[${#authentication.principal.empVO.id}]] 
+    var positionCode = [[${#authentication.principal.empVO.positionCode}]];
+  	var departmentNo = [[${#authentication.principal.empVO.departmentNo}]];
+  	
+  	function scheduleId() {
+		return $.ajax({
+			type : 'POST',
+			url : '/leaveListAll?id='+id,
+			data : {positionCode : positionCode, departmentNo : departmentNo},
+			dataType : 'json',
+		}).then( data => 
+			calendar.addEventSource( data )	
+	)}
+  	
+  	window.setTimeout(scheduleId, 400)
+  	
     let key = [[${key}]];
-    let id = [[${#authentication.principal.empVO.id}]] 
   </script>
 </body>
 </html>

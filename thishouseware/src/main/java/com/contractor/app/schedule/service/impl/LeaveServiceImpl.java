@@ -28,6 +28,22 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 	
 	@Override
+	public List<LeaveVO> leaveListAllWhereDepartmentNo(int departmentNo) {
+		return leaveMapper.leaveListAllWhereDepartmentNo(departmentNo);
+	}
+	
+	@Override
+	public List<LeaveVO> leaveListWhereId(String id) {
+		return leaveMapper.leaveListWhereId(id);
+	}
+	
+	@Override
+	public int leaveUpdate(LeaveVO leaveVO) {
+		int result = leaveMapper.leaveUpdate(leaveVO);
+		return result == 1 ? leaveVO.getLeaveNo() : -1;
+	}
+	
+	@Override
 	public List<Map<String, Object>> leaveList(String id) {
 		List<Map<String, Object>> leaves = leaveMapper.selectLeave(id);
 		return leaves;
@@ -35,15 +51,15 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Override
 	public int leaveInsert(LeaveVO leaveVO) {
-		int days = leaveVO.calLeaveDays(leaveVO.getLeaveStartDt(), leaveVO.getLeaveEndDt());
+		int days = leaveVO.calLeaveDays(leaveVO.getStart(), leaveVO.getEnd());
 		leaveVO.setLeaveDays(days);
 		int result = leaveMapper.insertLeave(leaveVO);
 		return result == 1 ? leaveVO.getLeaveNo() : -1;
 	}
 
 	@Override
-	public boolean leaveDelete(Integer no) {
-		return leaveMapper.deleteLeave(no) == 1;
+	public boolean leaveDelete(Integer leaveNo) {
+		return leaveMapper.deleteLeave(leaveNo) == 1;
 	}
 	
 }

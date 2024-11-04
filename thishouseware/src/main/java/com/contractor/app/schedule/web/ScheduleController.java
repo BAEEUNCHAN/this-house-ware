@@ -172,19 +172,22 @@ public class ScheduleController {
 	// DB서버의 휴가 가져오기 AJAX
 	@PostMapping("leaveListAll")
 	@ResponseBody
-	public List<Map<String, Object>> leaveListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {		
+	public List<LeaveVO> leaveListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {		
 		System.out.println(id);
 		System.out.println(positionCode);
 		System.out.println(departmentNo);
 		
 		if(positionCode.equals("a1") || positionCode.equals("a2") || positionCode.equals("a3")) {
 			// 직급 a1(사장), a2(관리자), a3(본부장)은 모든 일정확인가능
+			return leaveService.getLeaveListAll();
 		}else if(positionCode.equals("a4")) {
 			// a4(팀장)은 자신의 부서 모든 일정 확인가능
+			return leaveService.leaveListAllWhereDepartmentNo(departmentNo);
 		} else{
-			// 그 외 자신이 등록한 일정만 확인가능(인턴, 사원..)
+			return leaveService.leaveListWhereId(id);
 		}
-		return leaveService.leaveListAll();
+		
+		//return leaveService.getLeaveListAll();
 	}
 	
 	
@@ -196,6 +199,57 @@ public class ScheduleController {
 		return leaveService.getLeaveListAll();
 	}
 	*/
+	
+	
+	// 휴가 등록
+		@PostMapping("leaveUpdate")
+		@ResponseBody
+		public Map<String, Object> leaveUpdateJSON(@RequestBody LeaveVO leaveVO) {
+			Map<String, Object> result = new HashMap<>();
+			try {
+				// 받은 데이터 확인용
+		        System.out.println("Received Start: " + leaveVO.getStart());
+		        System.out.println("Received End: " + leaveVO.getEnd());
+		        System.out.println("Received Id: " + leaveVO.getId());
+		        System.out.println("Received Title: " + leaveVO.getTitle());
+		        System.out.println("Received Content: " + leaveVO.getContent());
+		        System.out.println("Received Color: " + leaveVO.getColor());
+		        System.out.println("Received LeaveNo: " + leaveVO.getLeaveNo());
+		        
+		        // DB에 저장
+				if (leaveService.leaveUpdate(leaveVO) > 0) {
+					result.put("success", true);
+					System.out.println("Success");
+				}
+				else {
+					result.put("success", false);
+					System.out.println("Fail");
+				}
+			} catch (Exception e) {
+				result.put("success", false);
+			}
+			return result;
+		}
+		
+		// 휴가 삭제
+		@PostMapping("leaveDelete")
+		@ResponseBody
+		public Map<String, Object> leaveDelete(@RequestParam Integer leaveNo) {
+			Map<String, Object> result = new HashMap<>();
+			try {
+				if(leaveService.leaveDelete(leaveNo)) {
+					result.put("success", true);
+					System.out.println("Success");
+				}
+				else {
+					result.put("success", false);
+					System.out.println("Fail");
+				}
+			} catch (Exception e) {
+				result.put("success", false);
+			}
+			return result;
+		}
 	
 	// DB서버의 자신의 휴가 가져오기 AJAX
 	@PostMapping("getLeave")

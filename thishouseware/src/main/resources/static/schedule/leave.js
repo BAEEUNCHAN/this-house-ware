@@ -9,28 +9,44 @@
  * 5) borderColor : 이벤트 테두리의 색상만을 변경한다.
  * 6) rendering : "bakground"라고 입력하면 color, backgroundColor의 색상으로 해당일 전체의 내용이 채워진다.
  */
+
+var calendar;
+
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendardiv');    
-  	fetch('/leaveListAll', {
+  	/*fetch('/leaveListAll', {
     	method: "POST",
     	headers: {
         	"Content-Type": "application/json",            
     	},
   	})
   	.then(result => result.json())
-  	.then(result => {
-		console.log(result);
-    	allEvents = result;
+  	.then(result => {*/
+		allEvents = [];
+		/*allEvents = [];
+		console.log(allEvents);*/
 
     	// full-calendar 생성하기
-    	var calendar = new FullCalendar.Calendar(calendarEl, {
+    	    calendar = new FullCalendar.Calendar(calendarEl, {
 			themeSystem: 'bootstrap5', // Bootstrap 5 Theming
       		googleCalendarApiKey: key, // 구글캘린더 api키 입력하시면 됩니다.
       		height: '600px', // calendar 높이 설정
       		expandRows: true, // 화면에 맞게 높이 재설정
       		slotMinTime: '00:00', // Day 캘린더에서 시작 시간
       		slotMaxTime: '23:59', // Day 캘린더에서 종료 시간
-      		// eventTextColor: 'black', // 이벤트 텍스트 컬러      		      		
+      		// eventTextColor: 'black', // 이벤트 텍스트 컬러      		
+      		
+      		// 휴가등록버튼
+      		customButtons:{
+        		myCustomButton:{
+          			text:"휴가등록",
+          			click: function() {
+            			//부트스트랩 모달 열기
+            			$("#addEventModal").modal("show");              
+          			}
+        		},        
+      		},
+      		      		
       		// 해더에 표시할 툴바
       		headerToolbar: {
         		left: 'prev,next today',
@@ -74,33 +90,76 @@ document.addEventListener('DOMContentLoaded', function() {
 	      		if(info.event.extendedProps.leaveNo == undefined || info.event.id != id) { 	      
 					return;	
 				}
-				
+				/*
 				console.log(info.event.extendedProps.leaveNo);
 				console.log(info.event.title);
 				console.log(info.event.start);
 				console.log(info.event.end);
 				console.log(info.event.extendedProps.content);				
-				console.log(info.event.id);		
-				
+				console.log(info.event.id);	
+				*/
 						
       		// 모달창에 현재 이벤트 정보 출력
       		let startDt = new Date(info.event.start - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);
 			let endDt = new Date(info.event.end - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, -5);								
-			$("#eventInfoModal #leaveStartDt").val(leaveStartDt);    		
-			$("#eventInfoModal #leaveType").val(leaveType);    		
+			$("#eventInfoModal #start").val(startDt);    		
+			$("#eventInfoModal #end").val(endDt);    		
+			$("#eventInfoModal #content").val(info.event.extendedProps.content);    		
+			$("#eventInfoModal #title").val(info.event.title);    		
 			$("#eventInfoModal #id").val(id);    		
 			$("#eventInfoModal #color").val(info.event.backgroundColor).prop("selected",true); 		
 			$("#eventInfoModal").modal("show");
 			
 			
+			//휴가 수정 이벤트
+				/*$("#modLeave").get(0).onclick = function(target) {
+					let eventData = {
+				        start: $("#eventInfoModal #start").val(),
+				        end: $("#eventInfoModal #end").val(),						        
+				        content: $("#eventInfoModal #content").val(),
+				        title: $("#eventInfoModal #title").val(),
+				        color: $("#eventInfoModal #color").val(),
+				    };
+					//빈값입력시 오류
+					if (eventData.title == "" || eventData.start == "" || eventData.end == "" || eventData.content == "") {
+						alert("휴가종류, 휴가내용, 시작시간, 종료시간은 필수 입력값입니다.");
+					} 
+					//끝나는 날짜가 시작하는 날짜보다 값이 크면 안됨
+					else if ($("#eventInfoModal #start").val() > $("#eventInfoModal #end").val()) {
+						alert("시간을 잘못 입력 하셨습니다.");
+					}
+					else {
+						// 서버로 data 보내기
+						let event = leaveUpdate(info);
+						if(event != null) {
+							info.event.remove(); 
+							calendar.addEvent(event);
+						}
+						$("#eventInfoModal").modal("hide");														
+					}
+				};
+				
+				// 휴가 삭제 이벤트
+				$("#delLeave").get(0).onclick = function() {
+					console.log("leaveNo:", info.event.extendedProps.leaveNo);
+console.log("Delete URL:", '/leaveDelete?no=' + info.event.extendedProps.leaveNo);
+
+					if (confirm("선택한 일정을 삭제하시겠습니까?")) {
+						console.log("leaveNo:", info.event.extendedProps.leaveNo);
+console.log("Delete URL:", '/leaveDelete?no=' + info.event.extendedProps.leaveNo);
+
+						deleteLeave(info);
+						$("#eventInfoModal").modal("hide");
+					}				
+				};*/
+			
     		},
       
-				
   			//데이터 가져오는 이벤트        
   			eventSources:[
     			{
     				events: allEvents,
-    				backgroundColor: 'green',    				        
+    				//backgroundColor: 'green',    				        
     			},
     			{
       				// Google Calendar에서 공휴일 정보 가져오기
@@ -113,9 +172,67 @@ document.addEventListener('DOMContentLoaded', function() {
 		// 캘린더 랜더링
     	calendar.render();
   	});
-});
 
- 
+ // 일정 수정
+ /*
+function leaveUpdate(info) {
+	// 서버로 data 보내기
+	let obj = new Object();
+	obj.leaveNo = info.event.extendedProps.leaveNo;
+	obj.title = $("#eventInfoModal #title").val();
+	obj.start = $("#eventInfoModal #start").val();
+    obj.end = $("#eventInfoModal #end").val();
+    obj.content = $("#eventInfoModal #content").val();
+    obj.color = $("#eventInfoModal #color").val();
+    obj.id = id;*/
+/*    obj.sheduleCode = 'f1';
+    obj.departmentNo = 13;*/
+   /* $.ajax({
+		type: 'post',
+		url: '/leaveUpdate',
+		data: JSON.stringify(obj),
+		contentType: 'application/json',
+		success: function(result) {
+			if(result.success) {
+				alert("수정했습니다");
+		        // location.reload();		        
+			}
+			else {
+				alert("수정 중 오류가 발생했습니다");
+				return null;
+			}
+		},
+		error: function(result) {
+			alert(result);
+			return null;
+        }
+	});
+	return obj;
+}
+
+
+// 휴가 삭제
+function deleteLeave(info) {	
+	console.log(info.event.extendedProps.leaveNo);
+	$.ajax({
+		type: 'post',
+		url: '/leaveDelete?leaveNo='+info.event.extendedProps.leaveNo,
+		success: function(result) {
+      		if(result.success) {
+        		info.event.remove();
+        		alert("삭제하였습니다");
+        		// location.reload();							
+      		}                        
+      		else {
+        		alert("오류가 발생하였습니다");
+      		}
+		},
+		error: function(result) {
+			alert(result);
+		}
+	})
+}
+*/
 /*
 - 일정 저장시 고려해야 할 DB 테이블
 1. title : 일정 이름

@@ -101,13 +101,22 @@
 
 	<!-- 결재자 전체조회 기존 
 	<select id="apprAllList" resultType="ApproverVO">
-		SELECT a.approver_no
-		, a.approver
-		, d.department_name
-		, e.name
-		, e.position_code
-		, a.approval_order
-		, a.approval_type
+		SELECT a.approver_no,
+       a.approver,
+       d.department_name,
+       e.name,
+       e.position_code,
+       a.approval_order,
+       a.approval_type,
+       CASE e.position_code
+           WHEN 'a1' THEN '사장'
+           WHEN 'a2' THEN '관리자'
+           WHEN 'a3' THEN '본부장'
+           WHEN 'a4' THEN '팀장'
+           WHEN 'a5' THEN '사원'
+           WHEN 'a6' THEN '인턴'
+           ELSE 'Unknown'
+       END AS position_name 
 		FROM approver a
 		JOIN employees e ON a.approver = e.id
 		JOIN department d ON e.department_no = d.department_no

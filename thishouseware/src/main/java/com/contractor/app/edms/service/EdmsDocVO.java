@@ -1,6 +1,7 @@
 package com.contractor.app.edms.service;
 
 import java.util.Date;
+import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class EdmsDocVO {
+
+	List<Integer> approvers; // 결재라인에 있는 결재자들 번호
+
 
     // 결재 상태 
     public static final String STATUS_PENDING = "결재대기";

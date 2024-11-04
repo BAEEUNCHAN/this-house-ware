@@ -13,6 +13,17 @@
 		FROM leave
 	</select>
 	
+	<!-- 휴가 전체 조회 -->
+	<select id="getLeaveListAll" resultType="LeaveVO">
+		SELECT leave_no 
+		       , id
+		       , leave_start_dt 
+		       , leave_end_dt 
+		       , leave_type 
+		       , leave_reason
+		FROM leave
+	</select>
+	
 	<!-- 휴가 개인별 조회 -->
 	<select id="selectLeave" resultType="map" parameterType="string">
 		SELECT leave_no AS "leaveNo"

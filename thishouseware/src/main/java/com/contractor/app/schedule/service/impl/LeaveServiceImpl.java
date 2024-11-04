@@ -23,6 +23,11 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 	
 	@Override
+	public List<LeaveVO> getLeaveListAll() {
+		return leaveMapper.getLeaveListAll();
+	}
+	
+	@Override
 	public List<Map<String, Object>> leaveList(String id) {
 		List<Map<String, Object>> leaves = leaveMapper.selectLeave(id);
 		return leaves;

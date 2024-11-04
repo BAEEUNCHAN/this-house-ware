@@ -54,24 +54,32 @@ public class EdmsServiceImpl implements EdmsService {
 		return edmsDocVO.getEdmsDocNo();
 	}
 
-	// 결재 승인
+	// 결재 승인 처리
 	@Override
 	public String approveDocument(String edmsDocNo) {
 		EdmsDocVO edmsDoc = edmsMapper.selectEdmsDocInfo(new EdmsDocVO(edmsDocNo));
 		int currentOrder = edmsDoc.getApprovalOrder();
-		List<Integer> approvers = edmsDoc.getApprovers();
+		int nextOrder = currentOrder + 1;
 
-		if (currentOrder < approvers.size() - 1) {
-			// 다음 결재자로 이동
-			edmsDoc.setApprovalOrder(currentOrder + 1);
+		// 다음 결재자 조회
+		Map<String, Object> params = new HashMap<>();
+		params.put("edmsDocNo", edmsDocNo);
+		params.put("nextOrder", nextOrder); // 여기서 nextOrder를 매개변수로 추가
+
+		String nextApproverId = edmsMapper.findNextApprover(params);
+		if (nextApproverId != null) {
+			// 다음 결재자가 있는 경우
+			edmsDoc.setApprovalOrder(nextOrder);
 			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED);
-			edmsDoc.setCurrentApproverId(approvers.get(currentOrder + 1).toString());
+			edmsDoc.setCurrentApproverId(nextApproverId); // 다음 결재자로 설정
 		} else {
 			// 모든 결재가 완료된 경우
-			completeDocumentApproval(edmsDoc);
+			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED);
+			edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 없음
+			captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
 		}
 
-		edmsMapper.updateDocumentApprovalStatus(edmsDoc);
+		edmsMapper.updateDocumentApprovalStatus(edmsDoc); // 승인 상태 업데이트
 		return "결재가 완료되었습니다.";
 	}
 
@@ -81,11 +89,15 @@ public class EdmsServiceImpl implements EdmsService {
 		edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 없음
 		captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
 	}
-	
+
 	// 다음 결재자 조회 (있으면 결재자 ID를, 없으면 null을 반환)
 	@Override
 	public String findNextApprover(String edmsDocNo, int currentOrder) {
-	    return edmsMapper.findNextApprover(edmsDocNo, currentOrder);
+		Map<String, Object> params = new HashMap<>();
+		params.put("edmsDocNo", edmsDocNo);
+		params.put("currentOrder", currentOrder);
+
+		return edmsMapper.findNextApprover(params);
 	}
 
 	// 결재 반려
@@ -98,19 +110,19 @@ public class EdmsServiceImpl implements EdmsService {
 		edmsDoc.setApprovalOrder(0); // 결재 순서를 기안자로 초기화
 		edmsDoc.setCurrentApproverId(edmsDoc.getId()); // 기안자의 ID로 설정
 
-		edmsMapper.updateDocumentApprovalStatus(edmsDoc);
+		edmsMapper.updateDocumentRejectionStatus(edmsDoc); // 반려 상태 업데이트
 		return "반려되었습니다.";
 	}
 
 	// 결재 완료 시 캡처 처리
 	private void captureDocument(EdmsDocVO edmsDoc) {
-		Map<String, Object> captureInfo = SaveImage(edmsDoc.getFileName());
+		Map<String, Object> captureInfo = saveImage(edmsDoc.getFileName());
 		edmsDoc.setFileName((String) captureInfo.get("fileName"));
 		edmsMapper.updateDocumentFileName(edmsDoc); // 파일명 업데이트
 	}
 
 	// 이미지 파일 저장
-	private Map<String, Object> SaveImage(String file) {
+	private Map<String, Object> saveImage(String file) {
 		Map<String, Object> object = new HashMap<>();
 
 		try {
@@ -150,6 +162,18 @@ public class EdmsServiceImpl implements EdmsService {
 		edmsMapper.updateDocumentFileName(edmsDoc);
 	}
 
+	// 결재 승인 상태 업데이트
+	@Override
+	public void updateDocumentApprovalStatus(EdmsDocVO edmsDoc) {
+		edmsMapper.updateDocumentApprovalStatus(edmsDoc);
+	}
+
+	// 결재 반려 상태 업데이트
+	@Override
+	public void updateDocumentRejectionStatus(EdmsDocVO edmsDoc) {
+		edmsMapper.updateDocumentRejectionStatus(edmsDoc);
+	}
+
 	// 결재양식 전체조회
 	@Override
 	public List<EdmsFormVO> edmsFormList() {
@@ -161,4 +185,5 @@ public class EdmsServiceImpl implements EdmsService {
 	public EdmsFormVO edmsFormInfo(EdmsFormVO edmsFormVO) {
 		return edmsMapper.selectEdmsFormInfo(edmsFormVO);
 	}
+
 }

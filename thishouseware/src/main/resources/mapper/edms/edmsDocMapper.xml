@@ -84,13 +84,13 @@
             , #{attatch}
             , SYSDATE
             , <choose>
-                <when test="approvalStatus != '임시저장'">
-                    '결재대기'
-                </when>
-                <otherwise>
-                    '임시저장'
-                </otherwise>
-              </choose>
+                    <when test="approvalStatus != '임시저장'">
+                        '결재대기'
+                    </when>
+                    <otherwise>
+                        '임시저장'
+                    </otherwise>
+                </choose>
             , #{edmsFormNo}
             , #{shareStatus}
             , #{shareFolderNo}
@@ -103,8 +103,8 @@
         SET 
               approval_status = #{approvalStatus}
             , current_approver_id = #{currentApproverId}
-            , approval_order = #{approvalOrder}
             , reject_reason = #{rejectReason}
+            , approval_dt = SYSDATE
         WHERE edms_doc_no = #{edmsDocNo}
     </update>
 
@@ -113,38 +113,47 @@
         UPDATE edms_doc
         SET 
               approval_status = #{approvalStatus}
-            , current_approver_id = #{id} <!-- 기안자의 ID로 초기화 -->
-            , approval_order = 0 <!-- 기안자로 초기화 -->
+            , current_approver_id = #{currentApproverId} <!-- 기안자의 ID로 초기화 -->
             , reject_reason = #{rejectReason}
+            , approval_dt = SYSDATE
         WHERE edms_doc_no = #{edmsDocNo}
     </update>
 
     <!-- 특정 사용자에 대해 결재상태별 문서조회 -->
     <select id="selectDocumentsByStatusAndUserId" parameterType="map" resultType="EdmsDocVO">
         SELECT 
-              edms_doc_no
-            , id
-            , title
-            , content
-            , file_name
-            , submit_dt
-            , approval_dt
-            , approval_status
-            , edms_form_no
-            , share_status
-            , share_folder_no
-        FROM edms_doc
-        WHERE approval_status = #{approvalStatus}
-          AND id = #{userId}
-        ORDER BY submit_dt DESC
+              d.edms_doc_no
+            , d.id
+            , d.title
+            , d.content
+            , d.file_name
+            , d.submit_dt
+            , d.approval_dt
+            , d.approval_status
+            , d.edms_form_no
+            , d.share_status
+            , d.share_folder_no
+            , a.approval_order
+        FROM edms_doc d
+        LEFT JOIN approval_line a ON d.edms_doc_no = a.edms_doc_no
+        WHERE d.approval_status = #{approvalStatus}
+          AND d.id = #{userId}
+        ORDER BY d.submit_dt DESC
     </select>
 
     <!-- 다음 결재자 조회 -->
-    <select id="findNextApprover" parameterType="map" resultType="String">
-        SELECT approver_id
-        FROM approval_line
-        WHERE edms_doc_no = #{edmsDocNo}
-          AND approval_order = #{currentOrder} + 1
-    </select>
+	<select id="findNextApprover" parameterType="map" resultType="String">
+	    SELECT approver
+	    FROM approver
+	    WHERE edms_doc_no = #{edmsDocNo}
+	      AND approval_order = #{nextOrder}
+	</select>
+	
+	<!-- 파일명 변경 -->
+	<update id="updateDocumentFileName" parameterType="EdmsDocVO">
+	    UPDATE edms_doc
+	    SET file_name = #{fileName}
+	    WHERE edms_doc_no = #{edmsDocNo}
+	</update>
 
 </mapper>

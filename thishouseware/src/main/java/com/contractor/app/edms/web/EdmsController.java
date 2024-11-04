@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.common.service.Base64ToImgDecodeUtil;
+import com.contractor.app.edms.mapper.EdmsMapper;
 import com.contractor.app.edms.service.EdmsDocVO;
 import com.contractor.app.edms.service.EdmsFormVO;
 import com.contractor.app.edms.service.EdmsService;
@@ -48,12 +49,15 @@ public class EdmsController {
 	private final EdmsService edmsService;
 	private final ApprService apprService;
 	private final EmpAuthUtil empAuthUtil;
+	private final EdmsMapper edmsMapper; // 매퍼 주입
 
 	@Autowired
-	public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil) {
+	public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil,
+			EdmsMapper edmsMapper) {
 		this.edmsService = edmsService;
 		this.apprService = apprService;
 		this.empAuthUtil = empAuthUtil; // empAuthUtil 주입
+		this.edmsMapper = edmsMapper; // 매퍼 초기화
 	}
 
 	// 결재문서 전체조회
@@ -100,40 +104,64 @@ public class EdmsController {
 
 	// 결재 승인 처리
 	@PostMapping("/approve")
-	public ResponseEntity<String> approveDocument(@RequestParam String edmsDocNo) {
-		EdmsDocVO edmsDoc = edmsService.edmsDocInfo(new EdmsDocVO(edmsDocNo));
-		int currentOrder = edmsDoc.getApprovalOrder();
-		List<Integer> approvers = edmsDoc.getApprovers();
+	public ResponseEntity<String> approveDocument(@RequestParam String edmsDocNo, @RequestParam String approvalStatus) {
+	    EdmsDocVO edmsDoc = edmsService.edmsDocInfo(new EdmsDocVO(edmsDocNo));
 
-		// 다음 결재자 조회
-		String nextApproverId = edmsService.findNextApprover(edmsDocNo, currentOrder);
-		if (nextApproverId != null) {
-			// 다음 결재자가 있는 경우
-			edmsDoc.setApprovalOrder(currentOrder + 1);
-			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED);
-			edmsDoc.setCurrentApproverId(nextApproverId); // 다음 결재자로 설정
-		} else {
-			// 모든 결재가 완료된 경우
-			edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED);
-			edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 없음
-			captureDocument(edmsDoc); // 결재 완료 시 캡처 수행
-		}
+	    // 결재 상태 확인
+	    if (edmsDoc.getApprovalStatus().equals(EdmsDocVO.STATUS_REJECTED)) {
+	        return ResponseEntity.badRequest().body("반려 상태이므로 승인할 수 없습니다.");
+	    }
 
-		edmsService.updateFileName(edmsDoc);
-		return ResponseEntity.ok("결재가 완료되었습니다.");
+	    int currentOrder = edmsDoc.getApprovalOrder();
+	    List<Integer> approvers = edmsDoc.getApprovers();
+
+	    if (currentOrder < approvers.size() - 1) {
+	        // 다음 결재자 조회
+	        int nextOrder = currentOrder + 1;
+	        Map<String, Object> params = new HashMap<>();
+	        params.put("edmsDocNo", edmsDocNo);
+	        params.put("nextOrder", nextOrder);
+
+	        String nextApproverId = edmsMapper.findNextApprover(params); 
+
+	        if (nextApproverId != null) {
+	            edmsDoc.setApprovalOrder(nextOrder);
+	            edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED);
+	            edmsDoc.setCurrentApproverId(nextApproverId);
+	        } else {
+	            completeDocumentApproval(edmsDoc);
+	        }
+	    } else {
+	        completeDocumentApproval(edmsDoc);
+	    }
+
+	    edmsService.updateDocumentApprovalStatus(edmsDoc);
+	    return ResponseEntity.ok("결재가 완료되었습니다.");
+	}
+	// 결재 완료 처리 메서드
+	private void completeDocumentApproval(EdmsDocVO edmsDoc) {
+		edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_COMPLETED); // 결재 완료 상태로 설정
+		edmsDoc.setCurrentApproverId(null); // 결재 완료 시 결재자 ID를 null로 설정
+		// 필요에 따라 추가적인 처리예정 문서 알림 같은거
+		// 캡쳐 // 수신문서 알림
+		captureDocument(edmsDoc);
 	}
 
 	// 결재 반려 처리
 	@PostMapping("/reject")
 	public ResponseEntity<String> rejectDocument(@RequestParam String edmsDocNo, @RequestParam String reason) {
-		EdmsDocVO edmsDoc = new EdmsDocVO();
-		edmsDoc.setEdmsDocNo(edmsDocNo);
+		EdmsDocVO edmsDoc = edmsService.edmsDocInfo(new EdmsDocVO(edmsDocNo));
+
+		if (edmsDoc.getApprovalStatus().equals(EdmsDocVO.STATUS_COMPLETED)) {
+			return ResponseEntity.badRequest().body("이미 결재가 완료된 문서입니다.");
+		}
+
 		edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_REJECTED); // 반려 상태로 설정
 		edmsDoc.setRejectReason(reason); // 반려 사유 설정
 		edmsDoc.setApprovalOrder(0); // 결재 순서를 기안자로 초기화
 		edmsDoc.setCurrentApproverId(edmsDoc.getId()); // 기안자의 ID로 설정
 
-		edmsService.updateFileName(edmsDoc);
+		edmsService.updateDocumentRejectionStatus(edmsDoc); // 반려 상태 업데이트
 		return ResponseEntity.ok("반려되었습니다.");
 	}
 

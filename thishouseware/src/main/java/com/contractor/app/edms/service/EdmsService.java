@@ -24,9 +24,16 @@ public interface EdmsService { // 전자결재
 	public void updateFileName(EdmsDocVO edmsDocVO);
 	// 결재 상태별 문서조회
 	public List<EdmsDocVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId);
+	// 결재 승인 상태 업데이트
+	public void updateDocumentApprovalStatus(EdmsDocVO edmsDoc);
+	// 결재 반려 상태 업데이트
+	public void updateDocumentRejectionStatus(EdmsDocVO edmsDoc);
 
+	
+	
 	// 결재양식 전체조회
 	public List<EdmsFormVO> edmsFormList();
 	// 결재양식 단건조회
 	public EdmsFormVO edmsFormInfo(EdmsFormVO edmsFormVO);
+
 }

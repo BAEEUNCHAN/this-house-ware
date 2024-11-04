@@ -1,6 +1,7 @@
 package com.contractor.app.edms.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -27,7 +28,7 @@ public interface EdmsMapper {
 	// 파일명 업데이트
 	public int updateDocumentFileName(EdmsDocVO edmsDocVO);
 	// 다음 결재자 조회 (다음 결재자가 있으면 결재자 ID 반환, 없으면 null 반환)
-	public String findNextApprover(@Param("edmsDocNo") String edmsDocNo, @Param("currentOrder") int currentOrder);
+	public String findNextApprover(Map<String, Object> params);
 
 	// 결재양식 전체조회
 	public List<EdmsFormVO> selectFormAllList();

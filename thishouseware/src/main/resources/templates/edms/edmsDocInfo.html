@@ -175,12 +175,8 @@ button:hover {
 									<td><span th:text="${edmsDocs.edmsFormNo}"></span></td>
 								</tr>
 								<tr>
-									<td><label for="dshare">공유폴더 여부</label></td>
-									<td><span th:text="${edmsDocs.shareStatus}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dsharen">공유폴더 번호</label></td>
-									<td><span th:text="${edmsDocs.shareFolderNo}"></span></td>
+								    <td><label for="rejectReason">반려 사유</label></td>
+								    <td><span th:text="${edmsDocs.rejectReason != null ? edmsDocs.rejectReason : 'N/A'}"></span></td>
 								</tr>
 							</table>
 							
@@ -199,81 +195,98 @@ button:hover {
 
 <!-- 반려 사유 모달 -->
 <div id="rejectModal">
-	<div class="modal-content">
-		<h4>반려 사유 입력</h4>
-		<textarea id="rejectReason" placeholder="반려 사유를 입력하세요"></textarea>
-		<div class="modal-footer">
-			<button id="confirmReject" class="custom-reject-btn">반려 확인</button>
-			<button id="closeModal" class="custom-approve-btn">닫기</button>
-		</div>
-	</div>
+    <div class="modal-content">
+        <h4>반려 사유 입력</h4>
+        <textarea id="rejectReason" placeholder="반려 사유를 입력하세요"></textarea>
+        <div class="modal-footer">
+            <button id="confirmReject" class="custom-reject-btn">반려 확인</button>
+            <button id="closeModal" class="custom-approve-btn">닫기</button>
+        </div>
+    </div>
 </div>
 
 <script th:inline="javascript">
-	const imgLink = $('input[name=imageLink]').val();
-	$('#edmsImg').attr({src: "/upload/" + imgLink});
+    // 이미지 파일 링크를 가져와서 설정하는 부분
+    const imgLink = $('input[name=imageLink]').val(); 
+    $('#edmsImg').attr({src: "/upload/" + imgLink}); 
 
-	$(document).ready(function() {
-	    let params = new URLSearchParams(window.location.search);
-	    let fromDocList = params.get('fromDocList');
-	    let fromDocDeptList = params.get('fromDocDeptList');
-	    let id = /*[[${#authentication.principal.empVO.id}]]*/ 'default_id';
-	    let deptNo = /*[[${#authentication.principal.empVO.departmentNo}]]*/ 'default_deptNo';
+    $(document).ready(function() {
+        // URL의 파라미터를 확인하여 'fromDocList' 및 'fromDocDeptList' 값을 가져옴
+        let params = new URLSearchParams(window.location.search);
+        let fromDocList = params.get('fromDocList'); // 문서 목록에서 왔는지 확인
+        let fromDocDeptList = params.get('fromDocDeptList'); // 부서 문서 목록에서 왔는지 확인
+        let id = [[${#authentication.principal.empVO.id}]]; // 로그인 사용자 ID
+        let deptNo = [[${#authentication.principal.empVO.departmentNo}]]; // 로그인 사용자의 부서 번호
 
-	    $('#listButton').on('click', function() {
-	        if (fromDocList === 'true') {
-	            location.href = '/docBox/docList?id=' + id;
-	        } else if (fromDocDeptList === 'true') {
-	            location.href = '/docBox/docDeptList?id=' + id + '&departmentNo=' + deptNo;
-	        } else {
-	            location.href = '/edms/edmsDocList';
-	        }
-	    });
-	});
+        // 목록 버튼 클릭 시 이전 페이지로 돌아가거나 목록 페이지로 이동
+        $('#listButton').on('click', function() {
+            if (fromDocList === 'true') {
+                // 문서 목록에서 온 경우 해당 목록으로 이동
+                location.href = '/docBox/docList?id=' + id;
+            } else if (fromDocDeptList === 'true') {
+                // 부서 문서 목록에서 온 경우 해당 목록으로 이동
+                location.href = '/docBox/docDeptList?id=' + id + '&departmentNo=' + deptNo;
+            } else {
+                // 기본적으로 문서 목록 페이지로 이동
+                location.href = '/edms/edmsDocList';
+            }
+        });
+    });
 
-	$('#approveButton').on('click', function() {
-	    let edmsDocNo = /*[[${edmsDocs.edmsDocNo}]]*/ 'defaultDocNo';
-	    $.ajax({
-	        type: 'POST',
-	        url: '/edms/approve',
-	        data: { edmsDocNo: edmsDocNo },
-	        success: function(response) {
-	            alert(response);
-	            location.reload();
-	        },
-	        error: function(error) {
-	            alert("승인 처리 중 오류가 발생했습니다.");
-	        }
-	    });
-	});
+ // 승인 버튼 클릭 시, 결재 승인 요청을 서버로 전송
+    $('#approveButton').on('click', function() {
+        let edmsDocNo = [[${edmsDocs.edmsDocNo}]]; // 문서 번호 
+        let approvalStatus = '승인'; // 결재 상태
 
-	$('#rejectButton').on('click', function() {
-	    $('#rejectModal').show(); // 반려 사유 모달을 표시
-	});
+        $.ajax({
+            type: 'POST', 
+            url: '/edms/approve', 
+            data: { 
+                edmsDocNo: edmsDocNo,
+                approvalStatus: approvalStatus // 결재 상태 추가
+            }, 
+            success: function(response) {
+                alert(response); 
+                location.reload(); 
+            },
+            error: function(error) {
+                alert("승인 처리 중 오류가 발생했습니다."); 
+            }
+        });
+    });
+ 
+    // 반려 버튼 클릭 시, 반려 사유 입력 모달을 표시
+    $('#rejectButton').on('click', function() {
+        $('#rejectModal').show(); // 반려 사유 모달을 보여줌
+    });
 
-	$('#closeModal').on('click', function() {
-	    $('#rejectModal').hide(); // 모달 닫기
-	});
+    // 모달의 닫기 버튼 클릭 시, 반려 사유 모달을 닫음
+    $('#closeModal').on('click', function() {
+        $('#rejectModal').hide(); // 반려 사유 모달을 숨김
+    }); // <- 여기에 괄호를 추가하여 닫기 함수 종료
 
-	$('#confirmReject').on('click', function() {
-	    let edmsDocNo = /*[[${edmsDocs.edmsDocNo}]]*/ 'defaultDocNo';
-	    let reason = $('#rejectReason').val();
-	    if (reason) {
-	        $.ajax({
-	            type: 'POST',
-	            url: '/edms/reject',
-	            data: { edmsDocNo: edmsDocNo, reason: reason },
-	            success: function(response) {
-	                alert(response);
-	                location.reload();
-	            },
-	            error: function(error) {
-	                alert("반려 처리 중 오류가 발생했습니다.");
-	            }
-	        });
-	    } else {
-	        alert("반려 사유를 입력해야 합니다.");
-	    }
-	});
+    // 반려 확인 버튼 클릭 시, 반려 요청을 서버로 전송
+    $('#confirmReject').on('click', function() {
+        let edmsDocNo = /*[[${edmsDocs.edmsDocNo}]]*/ 'defaultDocNo'; // 문서 번호 (Thymeleaf로 주입)
+        let reason = $('#rejectReason').val(); 
+        if (reason) {
+            // 반려 사유가 입력된 경우에만 요청 전송
+            $.ajax({
+                type: 'POST', 
+                url: '/edms/reject', 
+                data: { edmsDocNo: edmsDocNo, reason: reason }, 
+                success: function(response) {
+                    alert(response); 
+                    location.reload(); 
+                },
+                error: function(error) {
+                    alert("반려 처리 중 오류가 발생했습니다."); 
+                }
+            });
+        } else {
+            // 반려 사유가 입력되지 않은 경우 경고 메시지 표시
+            alert("반려 사유를 입력해주세요.");
+        }
+    });
 </script>
 </html>

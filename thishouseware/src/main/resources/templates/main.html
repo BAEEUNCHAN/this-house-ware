@@ -59,13 +59,13 @@
 												type="hidden" th:value="${board.boardsNo}"> <input
 												name="cntPerPage" type="hidden"
 												th:value="${paging.cntPerPage}">
-											<div style="text-align: right;">
-												<input name="searchWord" type="text"
-													th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
-												<button type="submit" class="btn btn-secondary"
-													style="width: 30px; height: 30px; font-size: 12px;">
+											<div style="text-align: right;">　
+												 <button type="submit" class="btn btn-secondary"
+													style="width: 30px; height: 30px; font-size: 12px; float:right;">
 													<i class="fas fa-search"></i>
-												</button>
+												</button>　
+												　 <input name="searchWord" type="text" class="form-control form-control-sm" style="width:200px; margin-right:5px; float:right;"												
+												th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
 											</div>
 										</form>
 										<!-- <span>게시글 수 [[${#lists.size(posts)}]]</span> -->

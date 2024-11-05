@@ -230,7 +230,7 @@ function saveSchedule() {
     obj.color = $("#addEventModal #color").val();
     obj.id = id;
     obj.sheduleCode = 'f1';
-    obj.departmentNo = 13;    
+    obj.departmentNo =   $("#departmentNo").val();  
     $.ajax({
 		type: 'post',
 		url: '/schAdd',

@@ -5,41 +5,36 @@
 	layout:fragment="Content">
 <head>
 <style>
-/* 게시판 제목과 게시글 목록 사이 간격 추가 */
+/* 기존 스타일 유지 */
 .card-title {
 	margin-bottom: 15px;
 }
 
-/* 게시글 목록 앞 점 제거 */
 .post-list {
 	list-style-type: none;
 	padding-left: 0;
 }
 
-/* 게시글 제목 스타일 */
 .post-title {
 	display: inline-block;
 	width: 200px;
 	text-align: left;
-	margin-left: 10px; /* 제목과 머리글 사이 간격 추가 */
-	font-weight: bold; /* 제목을 더 두껍게 */
+	margin-left: 10px;
+	font-weight: bold;
 }
 
-/* 머리글 스타일 */
 .post-header {
-	font-size: 14px; /* 머리글 크기 조정 */
-	color: #6c757d; /* 머리글 색상 변경 */
-	margin-right: 5px; /* 머리글과 제목 사이 간격 추가 */
+	font-size: 14px;
+	color: #6c757d;
+	margin-right: 5px;
 }
 
-/* 카드 내부 간격 추가 */
 .card {
-	padding: 10px; /* 카드 내부 여백 */
+	padding: 10px;
 }
 
-/* 카드 사이 간격 추가 */
 .mb-4 {
-	margin-bottom: 30px; /* 카드 간격 조정 */
+	margin-bottom: 30px;
 }
 </style>
 </head>
@@ -49,8 +44,7 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">게시판</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
-					</a></li>
+					<li class="nav-home"><a href="#"><i class="icon-home"></i></a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
 				</ul>
@@ -61,8 +55,9 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="card-title">
-									게시판 <a href="/board/postInsert" class="float-end"><button
-											class="btn btn-primary">글쓰기</button></a>
+									게시판 <a href="/board/postInsert" class="float-end">
+										<button class="btn btn-primary">글쓰기</button>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -70,7 +65,7 @@
 							<div class="row text-center">
 								<div class="board-container">
 									<div class="row">
-										<!-- 게시판 목록 출력 -->
+										<!-- 수정된 부분: filteredBoards 사용 -->
 										<div th:each="board : ${boards}" class="col-md-12 mb-4">
 											<div class="card">
 												<div class="board-header">

@@ -14,97 +14,114 @@
 		}
 	</style>
 </head>
+<div class="container">
+  <div class="page-inner">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">직원 수정</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
+        </a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">관리자</a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">직원 수정</a></li>
+      </ul>
+    </div>
+    <div class="page-inner">
+      <div class="row">
+        <form class="card" th:object="${employee}">
+          <div class="card-header">
+            <div class="card-title">직원 수정</div>
+          </div>
+          <div class="card-body">
             <div class="row">
-              <div class="col-md-12">
-                <form class="card" th:object="${employee}">
-                  <div class="card-header">
-                    <div class="card-title">직원 수정</div>
-                  </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label for="email">이메일 변경</label>
+                  <input type="text" class="form-control" th:field="*{email}" oninput = "checkEmail()">
+                  <span class="okEmail">사용가능한 이메일 입니다.</span>
+                <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
+                </div>
+                <input type="hidden"  th:field="*{id}" >
+                <input type="hidden"  th:field="*{imageLink}" >
+                <!-- inline -->
+                <div class="form-group">
+                  <label for="name" class="col-md-3 col-form-label">이름 변경</label>
+                  <input type="text" class="form-control input-full" th:field="*{name}">
+                </div>                        
+                <div class="form-group">
+                  <label for="phone" class="col-md-3 col-form-label">연락처 변경</label>
+                  <input type="text" class="form-control input-full" th:field="*{phone}">
+                </div>  
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">직급 변경</label>
+                  <select class="form-select" th:field="*{positionCode}">
+                    <option value="a1">사장</option>
+                    <option value="a2">관리자</option>
+                    <option value="a3">본부장</option>
+                    <option value="a4">팀장</option>
+                    <option value="a5">사원</option>
+                    <option value="a6">인턴</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">부서 변경</label>
+                  <select class="form-select" id="departmentNo" name="departmentNo" th:field="*{departmentNo}">
+                    <th:block th:each="info : ${departments}">
+                      <option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
+                    </th:block> 
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">입사일 변경</label>
+                  <input type="date"
+                    id="hireDt"
+                    name="hireDt"
+                    th:value="${#dates.format(employee.hireDt, 'yyyy-MM-dd')}"
+                    max="2050-01-01"
+                    min="2000-01-01"
+                    >
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlFile1">사진수정</label>
+                  <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="card card-post card-round">
+                  <img id="empImg" class="card-img-top" alt="사원 이미지" width="300px" height="300px">
                   <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-8">
-                        <div class="form-group">
-                          <label for="email">이메일 변경</label>
-                          <input type="text" class="form-control" th:field="*{email}" oninput = "checkEmail()">
-                          <span class="okEmail">사용가능한 이메일 입니다.</span>
-	                      <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
-                        </div>
-                        <input type="hidden"  th:field="*{id}" >
-                        <input type="hidden"  th:field="*{imageLink}" >
-                        <!-- inline -->
-                        <div class="form-group">
-                          <label for="name" class="col-md-3 col-form-label">이름 변경</label>
-                          <input type="text" class="form-control input-full" th:field="*{name}">
-                        </div>                        
-                        <div class="form-group">
-                          <label for="phone" class="col-md-3 col-form-label">연락처 변경</label>
-                          <input type="text" class="form-control input-full" th:field="*{phone}">
-                        </div>  
-                        <div class="form-group">
-                          <label for="exampleFormControlSelect1">직급 변경</label>
-                          <select class="form-select" th:field="*{positionCode}">
-                            <option value="a1">사장</option>
-                            <option value="a2">관리자</option>
-                            <option value="a3">본부장</option>
-                            <option value="a4">팀장</option>
-                            <option value="a5">사원</option>
-                            <option value="a6">인턴</option>
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleFormControlSelect1">부서 변경</label>
-                          <select class="form-select" id="departmentNo" name="departmentNo" th:field="*{departmentNo}">
-                            <th:block th:each="info : ${departments}">
-                              <option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
-                            </th:block> 
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleFormControlSelect1">입사일 변경</label>
-                          <input type="date"
-                            id="hireDt"
-                            name="hireDt"
-                            th:value="${#dates.format(employee.hireDt, 'yyyy-MM-dd')}"
-                            max="2050-01-01"
-                            min="2000-01-01"
-                            >
-                        </div>
-                        <div class="form-group">
-                          <label for="exampleFormControlFile1">사진수정</label>
-                          <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card card-post card-round">
-                          <img id="empImg" class="card-img-top" alt="사원 이미지" width="300px" height="300px">
-                          <div class="card-body">
-                            <div class="d-flex">
-                              <div class="info-post ms-2">
-                                <p class="username">[[${employee.positionName}]]</p>
-                                <p class="date text-muted">[[${employee.name}]]</p>
-                              </div>
-                            </div>
-                            <div class="separator-solid"></div>
-                            <h3 class="card-title">
-                              [[${employee.departmentName}]]
-                            </h3>
-                            <p class="card-text">
-                               입사일 : [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]<br>
-                               [[${employee.phone}]] <br>
-                            </p>
-                            <div class="separator-solid"></div>
-                            <button type="button" id="resignEmployee" class="btn btn-danger">퇴사 처리</button>
-                          </div>
-                        </div>
+                    <div class="d-flex">
+                      <div class="info-post ms-2">
+                        <p class="username">[[${employee.positionName}]]</p>
+                        <p class="date text-muted">[[${employee.name}]]</p>
                       </div>
                     </div>
+                    <div class="separator-solid"></div>
+                    <h3 class="card-title">
+                      [[${employee.departmentName}]]
+                    </h3>
+                    <p class="card-text">
+                       입사일 : [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]<br>
+                       [[${employee.phone}]] <br>
+                    </p>
+                    <div class="separator-solid"></div>
+                    <button type="button" id="resignEmployee" class="btn btn-danger">퇴사 처리</button>
                   </div>
-                  <div class="card-action">
-                    <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
+          </div>
+          <div class="card-action">
+            <button type="button" id="modifyEmployee" class="btn btn-success">수정하기</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+
 <script>
 let emailInput = document.querySelector("#email");
 let originEmail = emailInput.value; 

@@ -93,8 +93,8 @@
                   <div class="card-body">
                     <div class="d-flex">
                       <div class="info-post ms-2">
-                        <p class="username">[[${employee.positionName}]]</p>
-                        <p class="date text-muted">[[${employee.name}]]</p>
+                        <p class="username">[[${employee.id}]]</p>
+                        <p class="date text-muted">[[${employee.positionName}]] : [[${employee.name}]]</p>
                       </div>
                     </div>
                     <div class="separator-solid"></div>
@@ -106,7 +106,13 @@
                        [[${employee.phone}]] <br>
                     </p>
                     <div class="separator-solid"></div>
-                    <button type="button" id="resignEmployee" class="btn btn-danger">퇴사 처리</button>
+                     
+                    <button type="button" id="resignEmployee" class="btn btn-danger"
+                     th:if="${employee.resignDt == null}">퇴사 처리</button>
+                    <button type="button" disabled class="btn btn-danger"
+                     th:unless="${employee.resignDt == null}">
+                     [[${#dates.format(employee.resignDt, 'yyyy-MM-dd')}]] 퇴사처리됨
+                    </button>
                   </div>
                 </div>
               </div>

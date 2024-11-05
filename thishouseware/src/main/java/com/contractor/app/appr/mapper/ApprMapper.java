@@ -38,6 +38,12 @@ public interface ApprMapper {
 	public int deleteFavorite(Map<String, Object> params);
 	// 즐겨찾기 이름을 결재선 이름으로 가져오기
 	public String getApprovalLineName(@Param("approvalLineNo") int approvalLineNo);
+	
+	// 즐겨찾기 번호 가져오기
+	public int selectFavoriteNo(ApprFavoriteVO favorite);
+	// 즐겨찾기(별) 업데이트 시 결재라인 수정
+	public int updateFavorApprLine(ApprLineVO apprLineVO);
+	
 		
 	// 결재자 등록 정보 전체조회
 	public List<ApproverVO> apprAllList(int approvalLineNo);
@@ -52,5 +58,7 @@ public interface ApprMapper {
 	// 결재자 순서 변경
 	public void updateApprovalOrder(@Param("approverNo") String approverNo, @Param("approvalOrder") Integer approvalOrder);
 	
+	// 결재선의 결재자 삭제
+	public int delApprFromApprLine(Map<String, Object> params);	
 	
 }

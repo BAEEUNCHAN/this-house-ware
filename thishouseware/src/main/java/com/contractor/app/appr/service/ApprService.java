@@ -20,7 +20,9 @@ public interface ApprService {
 	// 결재선 수정
 	public Map<String, Object> apprLineUpdate(ApprLineVO apprLineVO);
 	
-	
+	// 결재선 즐겨찾기 업데이트
+	public boolean apprLineFavorUpdate(ApprLineVO apprLineVO);
+		
 	
 	// 결재선 즐겨찾기 전체조회
 	public List<ApprFavoriteVO> apprFavoriteList();
@@ -34,6 +36,9 @@ public interface ApprService {
 	public void favoriteDelete(int approvalLineNo, String id);
 	// 즐겨찾기 이름을 결재선 이름으로 가져오기
 	public String getApprovalLineName(@Param("approvalLineNo") int approvalLineNo);
+	
+	// 즐겨찾기 번호 가져오기
+	public int getFavoriteNo(ApprFavoriteVO favorite);
 	
 	
 	// 결재자 등록 정보 전체조회
@@ -49,5 +54,7 @@ public interface ApprService {
 	// 결재자 순서 변경
 	public void updateApprovalOrder(String approverNo, Integer approvalOrder);
 	
-
+	// 결재선의 결재자 삭제
+	public boolean apprRemove(int approvalLineNo, String id); 
+	
 }

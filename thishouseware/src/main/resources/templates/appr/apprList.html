@@ -93,7 +93,7 @@ button {
             <thead>
                 <tr>
                     <th><input type="checkbox" id="checkAllApprovers"></th>
-                    <th class="hidden" style="display: none">결재자번호</th>
+                    <th class="hidden" style="display: none">결재자번호</th>                    
                     <th>결재 순서</th>
                     <th>부서</th>
                     <th>직책</th>
@@ -105,8 +105,9 @@ button {
             <tbody class="approverRows">
                 <th:block th:each="info : ${approvers}">
                     <tr th:data-lineno="${info.approvalLineNo}" th:data-id="${info.approverNo}">
-                        <td><input type="checkbox" class="approverCheck" th:value="${info.approvalLineNo}"></td>
-                        <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
+                        <!-- <td><input type="checkbox" class="approverCheck" th:value="${info.approvalLineNo}"></td> -->
+                        <td><input type="checkbox" class="approverCheck" th:value="${info.approver}"></td>
+                        <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>                        
                         <td class="order-number">[[${info.approvalOrder}]]</td>
                         <td>[[${info.departmentName}]]</td>
                         <td>[[${info.positionName}]]</td>
@@ -166,18 +167,19 @@ button {
         // 삭제 버튼 클릭 시 동작
         $('#deleteApproverButton').on('click', function() {
             let selectedIds = [];
-            $('.approverCheck:checked').each(function() {
-                selectedIds.push($(this).val());
+            $('.approverCheck:checked').each(function() {            	
+            	selectedIds.push($(this).val());
             });
-
+			            
             if (selectedIds.length > 0) {
                 if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
                     $.ajax({
                         type: 'POST',
                         url: '/appr/approverDelete',
-                        data: JSON.stringify(selectedIds),
+                        data: JSON.stringify({"lineNo": ApprovalLineNo, "ids": selectedIds}),
                         contentType: 'application/json',
                         success: function(response) {
+                        	alert(response);
                             location.reload();
                         },
                         error: function() {

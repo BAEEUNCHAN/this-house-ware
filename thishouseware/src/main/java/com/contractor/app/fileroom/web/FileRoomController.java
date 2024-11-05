@@ -165,13 +165,12 @@ public class FileRoomController {
 
 		int fileRoomsNo = fileRoomService.insertFile(filesVO);
 		String url = null;
-		;
 
 		if (fileRoomsNo > 0) {
 			// 정상적으로 등록된 경우
 			url = "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
 		} else {
-			// 등록되지 않은 경우 
+			// 등록되지 않은 경우
 			url = "redirect:/errorPage"; // 에러 처리 로직 추가 가능
 		}
 		return url;

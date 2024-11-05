@@ -10,4 +10,8 @@ public interface DepartmentMapper {
 
 	DepartmentVO selectDepartmentBydeptNo(int departmentNo);
 	
+	List<DepartmentVO> selectUpperDepartmentNo(int upperDepartmentNo);
+	
+	
+	
 }

@@ -71,8 +71,11 @@
 															th:value="${#authentication.principal.empVO.id}">
 														<input type="hidden" name="fileRoomsNo"
 															th:value="${fileRoom.fileRoomsNo}"> <input
+															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
+                     (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"
 															type="text" name="folderName" placeholder="폴더 이름을 입력하세요"
-															id="folderName" style="width: 170px; height:30px; margin-right: 5px;">
+															id="folderName"
+															style="width: 170px; height: 30px; margin-right: 5px;">
 														<button class="btn btn-round btn-primary"
 															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
                      (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"

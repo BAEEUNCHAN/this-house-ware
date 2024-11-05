@@ -176,24 +176,12 @@ button:hover {
 										</select></td>
 									<tr>
 										<td><label for="edmsContent">내용</label></td>
-										<td><div id="edmsContent"></div>
-										</td>
+										<td><div id="edmsContent"></div></td>
 									</tr>
 									<tr>
 									<tr>
 										<td><label for="attatch">첨부파일</label></td>
 										<td><input type="file" id="attatch" name="uploadFile"></td>
-									</tr>
-									<tr>
-										<td><label for="shareStatus">공유폴더 여부</label></td>
-										<td><label><input type="radio" name="shareStatus"
-												value="y">예</label> <label><input type="radio"
-												name="shareStatus" value="n">아니오</label></td>
-									</tr>
-									<tr>
-										<td><label for="shareFolderNo">공유 폴더 번호</label></td>
-										<td><input type="text" id="shareFolderNo"
-											name="shareFolderNo" required></td>
 									</tr>
 									<tr>
 										<td><span name="approverNos"></span></td>
@@ -203,7 +191,7 @@ button:hover {
 								    <input type="button" class="btnSave btn btn-info" value="임시저장" style="float: right; margin-right: 10px; display: none;">
 								    <input type="button" class="btnSubmit btn btn-success" value="등록">
 								</div>
-								
+								<input type ='hidden' name ="approvalLineNo" value=''>
 							</form>
 						</div>
 					</div>
@@ -240,7 +228,7 @@ button:hover {
 				        $('#approverSel').change(function() {
 		  					let no = $("#approverSel option:selected").val();
 		  					console.log(no);
-		  					
+		  					$('[name ="approvalLineNo"]').val(no); // 결재선번호 담아서 넘기기
 		  					$.ajax({
 		  						type : 'POST',
 		  						url : '/appr/apprList?approvalLineNo='+no, 						

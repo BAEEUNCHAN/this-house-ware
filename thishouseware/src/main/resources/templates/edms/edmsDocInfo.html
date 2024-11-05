@@ -1,283 +1,323 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+<head>
 <style>
 /* 테이블 스타일 */
 table {
-	width: 100%;
-	border-collapse: collapse;
-	margin: 20px 0;
-	font-size: 16px;
-	text-align: left;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 테이블 헤더 스타일 */
 th, td {
-	padding: 12px;
-	border-bottom: 1px solid #ddd;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
 }
 
 th {
-	background-color: #f4f4f4;
-	font-weight: bold;
+    background-color: #f4f4f4;
+    font-weight: bold;
 }
 
 /* 라벨 스타일 */
 label {
-	font-weight: bold;
-	margin-right: 10px;
+    font-weight: bold;
+    margin-right: 10px;
 }
 
 /* 테이블 데이터 스타일 */
 td span {
-	display: block;
-	color: #333;
+    display: block;
+    color: #333;
 }
 
 /* 테이블 행 배경색 (홀수 행 스타일) */
 tr:nth-child(odd) {
-	background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 
 /* 버튼을 가운데 정렬 */
 .button-container {
-	text-align: center;
-	margin-top: 20px;
+    text-align: center;
+    margin-top: 20px;
 }
 
 button {
-	padding: 10px 20px;
-	background-color: #007bff;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 button:hover {
-	background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 /* 추가된 결재/반려 버튼 스타일 */
 .custom-approve-btn {
-	background-color: #28a745;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 4px;
-	font-size: 16px;
-	margin: 5px;
-	cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 .custom-approve-btn:hover {
-	background-color: #218838;
+    background-color: #45A049;
 }
 
 .custom-reject-btn {
-	background-color: #dc3545;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 4px;
-	font-size: 16px;
-	margin: 5px;
-	cursor: pointer;
+    background-color: #FF6347;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
 }
 
 .custom-reject-btn:hover {
-	background-color: #c82333;
+    background-color: #FF4500;
 }
 
 /* 반려 사유 모달 스타일 */
 #rejectModal {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #rejectModal .modal-content {
-	background-color: #fff;
-	margin: 15% auto;
-	padding: 20px;
-	border: 1px solid #888;
-	width: 400px;
-	border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+    width: 400px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+#rejectModal h4 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
 }
 
 #rejectModal textarea {
-	width: 100%;
-	height: 100px;
-	margin-top: 10px;
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px;
+    resize: none;
+    font-size: 14px;
 }
 
 #rejectModal .modal-footer {
-	text-align: right;
-	margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#rejectModal .modal-footer button {
+    width: 45%;
+    padding: 8px;
+    font-size: 14px;
+}
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.btn-list {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.center-buttons {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.center-buttons button {
+    margin: 5px;
 }
 </style>
+</head>
 
+<body>
 <div class="page-inner">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header">
-					<div class="card-title">결재문서 조회</div>
-				</div>
-				<div class="card-body">
-					<div class="row">
-						<div class="text-center">
-							<table class="table">
-								<tr>
-									<td><label for="dno">문서번호</label></td>
-									<td><span th:text="${edmsDocs.edmsDocNo}"></span></td>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">결재문서 조회</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="text-center">
+                            <table class="table">
+                                <tr>
+                                    <td><label for="dno">문서번호</label></td>
+                                    <td><span th:text="${edmsDocs.edmsDocNo}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="did">기안자</label></td>
+                                    <td><span th:text="${edmsDocs.id}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="dtitle">제목</label></td>
+                                    <td><span th:text="${edmsDocs.title}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="dcontent">내용</label></td>
+                                    <td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px" th:src="|/upload/${edmsDocs.fileName}|" ></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="datt">첨부파일명</label></td>
+                                    <td>
+                                        <a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="dsub">상신일시</label></td>
+                                    <td><span th:text="${#dates.format(edmsDocs.submitDt, 'yyyy-MM-dd')}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="dappr">결재일시</label></td>
+                                    <td><span th:text="${#dates.format(edmsDocs.approvalDt, 'yyyy-MM-dd')}"></span></td>
+                                </tr>
+                                <tr>
+								    <td><label for="dstate">결재상태</label></td>
+								    <td><span th:text="${edmsDocs.approvalStatus}"></span></td>
 								</tr>
-								<tr>
-									<td><label for="did">기안자</label></td>
-									<td><span th:text="${edmsDocs.id}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dtitle">제목</label></td>
-									<td><span th:text="${edmsDocs.title}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dcontent">내용</label></td>
-									<input name="imageLink" type="hidden" th:value="${edmsDocs.fileName}" />
-									<td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px"></td>
-								</tr>
-								<tr>
-									<td><label for="datt">첨부파일명</label></td>
-									<td>
-										<a th:if="${edmsDocs.attatch != null}" th:href="@{'fileDownload?fileLink=' + ${edmsDocs.attatch}}">파일 다운로드</a>
-										<br>
-									</td>
-								</tr>
-								<tr>
-									<td><label for="dsub">상신일시</label></td>
-									<td><span th:text="${#dates.format(edmsDocs.submitDt, 'yyyy-MM-dd')}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dappr">결재일시</label></td>
-									<td><span th:text="${#dates.format(edmsDocs.approvalDt, 'yyyy-MM-dd')}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dstate">결재상태</label></td>
-									<td><span th:text="${edmsDocs.approvalStatus}"></span></td>
-								</tr>
-								<tr>
-									<td><label for="dformn">결재양식번호</label></td>
-									<td><span th:text="${edmsDocs.edmsFormNo}"></span></td>
-								</tr>
-								<tr>
+                                <tr>
+                                    <td><label for="dformn">결재양식번호</label></td>
+                                    <td><span th:text="${edmsDocs.edmsFormNo}"></span></td>
+                                </tr>
+                                <tr th:if="${edmsDocs.rejectReason != null}">
 								    <td><label for="rejectReason">반려 사유</label></td>
-								    <td><span th:text="${edmsDocs.rejectReason != null ? edmsDocs.rejectReason : 'N/A'}"></span></td>
+								    <td><span th:text="${edmsDocs.rejectReason}"></span></td>
 								</tr>
-							</table>
-							
-							<div class="button-container">
-								<button type="button" id="listButton">목록</button>
-								<button type="button" class="custom-approve-btn" id="approveButton">승인</button>
-								<button type="button" class="custom-reject-btn" id="rejectButton">반려</button>
+                            </table>
+                            
+                            <div class="button-container">
+							    <button type="button" id="listButton" class="btn-list">목록</button>
+							    <div class="center-buttons">
+							        <button type="button" class="custom-approve-btn" id="approveButton"
+							                th:if="${#authentication.principal.empVO.id == edmsDocs.currentApproverId and edmsDocs.approvalStatus != '결재완료' and edmsDocs.approvalStatus != '반려'}">
+							            승인
+							        </button>
+							        <button type="button" class="custom-reject-btn" id="rejectButton"
+							                th:if="${#authentication.principal.empVO.id == edmsDocs.currentApproverId and edmsDocs.approvalStatus != '결재완료' and edmsDocs.approvalStatus != '반려'}">
+							            반려
+							        </button>
+							    </div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 반려 사유 모달 -->
-<div id="rejectModal">
+<div id="rejectModal" style="display: none;">
     <div class="modal-content">
         <h4>반려 사유 입력</h4>
         <textarea id="rejectReason" placeholder="반려 사유를 입력하세요"></textarea>
         <div class="modal-footer">
-            <button id="confirmReject" class="custom-reject-btn">반려 확인</button>
+            <button id="confirmReject" class="custom-reject-btn">반려</button>
             <button id="closeModal" class="custom-approve-btn">닫기</button>
         </div>
     </div>
 </div>
 
 <script th:inline="javascript">
+let approvalStatus= [[${param.approvalStatus}]]
+$(document).ready(function() {
     // 이미지 파일 링크를 가져와서 설정하는 부분
-    const imgLink = $('input[name=imageLink]').val(); 
-    $('#edmsImg').attr({src: "/upload/" + imgLink}); 
+   /*  const imgLink = $('input[name=imageLink]').val(); 
+    $('#edmsImg').attr({src: "/upload/" + imgLink});  */
 
-    $(document).ready(function() {
-        // URL의 파라미터를 확인하여 'fromDocList' 및 'fromDocDeptList' 값을 가져옴
-        let params = new URLSearchParams(window.location.search);
-        let fromDocList = params.get('fromDocList'); // 문서 목록에서 왔는지 확인
-        let fromDocDeptList = params.get('fromDocDeptList'); // 부서 문서 목록에서 왔는지 확인
-        let id = [[${#authentication.principal.empVO.id}]]; // 로그인 사용자 ID
-        let deptNo = [[${#authentication.principal.empVO.departmentNo}]]; // 로그인 사용자의 부서 번호
-
-        // 목록 버튼 클릭 시 이전 페이지로 돌아가거나 목록 페이지로 이동
-        $('#listButton').on('click', function() {
-            if (fromDocList === 'true') {
-                // 문서 목록에서 온 경우 해당 목록으로 이동
-                location.href = '/docBox/docList?id=' + id;
-            } else if (fromDocDeptList === 'true') {
-                // 부서 문서 목록에서 온 경우 해당 목록으로 이동
-                location.href = '/docBox/docDeptList?id=' + id + '&departmentNo=' + deptNo;
-            } else {
-                // 기본적으로 문서 목록 페이지로 이동
-                location.href = '/edms/edmsDocList';
-            }
-        });
+    // 목록 버튼 클릭 시, 기본 문서 목록 페이지로 이동
+    $('#listButton').on('click', function() {
+        location.href = `/docBox/docApprovalStatusList?approvalStatus=${approvalStatus}`;  
     });
 
- // 승인 버튼 클릭 시, 결재 승인 요청을 서버로 전송
+    // 승인 버튼 클릭 시, 결재 승인 요청을 서버로 전송
     $('#approveButton').on('click', function() {
-        let edmsDocNo = [[${edmsDocs.edmsDocNo}]]; // 문서 번호 
-        let approvalStatus = '승인'; // 결재 상태
-
         $.ajax({
             type: 'POST', 
             url: '/edms/approve', 
             data: { 
-                edmsDocNo: edmsDocNo,
-                approvalStatus: approvalStatus // 결재 상태 추가
-            }, 
+                edmsDocNo: [[${edmsDocs.edmsDocNo}]], // 문서 번호 전달
+                approvalStatus: '승인' // 승인 상태 설정
+            },
             success: function(response) {
                 alert(response); 
-                location.reload(); 
+                location.reload(); // 성공 시 페이지 새로고침
             },
             error: function(error) {
                 alert("승인 처리 중 오류가 발생했습니다."); 
             }
         });
     });
- 
+
     // 반려 버튼 클릭 시, 반려 사유 입력 모달을 표시
     $('#rejectButton').on('click', function() {
-        $('#rejectModal').show(); // 반려 사유 모달을 보여줌
+        $('#rejectModal').show(); // 반려 사유 모달 표시
     });
 
-    // 모달의 닫기 버튼 클릭 시, 반려 사유 모달을 닫음
+    // 모달의 닫기 버튼 클릭 시, 반려 사유 모달을 숨김
     $('#closeModal').on('click', function() {
-        $('#rejectModal').hide(); // 반려 사유 모달을 숨김
-    }); // <- 여기에 괄호를 추가하여 닫기 함수 종료
+        $('#rejectModal').hide();
+    });
 
     // 반려 확인 버튼 클릭 시, 반려 요청을 서버로 전송
     $('#confirmReject').on('click', function() {
-        let edmsDocNo = /*[[${edmsDocs.edmsDocNo}]]*/ 'defaultDocNo'; // 문서 번호 (Thymeleaf로 주입)
-        let reason = $('#rejectReason').val(); 
+        let reason = $('#rejectReason').val(); // 입력된 반려 사유 가져옴
         if (reason) {
             // 반려 사유가 입력된 경우에만 요청 전송
             $.ajax({
                 type: 'POST', 
                 url: '/edms/reject', 
-                data: { edmsDocNo: edmsDocNo, reason: reason }, 
+                data: { 
+                    edmsDocNo: [[${edmsDocs.edmsDocNo}]], // 문서 번호
+                    reason: reason // 반려 사유 전달
+                },
                 success: function(response) {
                     alert(response); 
-                    location.reload(); 
+                    location.reload(); // 성공 시 페이지 새로고침
                 },
                 error: function(error) {
                     alert("반려 처리 중 오류가 발생했습니다."); 
@@ -288,5 +328,7 @@ button:hover {
             alert("반려 사유를 입력해주세요.");
         }
     });
+});
 </script>
+</body>
 </html>

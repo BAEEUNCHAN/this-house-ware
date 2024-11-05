@@ -7,7 +7,9 @@ public interface DocService {
 	//문서함 문서 전체조회(메인화면)
 	public List<DocJoinVO> DocJoinList(String id);
 	// 문서결과별 문서 조회	
-	public List<DocJoinVO> docApprovalStatusList(String approvalStatus, String userId);
+	//public List<DocJoinVO> docApprovalStatusList(String approvalStatus, String userId);
+	// 결재 상태에 따라 문서 조회
+    public List<DocJoinVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId);
 	
 	// 부서별 문서 전체조회
 	public List<DocJoinVO> DocDeptList(int departmentNo);

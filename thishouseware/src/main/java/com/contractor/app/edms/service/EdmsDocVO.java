@@ -36,12 +36,12 @@ public class EdmsDocVO {
     private Date approvalDt; // 결재일시
     private String approvalStatus; // 결재상태
     private String edmsFormNo; // 결재양식 번호 / not null
-    private String shareStatus; // 공유폴더 여부 / not null
-    private String shareFolderNo; // 공유 폴더 번호 / not null
     private boolean important; // 중요문서 여부
-    private int approvalOrder; // 결재 순서
+    private int approverOrder; // 결재 순서
     private String rejectReason; // 반려 사유
     private String currentApproverId; // 결재자 id
+    private int approvalLineNo; // 결재선 번호
+    private String currentApprovalStatus; // 결재자별 결재상태
     
     private int departmentNo; // 부서번호
 

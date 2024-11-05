@@ -17,7 +17,7 @@ public interface EdmsMapper {
 	// 결재문서 등록
 	public int insertEdmsInfo(EdmsDocVO edmsDocVO);
 	// 결재문서 임시저장
-	public String insertSaveDoc(EdmsDocVO edmsDocVO);
+	public void insertSaveDoc(EdmsDocVO edmsDocVO);
 	// 결재 승인 상태 업데이트 - currentApproverId, approvalOrder도 함께 업데이트
 	public int updateDocumentApprovalStatus(EdmsDocVO edmsDocVO);
 	// 결재 반려 상태 업데이트 - approvalOrder와 currentApproverId를 초기화

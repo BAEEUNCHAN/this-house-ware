@@ -13,13 +13,11 @@ public interface EdmsService { // 전자결재
 	// 결재문서 등록
 	public String edmsInsert(EdmsDocVO edmsDocVO);
 	// 결재문서 임시저장
-	public String edmsInseSave(EdmsDocVO edmsDocVO);
+	public String edmsInsertSave(EdmsDocVO edmsDocVO);
 	// 결재 승인
-	public String approveDocument(String edmsDocNo);
+	public String approveDocument(String edmsDocNo, String approvalStatus);
 	// 결재 반려
 	public String rejectDocument(String edmsDocNo, String reason);
-	// 다음 결재자 조회 (결재자가 있으면 ID 반환, 없으면 null 반환)
-	public String findNextApprover(@Param("edmsDocNo") String edmsDocNo, @Param("currentOrder") int currentOrder);
 	// 파일명 업데이트
 	public void updateFileName(EdmsDocVO edmsDocVO);
 	// 결재 상태별 문서조회

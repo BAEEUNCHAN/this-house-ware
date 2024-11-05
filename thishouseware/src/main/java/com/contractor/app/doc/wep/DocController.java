@@ -39,29 +39,29 @@ public class DocController {
 	}
 
 	// 문서결과별 문서 조회
+	/*
+	 * @GetMapping("/docApprovalStatusList") public void
+	 * getApprovalStatus(@RequestParam String approvalStatus, Model model,
+	 * Authentication authentication) { EmployeeVO employeeVO =
+	 * empAuthUtil.getAuthEmp(authentication); String userId = employeeVO.getId();
+	 * 
+	 * List<DocJoinVO> list; switch (approvalStatus) { case "임시저장": list =
+	 * docService.docApprovalStatusList("임시저장", userId); break; case "결재완료": list =
+	 * docService.docApprovalStatusList("결재완료", userId); break; case "결재대기": list =
+	 * docService.docApprovalStatusList("결재대기", userId); break; case "결재수신": list =
+	 * docService.docApprovalStatusList("결재수신", userId); break; default: list = new
+	 * ArrayList<>(); // 기본값 또는 에러 처리 break; }
+	 * 
+	 * model.addAttribute("docBoxs", list); }
+	 */
+	// 문서결과별 문서 조회
 	@GetMapping("/docApprovalStatusList")
 	public void getApprovalStatus(@RequestParam String approvalStatus, Model model, Authentication authentication) {
 		EmployeeVO employeeVO = empAuthUtil.getAuthEmp(authentication);
 		String userId = employeeVO.getId();
 
-		List<DocJoinVO> list;
-		switch (approvalStatus) {
-		case "임시저장":
-			list = docService.docApprovalStatusList("임시저장", userId);
-			break;
-		case "결재완료":
-			list = docService.docApprovalStatusList("결재완료", userId);
-			break;
-		case "결재대기":
-			list = docService.docApprovalStatusList("결재대기", userId);
-			break;
-		case "결재수신":
-			list = docService.docApprovalStatusList("결재수신", userId);
-			break;
-		default:
-			list = new ArrayList<>(); // 기본값 또는 에러 처리
-			break;
-		}
+		// 결재 상태별 문서 조회
+		List<DocJoinVO> list = docService.getDocumentsByStatusAndUserId(approvalStatus, userId);
 
 		model.addAttribute("docBoxs", list);
 	}

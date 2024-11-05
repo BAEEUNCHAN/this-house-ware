@@ -14,8 +14,6 @@
             , approval_dt
             , approval_status
             , edms_form_no
-            , share_status
-            , share_folder_no
         FROM edms_doc
         <where>
             <if test="edmsDocNo != null and edmsDocNo != ''">
@@ -26,12 +24,6 @@
             </if>
             <if test="edmsFormNo != null and edmsFormNo != ''">
                 AND edms_form_no = #{edmsFormNo}
-            </if>
-            <if test="shareStatus != null and shareStatus != ''">
-                AND share_status = #{shareStatus}
-            </if>
-            <if test="shareFolderNo != null and shareFolderNo != ''">
-                AND share_folder_no = #{shareFolderNo}
             </if>
         </where>
         ORDER BY submit_dt
@@ -50,9 +42,10 @@
             , approval_dt
             , approval_status
             , edms_form_no
-            , share_status
-            , share_folder_no
             , reject_reason
+            , current_approver_id
+            , approval_line_no
+            , approver_order
         FROM edms_doc
         WHERE edms_doc_no = #{edmsDocNo}
     </select>
@@ -72,8 +65,9 @@
             , submit_dt
             , approval_status
             , edms_form_no
-            , share_status
-            , share_folder_no
+            , approver_order
+            , current_approver_id
+            , approval_line_no
         )
         VALUES (
               #{edmsDocNo}
@@ -92,21 +86,58 @@
                     </otherwise>
                 </choose>
             , #{edmsFormNo}
-            , #{shareStatus}
-            , #{shareFolderNo}
+            ,0
+            ,#{currentApproverId}
+            ,#{approvalLineNo}
         )
     </insert>
+    
+    <!-- 임시저장  -->
+    <insert id="insertSaveDoc" parameterType="EdmsDocVO">
+	    <selectKey keyProperty="edmsDocNo" resultType="String" order="BEFORE">
+	        SELECT NVL(MAX(edms_doc_no), 0) + 1 FROM edms_doc
+	    </selectKey>
+	    INSERT INTO edms_doc (
+	          edms_doc_no
+	        , id
+	        , title
+	        , content
+	        , file_name
+	        , attatch
+	        , submit_dt
+	        , approval_status
+	        , edms_form_no
+	        , approver_order
+	        , current_approver_id
+	        , approval_line_no
+	    )
+	    VALUES (
+	          #{edmsDocNo}
+	        , #{id}
+	        , #{title}
+	        , #{content}
+	        , #{fileName}
+	        , #{attatch}
+	        , SYSDATE
+	        , '임시저장'
+	        , #{edmsFormNo}
+	        , 0
+	        , #{currentApproverId}
+	        , #{approvalLineNo}
+	    )
+	</insert>
 
     <!-- 결재 상태 업데이트 -->
-    <update id="updateDocumentApprovalStatus" parameterType="EdmsDocVO">
-        UPDATE edms_doc
-        SET 
-              approval_status = #{approvalStatus}
-            , current_approver_id = #{currentApproverId}
-            , reject_reason = #{rejectReason}
-            , approval_dt = SYSDATE
-        WHERE edms_doc_no = #{edmsDocNo}
-    </update>
+	<update id="updateDocumentApprovalStatus" parameterType="EdmsDocVO">
+	    UPDATE edms_doc
+	    SET 
+	          approval_status = #{approvalStatus}
+	        , current_approver_id = #{currentApproverId}
+	        , reject_reason = #{rejectReason}
+	        , approval_dt = SYSDATE
+	        , approver_order = #{approverOrder}
+	    WHERE edms_doc_no = #{edmsDocNo}
+	</update>
 
     <!-- 결재 반려 상태 업데이트 -->
     <update id="updateDocumentRejectionStatus" parameterType="EdmsDocVO">
@@ -131,8 +162,6 @@
             , d.approval_dt
             , d.approval_status
             , d.edms_form_no
-            , d.share_status
-            , d.share_folder_no
             , a.approval_order
         FROM edms_doc d
         LEFT JOIN approval_line a ON d.edms_doc_no = a.edms_doc_no
@@ -155,5 +184,7 @@
 	    SET file_name = #{fileName}
 	    WHERE edms_doc_no = #{edmsDocNo}
 	</update>
+
+	
 
 </mapper>

@@ -84,7 +84,7 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleFormControlFile1">사진수정</label>
-                  <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
+                  <input type="file" class="form-control" id="uploadFile" name="uploadFile" />
                 </div>
               </div>
               <div class="col-md-4">
@@ -239,20 +239,89 @@ function checkEmail(){
         }
     });
 };
-// 직원 퇴사처리
-$('#resignEmployee').on('click', function(event){
-	// $.Ajax 방식 
-	$.ajax('/manager/resignEmp?id='+$('#id').val(),{
-		type : 'post',				
-	})
-	.done(result => {
-		if(result == 'error1'){
-			alert("서버문제로 퇴사처리가 실패하였습니다.");
-		}else{
-			alert("퇴사 처리가 완료되었습니다.");
-			location.reload();
-		}
-	})
-	.fail(err => console.log(err));
-});
+// 퇴사 처리 확인 경고형 모달창
+var SweetAlert2Demo = (function () {
+  //== Demos
+  var initDemos = function () {
+  
+    // 퇴사 버튼
+    $("#resignEmployee").click(function (e) {
+      resignEmployeeEvent('퇴사처리 시키시겠습니까?');
+    });
+  };
+  return {
+    //== Init
+    init: function () {
+      initDemos();
+    },
+  };
+})();
+function resignEmployeeEvent(title){
+  swal({
+    title: title,
+    type: "warning",
+    buttons: {
+      confirm: {
+        text: "예",
+        className: "btn btn-success",
+      },
+      cancel: {
+     	text: "아니요",
+        visible: true,
+        className: "btn btn-danger",
+      },
+    },
+  }).then((buttonResult) => {
+    if (buttonResult) {
+      let obj = new Object();
+      $.ajax({
+        url:'/manager/resignEmp?id='+$('#id').val(),
+        type: 'post',
+        success: function(answer){
+          if(answer == "success"){
+            swal({
+              title: "퇴사 처리가 완료되었습니다.",
+              type: "success",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+            }).then(function(){
+				location.reload();
+			});
+          }
+          else if("error1"){
+            swal({
+              title: "서버문제로 퇴사처리가 실패하였습니다.",
+              type: "error",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+            });              	
+          }
+        },
+        error: function (error) {
+          swal({
+              title: "요청이 실패하였습니다.",
+              type: "error",
+              buttons: {
+                confirm: {
+                  text: "예",
+                  className: "btn btn-success",
+                },
+              },
+          });
+        }
+      })
+      
+    } else {
+      swal.close();
+    }
+  });
+}
 </script>

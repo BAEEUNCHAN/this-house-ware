@@ -19,46 +19,22 @@
 			</ul>
 		</div>
 		<div></div>
-		<button class="btn btn-info" id="workBtn">근무자</button>
-		<button class="btn btn-info" id="resignBtn">퇴직자</button>
 		<div class="page-inner">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card">
-						<div class="card-header">
-							<div class="card-title">
+						<div class="card-header row">
+							<div class="card-title col-9">
 								직원 리스트
+							</div>
+							<div class="col-3">							
+								<button class="btn btn-info" id="workBtn">근무자</button>
+								<button class="btn btn-info" id="resignBtn">퇴직자</button>
 							</div>
 						</div>
 						<div class="card-body">
 							<div class="row">
 								<div class="text-center">
-									<table border="0" cellspacing="5" cellpadding="5">
-									    <tbody>
-										    <tr>
-										        <td>시작 날짜:</td>
-										        <td>
-										        	<input type="date"
-										                id="min"
-																		name="min"
-										                max="2050-01-01"
-										                min="2000-01-01"
-										                value=null>
-										        </td>
-										    </tr>
-										    <tr>
-										        <td>끝날짜:</td>
-										        <td>
-										        	<input type="date"
-										                id="max"
-																		name="max"
-										                max="2050-01-01"
-										                min="2000-01-01"
-										                value=null>
-										        </td>
-										    </tr>
-									    </tbody>
-									</table>
 									<table class="display" id="myTable">
 									  <thead>
 									    <tr>
@@ -133,7 +109,10 @@ $(document).ready(function () {
         var colIndex = document.querySelector('#select').selectedIndex;
         table.column(colIndex).search(this.value).draw();
     });
-
+    
+    // 날짜 검색 태그 삽입
+    $("#myTable_wrapper .row:eq(0) .col-sm-12:eq(0)").append('<table border="0" cellspacing="5" cellpadding="5"><tbody><tr><td>입사일 최소값:</td><td><input type="date"id="min"name="min"max="2050-01-01"min="2000-01-01"value=null></td></tr><tr><td>입사일 최대값:</td><td><input type="date"id="max"name="max"max="2050-01-01"min="2000-01-01"value=null></td></tr></tbody></table>');
+    
     /* 날짜검색 이벤트 */
     /* 날짜를 위한 push 메서드*/
 	$.fn.dataTable.ext.search.push(
@@ -162,5 +141,4 @@ $(document).ready(function () {
         table.draw();
     } );
 });
-
 </script>

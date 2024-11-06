@@ -54,6 +54,7 @@ public class DocController {
 	 * 
 	 * model.addAttribute("docBoxs", list); }
 	 */
+	
 	// 문서결과별 문서 조회
 	@GetMapping("/docApprovalStatusList")
 	public void getApprovalStatus(@RequestParam String approvalStatus, Model model, Authentication authentication) {

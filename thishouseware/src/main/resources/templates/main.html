@@ -3,168 +3,224 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
-<style>
-.container .pagination .active .page-link {
-	background-color: #007bff; /* 활성 페이지의 배경색 */
-	color: white; /* 활성 페이지의 글자색 */
-	border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            overflow: hidden; /* 전체 페이지 스크롤 제거 */
+        }
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: calc(100vh - 100px);
+            max-width: 1600px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: auto;
+            align-items: stretch;
+        }
+        .notice-section {
+            flex: 0 0 50%;
+            padding: 20px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-body {
+            padding: 20px;
+            background-color: #ffffff;
+            flex-grow: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+            margin-top: 30px;
+        }
+        .grid-section {
+            flex: 0 0 50%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+        }
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            color: #ffffff;
+            cursor: pointer;
+            height: 150px;
+        }
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            background-color: #444444;
+        }
+        .material-icons {
+            font-size: 56px;
+            margin-bottom: 15px;
+        }
+        .container .pagination .active .page-link {
+            background-color: #007bff; /* 활성 페이지의 배경색 */
+            color: white; /* 활성 페이지의 글자색 */
+            border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
+        }
 
-.container .pagination .page-item.disabled .page-link {
-	pointer-events: none; /* 비활성화된 링크 클릭 방지 */
-	color: #6c757d; /* 비활성화된 페이지의 글자색 */
-}
+        .container .pagination .page-item.disabled .page-link {
+            pointer-events: none; /* 비활성화된 링크 클릭 방지 */
+            color: #6c757d; /* 비활성화된 페이지의 글자색 */
+        }
 
-.container .btn {
-	padding: 0 !important;
-}
+        .container .btn {
+            padding: 0 !important;
+        }
 
-.container .table>tbody>tr>td, .table>tbody>tr>th {
-	padding: 5px !important;
-	font-size: 14px;
-}
-</style>
+        .container .table>tbody>tr>td, .table>tbody>tr>th {
+            padding: 5px !important;
+            font-size: 14px;
+        }
+    </style>
+</head>
 <body>
-	<div class="container">
-		<div class="page-inner">
-			<div class="page-header">
-				<h3 class="fw-bold mb-3">
-					<a href="/main?boardsNo=1" class="logo" style="color: black;">
-						<img src="/yerim/img/image-removebg-preview (8).png"
-						alt="navbar brand" class="navbar-brand" height="20"
-						style="width: 40px; height: 40px;" /> ThisHouseWare
-					</a>
-				</h3>
+    <div class="main-container">
+        <div class="notice-section">
+            <div class="page-header">
+                <h3 class="fw-bold mb-3">
+                    <a href="/main?boardsNo=1" class="logo" style="color: black;"></a>
+                </h3>
+            </div>
+            <div class="card" style="height: 100%; border: none;">
+                <div class="card-header" style="border: none;">
+                    <div class="card-title text-center" style="font-size: 30px; font-weight: bold;">
+                        [[${board.title}]]
+                    </div>
+                </div>
+                <div class="card-body" style="flex-grow: 1;">
+                    <form name="frmSearch" id="frmSearch">
+                        <input name="nowPage" type="hidden" th:value="${paging.nowPage}">
+                        <input name="boardsNo" type="hidden" th:value="${board.boardsNo}">
+                        <input name="cntPerPage" type="hidden" th:value="${paging.cntPerPage}">
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-secondary" style="width: 30px; height: 30px; font-size: 12px; float:right;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <input name="searchWord" type="text" class="form-control form-control-sm" style="width:200px; margin-right:5px; float:right;" th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
+                        </div>
+                    </form>
+                    <table class="table table-striped mt-3 post">
+                        <thead>
+                            <tr>
+                                <th>게시글 번호</th>
+                                <th>머리글</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>등록날짜</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <th:block th:each="info : ${posts}">
+                                <tr th:if="${info.display == 'q1'}">
+                                    <td>[[ ${info.postsNo}]]</td>
+                                    <td>[[ ${info.postsType}]]</td>
+                                    <td>[[ ${info.title}]]</td>
+                                    <td>[[ ${info.name}]]</td>
+                                    <td><span th:text="(${info.postSetting == '유'} and ${info.display == 'q2'}) ? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} : ${#dates.format(info.submitDT, 'yyyy-MM-dd')}"></span></td>
+                                </tr>
+                            </th:block>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="text-center">
+                            <nav aria-label="Page navigation" class="text-center mx-auto">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
+                                    <li class="page-item" th:classappend="${paging.startPage} == 1 ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
+                                    <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item" th:classappend="${num == paging.nowPage} ? 'active' : ''"><a class="page-link" th:href="|javascript:gopage(${num})|" th:text="${num}"></a></li>
+                                    <li class="page-item" th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a></li>
+                                    <li class="page-item" th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.lastPage})|">끝</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid-section">
+            <div class="grid-item" style="background-color: #FF7F7F;" onclick="location.href='/schedule/scheduleList'">
+                <span class="material-icons">access_time</span>
+                <p>일정</p>
+            </div>
+            <div class="grid-item" style="background-color: #6495ED;" onclick="location.href='/board/boardMainPage'">
+                <span class="material-icons">forum</span>
+                <p>게시판</p>
+            </div>
+            <div class="grid-item" style="background-color: #3CB371;" onclick="location.href='file/fileMainPage'">
+                <span class="material-icons">folder</span>
+                <p>자료실</p>
+            </div>
+            <div class="grid-item" style="background-color: #FFA500;" onclick="location.href='/edms/edmsInsert'">
+			    <span class="material-icons">description</span>
+			    <p>문서등록</p>
 			</div>
+            <div class="grid-item" style="background-color: #FF6347;" onclick="location.href='/reply/replyList'">
+                <span class="material-icons">contact_support</span>
+                <p>고객문의</p>
+            </div>
+            <div class="grid-item" style="background-color: #BA55D3;" onclick="location.href='/manager/emps'" sec:authorize="hasAnyAuthority('a1','a2')">
+                <span class="material-icons">admin_panel_settings</span>
+                <p>관리자메뉴</p>
+            </div>
+            <div class="grid-item" style="background-color: #d3d3d3;"sec:authorize="hasAnyAuthority('a3','a4','a5','a6')">
+                <span class="material-icons">admin_panel_settings</span>
+                <p>관리자메뉴</p>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        // 제이쿼리 객체 생성
+        // 글쓰기 게시판 번호 받아오기
+        let boardsNo = /*[[${board.boardsNo}]]*/'';
 
-			<div class="page-inner post">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title text-center"
-									style="font-size: 30px; font-weight: bold;">
-									<!-- <i class="fas fa-clipboard-list"></i> -->
-									[[${board.title}]] <a class="float-end"> <!-- <button class="btn btn-primary">글쓰기</button> -->
-									</a>
-								</div>
+        // 글쓰기 클릭 이벤트
+        $('.post button.btn.btn-primary').on('click', function() {
+            let url = '/board/postInsert?boardsNo=' + boardsNo;
+            location.href = url;
+        });
 
-							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="text-center">
-										<form name="frmSearch" id="frmSearch">
-											<input name="nowPage" type="hidden"
-												th:value="${paging.nowPage}"> <input name="boardsNo"
-												type="hidden" th:value="${board.boardsNo}"> <input
-												name="cntPerPage" type="hidden"
-												th:value="${paging.cntPerPage}">
-											<div style="text-align: right;">　
-												 <button type="submit" class="btn btn-secondary"
-													style="width: 30px; height: 30px; font-size: 12px; float:right;">
-													<i class="fas fa-search"></i>
-												</button>　
-												　 <input name="searchWord" type="text" class="form-control form-control-sm" style="width:200px; margin-right:5px; float:right;"												
-												th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
-											</div>
-										</form>
-										<!-- <span>게시글 수 [[${#lists.size(posts)}]]</span> -->
-										<table class="table table-striped mt-3">
-											<thead>
-												<tr>
-													<th>게시글 번호</th>
-													<th>머리글</th>
-													<th>제목</th>
-													<th>작성자</th>
-													<th>등록날짜</th>
-												</tr>
-											</thead>
-											<tbody>
-												<th:block th:each="info : ${posts}">
-													<!--  PostsVO => <tr/> -->
-													<tr th:if="${info.display == 'q1'}">
-														<td>[[ ${info.postsNo}]]</td>
-														<td>[[ ${info.postsType}]]</td>
-														<td>[[ ${info.title}]]</td>
-														<td>[[ ${info.name}]]</td>
-														<td><span
-															th:text="(${info.postSetting == '유'} and ${info.display == 'q2'}) 
-																		? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} 
-																		: ${#dates.format(info.submitDT, 'yyyy-MM-dd')}">
-														</span></td>
-													</tr>
-												</th:block>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							<div class="card-body" style="margin-top: -30px;">
-								<div class="row">
-									<div class="text-center">
-										<!-- 페이지 네이션 -->
-										<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
-										<nav aria-label="Page navigation" class="text-center mx-auto">
-											<ul class="pagination justify-content-center">
-												<li class="page-item"
-													th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
-													class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
-												<li class="page-item"
-													th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
-													class="page-link"
-													th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
-												<li
-													th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
-													class="page-item"
-													th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
-													class="page-link" th:href="|javascript:gopage(${num})|"
-													th:text="${num}"></a></li>
+        // 게시글 선택
+        $(document).ready(function() {
+            $('.post tbody > tr').on('click', function(event) {
+                let trTag = event.currentTarget;
+                let postsNo = $(trTag).children().eq(0).text();
+                let url = '/board/postInfo?postsNo=' + postsNo;
+                location.href = url;
+            });
+        });
 
-												<li class="page-item"
-													th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
-													<a class="page-link"
-													th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
-												</li>
-												<li class="page-item"
-													th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
-													<a class="page-link"
-													th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
-												</li>
-											</ul>
-										</nav>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script th:inline="javascript">
-		// 제이쿼리 객체 생성
-		// 글쓰기 게시판 번호 받아오기
-		let boardsNo = /*[[${board.boardsNo}]]*/'';
-
-		// 글쓰기 클릭 이벤트
-		$('.post button.btn.btn-primary').on('click', function() {
-			let url = '/board/postInsert?boardsNo=' + boardsNo;
-			location.href = url;
-		});
-
-		// 게시글 선택
-		$('.post tbody > tr').on('click', function(event) {
-			let trTag = event.currentTarget;
-			let postsNo = $(trTag).children().eq(0).text();
-			let url = '/board/postInfo?postsNo=' + postsNo;
-			location.href = url;
-		});
-
-		// 페이징
-		function gopage(p) {
-			frmSearch.nowPage.value = p;
-			frmSearch.submit();
-		}
-	</script>
+        // 페이징
+        function gopage(p) {
+            frmSearch.nowPage.value = p;
+            frmSearch.submit();
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,6 @@ package com.contractor.app.reply.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +18,8 @@ import com.contractor.app.employee.service.EmployeeService;
 import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.reply.service.ReplyService;
 import com.contractor.app.reply.service.ReplysVO;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class ReplyController {
@@ -62,8 +63,13 @@ public class ReplyController {
 	}
 	
 	@PostMapping("reply/replyInfo")
-	public String replyProcess(ComplainsVO complainVO, ReplysVO replyVO) {
-		
+	public String replyProcess(ComplainsVO complainVO, ReplysVO replyVO, HttpServletRequest request) {
+		String replyContent = request.getParameter("replyContent");
+		// 줄바꿈 문자를 <br/>로 변환
+		replyContent = replyContent.replace("\n", "<br/>");
+		// replyContent를 DB에 저장
+		replyVO.setReplyContent(replyContent);
+
 		if(replyVO.getReplyContent() == "") {
 			// 처리과정업데이트
 			complainService.updateComplainProgress(complainVO);

@@ -14,15 +14,17 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/main?boardsNo=1"> <i
+							class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/complain/complainList">고객관리</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="/complain/insertComplain">불편/장애사항 등록</a></li>
+					<li class="nav-item"><a href="/complain/insertComplain">불편/장애사항
+							등록</a></li>
 				</ul>
 			</div>
-			<div class="row">
+			<div class="row" >
 
 				<form name="insertForm2" th:action="@{/complain/insertComplain}"
 					method="post">
@@ -32,17 +34,24 @@
 								<div class="card-title">불편/장애사항 등록</div>
 							</div>
 							<div class="card-body">
-								<div class="row">
+								<div class="row" style="padding-left: 100px; padding-right: 20px;">
 									<!-- 왼쪽화면 -->
 									<div class="col-md-6 col-lg-30">
 										<!-- <div class="card-title">회사명</div> -->
-										<label for="companyNo">회사명 : </label> <select multiple
-											name="companyNo" class="form-control" id="companyNo"
-											style="width: 179px; font-size: 12px;">
-											<th:block th:each="info : ${companys}">
-												<option th:value="${info.companyNo}">[[${info.companyName}]]</option>
-											</th:block>
-										</select>
+										<div class="form-group">
+											<label for="companyNo"
+												style="display: inline-block; font-weight: bold; margin-right: 8px; vertical-align: top;">
+												<i class="fas fa-caret-right"></i> 회사명:
+											</label> <select multiple name="companyNo" class="form-control"
+												id="companyNo"
+												style="width: 170px; height: 110px !important; display: inline-block; font-size: 12px;">
+												<th:block th:each="info : ${companys}">
+													<option th:value="${info.companyNo}">[[${info.companyName}]]</option>
+												</th:block>
+											</select>
+										</div>
+
+
 
 
 
@@ -50,14 +59,17 @@
 										<!-- <button class="btn btn-primary" width="120px">회사등록</button> -->
 
 										<!-- <div class="card-title">고객명</div> -->
-										<br /> <label for="customerName">고객명 : </label> <input
-											type="text" name="customerName" aria-label="Username" 
-											id="customerName" aria-describedby="basic-addon1"
-											placeholder="고객 이름을 입력하세요." ><br /> <br />
-										<!-- <div class="card-title">연락처</div> -->
-										<label for="phone">연락처 : </label> <input type="text"
-											name="phone" aria-label="Username" id="phone" maxlength="13" oninput="autoHyphen(this)"
-											aria-describedby="basic-addon1" placeholder="'-'없이 숫자만 입력."><br />
+										<div class="form-group">
+											<label for="customerName"
+												style="display: inline-block; margin-right: 8px; font-weight: bold;">
+												<i class="fas fa-caret-right"></i> 고객명:
+											</label> <input type="text" name="customerName" aria-label="Username"
+												class="form-control form-control-sm" id="customerName"
+												aria-describedby="basic-addon1"
+												style="width: 170px; display: inline-block;"
+												placeholder="고객 이름을 입력하세요.">
+										</div>
+
 
 
 									</div>
@@ -65,37 +77,53 @@
 
 
 									<!-- 오른쪽화면 -->
-									<div class="col-md-6 col-lg-30">
+									<div class="col-md-6 col-lg-30" >
+										<!-- <div class="card-title">연락처</div> -->
+										<div class="form-group">
+											<label for="phone"
+												style="display: inline-block; margin-right: 8px; font-weight: bold;"><i
+												class="fas fa-caret-right"></i> 연락처 : </label> 　　　<input type="text"
+												class="form-control form-control-sm" name="phone"
+												aria-label="Username" id="phone" maxlength="13"
+												oninput="autoHyphen(this)" aria-describedby="basic-addon1"
+												placeholder="'-'없이 숫자만 입력."
+												style="width: 170px; display: inline-block;"><br />
+										</div>
 
-										<br />
 										<!-- <div class="card-title">문제발생일시</div> -->
-										<label for="complainDt">문제발생일시 : </label> <input type="date"
-											name="complainDt" id="complainDt" max="2077-10-10"
-											min="2020-06-05" value="2020-10-15">
-											<small style="color:lightgray;"><br/>
-											*문제발생일시를 선택하지 않으면 오늘날짜로 선택됩니다.
-											</small>
-											<br /> <br /><br />
-										<br />
+										<div class="form-group">
+											<label for="complainDt"
+												style="display: inline-block; margin-right: 8px; font-weight: bold;"><i
+												class="fas fa-caret-right"></i> 문제발생일시 : </label> <input type="date"
+												name="complainDt" id="complainDt" max="2077-10-10"
+												class="form-control form-control-sm" min="2020-06-05"
+												value="2020-10-15"
+												style="width: 170px; display: inline-block;"> <small
+												style="color: lightgray;"><br /> *선택하지 않으면 오늘날짜로
+												선택됩니다. </small>
+										</div>
+
 
 										<!-- <div class="card-title">문의구분</div> -->
-										<label for="complainType1">문의구분 : </label>
 										<div class="form-group">
-											<div class="d-flex">
-												<div class="form-check">
+											<label for="complainType1"
+												style="display: inline-block; margin-right: 8px; font-weight: bold;">
+												<i class="fas fa-caret-right"></i> 문의구분:
+											</label>　　
+											<div style="display: inline-block;">
+												<div class="form-check" style="display: inline-block;">
 													<input class="form-check-input" type="radio"
 														name="complainType" id="complainType1" value="1" /> <label
-														class="form-check-label" for="complainType1"> 고객불편
-													</label>
+														class="form-check-label" for="complainType1">고객불편</label>
 												</div>
-												<div class="form-check">
+												<div class="form-check" style="display: inline-block;">
 													<input class="form-check-input" type="radio"
-														name="complainType" id="complainType2" value="2"/> <label
-														class="form-check-label" for="complainType2"> 운영장애
-													</label>
+														name="complainType" id="complainType2" value="2" /> <label
+														class="form-check-label" for="complainType2">운영장애</label>
 												</div>
 											</div>
 										</div>
+
 
 
 
@@ -104,23 +132,58 @@
 									<!-- 오른쪽화면 끝 -->
 								</div>
 								<div class="card-action">
+								<br/>
+									<div class="form-group" style="float: center;">
+										<label for="complainTitle"><i
+											class="fas fa-feather-alt
+									"
+											style="display: inline-block;"></i> </label>　 <input type="text"
+											class="form-control form-control" name="complainTitle"
+											aria-label="Username" size=60 maxlength=50 id="complainTitle"
+											style="width: 95%; display: inline-block;"
+											aria-describedby="basic-addon1" placeholder="제목을 입력하세요."><br />
+										<br />
+									</div>
 
-									<label for="complainTitle">제목 : </label> <input type="text"
-										name="complainTitle" aria-label="Username" size=60
-										maxlength=50 id="complainTitle"
-										aria-describedby="basic-addon1" placeholder="제목을 입력하세요."><br />
-									<br /> <label for="complainContent">문의내용</label>
-									<textarea class="form-control" name="complainContent"
-										id="complainContent" rows="5"   maxlength="500" ></textarea>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-text"
+												style="font-weight: bold; color: #495057; font-size: 12px; background-color: #cfe2ff;">문의내용</span>
+											<textarea class="form-control" name="complainContent"
+												id="complainContent" rows="7" maxlength="500"
+												aria-label="With textarea"></textarea>
+										</div>
+									</div>
 
-									<label for="complainRequest">요청사항</label>
-									<textarea class="form-control" name="complainRequest"
-										id="complainRequest" rows="5"  maxlength="500"></textarea>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-text"
+												style="font-weight: bold; color: #495057; font-size: 12px; background-color: #cfe2ff;">요청사항</span>
+											<textarea class="form-control" name="complainRequest"
+												id="complainRequest" rows="7" maxlength="500"
+												aria-label="With textarea"></textarea>
+										</div>
+									</div>
 									<br />
-									비밀번호 : <input type="password" name="complainPwd" id="complainPwd" maxlength="8" placeholder="최대 8자리">
-									<div class="text-center"><br/>
-									<a><button type="submit" class="btn btn-success">등록</button></a>
-									<a href="/complain/complainList"><button type="button" class="btn btn-danger" onclick="window.location.href='/complainList'">취소</button></a>
+
+									<div class="form-group" style="float: right;">
+										<label
+											style="display: inline-block; margin-right: 8px; font-weight: bold;">
+											<i class="fas fa-lock
+									"></i> 비밀번호 :
+										</label><input type="password" name="complainPwd"
+											class="form-control form-control-sm" id="complainPwd"
+											maxlength="8" placeholder="최대 8자리"
+											style="width: 170px; display: inline-block;">
+									</div>
+
+									<div class="text-center">
+										<br />
+										<br />
+										<br /> <a><button type="submit" class="btn btn-success" >등록</button></a>
+										<a href="/complain/complainList"><button type="button"
+												class="btn btn-danger"
+												onclick="window.location.href='/complainList'">취소</button></a>
 									</div>
 								</div>
 							</div>
@@ -136,6 +199,7 @@
 		// Form 태그 네임속성 활용해서 이벤트 걸기
 		$(insertForm2).on('submit', complainInsertHandler)
 
+		
 		const autoHyphen = (target) => {
 				target.value = target.value
 					  .replace(/[^0-9]/g, '')
@@ -209,12 +273,16 @@
 				return;
 			}
 			
+			$('#complainContent').val($('#complainContent').val().replace(/\n/g, '<br/>'));
+		    $('#complainRequest').val($('#complainRequest').val().replace(/\n/g, '<br/>'));
+			
 			
 
 			alert('게시글이 등록되었습니다.');
 			insertForm2.submit();
 		}
 		
+			
 		
 		
 	

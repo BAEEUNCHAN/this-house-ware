@@ -250,18 +250,17 @@ public class ApprController {
 	@ResponseBody
 	public ResponseEntity<String> apprRemove(@RequestBody Map<String, Object> data) {
 		int no = (int) data.get("lineNo");
+		@SuppressWarnings("unchecked")
 		List<String> ids = (List<String>) data.get("ids");
-		System.out.println(no);
-		System.out.println(ids);		
 		
 		String str = "";
 		
 		for (String id : ids) {
 			if(apprService.apprRemove(no, id)) {
-				str = id + " 삭제 완료";
+				str = "삭제 완료!";
 			}
 			else {
-				str = id + " 삭제 중 오류 발생";
+				str = "삭제 중 오류 발생!";
 			}
 		}
 		System.out.println(str);

@@ -5,34 +5,91 @@
 	layout:fragment="Content">
 <head>
 <style>
-/* 기존 스타일 유지 */
+/* .card-title이 flexbox로 잘못 적용된 경우 수정 */
 .card-title {
-	margin-bottom: 15px;
+	flex-grow: 0; /* 제목 영역 크기 고정 */
+	white-space: nowrap; /* 제목이 한 줄로만 보이도록 설정 */
+	overflow: hidden;
+	text-overflow: ellipsis; /* 넘치는 텍스트는 '...'으로 표시 */
 }
 
+/* 카드 본문 중앙 정렬 */
+.card-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* 중앙 정렬 */
+	justify-content: center; /* 수직 중앙 정렬 */
+	flex-grow: 1;
+	text-align: center;
+}
+
+/* post-list가 중앙에 오도록 설정 */
 .post-list {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	list-style-type: none;
 	padding-left: 0;
+	margin: 0;
+	width: 100%;
 }
 
-.post-title {
-	display: inline-block;
-	width: 200px;
-	text-align: left;
-	margin-left: 10px;
-	font-weight: bold;
+/* post-item을 중앙에 배치 */
+.post-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 5px 0;
 }
 
+/* 머리글과 제목이 수평으로 정렬되도록 설정 */
 .post-header {
 	font-size: 14px;
 	color: #6c757d;
-	margin-right: 5px;
+	margin-right: 10px;
 }
 
+/* 게시글 제목 스타일 */
+.post-title {
+	display: inline-block;
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-left: 10px;
+	max-width: calc(100% - 50px);
+}
+
+/* 카드 스타일 */
 .card {
-	padding: 10px;
+	padding: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	min-height: 300px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center; /* 카드 전체 중앙 정렬 */
 }
 
+.card-header {
+	display: flex;
+	justify-content: space-between; /* 요소를 양 끝에 배치 */
+	align-items: center; /* 세로 중앙 정렬 */
+	width: 100%; /* 전체 너비를 차지하도록 설정 */
+}
+
+/* .no-custom-style 클래스가 있는 카드에는 스타일 적용 제외 */
+.card.no-custom-style {
+	padding: 20px; /* 카드 내부 여백 */
+	margin-bottom: 20px; /* 카드 사이의 간격 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+	border-radius: 10px; /* 둥근 모서리 */
+	height: auto; /* 높이를 자동으로 조정 */
+	min-height: unset; /* 기본 카드의 min-height 속성을 제거 */
+}
+
+/* mb-4는 기존 유지 */
 .mb-4 {
 	margin-bottom: 30px;
 }
@@ -49,45 +106,38 @@
 					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
 				</ul>
 			</div>
-			<div class="page-inner">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">
-									게시판 <a href="/board/postInsert" class="float-end">
-										<button class="btn btn-primary">글쓰기</button>
-									</a>
+			<div class="col-md-12">
+				<div class="card no-custom-style">
+					<div class="card-header">
+						<div class="card-title">게시판</div>
+						<a href="/board/postInsert">
+							<button class="btn btn-primary">글쓰기</button>
+						</a>
+					</div>
+				</div>
+				<div class="board-container">
+					<div class="row text-center">
+						<!-- 수정된 부분: filteredBoards 사용 -->
+						<div th:each="board : ${boards}" class="col-md-6 mb-4">
+							<div class="card">
+								<div class="board-header">
+									<a th:text="${board.boardsNo}" class="post-header"
+										th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+									<h4 th:text="${board.title}" class="card-title">게시판 이름</h4>
+								</div>
+								<div class="card-body">
+									<ul class="post-list">
+										<li th:each="post : ${board.posts}" class="post-item"
+											id="posts"><a th:text="${post.postsNo}"
+											class="post-header"
+											th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+											<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
+											<a th:text="${post.title}" class="post-title">게시글 제목</a></li>
+									</ul>
 								</div>
 							</div>
 						</div>
-						<div class="card-body">
-							<div class="row text-center">
-								<div class="board-container">
-									<div class="row">
-										<!-- 수정된 부분: filteredBoards 사용 -->
-										<div th:each="board : ${boards}" class="col-md-12 mb-4">
-											<div class="card">
-												<div class="board-header">
-													<a th:text="${board.boardsNo}" class="post-header"
-														th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
-													<h4 th:text="${board.title}" class="card-title">게시판 이름</h4>
-												</div>
-												<ul class="post-list">
-													<li th:each="post : ${board.posts}" class="post-item"
-														id="posts"><a th:text="${post.postsNo}"
-														class="post-header"
-														th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
-														<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
-														<a th:text="${post.title}" class="post-title">게시글 제목</a></li>
-												</ul>
-											</div>
-										</div>
-										<!-- /게시판 목록 -->
-									</div>
-								</div>
-							</div>
-						</div>
+						<!-- /게시판 목록 -->
 					</div>
 				</div>
 			</div>

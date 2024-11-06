@@ -29,7 +29,8 @@ public class employeeController {
 	private final EmpAuthUtil empAuthUtil;
 
 	@GetMapping("login")
-	public String loginForm() {
+	public String loginForm(@RequestParam(required = false) String errorMessage ,Model model) {
+		model.addAttribute("errorMessage", errorMessage);
 		return "employee/login";
 	}
 	

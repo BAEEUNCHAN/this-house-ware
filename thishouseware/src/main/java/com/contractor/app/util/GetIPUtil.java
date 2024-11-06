@@ -1,5 +1,10 @@
 package com.contractor.app.util;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 public class GetIPUtil {
@@ -31,5 +36,19 @@ public class GetIPUtil {
 		
 		return ip;
 	}
-
+	
+	public static String getPublicIP() {
+		try {
+            URL url = new URL("http://checkip.amazonaws.com");
+            URLConnection connection = url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String ip = in.readLine();
+            // System.out.println("External IP Address: " + ip);
+            return ip;
+        } catch (Exception e) {
+        	// System.out.println(e.getMessage());
+        	// System.out.println(e);
+            return "faild";
+        }
+	}
 }

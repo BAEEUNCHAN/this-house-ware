@@ -82,22 +82,22 @@
         <div class="collapse" id="subnav-personal">
           <ul class="nav nav-collapse subnav">
             <li>
-              <a href="/docBox/docApprovalStatusList">
+              <a th:href="@{/docBox/docApprovalStatusList(approvalStatus=임시저장)}">
                 <span class="sub-item">임시저장</span>
               </a>
             </li>
             <li>
-              <a href="/docBox/docApprovalStatusList">
+              <a th:href="@{/docBox/docApprovalStatusList(approvalStatus=결재대기)}">
                 <span class="sub-item">결재대기</span>
               </a>
             </li>
             <li>
-              <a href="/docBox/docApprovalStatusList">
+              <a th:href="@{/docBox/docApprovalStatusList(approvalStatus=결재수신)}">
                 <span class="sub-item">결재수신</span>
               </a>
             </li>
             <li>
-              <a href="/docBox/docApprovalStatusList">
+              <a th:href="@{/docBox/docApprovalStatusList(approvalStatus=결재완료)}">
                 <span class="sub-item">결재완료</span>
               </a>
             </li>
@@ -105,7 +105,7 @@
         </div>
       </li>
       <!-- 부서문서함 -->
-      <!-- <li>
+       <li>
         <a data-bs-toggle="collapse" href="#subnav-department">
           <span class="sub-item">부서문서함</span>
           <span class="caret"></span>
@@ -113,30 +113,34 @@
         <div class="collapse" id="subnav-department">
           <ul class="nav nav-collapse subnav">
             <li>
-              <a href="/reply/replyList">
+              <a th:href="@{/docBox/docDeptList}">
+                <span class="sub-item">전체문서</span>
+              </a>
+            </li>
+            <li>
+              <a th:href="@{/docBox/docDeptStatusList(approvalStatus='결재완료')}">
                 <span class="sub-item">결재완료</span>
               </a>
             </li>
             <li>
-              <a href="/reply/replyList">
+              <a th:href="@{/docBox/docDeptImportantList(important='true')}">
                 <span class="sub-item">중요문서</span>
-              </a>
-            </li>
-            <li>
-              <a href="/reply/replyList">
-                <span class="sub-item">공유문서</span>
               </a>
             </li>
           </ul>
         </div>
-      </li> -->
-      <li>
-        <a href="/docBox/docDeptList?departmentNo=${#authentication.principal.empVO.departmentNo}">
-          <span class="sub-item">부서문서함</span>
-        </a>
-      </li>
+      </li> 
+      
+      
+      
+      
+      
+      
+      
+      
+      
       <!-- 문서함설정 -->
-      <li>
+      <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-settings">
           <span class="sub-item">문서함설정</span>
           <span class="caret"></span>
@@ -155,7 +159,7 @@
             </li>
           </ul>
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </li>
@@ -185,8 +189,14 @@
           </ul>
         </div>
       </li> -->
+      <!-- 결재양식 -->
       <li>
-        <a href="/edms/edmsDocList">
+        <a th:href="@{/edms/edmsFormList}">
+          <span class="sub-item">결재양식</span>
+        </a>
+      </li>
+      <li>
+        <a th:href="@{/edms/edmsDocList}">
           <span class="sub-item">결재문서</span>
         </a>
       </li>
@@ -212,12 +222,12 @@
         </div>
       </li> -->
       <li>
-        <a href="/edms/edmsInsert">
+        <a th:href="@{/edms/edmsInsert}">
           <span class="sub-item">결재문서등록</span>
         </a>
       </li>
-      <!-- 결재양식 -->
-      <li>
+      
+      <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-form">
           <span class="sub-item">결재양식</span>
           <span class="caret"></span>
@@ -230,13 +240,8 @@
               </a>
             </li>
             <li>
-              <a href="/appr/apprLineList">
+              <a th:href="@{/appr/apprLineList}">
                 <span class="sub-item">결재라인등록</span>
-              </a>
-            </li>
-            <li>
-              <a href="/appr/apprList">
-                <span class="sub-item">결재자등록</span>
               </a>
             </li>
             <li>
@@ -246,7 +251,7 @@
             </li>
           </ul>
         </div>
-      </li>
+      </li> -->
 
     </ul>
   </div>
@@ -388,11 +393,14 @@
   </div>
 </li>
 
-<!-- 관리자 관리 -->
-<li class="nav-item" sec:authorize="isAuthenticated()">
+
+
+<li class="nav-item" sec:authorize="hasAnyAuthority('a1','a2')">
+<!-- 관리자 -->
+<li class="nav-item" sec:authorize="hasAnyAuthority('a1','a2')">
   <a data-bs-toggle="collapse" href="#submenu4">
     <i class="fas fa-user-check"></i>
-    <p>관리자 관리</p>
+    <p>관리자</p>
     <span class="caret"></span>
   </a>
   <div class="collapse" id="submenu4">

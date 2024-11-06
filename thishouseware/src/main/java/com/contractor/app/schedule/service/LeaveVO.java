@@ -4,16 +4,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 @Data
 public class LeaveVO {
 	Integer leaveNo; 	// 휴가 번호
 	String id; 			// 아이디
-	String leaveStartDt; // 휴가 시작일시
-	String leaveEndDt; // 휴가 종료일시
+	 //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
+	String start; // 휴가 시작일시
+	 //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd", timezone = "Asia/Seoul")
+	String end; // 휴가 종료일시
 	Integer leaveDays; // 휴가 일수
-	String leaveReason; // 휴가 사유
-	String leaveType; // 휴가 종류
+	String content; // 휴가 사유 = (leave_reason)
+	String title; // 휴가 종류 = (leave_type)
+	String color; // 휴가 색
 	/* n1 연차휴가
     n2 생리휴가
     n3 출산전후휴가

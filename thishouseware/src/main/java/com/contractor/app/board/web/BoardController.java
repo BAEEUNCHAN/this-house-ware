@@ -20,7 +20,6 @@ import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.employee.service.DepartmentVO;
 import com.contractor.app.employee.service.EmployeeService;
-import com.contractor.app.employee.service.EmployeeVO;
 import com.contractor.app.security.service.LoginUserVO;
 import com.contractor.app.util.EmpAuthUtil;
 
@@ -65,13 +64,14 @@ public class BoardController {
 			// 공지사항, 전체 게시판, 해당 본부 부서 게시판만 필터링
 			List<BoardsVO> filteredBoards = boards.stream()
 					.filter(board -> board.getBoardsType().equals("공지사항") || board.getBoardsType().equals("전체게시판")
-							|| (upperDepartmentNo.stream().anyMatch(dept -> dept.getDepartmentName().equals(board.getTitle()))))
+							|| (upperDepartmentNo.stream()
+									.anyMatch(dept -> dept.getDepartmentName().equals(board.getTitle()))))
 					.collect(Collectors.toList());
 
 			model.addAttribute("boards", filteredBoards);
 		} else if (positionCode.equals("a4") || positionCode.equals("a5")) { // 포지션 코드가 a4(팀장) 또는 a5(사원)일 경우
 			List<BoardsVO> boards = boardService.selectBoardMain(boardsVO);
-			
+
 			// 공지사항, 전체 게시판, 해당 부서 게시판만 필터링
 			List<BoardsVO> filteredBoards = boards.stream()
 					.filter(board -> board.getBoardsType().equals("공지사항") || board.getBoardsType().equals("전체게시판")
@@ -109,25 +109,43 @@ public class BoardController {
 		// 게시판 목록 조회 - title
 		List<BoardsVO> list = boardService.boardList(null);
 
+		// 로그인 사용자 정보 가져오기
+		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
+		int departmentNo = loginUserVO.getEmpVO().getDepartmentNo();
+		String positionCode = loginUserVO.getEmpVO().getPositionCode();
+		List<DepartmentVO> upperDepartmentNo = employeeService.selectUpperDepartmentNo(departmentNo);
+		DepartmentVO departments = employeeService.getDepartmentBydeptNo(departmentNo);
+
 		// 게시판 유형 조회 - boardsType
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
-		LoginUserVO loginUserVO = (LoginUserVO) authentication.getPrincipal();
-		String positionCode = loginUserVO.getEmpVO().getPositionCode();
 
-		// 로그인 한 계정의 포지션 코드를 체크한후 a1(사장) a2(관리자) 등급이 아니면
-		// boardsType 의 앞에서부터 1개의 값을 제거한다.
+		// 로그인 한 계정의 포지션 코드를 체크한후 a3(본부장) 등급이면
 		if (positionCode.equals("a3")) {
 			boardsType.remove(0);
-		}
+			// 전체 게시판, 해당 본부 부서 게시판만 필터링
+			List<BoardsVO> filteredBoards = list.stream().filter(board -> board.getBoardsType().equals("전체게시판")
+					|| (upperDepartmentNo.stream().anyMatch(dept -> dept.getDepartmentName().equals(board.getTitle()))))
+					.collect(Collectors.toList());
+
+			model.addAttribute("boards", filteredBoards);
+		} /*
+			 * else if (positionCode.equals("a4")) { boardsType.remove(0); // 전체 게시판, 해당 부서
+			 * 게시판만 필터링 List<BoardsVO> filteredBoards = list.stream().filter(board ->
+			 * board.getBoardsType().equals("전체게시판") ||
+			 * (departments.getDepartmentName().equals(board.getTitle()))).collect(
+			 * Collectors.toList());
+			 * 
+			 * model.addAttribute("boards", filteredBoards); }
+			 */
 
 		// 머리글 유형 조회 - postsType
 		List<CommonCodeVO> postsType = commonCodeService.selectCommonCode("0P");
-
-		// 로그인 한 계정의 포지션 코드를 체크한후 a1(사장) a2(관리자) a3(본부장) a4(팀장) 등급이 아니면
-		// postsType 의 앞에서부터 2개 의 값을 제거한다.
-		if (!positionCode.equals("a1") && !positionCode.equals("a2")) {
-			postsType.remove(0);
-			postsType.remove(0);
+ 
+		// 로그인 한 계정의 포지션 코드를 체크한후 a3(본부장)이면
+		if (positionCode.equals("a3")) {
+			// 전체 게시판, 해당 부서 게시판만 필터링
+			
+			
 		}
 
 		// 게시 기간여부
@@ -136,7 +154,7 @@ public class BoardController {
 		// 페이지에 전달
 		model.addAttribute("selectedBoardsNo", boardsNo);
 		model.addAttribute("boardsType", boardsType);
-		model.addAttribute("boards", list);
+		// model.addAttribute("boards", list);
 		model.addAttribute("postsType", postsType);
 		model.addAttribute("postSetting", postSetting);
 

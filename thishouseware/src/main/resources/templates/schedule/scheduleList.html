@@ -146,7 +146,11 @@
 	</div>
 
 	<script th:inline="javascript">
+	
+	
+	
   	var id = [[${#authentication.principal.empVO.id}]];
+  	var name = [[${#authentication.principal.empVO.name}]];
   	var positionCode = [[${#authentication.principal.empVO.positionCode}]];
   	var departmentNo = [[${#authentication.principal.empVO.departmentNo}]];
   	function scheduleId() {

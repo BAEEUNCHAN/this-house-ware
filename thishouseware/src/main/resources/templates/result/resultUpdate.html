@@ -66,12 +66,12 @@
 									<p style="font-weight: bold; font-size: 16px;">
 										<i class="fas fa-check-square"> 문의내용</i>
 									</p>
-									<label for="customerName">[[${complain.complainContent}]]</label>
+									<label for="customerName" th:utext="${complain.complainContent}"></label>
 									<br /> <br />
 									<p style="font-weight: bold; font-size: 16px;">
 										<i class="fas fa-check-square"> 요구사항</i>
 									</p>
-									<label for="phone">[[${complain.complainRequest}]]</label>
+									<label for="phone" th:utext="${complain.complainRequest}"></label>
 								</div>
 							</div>
 
@@ -138,7 +138,7 @@
 													</p>
 												</div>
 												<div class="timeline-body">
-													<p>[[${info.replyContent}]]</p>
+												<label for="replyContent" th:utext="${info.replyContent}"></label>
 												</div>
 												<br /> <br />
 											</div>
@@ -166,14 +166,14 @@
 											<div class="col-md-12 col-lg-12">
 												<i class="fas fa-check-square"> 해결방법 </i>
 												<textarea class="form-control" name="resultSolution"
-													id="resultSolution" rows="3" maxlength="300"
+													id="resultSolution" rows="6" maxlength="300"
 													style="background-color: lightyellow;"
-													th:text="${result.resultSolution}"></textarea>
+													th:utext="${result.resultSolution}"></textarea>
 												<br /> <i class="fas fa-check-square"> 피드백내용 </i>
 												<textarea class="form-control" name="resultFeedback"
-													id="resultFeedback" rows="3" maxlength="300"
+													id="resultFeedback" rows="6" maxlength="300"
 													style="background-color: lightyellow;"
-													th:text="${result.resultFeedback}"></textarea>
+													th:utext="${result.resultFeedback}"></textarea>
 												<br /> <input type="hidden" name="complainNo"
 													th:value="${complain.complainNo}">
 
@@ -203,8 +203,55 @@
 
 	<script>
 		$(updateForm).on('submit', resultUpdateHandler)
+		
+		document.addEventListener('DOMContentLoaded', function() {
+			// `textarea` 요소 가져오기
+			const resultSolution = document.getElementById("resultSolution");
+			const resultFeedback = document.getElementById("resultFeedback");
+
+			// 서버에서 가져온 `<br/>` 태그를 줄 바꿈 문자로 변환
+			if (resultSolution) {
+				resultSolution.value = resultSolution.value.replace(
+						/<br\s*\/?>/gi, '\n');
+			}
+			if (resultFeedback) {
+				resultFeedback.value = resultFeedback.value.replace(
+						/<br\s*\/?>/gi, '\n');
+			}
+		});
 		function resultUpdateHandler(event) {
 			event.preventDefault();
+			
+			let resultCost = $('form [name="resultCost"]'); // 공백은 하위요소 찾는 것.
+			if (resultCost.val() == '') {
+				alert('소모비용을 입력해주세요.');
+				resultCost.focus();
+				return;
+			}
+			let resultPeople = $('form [name="resultPeople"]'); // 공백은 하위요소 찾는 것.
+			if (resultPeople.val() == '') {
+				alert('투입인원을 입력해주세요.');
+				resultPeople.focus();
+				return;
+			}
+			let resultSolution = $('form [name="resultSolution"]'); // 공백은 하위요소 찾는 것.
+			if (resultSolution.val() == '') {
+				alert('해결방법을 입력해주세요.');
+				resultSolution.focus();
+				return;
+			}
+			let resultFeedback = $('form [name="resultFeedback"]'); // 공백은 하위요소 찾는 것.
+			if (resultFeedback.val() == '') {
+				alert('피드백내용을 입력해주세요.');
+				resultFeedback.focus();
+				return;
+			}
+			
+			$('#resultSolution').val(
+					$('#resultSolution').val().replace(/\n/g, '<br/>'));
+			$('#resultFeedback').val(
+					$('#resultFeedback').val().replace(/\n/g, '<br/>'));
+			alert('게시글이 등록되었습니다.');
 			updateForm.submit();
 		}
 	</script>

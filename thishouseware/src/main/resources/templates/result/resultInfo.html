@@ -25,59 +25,53 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">불편/장애사항 단건조회</div>
+									<div class="card-title">불편/장애사항 단건조회
+									<th:block th:each="info : ${results}">
+												<!-- <th:block th:if="${info.resultCost != null}"> -->
+													<span th:if="${complain.progress == 3}"
+														class="badge badge-primary"> 상황완료</span>
+													<span th:if="${complain.progress == 4}"
+														class="badge badge-count"> 보고완료</span>
+												<!-- </th:block> -->
+											</th:block>
+									
+									
+									</div>
 								</div>
 								<div class="card-body">
-									<div class="row">
+									<div class="row" style="padding:30px;">
 										<!-- 왼쪽화면 -->
 										<div class="col-md-6 col-lg-30">
 
-											<label for="companyName">회사명 :
+											<label for="companyName"><i class="fas fa-caret-right">
+											회사명 : </i> 
 												[[${complain.companyName}]]</label> <br /> <br /> <label
-												for="customerName">고객명 :
+												for="customerName"><i class="fas fa-caret-right">
+											고객명 : </i>
 												[[${complain.customerName}]]</label> <br /> <br /> <label
-												for="phone">연락처 : [[${complain.phone}]]</label> <br /> <br />
+												for="phone"><i class="fas fa-caret-right">
+											연락처 : </i> [[${complain.phone}]]</label> <br /> <br />
 
 										</div>
 										<!-- 왼쪽화면 끝-->
 										<!-- 오른쪽화면 -->
 										<div class="col-md-6 col-lg-30">
-											<label for="uploadDt">문제발생일 :
+											<label for="uploadDt"><i class="fas fa-caret-right">
+											문제발생일 : </i>
 												[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]] <br />
-												<br /> <span>문의구분 : [[${complain.complainType == 1 ?
-													'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] /
-													처리상황 : </span> <br />
+												<br /> <span><i class="fas fa-caret-right">
+											문의구분 : </i> [[${complain.complainType == 1 ?
+													'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] </span> <br />
 											</label>
-											<th:block th:each="info : ${results}">
-												<th:block th:if="${info.resultCost != null}">
-													<span th:if="${complain.progress == 3}"
-														class="badge badge-primary"> 상황완료</span>
-													<span th:if="${complain.progress == 4}"
-														class="badge badge-count"> 보고완료</span>
-												</th:block>
-											</th:block>
+											
 
 
-											<th:block
-												th:if="${results == null } or ${results.size() == 0}">
-												<select class="form-select" id="progress" name="progress"
-													aria-label="Progress Dropdown" style="width: 100px; display: inline-block;">
-													<option th:value="0"
-														th:selected="${complain.progress == 0}">대기</option>
-													<option th:value="1"
-														th:selected="${complain.progress == 1}">진행</option>
-													<option th:value="2"
-														th:selected="${complain.progress == 2}">접수</option>
-													<option th:value="3"
-														th:selected="${complain.progress == 3}">상황완료</option>
-													<option th:value="4"
-														th:selected="${complain.progress == 4}">보고완료</option>
-												</select>
-											</th:block>
+											
 
 
 
-											<br /> <br /> <label for="phone">작성일 :
+											<br /> <br /> <label for="phone"><i class="fas fa-caret-right">
+											작성일 : </i>
 												[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
 											<br />
 										</div>
@@ -90,12 +84,13 @@
 										<p style="font-weight: bold; font-size: 16px;">
 											<i class="fas fa-check-square"> 문의내용</i>
 										</p>
-										<label for="customerName">[[${complain.complainContent}]]</label>
+										<label for="customerName" th:utext="${complain.complainContent}"></label>
+										
 										<br /> <br />
 										<p style="font-weight: bold; font-size: 16px;">
 											<i class="fas fa-check-square"> 요구사항</i>
 										</p>
-										<label for="phone">[[${complain.complainRequest}]]</label>
+										<label for="customerName" th:utext="${complain.complainRequest}"></label>
 									</div>
 								</div>
 
@@ -118,8 +113,8 @@
 												<label for="resultCost"><i
 													class="fas fa-check-square"> 소모비용 : </i></label>
 												<input type="number" name="resultCost" maxlength="10"
-													aria-label="Username" id="resultCost"
-													style="width: 150px; height: 33px;"
+													aria-label="Username" id="resultCost" class="form-control form-control-sm"
+													style="width: 170px; display: inline-block;"
 													aria-describedby="basic-addon1">
 												<br />
 												<br />
@@ -127,7 +122,8 @@
 													class="fas fa-check-square"> 투입인원 : </i></label>
 												<input type="number" name="resultPeople" maxlength="7"
 													aria-label="Username" id="resultPeople"
-													style="width: 150px; height: 33px;"
+													class="form-control form-control-sm"
+													style="width: 170px; display: inline-block;"
 													aria-describedby="basic-addon1">
 												<br />
 											</th:block>
@@ -150,13 +146,17 @@
 												<label for="receiveDt"><i
 													class="fas fa-calendar-alt"> 문제접수일시 : </i></label>
 												<input type="date" name="receiveDt" id="receiveDt"
-													max="2077-10-10" min="2020-06-05" value="2020-10-15">
+													max="2077-10-10" min="2020-06-05" value="2020-10-15"
+													class="form-control form-control-sm"
+													style="width: 170px; display: inline-block;">
 												<br />
 												<br />
 												<label for="completeDt"><i
 													class="fas fa-calendar-check"> 문제해결일시 : </i></label>
 												<input type="date" name="completeDt" id="completeDt"
-													max="2077-10-10" min="2020-06-05" value="2020-10-15">
+													max="2077-10-10" min="2020-06-05" value="2020-10-15"
+													class="form-control form-control-sm"
+													style="width: 170px; display: inline-block;">
 												<br />
 											</th:block>
 										</div>
@@ -190,7 +190,8 @@
 														</p>
 													</div>
 													<div class="timeline-body">
-														<p>[[${info.replyContent}]]</p>
+													
+															<label for="replyContent" th:utext="${info.replyContent}"></label>
 													</div>
 													<br /> <br />
 												</div>
@@ -220,33 +221,49 @@
 														<th:block th:if="${info.resultSolution != null}">
 															<label for="resultSolution"><i
 																class="fas fa-check-square" style="color: blue;">
-																	해결방법 </i></label>
-															<p>[[${info.resultSolution}]]</p>
-															<br />
+																	해결방법 </i></label><br/>
+															<label for="resultSolution" th:utext="${info.resultSolution}" style="padding:20px;"></label>
+															<br /><br />
 															<label for="resultFeedback"> <i
 																class="fas fa-check-square" style="color: blue;">
-																	피드백내용 </i></label>
-															<p>[[${info.resultFeedback}]]</p>
+																	피드백내용 </i></label><br/>
+															<label for="resultFeedback" th:utext="${info.resultFeedback}" style="padding:20px;"></label>
 														</th:block>
 													</th:block>
+													
 													<th:block
 														th:if="${results == null } or ${results.size() == 0}">
 														<i class="fas fa-check-square"> 해결방법 </i>
 														<textarea class="form-control" name="resultSolution"
-															id="resultSolution" rows="3" maxlength="300"
+															id="resultSolution" rows="6" maxlength="300"
 															style="background-color: lightyellow;"></textarea>
 														<br />
 														<i class="fas fa-check-square"> 피드백내용 </i>
 														<textarea class="form-control" name="resultFeedback"
-															id="resultFeedback" rows="3" maxlength="300"
+															id="resultFeedback" rows="6" maxlength="300"
 															style="background-color: lightyellow;"></textarea>
 														<br />
 													</th:block>
 													<input type="hidden" name="complainNo"
 														th:value="${complain.complainNo}">
+														<th:block
+														th:if="${results == null } or ${results.size() == 0}">
+<div style="text-align: left;">
+    <p style="display: inline-block; margin-right: 10px; font-weight:bold;"><i class="fas fa-check-square"> 처리상황 : </i></p>
+    <select class="form-select" id="progress" name="progress"
+        aria-label="Progress Dropdown" style="width: 100px; display: inline-block;">
+        <option th:value="0" th:selected="${complain.progress == 0}">대기</option>
+        <option th:value="1" th:selected="${complain.progress == 1}">진행</option>
+        <option th:value="2" th:selected="${complain.progress == 2}">접수</option>
+        <option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
+        <option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
+    </select>
+</div>
 
+
+											</th:block>
 												</div>
-											</div>
+											</div><br/>
 											<div class="text-center">
 												<th:block
 													th:if="${results == null } or ${results.size() == 0}">
@@ -333,6 +350,9 @@
 				return;
 			}
 
+			$('#resultSolution').val($('#resultSolution').val().replace(/\n/g, '<br/>'));
+		    $('#resultFeedback').val($('#resultFeedback').val().replace(/\n/g, '<br/>'));
+		    
 			alert('게시글이 등록되었습니다.');
 			updateForm.submit();
 		}

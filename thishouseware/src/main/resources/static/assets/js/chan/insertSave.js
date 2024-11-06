@@ -25,7 +25,7 @@ var SweetAlert2Demo = (function() {
 					// AJAX 요청을 통해 임시저장 기능 호출
 					$.ajax({
 						type: "POST",
-						url: "/edms/edmsInsert", // 서버의 임시 저장 URL
+						url: "/edms/insertSaveDoc", // 서버의 임시 저장 URL
 						data: {
 							// 필요한 데이터 여기에 추가
 							id: $("#id").val(),

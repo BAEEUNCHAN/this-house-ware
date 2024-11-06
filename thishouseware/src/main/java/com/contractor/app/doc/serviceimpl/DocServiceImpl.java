@@ -37,7 +37,7 @@ public class DocServiceImpl implements DocService {
 	} // 문서함 문서 전체조회
 
 	@Override
-	public List<DocJoinVO> docApprovalStatusList(String approvalStatus, String userId) {
+	public List<DocJoinVO> getDocumentsByStatusAndUserId(String approvalStatus, String userId) {
 	    List<EdmsDocVO> edmsDocList = docMapper.getDocumentsByStatusAndUserId(approvalStatus, userId);
 	    List<DocJoinVO> docJoinList = new ArrayList<>();
 
@@ -63,7 +63,7 @@ public class DocServiceImpl implements DocService {
 
 	    return docJoinList;
 	} // 문서결과별 문서 조회
-
+	
 	@Override
 	public List<DocJoinVO> DocDeptList(int departmentNo) {
 		List<DocJoinVO> list = docMapper.selectDocDeptList(departmentNo);

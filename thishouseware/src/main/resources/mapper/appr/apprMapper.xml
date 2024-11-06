@@ -202,18 +202,17 @@
 	</delete>
 
 	<!-- 결재자 수정 -->
-	<update id="updateAppr">
-		UPDATE approver
-		SET approver_no
-		, approver
-		, approval_order
-		, approval_status
-		, approval_dt
-		, rejected_reason
-		, edms_doc_no
-		, approval_line_no
-		, approval_type
-		WHERE approval_line_no = #{approvalLineNo}
+	<update id="updateAppr" parameterType="ApprVO">
+	    UPDATE approver
+	    SET approver = #{approver},
+	        approval_order = #{approvalOrder},
+	        approval_status = #{approvalStatus},
+	        approval_dt = #{approvalDt},
+	        rejected_reason = #{rejectedReason},
+	        edms_doc_no = #{edmsDocNo},
+	        approval_line_no = #{approvalLineNo},
+	        approval_type = #{approvalType}
+	    WHERE approver_no = #{approverNo} 
 	</update>
 	
 	<!-- 결재자 순서 변경 -->

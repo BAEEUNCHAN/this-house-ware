@@ -1,6 +1,5 @@
 package com.contractor.app.doc.wep;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -63,6 +62,8 @@ public class DocController {
 
 		// 결재 상태별 문서 조회
 		List<DocJoinVO> list = docService.getDocumentsByStatusAndUserId(approvalStatus, userId);
+		
+		System.out.println(list);
 
 		model.addAttribute("docBoxs", list);
 	}

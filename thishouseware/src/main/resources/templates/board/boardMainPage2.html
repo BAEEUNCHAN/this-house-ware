@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<style>
+/* 게시판 제목과 게시글 목록 사이 간격 추가 */
+.card-title {
+	margin-bottom: 15px;
+}
+
+/* 게시글 목록 앞 점 제거 */
+.post-list {
+	list-style-type: none;
+	padding-left: 0;
+}
+
+/* 게시글 제목 스타일 */
+.post-title {
+	display: inline-block;
+	width: 200px;
+	text-align: left;
+	margin-left: 10px; /* 제목과 머리글 사이 간격 추가 */
+	font-weight: bold; /* 제목을 더 두껍게 */
+}
+
+/* 머리글 스타일 */
+.post-header {
+	font-size: 14px; /* 머리글 크기 조정 */
+	color: #6c757d; /* 머리글 색상 변경 */
+	margin-right: 5px; /* 머리글과 제목 사이 간격 추가 */
+}
+
+/* 카드 내부 간격 추가 */
+.card {
+	padding: 10px; /* 카드 내부 여백 */
+}
+
+/* 카드 사이 간격 추가 */
+.mb-4 {
+	margin-bottom: 30px; /* 카드 간격 조정 */
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="page-inner">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">게시판</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
+				</ul>
+			</div>
+			<div class="page-inner">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+								<div class="card-title">
+									게시판 <a href="/board/postInsert" class="float-end"><button
+											class="btn btn-primary">글쓰기</button></a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row text-center">
+								<div class="board-container">
+									<div class="row">
+										<!-- 게시판 목록 출력 -->
+										<!-- 전체 게시판을 출력할 조건: employeeVO.positionCode가 a1 또는 a2인 경우 -->
+										<div
+											th:if="${employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2'}">
+											<div th:each="board : ${boards}" class="col-md-12 mb-4">
+												<div class="card">
+													<div class="board-header">
+														<a th:text="${board.boardsNo}" class="post-header"
+															th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+														<h4 th:text="${board.title}" class="card-title">게시판
+															이름</h4>
+													</div>
+													<ul class="post-list">
+														<li th:each="post : ${board.posts}" class="post-item"
+															id="posts"><a th:text="${post.postsNo}"
+															class="post-header"
+															th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+															<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
+															<a th:text="${post.title}" class="post-title">게시글 제목</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										
+										<!-- 팀장, 사원 계정 : boardsType이 o1 또는 o2인 경우 및 departmentName이 board.title과 일치하는 경우 -->
+										<div
+											th:if="${employeeVO.positionCode == 'a4' or employeeVO.positionCode == 'a5'}">
+											<div th:each="board : ${boards}"
+												th:if="${board.boardsType == '공지사항' or board.boardsType == '전체게시판' or employeeVO.departmentName == board.title}"
+												class="col-md-12 mb-4">
+												<div class="card">
+													<div class="board-header">
+														<a th:text="${board.boardsNo}" class="post-header"
+															th:style="${board.boardsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+														<h4 th:text="${board.title}" class="card-title">게시판
+															이름</h4>
+													</div>
+													<ul class="post-list">
+														<li th:each="post : ${board.posts}" class="post-item"
+															id="posts"><a th:text="${post.postsNo}"
+															class="post-header"
+															th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
+															<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
+															<a th:text="${post.title}" class="post-title">게시글 제목</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+										<!-- /게시판 목록 -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		// 게시글 클릭 시 게시글 단건조회 페이지 이동
+		$('#posts.post-item').on('click', function(event) {
+			let liTag = event.currentTarget;
+			let postsNo = $(liTag).children().eq(0).text();
+			console.log(postsNo);
+			let url = '/board/postInfo?postsNo=' + postsNo;
+			location.href = url;
+		});
+
+		// 게시판 클릭 시 해당 게시판 이동
+		$('div.board-header').on('click', function(event) {
+			let hTag = event.currentTarget;
+			let boardsNo = $(hTag).children().eq(0).text();
+			let url = '/board/postList?boardsNo=' + boardsNo;
+			location.href = url;
+		});
+	</script>
+</body>
+</html>

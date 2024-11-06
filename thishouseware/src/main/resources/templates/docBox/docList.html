@@ -76,12 +76,13 @@
 </div>
 
 <script th:inline="javascript">
+	let approvalStatus = [[${param.approvalStatus}]]
     // 문서함에서 문서 클릭 시 문서함 목록으로 이동하기
     $('.docBox > tr').on('click', function(event) {
         let trTag = event.currentTarget;
         let edno = $(trTag).children().eq(0).text();
         let id = /*[[${#authentication.principal.empVO.id}]]*/ ''; // 로그인한 사용자 id
-        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocList=true&id=${id}`;
+        let url = `/edms/edmsDocInfo?edmsDocNo=${edno}&fromDocList=true&id=${id}&approvalStatus=${approvalStatus}`;
         location.href = url;
     });
 

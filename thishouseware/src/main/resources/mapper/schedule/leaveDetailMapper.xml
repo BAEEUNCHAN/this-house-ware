@@ -14,7 +14,7 @@
 	</select>
 	
 	<!-- 휴가 상세 단건 조회 -->
-	<select id="getLeaveDetail" resultType="LeaveDetailVO">
+	<select id="getLeaveDetail" resultType="LeaveDetailVO" parameterType="String">
 		SELECT leave_total_days
 		       , leave_used_days
 		       , leave_remain_days

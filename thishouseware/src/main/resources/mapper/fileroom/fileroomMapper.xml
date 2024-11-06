@@ -200,7 +200,7 @@
 		,'admin'
 		,#{fileRoomsNo}
 		,'q2'
-		,#{folderPath}
+		, '/'
 		,#{id})
 	</insert>
 

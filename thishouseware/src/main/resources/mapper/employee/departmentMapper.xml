@@ -19,4 +19,13 @@
 		from department
 		where department_no  = #{departmentNo}
 	</select>
+	
+	<!-- 수민 : 상위 부서 번호 가져오기 -->
+	<select id="selectUpperDepartmentNo" resultType="DepartmentVO" parameterType="int" >
+		SELECT DEPARTMENT_NAME
+			  ,DEPARTMENT_NO
+              ,UPPER_DEPARTMENT_NO
+	    FROM   department
+	    WHERE  UPPER_DEPARTMENT_NO = #{upperDepartmentNo}
+	</select>
 </mapper>

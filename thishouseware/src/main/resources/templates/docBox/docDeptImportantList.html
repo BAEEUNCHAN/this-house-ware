@@ -85,6 +85,7 @@
 </div>
 
 <script th:inline="javascript">
+	let approvalStatus = [[${param.approvalStatus}]]
     // 문서함에서 문서 클릭 시 부서문서함 목록으로 이동하기
     $('.docBox > tr').on('click', function(event) {
         let trTag = event.currentTarget;

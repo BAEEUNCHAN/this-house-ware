@@ -20,6 +20,8 @@ public class BoardsVO {
 	
 	List<PostsVO> posts;
 	
+	private Integer departmentNo; // 부서 번호 추가
+	
 	@Override
 	public boolean equals(Object obj) {
 		return this.boardsType.equals(((BoardsVO)obj).boardsType);

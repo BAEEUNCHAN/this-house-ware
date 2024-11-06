@@ -21,26 +21,30 @@
     </select>
     
     <!-- 문서결과별 문서 조회 -->
-    <select id="getDocumentsByStatusAndUserId" resultType="EdmsDocVO">
-        SELECT 
-            e.department_no
-            , d.edms_doc_no
-            , d.title
-            , e.id
-            , d.submit_dt
-            , d.approval_status
-            , d.important
-            , d.approval_dt
-        FROM 
-            edms_doc d
-        JOIN 
-            employees e ON d.id = e.id
-        WHERE 
-            d.approval_status = #{approvalStatus}
-            AND e.id = #{userId}
-        ORDER BY 
-            d.submit_dt DESC
-    </select>
+    <select id="getDocumentsByStatusAndUserId" parameterType="map" resultType="EdmsDocVO">
+	    SELECT 
+	        e.department_no
+	        , d.edms_doc_no
+	        , d.title
+	        , e.id
+	        , d.submit_dt
+	        , CASE 
+	            WHEN d.current_approver_id = #{userId} THEN '결재수신' 
+	            ELSE d.approval_status 
+	          END AS approval_status
+	        , d.important
+	        , d.approval_dt
+	    FROM 
+	        edms_doc d
+	    JOIN 
+	        employees e ON d.id = e.id
+	    WHERE 
+	        d.approval_status = #{approvalStatus}
+	        AND e.id = #{userId}
+	    ORDER BY 
+	        d.submit_dt DESC
+	</select>
+
     
     
    		<!-- 부서문서 -->

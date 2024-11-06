@@ -90,4 +90,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeVO> getEmpDept(int departmentNo) {
 		return employeeMapper.selectEmpByDept(departmentNo);
 	} // 은찬 추가 결재자 리스트에 부서별 직원 조회
+
+	// 수민 : 상위 부서 번호 가져오기
+	@Override
+	public List<DepartmentVO> selectUpperDepartmentNo(int upperDepartmentNo) {
+		return departmentMapper.selectUpperDepartmentNo(upperDepartmentNo);
+	} 
 }

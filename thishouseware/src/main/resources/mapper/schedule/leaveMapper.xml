@@ -28,17 +28,19 @@
 	
 	<!-- 휴가 부서별 조회 -->
 	<select id="leaveListAllWhereDepartmentNo" resultType="map" parameterType="int">
-		SELECT leave_no AS "leaveNo"
-		       , id AS "id"
-		       , TO_CHAR(leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
-		       , TO_CHAR(leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
-		       , id || ': ' || leave_type AS "title"
-		       , leave_reason AS "content" 
-		       , color AS "color" 
-		FROM leave
+		SELECT l.leave_no AS "leaveNo"
+		       , l.id AS "id"
+		       , TO_CHAR(l.leave_start_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "start"
+		       , TO_CHAR(l.leave_end_dt + 9/24, 'yyyy-MM-dd HH24MISS') AS "end"
+		       , l.id || ': ' || leave_type AS "title"
+		       , l.leave_reason AS "content" 
+		       , l.color AS "color" 
+               , e.department_no
+		FROM   leave l JOIN employees e
+        ON     l.id = e.id
 		<where>
 		<if test="departmentNo != null and departmentNo != ''">
-		department_no = #{departmentNo}
+		e.department_no = #{departmentNo}
 		</if>
 		</where>
 	</select>

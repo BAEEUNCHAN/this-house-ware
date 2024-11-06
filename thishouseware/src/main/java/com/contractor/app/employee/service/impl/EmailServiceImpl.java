@@ -21,13 +21,13 @@ public class EmailServiceImpl {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
     @Async
-    public void sendEmail(String email,String emailTitle, String content){
+    public void sendEmail(String email,String emailTitle,String contentTitle ,String content){
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(email); // 메일 수신자
             mimeMessageHelper.setSubject(emailTitle); // 메일 제목
-            mimeMessageHelper.setText(setContext(content), true); // 메일 본문 내용, HTML 여부
+            mimeMessageHelper.setText(setContext(contentTitle,content), true); // 메일 본문 내용, HTML 여부
             javaMailSender.send(mimeMessage);
 
             log.info("Succeeded to send Email");
@@ -38,8 +38,9 @@ public class EmailServiceImpl {
     }
 
     //thymeleaf를 통한 html을 스트링형으로 만듬
-    public String setContext(String content) {
+    public String setContext(String contentTitle,String content) {
         Context context = new Context();
+        context.setVariable("contentTitle", contentTitle);
         context.setVariable("content", content);
         return templateEngine.process("employee/sendEmail", context);
     }

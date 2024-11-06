@@ -179,5 +179,26 @@ public class ApprServiceImpl implements ApprService {
 	public void updateApprovalOrder(String approverNo, Integer approvalOrder) {
 		apprMapper.updateApprovalOrder(approverNo, approvalOrder);
 	}
+	
+	// 결재선의 결재자 삭제
+	@Override
+	public boolean apprRemove(int approvalLineNo, String id) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("approvalLineNo", approvalLineNo);
+		map.put("id", id);		
+		return apprMapper.delApprFromApprLine(map) == 1;
+	}
+	
+	// 즐겨찾기 번호 가져오기
+	@Override
+	public int getFavoriteNo(ApprFavoriteVO favorite) {
+		return apprMapper.selectFavoriteNo(favorite);
+	}
+	
+	// 결재선 즐겨찾기 업데이트
+	@Override
+	public boolean apprLineFavorUpdate(ApprLineVO apprLineVO) {
+		return apprMapper.updateFavorApprLine(apprLineVO) == 1;
+	}
 
 }// 끝

@@ -5,12 +5,21 @@
 	layout:fragment="Content">
   <input type="hidden" id="id" th:value="${employee.id}" placeholder="연락처">
   <div class="page-inner">
+		<div class="page-header">
+      <h3 class="fw-bold mb-3">내정보 수정</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
+        </a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">내정보 수정</a></li>
+      </ul>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <form class="card" id="modifyEmployeeForm">
           
           <div class="card-header">
-            <div class="card-title">직원 수정</div>
+            <div class="card-title">내정보 수정</div>
           </div>
           <div class="card-body">
             <div class="row">

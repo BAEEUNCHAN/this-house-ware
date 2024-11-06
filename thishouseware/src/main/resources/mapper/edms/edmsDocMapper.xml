@@ -168,6 +168,23 @@
         WHERE d.approval_status = #{approvalStatus}
           AND d.id = #{userId}
         ORDER BY d.submit_dt DESC
+    
+    <!-- 결재 수신 문서조회 -->
+    <select id="selectDocumentsByUserId" parameterType="map" resultType="EdmsDocVO">
+        SELECT edms_doc_no
+            , id
+            , title
+            , content
+            , file_name
+            , submit_dt
+            , approval_dt            
+            , edms_form_no
+            , share_status
+            , share_folder_no
+        FROM edms_doc
+        WHERE approval_status = #{userId}
+          AND id = #{userId}
+        ORDER BY submit_dt DESC
     </select>
 
     <!-- 다음 결재자 조회 -->

@@ -3,69 +3,77 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+
   <div class="page-inner">
-    <div class="row">
-      <div class="col-md-12">
-        <form class="card">
-          <div class="card-header">
-            <div class="card-title">내 정보</div>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-4">
-                <div class="card card-post card-round">
-                  <img class="card-img-top" 
-                  	th:src="@{/upload/}+${employee.imageLink}" 
-                  	alt="사원 이미지">
-                  <div class="card-body">
-                    <div class="d-flex">
-                      <div class="info-post ms-2">
-                        <p class="username">[[${employee.id}]]</p>
-                        <p class="date text-muted">[[${employee.name}]]</p>
-                      </div>
-                    </div>
-                    <div class="separator-solid"></div>
-                    <h3 class="card-title">
-                      [[${employee.departmentName}]]
-                    </h3>
-                    <p class="card-text">
-                      [[${employee.positionName}]]  <br>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
+    <div class="page-header">
+      <h3 class="fw-bold mb-3">해당 페이지 제목</h3>
+      <ul class="breadcrumbs mb-3">
+        <li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
+        </a></li>
+        <li class="separator"><i class="icon-arrow-right"></i></li>
+        <li class="nav-item"><a href="#">내정보</a></li>
+      </ul>
+    </div>
+    <div class="col-md-12">
+      <form class="card">
+        <div class="card-header">
+          <div class="card-title">내 정보</div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card card-post card-round">
+                <img class="card-img-top" 
+                  th:src="@{/upload/}+${employee.imageLink}" 
+                  alt="사원 이미지">
                 <div class="card-body">
-                  <table class="table table-typo">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <p>이메일</p>
-                        </td>
-                        <td><span class="h5">[[${employee.email}]]</span></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>전화번호</p>
-                        </td>
-                        <td><span class="h5">[[${employee.phone}]]</span></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <p>입사일</p>
-                        </td>
-                        <td><span class="h5"> [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="d-flex">
+                    <div class="info-post ms-2">
+                      <p class="username">[[${employee.id}]]</p>
+                      <p class="date text-muted">[[${employee.name}]]</p>
+                    </div>
+                  </div>
+                  <div class="separator-solid"></div>
+                  <h3 class="card-title">
+                    [[${employee.departmentName}]]
+                  </h3>
+                  <p class="card-text">
+                    [[${employee.positionName}]]  <br>
+                  </p>
                 </div>
               </div>
             </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <table class="table table-typo">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <p>이메일</p>
+                      </td>
+                      <td><span class="h5">[[${employee.email}]]</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>전화번호</p>
+                      </td>
+                      <td><span class="h5">[[${employee.phone}]]</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>입사일</p>
+                      </td>
+                      <td><span class="h5"> [[${#dates.format(employee.hireDt, 'yyyy-MM-dd')}]]</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-          <div class="card-action">
-            <a th:href="@{/employee/modify/{id}(id=${employee.id})}" class="btn btn-success">수정하기</a>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div class="card-action">
+          <a th:href="@{/employee/modify/{id}(id=${employee.id})}" class="btn btn-success">수정하기</a>
+        </div>
+      </form>
     </div>
-  </div>
+</div>

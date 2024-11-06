@@ -15,76 +15,92 @@
 	</style>
 </head>
 <body>
-	<div class="row">
-	  <div class="col-md-12">
-	    <form class="card">
-	      <div class="card-header">
-	        <div class="card-title">직원 추가</div>
-	      </div>
-	      <div class="card-body">
-	        <div class="row">
-	          <div class="col-md-8">
-	            <div class="form-group">
-	              <label for="email">이메일</label>
-	              <input type="email" class="form-control" id="email" name="email" placeholder="이메일" oninput = "checkEmail()">
-	              <span class="okEmail">사용가능한 이메일 입니다.</span>
-	              <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
-	            </div>
-	            <!-- inline -->
-	            <div class="form-group">
-	              <label for="name" class="col-md-3 col-form-label">이름</label>
-	              <input type="text" class="form-control input-full" id="name" name="name" placeholder="이름입력">
-	            </div>                        
-	            <div class="form-group">
-	              <label for="password">제공 비밀번호</label>
-	              <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" autoComplete="off" >
-	            </div>
-	            <div class="form-group">
-	              <label for="phone" class="col-md-3 col-form-label">연락처</label>
-	              <input type="text" class="form-control input-full" id="phone" placeholder="연락처">
-	            </div>  
-	            <div class="form-group">
-	              <label for="exampleFormControlSelect1">직급</label>
-	              <select class="form-select" id="positionCode" name="positionCode">
-	                <option value="a1">사장</option>
-	                <option value="a2">관리자</option>
-	                <option value="a3">본부장</option>
-	                <option value="a4">팀장</option>
-	                <option value="a5">사원</option>
-	                <option value="a6" selected="selected">인턴</option>
-	              </select>
-	            </div>
-	            <div class="form-group">
-	              <label for="exampleFormControlSelect1">부서</label>
-	              <select class="form-select" id="departmentNo" name="departmentNo">
-	                <th:block th:each="info : ${departments}">
-	                	<option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
-	                </th:block> 
-	              </select>
-	            </div>
-	            <div class="form-group">
-	              <label for="exampleFormControlSelect1">입사일</label>
-	              <input type="date"
-	                id="hireDt"
-									name="hireDt"
-	                max="2050-01-01"
-	                min="2000-01-01"
-	                value="2025-01-01">
-	            </div>
-	            <div class="form-group">
-	              <label for="exampleFormControlFile1">사진입력</label>
-	              <input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
-	            </div>
-	          </div>
-	        </div>
-	      </div>
-	      <div class="card-action">
-	        <button type="button" id="addEmployee" class="btn btn-success">추가하기</button>
-	        <input type="reset" class="btn btn-danger">초기화하기</button>
-	      </div>
-	    </form>
-	  </div>
+<div class="container">
+	<div class="page-inner">
+		<div class="page-header">
+			<h3 class="fw-bold mb-3">직원 추가</h3>
+			<ul class="breadcrumbs mb-3">
+				<li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
+				</a></li>
+				<li class="separator"><i class="icon-arrow-right"></i></li>
+				<li class="nav-item"><a href="#">관리자</a></li>
+				<li class="separator"><i class="icon-arrow-right"></i></li>
+				<li class="nav-item"><a href="#">직원 추가</a></li>
+			</ul>
+		</div>
+		<div class="page-inner">
+			<div class="row">
+				<form class="card">
+					<div class="card-header">
+						<div class="card-title">직원 추가</div>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label for="email">이메일</label>
+									<input type="email" class="form-control" id="email" name="email" placeholder="이메일" oninput = "checkEmail()">
+									<span class="okEmail">사용가능한 이메일 입니다.</span>
+									<span class="noEmail">사용할 수 없는 이메일 입니다.</span>
+								</div>
+								<!-- inline -->
+								<div class="form-group">
+									<label for="name" class="col-md-3 col-form-label">이름</label>
+									<input type="text" class="form-control input-full" id="name" name="name" placeholder="이름입력">
+								</div>                        
+								<div class="form-group">
+									<label for="password">제공 비밀번호</label>
+									<input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" autoComplete="off" >
+								</div>
+								<div class="form-group">
+									<label for="phone" class="col-md-3 col-form-label">연락처</label>
+									<input type="text" class="form-control input-full" id="phone" placeholder="연락처">
+								</div>  
+								<div class="form-group">
+									<label for="exampleFormControlSelect1">직급</label>
+									<select class="form-select" id="positionCode" name="positionCode">
+										<option value="a1">사장</option>
+										<option value="a2">관리자</option>
+										<option value="a3">본부장</option>
+										<option value="a4">팀장</option>
+										<option value="a5">사원</option>
+										<option value="a6" selected="selected">인턴</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlSelect1">부서</label>
+									<select class="form-select" id="departmentNo" name="departmentNo">
+										<th:block th:each="info : ${departments}">
+											<option th:value="${info.departmentNo}">[[${info.departmentName}]]</option>
+										</th:block> 
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlSelect1">입사일</label>
+									<input type="date"
+										id="hireDt"
+										name="hireDt"
+										max="2050-01-01"
+										min="2000-01-01"
+										value="2025-01-01">
+								</div>
+								<div class="form-group">
+									<label for="exampleFormControlFile1">사진입력</label>
+									<input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-action">
+						<button type="button" id="addEmployee" class="btn btn-success">추가하기</button>
+						<input type="reset" class="btn btn-danger">초기화하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
+</div>
+
 <script>
 let emailInput = document.querySelector("#email");
 let nameInput = document.querySelector("#name");

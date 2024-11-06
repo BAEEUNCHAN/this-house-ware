@@ -4,22 +4,22 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <style>
-.pagination .active .page-link {
+.container .pagination .active .page-link {
 	background-color: #007bff; /* 활성 페이지의 배경색 */
 	color: white; /* 활성 페이지의 글자색 */
 	border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
 }
 
-.pagination .page-item.disabled .page-link {
+.container .pagination .page-item.disabled .page-link {
 	pointer-events: none; /* 비활성화된 링크 클릭 방지 */
 	color: #6c757d; /* 비활성화된 페이지의 글자색 */
 }
 
-.btn {
+.container .btn {
 	padding: 0 !important;
 }
 
-.table>tbody>tr>td, .table>tbody>tr>th {
+.container .table>tbody>tr>td, .table>tbody>tr>th {
 	padding: 5px !important;
 	font-size: 14px;
 }
@@ -59,13 +59,13 @@
 												type="hidden" th:value="${board.boardsNo}"> <input
 												name="cntPerPage" type="hidden"
 												th:value="${paging.cntPerPage}">
-											<div style="text-align: right;">
-												<input name="searchWord" type="text"
-													th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
-												<button type="submit" class="btn btn-secondary"
-													style="width: 30px; height: 30px; font-size: 12px;">
+											<div style="text-align: right;">　
+												 <button type="submit" class="btn btn-secondary"
+													style="width: 30px; height: 30px; font-size: 12px; float:right;">
 													<i class="fas fa-search"></i>
-												</button>
+												</button>　
+												　 <input name="searchWord" type="text" class="form-control form-control-sm" style="width:200px; margin-right:5px; float:right;"												
+												th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
 											</div>
 										</form>
 										<!-- <span>게시글 수 [[${#lists.size(posts)}]]</span> -->

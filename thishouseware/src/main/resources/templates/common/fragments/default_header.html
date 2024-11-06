@@ -8,6 +8,7 @@
     background-color: #dde3f7;
     color:white;
 }
+
 </style>
 <div class="main-header-logo">
             <!-- Logo Header -->
@@ -157,7 +158,6 @@
                           </div>
                           <div class="u-text">
                             <h4 th:text="${#authentication.principal.empVO.id}"></h4>
-                            <p class="text-muted" th:text="${session.attendance.attendancesCode}"></p> 
                             <button type="button" 
                               class="btn btn-success" 
                               id="attendanceBtn1"

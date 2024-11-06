@@ -74,7 +74,7 @@
                                             <td>[[${#dates.format(info.recentUsedDt, 'yyyy-MM-dd')}]]</td>
                                             <td>
                                                 <label class="chk_box">
-                                                    <input type="checkbox" class="favoriteCheck" th:checked="${info.favoriteChk == 'Y'}" th:data-id="${info.id}" th:data-lineno="${info.approvalLineNo}" />
+                                                    <input type="checkbox" class="favoriteCheck" th:checked="${#strings.equals(info.favoriteChk,'Y')}" th:data-id="${info.id}" th:data-lineno="${info.approvalLineNo}" />
                                                     <i class="fa fa-star" aria-hidden="true"></i>
                                                 </label>
                                             </td>
@@ -138,8 +138,11 @@
         $('.apprLines').on('click', 'tr', function(event) {
             // 체크박스나 수정 버튼 클릭 시 이벤트를 무시하고, 다른 곳 클릭 시에만 실행
             if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('modifyAppLineButton')) {
-                ApprovalLineNo = $(this).data("lineno");
-                ApprovalLineName = $(this).find('td').eq(3).text();
+            	            	
+                // ApprovalLineNo = $(this).data("lineno");                
+                ApprovalLineNo = $(event.target).parent().data("lineno");
+                // ApprovalLineName = $(this).find('td').eq(3).text();                
+                ApprovalLineName = $(event.target).parent().find('td').eq(3).text();
 
                 $.ajax({
                     type: 'GET',
@@ -147,7 +150,7 @@
                     data: {
                         approvalLineNo: ApprovalLineNo,
                     },
-                    success: function(response) {
+                    success: function(response) {                    	
                         $(".apprList").html(response);
                     },
                     error: function() {
@@ -159,6 +162,8 @@
         
         // 결재라인 이름 수정 버튼 클릭 시 동작
         $('.apprLines').on('click', '.modifyAppLineButton', function(event) {
+            // 이 이벤트가 걸린 상태에서 이름필드를 클릭하면
+            // 결재라인 클릭 시 결재자 리스트 출력 이벤트가 걸리면서 오류가 뜬다
             event.stopPropagation();
 
             let $row = $(this).closest('tr');
@@ -206,11 +211,16 @@
 
      // 즐겨찾기 업데이트
         $('.apprLines').on('click', '.favoriteCheck', function(event) {
+        	// 이 이벤트가 걸린 상태에서 이름필드를 클릭하면
+            // 결재라인 클릭 시 결재자 리스트 출력 이벤트가 걸리면서 오류가 뜬다
             event.stopPropagation();
-
+			
             let id = $(this).attr("data-id");
-            let approvalLineNo = $(this).attr("data-lineno"); 
+            console.log(id);
+            let approvalLineNo = $(this).attr("data-lineno");
+            console.log(approvalLineNo);
             let favoriteChk = $(this).is(':checked') ? 'Y' : 'N';
+            console.log(favoriteChk);
             let checkbox = $(this);
 
             $.ajax({

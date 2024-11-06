@@ -250,7 +250,7 @@
 	         , update_dt = SYSDATE
 	         , favorite_chk = #{favoriteChk}
 	     WHERE approval_line_no = #{approvalLineNo}
-	       AND id = #{id}
+	       AND id = #{id}	       
 	</update>
 	
 	<!-- 즐겨찾기 추가 -->
@@ -286,5 +286,27 @@
 	     WHERE approval_line_no = #{approvalLineNo}
 	       AND id = #{id}
 	</delete>
+	
+	<!-- 결재선의 결재자 삭제 -->
+	<delete id="delApprFromApprLine" parameterType="map">
+		DELETE FROM approver
+	    WHERE approval_line_no = #{approvalLineNo}
+	    	AND approver = #{id}
+	</delete>
+	
+	<!-- 즐겨찾기 번호 가져오기, 현재 사용 안함 -->
+	<select id="selectFavoriteNo" parameterType="ApprFavoriteVO">
+		SELECT favorite_no
+		FROM approval_line_favorite
+		WHERE approval_line_no = #{approvalLineNo}
+			AND id = 'id'
+	</select>
+	
+	<!-- 즐겨찾기(별) 업데이트 시 결재라인 수정 -->
+	<update id="updateFavorApprLine" parameterType="ApprLineVO">
+	    UPDATE approval_line
+	        SET favorite_chk = #{favoriteChk}
+	    WHERE approval_line_no = #{approvalLineNo}
+	</update>	
 
 </mapper>

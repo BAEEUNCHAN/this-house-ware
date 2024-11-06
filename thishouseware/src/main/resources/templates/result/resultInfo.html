@@ -11,10 +11,10 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="/"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a href="#">고객관리</a></li>
+					<li class="nav-item"><a href="/result/resultList">고객관리</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="#">불편/장애사항 단건조회</a></li>
 				</ul>
@@ -182,7 +182,7 @@
 
 												<div class="timeline-panel">
 													<div class="timeline-heading">
-														<h4 class="timeline-title" style="font-weight: bold;">[[${info.departmentName}]][[${info.name}]]</h4>
+														<h4 class="timeline-title" style="font-weight: bolder;">[[${info.departmentName}]][[${info.name}]]</h4>
 														<p>
 															<small class="text-muted"><i
 																class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
@@ -211,7 +211,7 @@
 								<div class="col-md-12">
 									<div class="card">
 										<div class="card-header">
-											<div class="card-title">문의답변/조치사항</div>
+											<div class="card-title">해결방법/피드백내용</div>
 										</div>
 										<div class="card-body">
 											<div class="row">

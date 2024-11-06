@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.contractor.app.schedule.service.LeaveService;
 import com.contractor.app.schedule.service.LeaveVO;
 import com.contractor.app.schedule.service.ScheduleService;
 import com.contractor.app.schedule.service.ScheduleVO;
+import com.contractor.app.util.EmpAuthUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +35,11 @@ public class ScheduleController {
 	
 	private final LeaveService leaveService;
 	private final LeaveDetailService leaveDetailService;
+	private final EmpAuthUtil empAuthUtil;
 	
 	// Google API key
 	@Value("${apikey.googlekey}")
 	String key;
-	
-	String id = "emp102"; // 실제 로그인 id 가져오기
 	
 	// 스케쥴 페이지 화면
 	@GetMapping("schedule/scheduleList")
@@ -51,6 +52,7 @@ public class ScheduleController {
 	@PostMapping("schListAll")
 	@ResponseBody
 	public List<ScheduleVO> schListJSON(@RequestParam(required = false) String id, String positionCode, int departmentNo) {
+		
 		//return scheduleService.scheduleListAll();
 		System.out.println(id);
 		System.out.println(positionCode);
@@ -111,7 +113,7 @@ public class ScheduleController {
 	// 일정 등록
 	@PostMapping("schUpdate")
 	@ResponseBody
-	public Map<String, Object> schUpdateJSON(@RequestBody ScheduleVO scheduleVO) {
+	public Map<String, Object> schUpdateJSON(@RequestBody ScheduleVO scheduleVO, @RequestBody int departmentNo) {
 		Map<String, Object> result = new HashMap<>();
 		try {
 			// 받은 데이터 확인용
@@ -161,7 +163,8 @@ public class ScheduleController {
 	
 	// 휴가 조회 페이지
 	@GetMapping("schedule/leaveList")
-	public String leavesList(LeaveDetailVO leaveDetailVO, Model model) {		
+	public String leavesList(LeaveDetailVO leaveDetailVO, Model model, Authentication authentication) {
+		String id = empAuthUtil.getAuthEmp(authentication).getId();
 		LeaveDetailVO ldInfo = leaveDetailService.leaveDetailSelect(id);		
 		model.addAttribute("ldInfo", ldInfo);
 		model.addAttribute("key", key);
@@ -254,7 +257,8 @@ public class ScheduleController {
 	// DB서버의 자신의 휴가 가져오기 AJAX
 	@PostMapping("getLeave")
 	@ResponseBody
-	public List<Map<String, Object>> getLeaveJSON() {		
+	public List<Map<String, Object>> getLeaveJSON(Authentication authentication) {
+		String id = empAuthUtil.getAuthEmp(authentication).getId();
 		return leaveService.leaveList(id);
 	}
 	

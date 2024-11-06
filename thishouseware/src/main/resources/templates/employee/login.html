@@ -5,18 +5,10 @@
 	layout:fragment="Content">
 <head>
 	 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
-	 <style>
-	 
-	 
-	 
-	 
-	 
-	 
+<style>
  body {
     background-color: #f8f9fa;
 }
-
-
 
 .page-inner {
     margin-top: 50px;
@@ -39,8 +31,6 @@
 .breadcrumbs .separator {
     margin: 0 8px;
 }
-
-
 
 .card {
     max-width: 500px;
@@ -107,7 +97,13 @@ a:hover {
     text-decoration: underline;
 }
 
-    </style>
+/*로그인 실패시 뜨는 div 디자인*/
+.alert-danger{
+	padding-bottom: 0px; 
+	font-weight: bold;
+	display: none;
+}
+</style>
 </head>
 
 
@@ -129,8 +125,13 @@ a:hover {
 			<!-- Logo -->
 			<!-- /Logo -->
 			<h4 class="mb-2" style="font-weight:bold;">이집웨어</h4>
-	
+			<div class="alert alert-danger">
+				<p>
+					알 수 없는 이유로 로그인에 실패하였습니다.<br>관리자에게 문의하세요.
+				</p>
+			</div>
 			<form class="form-signin" method="post" action="/login">
+
 		        <h2 class="form-signin-heading">Please sign in</h2>
 		        <p>
 		          <label for="username" class="sr-only">Username</label>
@@ -157,12 +158,13 @@ a:hover {
 <script>
 	let errorMessage = "[[${errorMessage}]]";
 	if(errorMessage.length > 0 ){
+		$(".alert-danger").css("display", "block");
 		if(errorMessage == "error"){
-			alert("알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.");
+			$(".alert-danger > p").html("알 수 없는 이유로 로그인에 실패하였습니다.<br>관리자에게 문의하세요.");
 		}else if(errorMessage == "error1"){
-			alert("아이디와 비밀번호가 맞지 않습니다. 다시 확인해 주십시오");
+			$(".alert-danger > p").html("아이디와 비밀번호가 맞지 않습니다.<br>다시 확인해 주십시오");
 		}else if(errorMessage == "error2"){
-			alert("퇴직처리된 계정입니다. 관리자에게 문의하세요.");
+			$(".alert-danger > p").html("퇴직처리된 계정입니다.<br>관리자에게 문의하세요.");
 		}
 	}
 </script>

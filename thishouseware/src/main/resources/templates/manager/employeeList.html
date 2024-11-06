@@ -22,12 +22,13 @@
 	<div class="col-md-12">
 		<div class="card">
 			<div class="card-header row">
-				<div class="card-title col-9">
+				<div class="card-title col-7">
 					직원 리스트
 				</div>
-				<div class="col-3">							
+				<div class="col-5">							
 					<button class="btn btn-info" id="workBtn">근무자</button>
 					<button class="btn btn-info" id="resignBtn">퇴직자</button>
+					<button class="btn btn-info" id="allBtn">전체 직원</button>
 				</div>
 			</div>
 			<div class="card-body">
@@ -52,12 +53,7 @@
 									<td>[[${info.positionName}]]</td>
 									<td>[[${info.departmentName}]]</td>
 									<td>[[${#dates.format(info.hireDt, 'yyyy-MM-dd')}]]</td>
-									<th:block th:if="${info.resignDt == null}">
-									<td>none</td>
-									</th:block>
-									<th:block th:unless="${info.resignDt == null}">
 									<td>[[${#dates.format(info.resignDt, 'yyyy-MM-dd')}]]</td>
-									</th:block>
 								</tr>
 							</th:block>
 							</tbody>
@@ -87,27 +83,31 @@ $(document).ready(function () {
     // 퇴직자와 근무자를 나누어 띄어주기 
 	// 근무자
 	$('#workBtn').on('click', function() {
-		table.column(5).search('none').draw();
+		table.column(5).search('^$', true, false).draw();
 	});
 	
 	// 퇴직자
 	$('#resignBtn').on('click', function() {
 		table.column(5).search('20').draw();
 	});
+	// 전채조회
+	$('#allBtn').on('click', function() {
+		table.column(5).search('').draw();
+	});
 
-    /* Column별 검색기능 추가 */
-    $('#myTable_filter').prepend('<select id="select"></select>');
-    $('#myTable > thead > tr').children().each(function (indexInArray, valueOfElement) { 
-        $('#select').append('<option>'+valueOfElement.innerHTML+'</option>');
-    });
+	/* Column별 검색기능 추가 */
+	$('#myTable_filter').prepend('<select id="select"></select>');
+	$('#myTable > thead > tr').children().each(function (indexInArray, valueOfElement) { 
+			$('#select').append('<option>'+valueOfElement.innerHTML+'</option>');
+	});
+	
+	$('.dataTables_filter input').unbind().bind('keyup', function () {
+			var colIndex = document.querySelector('#select').selectedIndex;
+			table.column(colIndex).search(this.value).draw();
+	});
     
-    $('.dataTables_filter input').unbind().bind('keyup', function () {
-        var colIndex = document.querySelector('#select').selectedIndex;
-        table.column(colIndex).search(this.value).draw();
-    });
-    
-    // 날짜 검색 태그 삽입
-    $("#myTable_wrapper .row:eq(0) .col-sm-12:eq(0)").append('<table border="0" cellspacing="5" cellpadding="5"><tbody><tr><td>입사일 최소값:</td><td><input type="date"id="min"name="min"max="2050-01-01"min="2000-01-01"value=null></td></tr><tr><td>입사일 최대값:</td><td><input type="date"id="max"name="max"max="2050-01-01"min="2000-01-01"value=null></td></tr></tbody></table>');
+  // 날짜 검색 태그 삽입
+  $("#myTable_wrapper .row:eq(0) .col-sm-12:eq(0)").append('<table border="0" cellspacing="5" cellpadding="5"><tbody><tr><td>입사기간:</td><td><input type="date"id="min"name="min"max="2050-01-01"min="2000-01-01"value=null></td><td> ~ </td><td><input type="date"id="max"name="max"max="2050-01-01"min="2000-01-01"value=null></td></tr></tbody></table>');
     
     /* 날짜검색 이벤트 */
     /* 날짜를 위한 push 메서드*/
@@ -132,9 +132,9 @@ $(document).ready(function () {
 	    }
 	);
     
-    $('#min, #max').change( function() {
-    	console.log("test");
-        table.draw();
-    } );
+	$('#min, #max').change( function() {
+		console.log("test");
+			table.draw();
+	} );
 });
 </script>

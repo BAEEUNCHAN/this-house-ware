@@ -84,14 +84,14 @@
 					</div>
 					<div class="form-group">
 						<label for="exampleFormControlFile1">사진입력</label>
-						<input type="file" name="uploadFile" class="form-control-file" id="uploadFile">
+						<input type="file" class="form-control" id="uploadFile" name="uploadFile" />
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="card-action">
 			<button type="button" id="addEmployee" class="btn btn-success">추가하기</button>
-			<input type="reset" class="btn btn-danger">초기화하기</button>
+			<input type="reset" class="btn btn-danger"></button>
 		</div>
 	</form>
 </div>
@@ -133,6 +133,7 @@ $('#addEmployee').on('click', function(event){
 		alert("입력값이 부족합니다.");
 		return null;
 	}
+	
 	if(!emailValueCheck()){
 		alert("email 을 사용할 수 없습니다.");
 		return null;
@@ -172,7 +173,7 @@ $('#addEmployee').on('click', function(event){
 		}else if(result == 'error4'){
 			alert("서버문제로 회원추가가 실패하였습니다.");
 		}else{
-			alert("회원 정보 추가가 성공하셧습니다.");
+			alert("회원 정보 추가가 성공했습니다.");
 			location.href = "/manager/modifyEmp?id="+result;
 		}
 	})

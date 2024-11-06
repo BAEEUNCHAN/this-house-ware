@@ -31,7 +31,6 @@ import com.contractor.app.appr.service.ApprLineVO;
 import com.contractor.app.appr.service.ApprService;
 import com.contractor.app.appr.service.ApproverVO;
 import com.contractor.app.common.service.Base64ToImgDecodeUtil;
-import com.contractor.app.edms.mapper.EdmsMapper;
 import com.contractor.app.edms.service.EdmsDocVO;
 import com.contractor.app.edms.service.EdmsFormVO;
 import com.contractor.app.edms.service.EdmsService;
@@ -50,15 +49,12 @@ public class EdmsController {
 	private final EdmsService edmsService;
 	private final ApprService apprService;
 	private final EmpAuthUtil empAuthUtil;
-	private final EdmsMapper edmsMapper; // 매퍼 주입
 
 	@Autowired
-	public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil,
-			EdmsMapper edmsMapper) {
+	public EdmsController(EdmsService edmsService, ApprService apprService, EmpAuthUtil empAuthUtil) {
 		this.edmsService = edmsService;
 		this.apprService = apprService;
-		this.empAuthUtil = empAuthUtil; // empAuthUtil 주입
-		this.edmsMapper = edmsMapper; // 매퍼 초기화
+		this.empAuthUtil = empAuthUtil; // empAuthUtil 주입		
 	}
 
 	// 결재문서 전체조회

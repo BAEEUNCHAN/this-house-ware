@@ -34,8 +34,8 @@
 												<td>[[${info.edmsDocNo}]]</td>
 												<td>[[${info.id}]]</td>
 												<td>[[${info.title}]]</td>
-												<td>[[ ${ #dates.format(info.submitDt, "yyyy-MM-dd" )}]]</td>
-												<td>[[ ${ #dates.format(info.approvalDt, "yyyy-MM-dd" )}]]</td>
+												<td>[[${ #dates.format(info.submitDt, "yyyy-MM-dd" )}]]</td>
+												<td>[[${ #dates.format(info.approvalDt, "yyyy-MM-dd" )}]]</td>
 												<td>[[${info.approvalStatus}]]</td>
 											</tr>
 										</th:block>
@@ -52,7 +52,7 @@
 		$('.edmsdoc > tr').on('click', function(event){
 			let trTag = event.currentTarget;
 			let edno = $(trTag).children().eq(0).text();
-			let url ='edmsDocInfo?edmsDocNo=' + edno;
+			let url = 'edmsDocInfo?edmsDocNo=' + edno;
 			location.href=url;
 		});
 		

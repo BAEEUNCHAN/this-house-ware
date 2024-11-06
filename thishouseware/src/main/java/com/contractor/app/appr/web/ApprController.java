@@ -1,6 +1,7 @@
 package com.contractor.app.appr.web;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,7 +120,14 @@ public class ApprController {
 	    int approvalLineNo = favorite.getApprovalLineNo();
 	    String id = favorite.getId();
 	    String favoriteChk = favorite.getFavoriteChk();
-
+	    
+	    ApprLineVO apprlineVO = new ApprLineVO();
+	    apprlineVO.setApprovalLineNo(approvalLineNo);
+	    apprlineVO.setFavoriteChk(favoriteChk);
+	    if(apprService.apprLineFavorUpdate(apprlineVO)) {
+	    	// approval_line 테이블의 favorite_chk 컬럼 업데이트 성공시 동작 코드
+	    }
+	    
 	    // favoriteName을 approvalLineName으로 설정
 	    if (favorite.getFavoriteName() == null || favorite.getFavoriteName().isEmpty()) {
 	        String approvalLineName = apprService.getApprovalLineName(approvalLineNo); // approvalLineNo로 이름 가져오기
@@ -133,13 +141,14 @@ public class ApprController {
 	        } else {
 	            apprService.insertFavorite(favorite); // 없는 경우 새로운 즐겨찾기 추가
 	        }
+	        
 	    } else {
 	        apprService.favoriteDelete(approvalLineNo, id); // 'N'이면 즐겨찾기 삭제
 	    }
 
 	    return ResponseEntity.ok("즐겨찾기 상태가 업데이트되었습니다.");
-	}
-
+	}		
+	
 	// 즐겨찾기 삭제
 	@GetMapping("/favoriteDelete")
 	public String favoriteDelete(Integer favoriteNo, String id) {
@@ -162,10 +171,12 @@ public class ApprController {
 		List<ApproverVO> list = apprService.apprList(approvalLineNo);
 
 		// 직급 코드에 따른 직급 이름 설정
+		/*
 		for (ApproverVO approver : list) {
 			String positionName = EmployeeUtil.getPostionName(approver.getPositionCode());
 			approver.setPositionName(positionName); // 변환된 이름 설정
 		}
+		*/
 		model.addAttribute("approvers", list);
 	}
 
@@ -232,6 +243,29 @@ public class ApprController {
 			url = "redirect:apprList";
 		}
 		return url;
+	}
+	
+	// 결재자 삭제 - 처리(POST)
+	@PostMapping("/approverDelete")
+	@ResponseBody
+	public ResponseEntity<String> apprRemove(@RequestBody Map<String, Object> data) {
+		int no = (int) data.get("lineNo");
+		List<String> ids = (List<String>) data.get("ids");
+		System.out.println(no);
+		System.out.println(ids);		
+		
+		String str = "";
+		
+		for (String id : ids) {
+			if(apprService.apprRemove(no, id)) {
+				str = id + " 삭제 완료";
+			}
+			else {
+				str = id + " 삭제 중 오류 발생";
+			}
+		}
+		System.out.println(str);
+		return ResponseEntity.ok(str);
 	}
 
 	// 결재자 삭제

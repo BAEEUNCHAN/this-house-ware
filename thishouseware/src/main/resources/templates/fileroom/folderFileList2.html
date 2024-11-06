@@ -65,31 +65,15 @@
 										<div class="col border-end">
 											<div class="folder-section folder">
 												<div class="d-flex justify-content-between mb-2">
-													<form name="insertForm" th:action="@{/file/folderFileList}"
-														method="post">
-														<input type="hidden" name="id"
-															th:value="${#authentication.principal.empVO.id}">
-														<input type="hidden" name="fileRoomsNo"
-															th:value="${fileRoom.fileRoomsNo}"> <input
-															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
+													<button class="btn btn-round btn-primary"
+														th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
                      (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"
-															type="text" name="folderName" placeholder="폴더 이름을 입력하세요"
-															id="folderName"
-															style="width: 170px; height: 30px; margin-right: 5px;">
-														<button class="btn btn-round btn-primary"
-															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
-                     (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"
-															type="submit"
-															style="font-size: 12px; width: 100px; height: 40px;">폴더
-															추가</button>
-													</form>
+														th:onclick="'location.href=@{/file/folderInsert(fileRoomsNo=${fileRoom.fileRoomsNo})}'">
+														폴더 추가</button>
 													<div class="float-end">
-														<button id="noneSearch" class="btn btn-round btn-warning"
-															style="font-size: 12px; width: 100px; height: 40px;">되돌리기</button>
+														<button id="noneSearch" class="btn btn-round btn-warning">되돌리기</button>
 														<button id="noneFolderSearch"
-															class="btn btn-round btn-success"
-															style="font-size: 12px; width: 150px; height: 40px;">폴더
-															없는대상 조회</button>
+															class="btn btn-round btn-success">폴더 없는대상 조회</button>
 													</div>
 												</div>
 												<table class="table table-striped table-hover">
@@ -209,24 +193,6 @@
 			});
 
 		});
-
-		// submit을 하기 전 폴더 이름 확인
-		const insertForm = document.forms['insertForm'];
-		insertForm.addEventListener('submit', folderInsertHandler);
-
-		function folderInsertHandler(event) {
-			event.preventDefault();
-
-			let folderName = document.querySelector('form [name="folderName"]');
-			if (folderName.value == '') {
-				alert('폴더 이름이 입력되지 않았습니다.');
-				folderName.focus();
-				return;
-			}
-
-			alert('폴더가 등록되었습니다.');
-			insertForm.submit();
-		}
 	</script>
 </body>
 </html>

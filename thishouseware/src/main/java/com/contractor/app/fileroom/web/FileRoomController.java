@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.contractor.app.board.service.BoardsVO;
-import com.contractor.app.board.service.PagingVO;
-import com.contractor.app.board.service.PostsVO;
 import com.contractor.app.common.service.CommonCodeService;
 import com.contractor.app.common.service.CommonCodeVO;
 import com.contractor.app.employee.service.EmployeeVO;
@@ -31,7 +29,6 @@ import com.contractor.app.fileroom.service.FileRoomService;
 import com.contractor.app.fileroom.service.FileRoomsVO;
 import com.contractor.app.fileroom.service.FilesVO;
 import com.contractor.app.fileroom.service.FolderVO;
-import com.contractor.app.security.service.LoginUserVO;
 import com.contractor.app.util.EmpAuthUtil;
 import com.contractor.app.util.FileUploadUtil;
 
@@ -102,6 +99,13 @@ public class FileRoomController {
 		return "fileroom/fileMainPage";
 	}
 
+	// 폴더 추가 - 처리 : URI - folderInsert / PARAMETER - FolderVO(QueryString)
+	@PostMapping("/folderFileList")
+	public String folderFileList(FolderVO folderVO) { // <form/> 활용한 submit
+		int fileRoomsNo = fileRoomService.insertFolder(folderVO);
+		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
+	}
+
 	// 자료실별 폴더, 파일 전체조회 : URI - folderFileList / RETURN - file/folderFileList
 	@GetMapping("/folderFileList")
 	public String folderFileList(Model model, Authentication authentication, FolderVO folderVO, FileRoomsVO fileRoomsVO,
@@ -161,7 +165,6 @@ public class FileRoomController {
 
 		int fileRoomsNo = fileRoomService.insertFile(filesVO);
 		String url = null;
-		;
 
 		if (fileRoomsNo > 0) {
 			// 정상적으로 등록된 경우
@@ -201,13 +204,12 @@ public class FileRoomController {
 		os.close();
 	}
 
-	/*
-	 * @GetMapping("/getFoldersByFileRoomsNo")
-	 * 
-	 * @ResponseBody public List<FolderVO> getFoldersByFileRoomsNo(@RequestParam
-	 * Integer fileRoomsNo) { List<FolderVO> folders =
-	 * fileRoomService.selectFolders(fileRoomsNo); return folders; }
-	 */
+	@GetMapping("/getFoldersByFileRoomsNo")
+	@ResponseBody
+	public List<FolderVO> getFoldersByFileRoomsNo(@RequestParam Integer fileRoomsNo) {
+		List<FolderVO> folders = fileRoomService.selectFolders(fileRoomsNo);
+		return folders;
+	}
 
 	// 폴더 삭제 - 처리 : URI - folderDelete / PARAMETER - Integer
 	@GetMapping("/folderDelete") // QueryString : @RequestParam
@@ -222,26 +224,5 @@ public class FileRoomController {
 		fileRoomService.deleteFile(fileNo);
 		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
 	}
-
-	// 폴더 추가 - 처리 : URI - folderInsert / PARAMETER - FolderVO(QueryString)
-	@PostMapping("/folderInsert")
-	public String folderInsert(FolderVO folderVO) { // <form/> 활용한 submit
-		int fileRoomsNo = fileRoomService.insertFolder(folderVO);
-		return "redirect:folderFileList?fileRoomsNo=" + fileRoomsNo;
-	}
-
-	// 폴더 추가 - 페이지 : URI - folderInsert / RETURN - file/folderInsert
-	@GetMapping("/folderInsert")
-	public String folderInsert(FileRoomsVO fileRoomsVO, Model model,
-			@RequestParam(value = "fileRoomsNo", required = false) Integer fileRoomsNo) {
-		// 자료실 가져오기
-		FileRoomsVO fileRoom = fileRoomService.selectFileroom(fileRoomsVO);
-
-		// 모델에 추가하여 뷰로 전달
-		model.addAttribute("fileRoom", fileRoom);
-
-		return "fileRoom/folderInsert";
-	}
-
 
 }

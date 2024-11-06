@@ -34,32 +34,57 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.selectPostInfo(postsVO);
 	}
 
+	/*
+	 * @Override public int insertPost(PostsVO postsVO) { // 현재 날짜에서 시간 제거 후 날짜만 남기기
+	 * Date now = new Date(); SimpleDateFormat dateFormat = new
+	 * SimpleDateFormat("yyyy-MM-dd"); Date nowDate = null; try { nowDate =
+	 * dateFormat.parse(dateFormat.format(now)); } catch (ParseException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * if (postsVO.getPostSetting() == "q1") { if
+	 * (postsVO.getPostStartTime().compareTo(nowDate) <= 0 &&
+	 * postsVO.getPostEndTime().compareTo(nowDate) >= 0) { postsVO.setDisplay("q1");
+	 * // 게시 } else if (postsVO.getPostStartTime().compareTo(nowDate) > 0) {
+	 * postsVO.setDisplay("q2"); // 비게시 } } else { postsVO.setDisplay("q1"); //
+	 * 기본적으로 게시 상태로 설정 }
+	 * 
+	 * boardMapper.insertPostInfo(postsVO); return postsVO.getPostsNo(); }
+	 */
+	
 	@Override
 	public int insertPost(PostsVO postsVO) {
-		// 현재 날짜에서 시간 제거 후 날짜만 남기기
-		Date now = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date nowDate = null;
-		try {
-			nowDate = dateFormat.parse(dateFormat.format(now));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	    // 현재 날짜에서 시간 제거 후 날짜만 남기기
+	    Date now = new Date();
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date nowDate = null;
+	    try {
+	        nowDate = dateFormat.parse(dateFormat.format(now));
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
 
-		if (postsVO.getPostSetting() == "q1") {
-			if (postsVO.getPostStartTime().compareTo(nowDate) <= 0
-					&& postsVO.getPostEndTime().compareTo(nowDate) >= 0) {
-				postsVO.setDisplay("q1"); // 게시
-			} else if (postsVO.getPostStartTime().compareTo(nowDate) > 0) {
-				postsVO.setDisplay("q2"); // 비게시
-			}
-		} else {
-			postsVO.setDisplay("q1"); // 기본적으로 게시 상태로 설정
-		}
+	    System.out.println("현재 날짜 (시간 제거): " + nowDate);
+	    System.out.println("게시 시작 시간: " + postsVO.getPostStartTime());
+	    System.out.println("게시 종료 시간: " + postsVO.getPostEndTime());
 
-		boardMapper.insertPostInfo(postsVO);
-		return postsVO.getPostsNo();
+	    if ("q1".equals(postsVO.getPostSetting())) {
+	        if (postsVO.getPostStartTime().compareTo(nowDate) <= 0
+	                && postsVO.getPostEndTime().compareTo(nowDate) >= 0) {
+	            postsVO.setDisplay("q1"); // 게시
+	            System.out.println("게시 상태 설정: q1");
+	        } else if (postsVO.getPostStartTime().compareTo(nowDate) > 0) {
+	            postsVO.setDisplay("q2"); // 비게시
+	            System.out.println("게시 상태 설정: q2 (시작 전)");
+	        }
+	    } else {
+	        postsVO.setDisplay("q1"); // 기본적으로 게시 상태로 설정
+	        System.out.println("기본 게시 상태 설정: q1");
+	    }
+
+	    boardMapper.insertPostInfo(postsVO);
+	    return postsVO.getPostsNo();
 	}
+
 
 	@Override
 	public int deletePost(int postsNo) {

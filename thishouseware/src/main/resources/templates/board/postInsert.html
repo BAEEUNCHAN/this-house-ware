@@ -33,7 +33,7 @@
 												th:value="${#authentication.principal.empVO.id}">
 											<table class="table">
 												<tr>
-													<th>게시판 선택</th>
+													<th>게시판</th>
 													<td><select class="form-select" name="boardsNo"
 														aria-label="Default select example">
 															<option value="">선택</option>
@@ -73,12 +73,12 @@
 													</span></td>
 												</tr>
 												<tr>
-													<th>게시 시작시간</th>
+													<th>게시 시작 날짜</th>
 													<td><input type="date" name="postStartTime"
 														id="postStartTime" disabled></td>
 												</tr>
 												<tr>
-													<th>게시 종료시간</th>
+													<th>게시 종료 날짜</th>
 													<td><input type="date" name="postEndTime"
 														id="postEndTime" disabled></td>
 												</tr>
@@ -178,6 +178,7 @@
 				.substring(0, 10);
 		document.getElementById('postEndTime').value = today.toISOString()
 				.substring(0, 10);
+		
 	</script>
 </body>
 </html>

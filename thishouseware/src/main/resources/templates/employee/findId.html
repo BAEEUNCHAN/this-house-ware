@@ -116,6 +116,9 @@
 				</p>
 				<button id="findIdBtn" class="btn btn-lg btn-primary btn-block" type="button">아이디 찾기</button>
 			</form>
+			<a href="/login">
+				<span>로그인</span>
+			</a>
 		</div>
 	</div>
 	</div>
@@ -133,7 +136,7 @@
 	    let formData = new FormData();
 		formData.append('email', emailInput.value);
 		
-		
+		alert("이메일 전송이 되었습니다.");
 		// $.Ajax 방식 
 		$.ajax('/employee/findId',{
 			type : 'post',
@@ -149,8 +152,7 @@
 			}else if(result == 'error2'){
 				alert("이메일 전송이 실패하였습니다.");
 			}else{
-				alert("이메일 전송이 완료되었습니다.");
-				location.href = "/login";
+				// location.href = "/login";
 			}
 			$("#findIdBtn").prop('disabled',false);
 		})

@@ -169,7 +169,6 @@
           AND d.id = #{userId}
         ORDER BY d.submit_dt DESC
     </select>
-    
     <!-- 결재 수신 문서조회 -->
     <select id="selectDocumentsByUserId" parameterType="map" resultType="EdmsDocVO">
         SELECT edms_doc_no

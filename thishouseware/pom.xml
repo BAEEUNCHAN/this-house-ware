@@ -122,7 +122,6 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>thw</finalName>
 		<plugins>

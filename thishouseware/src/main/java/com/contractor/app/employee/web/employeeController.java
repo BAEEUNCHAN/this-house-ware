@@ -52,7 +52,7 @@ public class employeeController {
 		}
 		
 		try {
-			emailService.sendEmail(email, "회원님의 아이디입니다.", empVO.getId());
+			emailService.sendEmail(email, "회원님의 아이디입니다.","요청하신 아이디 값입니다.",empVO.getId());
 		} catch (Exception e) {
 			return "error2";
 		}
@@ -90,7 +90,7 @@ public class employeeController {
 		}
 		
 		try {
-			emailService.sendEmail(empVO.getEmail(), "회원님의 인증코드입니다.",randomValue);
+			emailService.sendEmail(empVO.getEmail(), "회원님의 인증코드입니다.","요청하신 인증코드 입니다.",randomValue);
 		} catch (Exception e) {
 			return "error4"; // 이메일 전송 실패
 		}

@@ -1,10 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<head>
+	<style>
+		a {
+  			text-decoration: none;
+				color : black;
+  			cursor: pointer;
+		}
+	</style>
+</head>
 <body>
+<h1><a href="http://www.thishouseware.shop/main?boardsNo=1">ThisHouseWare</a></h1>
 <div style="margin:100px;">
     <h1> 안녕하세요.</h1>
-    <h1> 요청에 대한 값을 전달해드립니다.</h1>
+    <h1 th:text="${contentTitle}"></h1>
 	<h2 th:text="${content}"></h2>
 </div>
 

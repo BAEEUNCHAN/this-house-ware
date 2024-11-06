@@ -12,6 +12,23 @@
 			display : none;
 			color : red;
 		}
+    .okName{
+			display : none;
+			color : blue;
+		}
+		.noName{
+			display : none;
+			color : red;
+		}
+
+		.okPhone{
+			display : none;
+			color : blue;
+		}
+		.noPhone{
+			display : none;
+			color : red;
+		}
 	</style>
 </head>
   <div class="page-inner">
@@ -44,11 +61,15 @@
             <!-- inline -->
             <div class="form-group">
               <label for="name" class="col-md-3 col-form-label">이름 변경</label>
-              <input type="text" class="form-control input-full" th:field="*{name}">
+              <input type="text" class="form-control input-full" th:field="*{name}" oninput = "checkName()">
+              <span class="okName">사용가능한 이름 입니다.</span>
+              <span class="noName">사용할 수 없는 이름 입니다.</span>
             </div>                        
             <div class="form-group">
               <label for="phone" class="col-md-3 col-form-label">연락처 변경</label>
-              <input type="text" class="form-control input-full" th:field="*{phone}">
+              <input type="text" class="form-control input-full" th:field="*{phone}" oninput = "checkPhone()">
+              <span class="okPhone">사용가능한 연락쳐 입니다.</span>
+              <span class="noPhone">사용할 수 없는 연락쳐 입니다.</span>
             </div>  
             <div class="form-group">
               <label for="exampleFormControlSelect1">직급 변경</label>
@@ -133,22 +154,14 @@ let phoneInput = document.querySelector("#phone");
 function valueCheck(){
     // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
     if(
-        emailInput.value.length > 0 &&
+        $('.okEmail').css('display') != "none" &&
         nameInput.value.length > 0 &&
         phoneInput.value.length > 0
     ){
-        return true;
+			$('#modifyEmployee').attr("disabled", false);
     }else{
-        return false;
+			$('#modifyEmployee').attr("disabled", true);
     }
-}
-function emailValueCheck(){
-	if($('.okEmail').css('display') == "none"){
-		return false;
-	}else{
-		return true;
-	}
-	
 }
 // 이미지 링크용 스크립트
 const imgLink = $('input[name=imageLink]').val();
@@ -157,14 +170,6 @@ $('#empImg').attr({src: "/upload/"+imgLink});
 // 회원 정보 수정하기
 $('#modifyEmployee').on('click', function(event){
 
-	if(!valueCheck()){
-		alert("수정값이 잘못되었습니다.");
-		return null;
-	}
-	if(!emailValueCheck()){
-		alert("email 을 사용할 수 없습니다.");
-		return null;
-	}
 	let formData = new FormData(); 
   formData.append("id", $('#id').val());
   formData.append("imageLink", $('#imageLink').val());
@@ -223,17 +228,40 @@ function checkEmail(){
             if(answer == 0){ // 사용가능한경우
                 $('.okEmail').css("display","inline-block"); 
                 $('.noEmail').css("display", "none");
+                valueCheck();
             } else { // 사용불가능한경우
                 $('.noEmail').css("display","inline-block");
                 $('.okEmail').css("display", "none");
+                valueCheck();
             }
         },
         error:function(){
             $('.noEmail').css("display","inline-block");
             $('.okEmail').css("display", "none");
+            valueCheck();
         }
     });
 };
+function checkName(){
+	if(nameInput.value.length > 0 ){
+		$('.okName').css("display","inline-block"); 
+		$('.noName').css("display", "none");
+	}else{
+		$('.noName').css("display","inline-block");
+		$('.okName').css("display", "none");
+	}
+	valueCheck();
+}
+function checkPhone(){
+	if(phoneInput.value.length > 0 ){
+		$('.okPhone').css("display","inline-block"); 
+		$('.noPhone').css("display", "none");
+	}else{
+		$('.noPhone').css("display","inline-block");
+		$('.okPhone').css("display", "none");
+	}
+	valueCheck();
+}
 // 퇴사 처리 확인 경고형 모달창
 var SweetAlert2Demo = (function () {
   //== Demos

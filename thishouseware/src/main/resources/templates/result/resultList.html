@@ -18,24 +18,9 @@
 	float: left; 
 }
 
-.progress-0 {
-	color: red;
-}
-
-.progress-1 {
-	color: orange;
-}
-
-.progress-2 {
-	color: green;
-}
-
-.progress-3 {
-	color: gray;
-}
-
-.progress-4 {
-	color: blue;
+#example tbody tr:hover {
+    cursor:pointer;
+    background-color:#ddd;
 }
 .container .btn{
 	padding: 0px;
@@ -72,7 +57,7 @@
 									<!-- 처리상황 드롭다운 메뉴 -->
 			<select class="form-select" id="progressDropdown"
 				aria-label="Progress Dropdown" style="width:100px; float:right;">
-				<option value="">선택</option>
+				<option value="">처리상황</option>
 				<option value="3">상황완료</option>
 				<option value="4">보고완료</option>
 			</select>

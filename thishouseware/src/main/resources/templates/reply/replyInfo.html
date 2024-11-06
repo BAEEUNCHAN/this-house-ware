@@ -74,12 +74,12 @@
 									<p style="font-weight: bold; font-size: 16px;">
 										<i class="fas fa-check-square"> 문의내용</i>
 									</p>
-									<label for="customerName">[[${complain.complainContent}]]</label>
+									<label for="customerName" th:utext="${complain.complainContent}"></label>
 									<br /> <br />
 									<p style="font-weight: bold; font-size: 16px;">
 										<i class="fas fa-check-square"> 요구사항</i>
 									</p>
-									<label for="phone">[[${complain.complainRequest}]]</label> <br />
+									<label for="phone" th:utext="${complain.complainRequest}"></label> <br />
 								</div>
 							</div>
 						</div>
@@ -126,7 +126,7 @@
 
 												</div>
 												<div class="timeline-body">
-													<p>[[${info.replyContent}]]</p>
+												<label for="replyContent" th:utext="${info.replyContent}"></label>
 												</div>
 
 											</div>
@@ -139,7 +139,7 @@
 												[[${#authentication.principal.empVO.name}]]</i></small>
 										<textarea class="form-control" name="replyContent"
 											id="replyContent" rows="5" maxlength="500" wrap="soft"
-											style="background-color: lightyellow;"></textarea>
+											style="background-color: lightyellow; white-space: pre-wrap;"></textarea>
 
 
 
@@ -180,6 +180,8 @@
 	    loadReplies(0);
 	});
 
+
+	
 		
     // 삭제버튼
       $('.fa-times-circle').on('click', function() {
@@ -200,69 +202,76 @@
     
     
     
-    $(".fa-edit").click(function (e) {
-    	var replyNo = $(this).data('id');
-    	var replyContent = $(this).closest('.timeline-panel').find('.timeline-body p').text().trim();
-        swal({
-          title: "",
-          text : "수정할 댓글내용을 입력하세요.",
-          content: {
-            element: "textarea",
-            maxlength: "500",
-            attributes: {
-              value: replyContent, 
-              //type: "text",
-              id: "input-field",
-              className: "form-control",
-              wrap: "soft",
-              style: "white-space:normal !important; word-wrap:break-word !important; width: 100% !important; height: 200px !important;",
-            },
-          },
-          buttons: {
-            confirm: {
-            	text: "수정",
-              className: "btn btn-success",
-            },
-            cancel: {
-            	text: "취소",
-              visible: true,
-              className: "btn btn-danger",
-            },
-          },
-        }).then(function (value) {
-        	if(value){
-        		var updatedContent = $("#input-field").val();
-        	$.ajax({
-                url: `/reply/replyUpdate?replyNo=` + replyNo,
-                type: 'POST',
-                data: {
-				replyNo: replyNo,                	
-                replyContent: updatedContent,
-                },
-                success: function(response){
-          swal("수정 완료", "댓글이 성공적으로 수정되었습니다.", "success")
-          .then(function() {
-              location.reload();
-          });
-                },
-                error: function() {
-                    swal("오류", "글자수를 초과했습니다. 댓글 수정에 실패했습니다.", "error").then(function(){
-                    	location.reload();
-                    }) } 
-                    
-        })
-        	}
-        	
-        });
-      });
+      $(".fa-edit").click(function (e) {
+    	    var replyNo = $(this).data('id');
+    	    var replyContent = $(this).closest('.timeline-panel').find('label[for="replyContent"]').html().trim();
+    	    
+    	    // <br/>을 \n으로 변환하여 textarea에 넣기
+    	    var replyContentWithNewLines = replyContent.replace(/<br\s*\/?>/g, '\n');
+    	    
+    	    swal({
+    	        title: "",
+    	        text: "수정할 댓글 내용을 입력하세요.",
+    	        content: {
+    	            element: "textarea",
+    	            maxlength: "500",
+    	            attributes: {
+    	                value: replyContentWithNewLines, 
+    	                id: "input-field",
+    	                className: "form-control",
+    	                wrap: "soft",
+    	                style: "white-space:normal !important; word-wrap:break-word !important; width: 100% !important; height: 200px !important;",
+    	            },
+    	        },
+    	        buttons: {
+    	            confirm: {
+    	                text: "수정",
+    	                className: "btn btn-success",
+    	            },
+    	            cancel: {
+    	                text: "취소",
+    	                visible: true,
+    	                className: "btn btn-danger",
+    	            },
+    	        },
+    	    }).then(function (value) {
+    	        if (value) {
+    	            var updatedContent = $("#input-field").val();
+    	            // \n을 <br/>로 변환하여 서버에 전송
+    	            var contentWithBreaks = updatedContent.replace(/\n/g, '<br/>');
+    	            
+    	            $.ajax({
+    	                url: `/reply/replyUpdate?replyNo=` + replyNo,
+    	                type: 'POST',
+    	                data: {
+    	                    replyNo: replyNo,
+    	                    replyContent: contentWithBreaks,
+    	                },
+    	                success: function(response) {
+    	                    swal("수정 완료", "댓글이 성공적으로 수정되었습니다.", "success")
+    	                    .then(function() {
+    	                        location.reload();
+    	                    });
+    	                },
+    	                error: function() {
+    	                    swal("오류", "글자수를 초과했습니다. 댓글 수정에 실패했습니다.", "error")
+    	                    .then(function(){
+    	                        location.reload();
+    	                    });
+    	                }
+    	            });
+    	        }
+    	    });
+    	});
+
+
     
     
-              
-              $(updateForm).on('submit', replyUpdateHandler)
-              function replyUpdateHandler(event){
-            	  event.preventDefault();
-            	  updateForm.submit();
-              }
+              // 댓글등록+처리과정업데이트
+              var replyContent = $("#replyContent").val(); // textarea에서 입력한 댓글 내용
+
+    // 줄바꿈을 <br/>로 변환
+    var contentWithBreaks = replyContent.replace(/\n/g, '<br/>');
               
               
 	

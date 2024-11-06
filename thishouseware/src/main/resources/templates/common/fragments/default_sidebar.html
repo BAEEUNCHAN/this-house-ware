@@ -31,11 +31,13 @@
         </div>
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
+          
             <ul class="nav nav-secondary">
-              <li class="nav-item active">
+            
+              <!-- <li class="nav-item active">
                 <a
                   data-bs-toggle="collapse"
-                  href="#dashboard"
+                  href="/logout"
                   class="collapsed"
                   aria-expanded="false"
                 >
@@ -45,15 +47,15 @@
                 </a>
                 <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
-                    <li>
-                      <a href="/login">
-                        <span class="sub-item">로그인</span>
+                     <li>
+                      <a href="/logout">
+                        <span class="sub-item">로그아웃</span>
                       </a>
                     </li>
                     
                   </ul>
                 </div>
-              </li>
+              </li> -->
               
 
               <li class="nav-section">
@@ -198,6 +200,11 @@
       <li>
         <a th:href="@{/edms/edmsDocList}">
           <span class="sub-item">결재문서</span>
+        </a>
+      </li>
+      <li>
+        <a th:href="@{/appr/apprLineList}">
+          <span class="sub-item">결재라인</span>
         </a>
       </li>
       <!-- 결재라인 -->

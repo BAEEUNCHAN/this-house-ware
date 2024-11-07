@@ -58,8 +58,9 @@ public class ScheduleController2 {
 			HttpServletRequest request) {
 		
 		// 회사 컴퓨터로 로그인된것인지 확인한다.
-		String requestIp = GetIPUtil.getPublicIP();
-		// System.out.println("ip"+requestIp);
+		String requestIp =  GetIPUtil.getClientIp(request);
+		System.out.println("clientIP : "+requestIp);
+		
 		if(!requestIp.contains(companyIpFront)) {
 			return "error1";
 		}

@@ -18,7 +18,8 @@ public class DocJoinVO { // 문서함
 
  private int departmentNo; // 부서번호
  private String title; // 문서 제목
- private String id; // 작성자 
+ private String id; // 작성자 아이디
+ private String name; // 작성자 이름
  @DateTimeFormat(pattern = "yyyy-MM-dd")
  private Date submitDt; //문서 작성 날짜
  private String edmsDocNo; // 문서 번호

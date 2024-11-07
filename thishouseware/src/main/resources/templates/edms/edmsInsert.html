@@ -3,12 +3,29 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
+<!-- Bootstrap Icons 추가 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><!--이미지 스크린샷-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!--모달-->
+</head>
 <style>
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.page-inner {
+    width: 95%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
 /* 테이블 스타일 */
 table {
-	width: 100%;
+	width: 90%;
 	border-collapse: collapse;
 	margin: 20px 0;
 	font-size: 16px;
@@ -61,6 +78,22 @@ button {
 
 button:hover {
 	background-color: #0056b3;
+}
+/* 인풋 및 셀렉트 스타일 */
+input[type="text"], select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #1b3a6e;
+    box-shadow: 0 0 8px rgba(27, 58, 110, 0.3);
+    outline: none;
 }
 /* 모달 버튼 */
 .custom-confirm-btn {
@@ -123,25 +156,145 @@ button:hover {
 .custom-error-btn:hover {
 	background-color: #c0392b; /* 호버 시 어두운 붉은색 */
 }
+/* 파일 첨부 스타일 */
+input[type="file"] {
+    display: none;
+}
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.file-upload-label:hover {
+    transform: scale(1.02);
+}
+
+.file-upload-label i {
+    margin-right: 8px; /* 아이콘과 텍스트 사이에 간격 추가 */
+    font-size: 1.2rem; /* 아이콘 크기 조정 */
+}
+
+#file-chosen {
+    margin-left: 10px;
+    font-style: italic;
+    color: #1b3a6e; /* 강조된 색상 */
+    font-size: 0.9rem;
+}
+
+/* 결재자 테이블 스타일 */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-left: 4px solid #1b3a6e;
+    border-right: 4px solid #1b3a6e;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.styled-table th, .styled-table td {
+    padding: 15px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #ddd !important; /* 우선순위를 높이기 위해 추가 */
+}
+
+.styled-table thead th {
+    background-color: #1b3a6e !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.styled-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9 !important;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: #ffffff !important;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #e0f7fa !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+    transition: all 0.3s ease;
+}
+
+/* 결재자 셀 스타일 */
+.styled-td {
+    padding: 12px;
+    text-align: center;
+    font-size: 1rem !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+/* 직급 셀 스타일: 너비 조정, 강조 배경색 */
+.styled-td.position {
+    font-weight: bold;
+    color: #2a4d69 !important;
+    border-right: 2px solid #1b3a6e; /* 셀 간 구분을 위한 테두리 */
+    width: 30%; /* 직급 칸의 가로 크기 조정 */
+}
+
+/* 이름 셀 스타일: 폰트 크기와 두께 증가, 강조 배경색 */
+.styled-td.name {
+    color: #1b3a6e !important;
+    font-size: 1.2rem !important; 
+    font-weight: bold !important;
+    border-left: 2px solid #1b3a6e; 
+
+/* 결재자 라인 제목 스타일 */
+.approval-title {
+    background-color: #d1e0ff !important;
+    color: #1b3a6e !important;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
 </style>
 <div class="page-inner">
+	<div class="page-header">
+		<h3 class="fw-bold mb-3">결재문서 등록</h3>
+		<ul class="breadcrumbs mb-3">
+			<li class="nav-home"><a href="/main?boardsNo=1"> <i
+					class="icon-home"></i>
+			</a></li>
+			<li class="separator"><i class="icon-arrow-right"></i></li>
+			<li class="nav-item">전자결재</li>
+			<li class="separator"><i class="icon-arrow-right"></i></li>
+			<li class="nav-item"><a href="/edms/edmsInsert">결재문서 등록</a></li>
+		</ul>
+	</div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<div class="card-title">결재문서 작성</div>
+					<div class="card-title">결재문서 등록</div>
 				</div>
 				<div class="card-body">
 					<div class="row">
 						<div class="text-center">
-							<h2 style="text-align: center;">문서 정보 입력</h2>
 							<form name="insertForm" th:action="@{/edms/edmsInsert}"
 								method="post" enctype="multipart/form-data">
 								<table class="table">
 									<tr>
-										<td><label for="id">아이디</label></td>
-										<td><input type ="hidden" th:value ="${#authentication.principal.empVO.id}"name ="id" id="id">
-										<p th:text="${#authentication.principal.empVO.id}"></p></td>
+										<td><label for="id">기안자</label></td>
+										<td>
+									        <input type="hidden" th:value="${#authentication.principal.empVO.id}" name="id" id="id">
+									        <p th:text="${#authentication.principal.empVO.name}"></p>
+									    </td>
 									</tr>
 									<tr>
 										<td><label for="title">제목</label></td>
@@ -180,25 +333,33 @@ button:hover {
 									</tr>
 									<tr>
 									<tr>
-										<td><label for="attatch">첨부파일</label></td>
-										<td><input type="file" id="attatch" name="uploadFile"></td>
+									    <td><label for="attatch">첨부파일</label></td>
+									    <td>
+									        <label for="attatch" class="file-upload-label">
+									            <i class="bi bi-folder"></i> 파일 선택
+									        </label>
+									        <input type="file" id="attatch" name="uploadFile">
+									        <span id="file-chosen">선택된 파일 없음</span>
+									    </td>
 									</tr>
 									<tr>
 										<td><span name="approverNos"></span></td>
 									</tr>
 								</table>
 								<div style="text-align: center; margin-top: 20px;">
-								    <input type="button" class="btnSave btn btn-info" value="임시저장" style="float: right; margin-right: 10px; display: none;">
-								    <input type="button" class="btnSubmit btn btn-success" value="등록">
+									<input type="button" class="btnSave btn btn-info" value="임시저장"
+										style="float: right; margin-right: 10px; display: none;">
+									<input type="button" class="btnSubmit btn btn-success"
+										value="등록">
 								</div>
-								<input type ='hidden' name ="approvalLineNo" value=''>
+								<input type='hidden' name="approvalLineNo" value=''>
 							</form>
 						</div>
 					</div>
-					</div>
 				</div>
+			</div>
 
-					<script th:inline="javascript">
+			<script th:inline="javascript">
 				    // 로그인된 사용자 ID를 가져옴
 				    var userId = [[${#authentication.principal.empVO.id}]];
 				    // 결재라인 가져오기
@@ -270,27 +431,29 @@ button:hover {
 	  					return strHtml;
 	  				}
 	  				
-				    // 결재선 선택시 결재자 테이블 생성
-				    // approvalOrder로 정렬하도록 apprMapper에서 지정되어있어서 순번대로 그려줌 
-	  				function getTableTag(result) {
-	  					let tableTag = $('#apprLineSel').append($("<table></table>"));
-	  					tableTag = $(tableTag).append($("<tr></tr>"));
-	  					for(approver of result) {
-	  						$(tableTag).append(
-	  							$("<td></td>").append(approver.positionName));
-	  					}
-	  					tableTag = $(tableTag).append($("<tr></tr>"));
-	  					for(approver of result) {
-	  						$(tableTag).append(
-	  							$("<td></td>").append(approver.name));
-	  					}
-	  					// 결재자 서명이 들어가는 tr
-	  					tableTag = $(tableTag).append($("<tr></tr>"));
-	  					for(approver of result) {
-	  						$(tableTag).append(
-	  							$("<td></td>").append());
-	  					}	  					
-	  				}
+		  			// 결재선 선택시 결재자 테이블 생성
+		  			// approvalOrder로 정렬하도록 apprMapper에서 지정되어 있어서 순번대로 그려줌 
+		  			function getTableTag(result) {
+		  			    let tableTag = $('<table class="styled-table"></table>'); // 클래스 이름 추가
+	
+		  			    // 테이블 헤더 행 추가
+		  			    let headerRow = $('<tr></tr>');
+		  			    headerRow.append('<th>직급 </th>');
+		  			    for (approver of result) {
+		  			        headerRow.append('<th class="styled-td position">' + approver.positionName + '</th>');
+		  			    }
+		  			    tableTag.append(headerRow);
+	
+		  			    // 결재자 이름 행 추가
+		  			    let nameRow = $('<tr></tr>');
+		  			    nameRow.append('<td>이름</td>');
+		  			    for (approver of result) {
+		  			        nameRow.append('<td class="styled-td name">' + approver.name + '</td>');
+		  			    }
+		  			    tableTag.append(nameRow);
+	
+		  			    $('#apprLineSel').html(tableTag); // 테이블 태그를 설정된 위치에 추가
+		  			}
 				    
 				    // 결재선 선택시 approverNo를 Input 태그의 approvers에 담기
 				    function getApprovers(result) {
@@ -311,7 +474,7 @@ button:hover {
 				        .then(res => {
 				            if (res.ok) {
 				                // 요청이 성공하면 페이지 이동
-				                location.href = '/edms/edmsDocList';
+				                location.href = '/docBox/docList';
 				            } else {
 				                // 실패 시 alert
 				                alert('스크린샷 업로드에 실패했습니다.');
@@ -329,12 +492,18 @@ button:hover {
 				            sendScreenshot(imgData);
 				        });
 				    });
+				    
+				    //첨부파일
+				      document.getElementById('attatch').addEventListener('change', function() {
+				        const fileChosen = document.getElementById('file-chosen');
+				        fileChosen.textContent = this.files.length > 0 ? this.files[0].name : '선택된 파일 없음';
+				    });
+				    
 				</script>
-
-		  		<!-- 임시저장 모달 -->
-				<script src="/assets/js/chan/insertSave.js"></script>
-				<!--<script src="/assets/js/chan/insertSaveButton.js"></script>-->
-			</div>
+			<!-- 임시저장 모달 -->
+			<script src="/assets/js/chan/insertSave.js"></script>
+			<!--<script src="/assets/js/chan/insertSaveButton.js"></script>-->
 		</div>
 	</div>
+</div>
 </html>

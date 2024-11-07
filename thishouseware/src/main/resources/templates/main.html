@@ -8,89 +8,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>메인 페이지</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            overflow: hidden; /* 전체 페이지 스크롤 제거 */
-        }
-        .main-container {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            height: calc(100vh - 100px);
-            max-width: 1600px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: auto;
-            align-items: stretch;
-        }
-        .notice-section {
-            flex: 0 0 50%;
-            padding: 20px;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-        }
-        .card-body {
-            padding: 20px;
-            background-color: #ffffff;
-            flex-grow: 1;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: auto;
-            margin-top: 30px;
-        }
-        .grid-section {
-            flex: 0 0 50%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 20px;
-            padding: 20px;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-        }
-        .grid-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-            color: #ffffff;
-            cursor: pointer;
-            height: 150px;
-        }
-        .grid-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            background-color: #444444;
-        }
-        .material-icons {
-            font-size: 56px;
-            margin-bottom: 15px;
-        }
-        .container .pagination .active .page-link {
-            background-color: #007bff; /* 활성 페이지의 배경색 */
-            color: white; /* 활성 페이지의 글자색 */
-            border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
-        }
+<style>
+body {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+	background-color: #f0f0f0;
+	/* overflow: hidden; /* 전체 페이지 스크롤 제거 */ 
+}
 
-        .container .pagination .page-item.disabled .page-link {
-            pointer-events: none; /* 비활성화된 링크 클릭 방지 */
-            color: #6c757d; /* 비활성화된 페이지의 글자색 */
-        }
+.main-container {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: calc(100vh - 123px);
+	max-width: 1600px;
+	background-color: #ffffff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	overflow: hidden;
+	margin: auto;
+	align-items: stretch;
+}
 
-    </style>
+.notice-section {
+	flex: 0 0 60%;
+	padding: 20px;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+}
+
+.card-body {
+	padding: 20px;
+	background-color: #ffffff;
+	flex-grow: 1;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	margin-top: 30px;
+}
+
+.grid-section {
+	flex: 0 0 40%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 20px;
+	padding: 20px;
+	align-items: center;
+	justify-content: center;
+	background-color: #ffffff;
+}
+
+.grid-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border-radius: 20px;
+	padding: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+	color: #ffffff;
+	cursor: pointer;
+	height: 150px;
+}
+
+.grid-item:hover {
+	transform: scale(1.05);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+	background-color: #444444;
+}
+
+.material-icons {
+	font-size: 56px;
+	margin-bottom: 15px;
+}
+
+.container .pagination .active .page-link {
+	background-color: #007bff; /* 활성 페이지의 배경색 */
+	color: white; /* 활성 페이지의 글자색 */
+	border-color: #007bff; /* 활성 페이지의 테두리 색상 추가 */
+}
+
+.container .pagination .page-item.disabled .page-link {
+	pointer-events: none; /* 비활성화된 링크 클릭 방지 */
+	color: #6c757d; /* 비활성화된 페이지의 글자색 */
+}
+
+.container .btn {
+	padding: 0 !important;
+}
+
+.container .table>tbody>tr>td, .table>tbody>tr>th {
+	padding: 5px !important;
+	font-size: 14px;
+}
+</style>
 </head>
 <body>
     <div class="main-container">
@@ -100,14 +116,25 @@
                     <a href="/main?boardsNo=1" class="logo" style="color: black;"></a>
                 </h3>
             </div>
-            <div class="card" style="border: none;">
+            <div class="card" style="height: 100%; border: none;">
                 <div class="card-header" style="border: none;">
                     <div class="card-title text-center" style="font-size: 30px; font-weight: bold;">
                         [[${board.title}]]
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="thisTable table table-striped post">
+                <div class="card-body" style="flex-grow: 1;">
+                    <form name="frmSearch" id="frmSearch">
+                        <input name="nowPage" type="hidden" th:value="${paging.nowPage}">
+                        <input name="boardsNo" type="hidden" th:value="${board.boardsNo}">
+                        <input name="cntPerPage" type="hidden" th:value="${paging.cntPerPage}">
+                        <div style="text-align: right;">
+                            <button type="submit" class="btn btn-secondary" style="width: 30px; height: 30px; font-size: 12px; float:right;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <input name="searchWord" type="text" class="form-control form-control-sm" style="width:200px; margin-right:5px; float:right;" th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
+                        </div>
+                    </form>
+                    <table class="table table-striped mt-3 post">
                         <thead>
                             <tr>
                                 <th>게시글 번호</th>
@@ -129,6 +156,19 @@
                             </th:block>
                         </tbody>
                     </table>
+                    <div class="row">
+                        <div class="text-center">
+                            <nav aria-label="Page navigation" class="text-center mx-auto">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
+                                    <li class="page-item" th:classappend="${paging.startPage} == 1 ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
+                                    <li th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item" th:classappend="${num == paging.nowPage} ? 'active' : ''"><a class="page-link" th:href="|javascript:gopage(${num})|" th:text="${num}"></a></li>
+                                    <li class="page-item" th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a></li>
+                                    <li class="page-item" th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'"><a class="page-link" th:href="|javascript:gopage(${paging.lastPage})|">끝</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

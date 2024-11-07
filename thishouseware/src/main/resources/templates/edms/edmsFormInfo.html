@@ -60,8 +60,177 @@ button {
 button:hover {
 	background-color: #0056b3;
 }
+/* 기본 스타일 초기화 */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f8f9fa;
+	color: #333;
+	overflow-x: hidden;
+}
+
+/* 전체 레이아웃 */
+.page-inner {
+	padding: 20px;
+	width: 95%;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+/* 카드 스타일 */
+.card {
+	border-radius: 12px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+	background-color: #ffffff;
+	margin-bottom: 30px;
+	overflow: hidden;
+}
+
+.card-header {
+	background-color: #1b3a6e; /* 짙은 남색 */
+	color: #ffffff;
+	padding: 20px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+
+.card-title {
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+/* card-body 높이를 늘리기 위해 flex 설정 */
+.card-body {
+	padding: 20px;
+	overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
+}
+
+/* 테이블 스타일 */
+.table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin: 20px 0;
+	background-color: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+	padding: 15px;
+	border-bottom: 1px solid #f0f0f0;
+	text-align: center;
+	font-size: 1rem;
+}
+
+.table thead th {
+	background-color: #1b3a6e; /* 짙은 남색 */
+	color: #ffffff;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.table tbody tr {
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.table tbody tr:hover {
+	background-color: #e9ecef;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.table tbody td {
+	background-color: #ffffff;
+	border-right: 1px solid #f0f0f0; /* 세로 테두리 추가 */
+}
+
+.table tbody td:last-child {
+	border-right: none; /* 마지막 열의 세로 테두리 제거 */
+}
+
+/* 테이블 제목 강조 */
+.table tbody td.title-cell {
+	font-weight: bold;
+	color: #1b3a6e;
+}
+
+/* 숨김 요소 스타일 */
+.hidden {
+	display: none;
+}
+
+/* 문서함 테이블 행 클릭 효과 */
+.docBox tr {
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.docBox tr:hover {
+	background-color: #e9ecef;
+}
+
+/* 버튼 및 인터랙션 스타일 */
+.text-center {
+	text-align: center;
+}
+
+/* 버튼 스타일 */
+.button {
+	display: inline-block;
+	background-color: #17a2b8;
+	color: #ffffff;
+	padding: 10px 20px;
+	text-decoration: none;
+	border-radius: 8px;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button:hover {
+	background-color: #138496;
+	transform: scale(1.05);
+}
+
+/* 반응형 스타일 */
+@media ( max-width : 768px) {
+	.card {
+		padding: 10px;
+	}
+	.table th, .table td {
+		padding: 10px;
+		font-size: 0.9rem;
+	}
+	.card-title {
+		font-size: 1.3rem;
+	}
+	.pagination a {
+		padding: 8px 12px;
+	}
+@media ( max-width : 991.5px) {
+	.navbar-header {
+		position: absolute;
+	}
+}
 </style>
 <div class="page-inner">
+<div class="page-header">
+            <h3 class="fw-bold mb-3">결재양식 조회</h3>
+            <ul class="breadcrumbs mb-3">
+               <li class="nav-home"><a href="/main?boardsNo=1"> <i
+                     class="icon-home"></i>
+               </a></li>
+               <li class="separator"><i class="icon-arrow-right"></i></li>
+               <li class="nav-item"><a href="/complain/complainList">전자결재</a></li>
+               <li class="separator"><i class="icon-arrow-right"></i></li>
+               <li class="nav-item"><a href="/complain/insertComplain">결재양식 조회</a></li>
+            </ul>
+         </div>
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">

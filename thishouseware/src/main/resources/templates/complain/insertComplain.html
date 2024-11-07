@@ -7,9 +7,145 @@
 .card .card-action {
 	margin-top: 20px;
 }
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.page-inner, .col-md-12 {
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.card-header {
+    background-color: #1b3a6e;
+    color: #ffffff;
+    padding: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card-body {
+    padding: 20px;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.table thead th {
+    background-color: #1b3a6e;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.chk_box input[type="checkbox"] {
+    display: none;
+}
+
+.chk_box {
+    cursor: pointer;
+    position: relative;
+}
+
+.chk_box .fa-star {
+    color: #6c757d;
+    font-size: 20px;
+}
+
+.chk_box input[type="checkbox"]:checked + .fa-star {
+    color: #ffc107;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .card {
+        padding: 10px;
+    }
+    
+    .table th, .table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .card-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 991.5px) {
+    .navbar-header {
+        position: absolute;
+    }
+}
 </style>
 <body>
-	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
@@ -193,7 +329,6 @@
 				</form>
 			</div>
 		</div>
-	</div>
 	<script>
 		// submit을 하기 전 제목, 작성자, 작성일자 확인, 값이 없는 경우 등록되지 않도록 이벤트걸기.
 		// Form 태그 네임속성 활용해서 이벤트 걸기

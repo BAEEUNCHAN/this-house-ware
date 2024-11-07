@@ -18,125 +18,135 @@
 						href="/board/postList?boardsNo=${board.boardsNo}">[[${post.boardTitle}]]</a></li>
 				</ul>
 			</div>
-			<div class="page-inner">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">
-									[[${post.boardTitle}]] <a class="float-end">
-										<button class="btn btn-success" type="button"
-											th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
-											th:onclick="|location.href='@{/board/postUpdate(postsNo=${post.postsNo})}'|">수정</button>
-										<button class="btn btn-danger" type="button"
-											th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
-											th:onclick="|location.href='@{/board/postDelete(postsNo=${post.postsNo}, boardsNo=${post.boardsNo})}'|">
-											삭제</button>
-										<button class="btn btn-primary" type="button"
-											th:onclick="|location.href='@{/board/postList(boardsNo=${post.boardsNo})}'|">목록</button>
-									</a>
-								</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								[[${post.boardTitle}]] <a class="float-end">
+									<button class="btn btn-success" type="button"
+										th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
+										th:onclick="|location.href='@{/board/postUpdate(postsNo=${post.postsNo})}'|">수정</button>
+									<button class="btn btn-danger" type="button"
+										th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
+										th:onclick="|location.href='@{/board/postDelete(postsNo=${post.postsNo}, boardsNo=${post.boardsNo})}'|">
+										삭제</button>
+									<button class="btn btn-primary" type="button"
+										th:onclick="|location.href='@{/board/postList(boardsNo=${post.boardsNo})}'|">목록</button>
+								</a>
 							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="text-center">
-										<table class="table">
-											<tr>
-												<th>게시판 이름</th>
-												<td>[[ ${post.boardTitle} ]]</td>
-											</tr>
-											<tr>
-												<th>게시글 제목</th>
-												<td>[[ ${post.title} ]]</td>
-											</tr>
-											<tr>
-												<th>작성자</th>
-												<td>[[ ${post.name} ]]
-											</tr>
-											<tr>
-												<th>등록날짜</th>
-												<td><span th:text="(${post.postSetting == '유'} and ${post.display == 'q2'}) 
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="text-center">
+									<table class="table">
+										<!-- <tr>
+											<td colspan=2>
+												게시판 이름
+												<div class="mb-3 row d-flex align-items-center">
+													<label for="title" class="col-sm-2 col-form-label fw-bold">게시판 이름</label>
+													<div class="col-sm-10">
+														<input type="text" class="form-control" name="title"
+															id="title">
+													</div>
+												</div>
+											</td>
+										</tr> -->
+										<tr>
+											<th>게시판 이름</th>
+											<td>[[ ${post.boardTitle} ]]</td>
+										</tr>
+										<tr>
+											<th>게시글 제목</th>
+											<td>[[ ${post.title} ]]</td>
+										</tr>
+										<tr>
+											<th>작성자</th>
+											<td>[[ ${post.name} ]]
+										</tr>
+										<tr>
+											<th>등록날짜</th>
+											<td><span
+												th:text="(${post.postSetting == '유'} and ${post.display == 'q2'}) 
 																		? ${#dates.format(post.postStartTime, 'yyyy-MM-dd')} 
 																		: ${#dates.format(post.submitDT, 'yyyy-MM-dd')}">
-															</span></td>
+											</span></td>
+										</tr>
+										<tr>
+											<th>내용</th>
+											<td height="100px" width="200px">[[ ${post.content} ]]</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="card-header">
+								<div class="card-title">댓글 목록</div>
+							</div>
+							<div class="row">
+								<div class="text-center">
+									<!-- 댓글 조회 -->
+									<table class="table">
+										<thead>
+											<tr>
+												<th>댓글 번호</th>
+												<th>작성자</th>
+												<th>작성일자</th>
+												<th>내용</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:each="info : ${comments}">
+												<tr>
+													<td>[[ ${info.commentsNo} ]]</td>
+													<td>[[ ${info.name} ]]</td>
+													<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd
+														HH:mm")} ]]</td>
+													<td>[[ ${info.content} ]]</td>
+													<td><button type="button" class="btn btn-success"
+															th:style="${info.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
+															th:onclick="|location.href='@{/board/commentUpdate(postsNo=${post.postsNo}, commentsNo=${info.commentsNo})}'|">수정</button>
+														<button type="button" class="btn btn-danger"
+															th:style="${info.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
+															th:onclick="|location.href='@{/board/commentDelete(postsNo=${post.postsNo}, commentsNo=${info.commentsNo})}'|">삭제</button></td>
+												</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div class="card-header">
+								<div class="card-title">댓글 등록</div>
+							</div>
+							<div class="row">
+								<div class="text-center">
+									<!-- 댓글 작성 -->
+									<form name="insertForm" th:action="@{/board/postInfo}"
+										method="post">
+										<input name="postsNo" type="hidden" th:value="${post.postsNo}">
+										<table class="table">
+											<tr>
+												<th>작성자</th>
+												<td><input type="hidden" name="id"
+													th:value="${#authentication.principal.empVO.id}">[[${#authentication.principal.empVO.name}]]</td>
 											</tr>
 											<tr>
 												<th>내용</th>
-												<td height="100px" width="200px">[[ ${post.content} ]]</td>
+												<td><textarea name="content"></textarea></td>
 											</tr>
 										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-body">
-								<div class="card-header">
-									<div class="card-title">댓글 목록</div>
-								</div>
-								<div class="row">
-									<div class="text-center">
-										<!-- 댓글 조회 -->
-										<table class="table">
-											<thead>
-												<tr>
-													<th>댓글 번호</th>
-													<th>작성자</th>
-													<th>작성일자</th>
-													<th>내용</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<th:block th:each="info : ${comments}">
-													<tr>
-														<td>[[ ${info.commentsNo} ]]</td>
-														<td>[[ ${info.name} ]]</td>
-														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd
-															HH:mm")} ]]</td>
-														<td>[[ ${info.content} ]]</td>
-														<td><button type="button" class="btn btn-success"
-																th:style="${info.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
-																th:onclick="|location.href='@{/board/commentUpdate(postsNo=${post.postsNo}, commentsNo=${info.commentsNo})}'|">수정</button>
-															<button type="button" class="btn btn-danger"
-																th:style="${info.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
-																th:onclick="|location.href='@{/board/commentDelete(postsNo=${post.postsNo}, commentsNo=${info.commentsNo})}'|">삭제</button></td>
-													</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-body">
-								<div class="card-header">
-									<div class="card-title">댓글 등록</div>
-								</div>
-								<div class="row">
-									<div class="text-center">
-										<!-- 댓글 작성 -->
-										<form name="insertForm" th:action="@{/board/postInfo}"
-											method="post">
-											<input name="postsNo" type="hidden"
-												th:value="${post.postsNo}">
-											<table class="table">
-												<tr>
-													<th>작성자</th>
-													<td><input type="hidden" name="id"
-														th:value="${#authentication.principal.empVO.id}">[[${#authentication.principal.empVO.name}]]</td>
-												</tr>
-												<tr>
-													<th>내용</th>
-													<td><textarea name="content"></textarea></td>
-												</tr>
-											</table>
-											<div>
-												<button type="submit" class="btn btn-success"
-													th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">등록</button>
-											</div>
-										</form>
-									</div>
+										<div>
+											<button type="submit" class="btn btn-success"
+												th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">등록</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>

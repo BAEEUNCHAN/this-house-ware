@@ -7,80 +7,90 @@
     <title>결재자 조회</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- jQuery 라이브러리 -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- jQuery UI 라이브러리 -->
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI 라이브러리 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <style>
 /* 기본 체크박스 숨기기 */
 .chk_box input[type="checkbox"] {
-	display: none;
+    display: none;
 }
 
 /* 체크박스 스타일 */
 .chk_box {
-	cursor: pointer;
-	position: relative;
+    cursor: pointer;
+    position: relative;
 }
 
 /* 기본 별 아이콘 색상 */
 .chk_box .fa-star {
-	color: #6c757d;
-	font-size: 20px;
+    color: #6c757d;
+    font-size: 20px;
 }
 
 /* 체크된 상태의 별 아이콘 색상 */
 .chk_box input[type="checkbox"]:checked+.fa-star {
-	color: #ffc107;
+    color: #ffc107;
 }
 
 /* 테이블 컨테이너 스타일 */
 .table-container {
-	width: 100%;
-	max-width: 2400px; /* 최대 너비 조정 */
-	margin: 0 auto;
-	padding: 20px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 8px;
-	background-color: #ffffff;
-	margin-bottom: 20px;
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
 }
 
 /* 테이블 제목 스타일 */
 .table-header {
-	padding: 10px 20px;
-	font-size: 1.25em;
-	font-weight: bold;
-	color: #4a4a4a;
-	border-bottom: 1px solid #e5e5e5;
-	text-align: left; /* 왼쪽 정렬 */
+    padding: 10px 20px;
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #4a4a4a;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
 }
 
 /* 테이블 스타일 */
 .table {
-	width: 100%;
-	margin: 0;
-	border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
 }
 
 /* 테이블 헤더 스타일 */
 .table th, .table td {
-	padding: 12px 15px;
-	text-align: center;
-	border-bottom: 1px solid #e5e5e5;
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
 }
 
-/* 버튼 스타일 */
-button {
-	margin-top: 10px;
-	margin-right: 5px;
+/* 드래그 가능한 행 스타일 */
+.approverRows tr {
+    cursor: grab;
+    transition: background-color 0.2s ease;
+}
+
+.approverRows tr:hover {
+    background-color: #f7f7f7; /* 마우스를 올렸을 때 배경색 변경 */
 }
 
 /* 드래그 중 강조 효과 */
 .sortable-placeholder {
-	background-color: #d3f3ff;
-	border: 1px dashed #99d1ff;
-	height: 50px;
+    background-color: #d3f3ff;
+    border: 1px dashed #99d1ff;
+    height: 50px;
+}
+
+/* 드래그 중인 행 스타일 */
+.ui-sortable-helper {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #e6f7ff;
 }
 </style>
 </head>
@@ -104,14 +114,13 @@ button {
             <tbody class="approverRows">
                 <th:block th:each="info : ${approvers}">
                     <tr th:data-lineno="${info.approvalLineNo}" th:data-id="${info.approverNo}">
-                        <!-- <td><input type="checkbox" class="approverCheck" th:value="${info.approvalLineNo}"></td> -->
                         <td><input type="checkbox" class="approverCheck" th:value="${info.approver}"></td>
-                        <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>                        
+                        <td class="hidden" style="display: none;">[[${info.approverNo}]]</td>
                         <td class="order-number">[[${info.approvalOrder}]]</td>
                         <td>[[${info.departmentName}]]</td>
                         <td>[[${info.positionName}]]</td>
                         <td>[[${info.approvalType}]]</td>
-                        <td>[[${info.name}]]</td>                        
+                        <td>[[${info.name}]]</td>
                     </tr>
                 </th:block>
             </tbody>
@@ -138,19 +147,6 @@ button {
             $('.approverCheck').prop('checked', this.checked);
         });
 
-        // 즐겨찾기 체크박스 클릭 시 이벤트 전파 방지
-        $('.chk_box').on('click', function(event) {
-            event.stopPropagation();
-        });
-
-       /*  // 각 행 클릭 시 approverInfo 페이지로 이동
-        $('.approverRows').on('click', 'tr', function(event) {
-            if (!$(event.target).is('input[type="checkbox"]') && !$(event.target).hasClass('chk_box')) {
-                let approverNo = $(this).find('td.hidden').text().trim();
-                location.href = '/appr/apprInfo?approverNo=' + approverNo;
-            }
-        }); */
-
         // 추가 버튼 클릭 시 동작
         $('#addApproverButton').on('click', function() {
             let approvalLineNo = $('[name="approvalLineNo"]').val();
@@ -160,10 +156,10 @@ button {
         // 삭제 버튼 클릭 시 동작
         $('#deleteApproverButton').on('click', function() {
             let selectedIds = [];
-            $('.approverCheck:checked').each(function() {            	
-            	selectedIds.push($(this).val());
+            $('.approverCheck:checked').each(function() {
+                selectedIds.push($(this).val());
             });
-			            
+
             if (selectedIds.length > 0) {
                 if (confirm('선택한 결재자를 삭제하시겠습니까?')) {
                     $.ajax({
@@ -172,7 +168,7 @@ button {
                         data: JSON.stringify({"lineNo": ApprovalLineNo, "ids": selectedIds}),
                         contentType: 'application/json',
                         success: function(response) {
-                        	alert(response);
+                            alert(response);
                             location.reload();
                         },
                         error: function() {

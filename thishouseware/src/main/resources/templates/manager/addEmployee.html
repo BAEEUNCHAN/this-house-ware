@@ -5,43 +5,28 @@
 	layout:fragment="Content">
 <head>
 	<style>
-		.okEmail{
-			display : none;
-			color : blue;
-		}
 		.noEmail{
 			display : none;
 			color : red;
 		}
 
-		.okName{
-			display : none;
-			color : blue;
-		}
 		.noName{
 			display : none;
 			color : red;
 		}
 
-		.okPassword{
-			display : none;
-			color : blue;
-		}
 		.noPassword{
 			display : none;
 			color : red;
 		}
 
-		.okPhone{
-			display : none;
-			color : blue;
-		}
 		.noPhone{
 			display : none;
 			color : red;
 		}
 
 		.noImage{
+			display : none;
 			color : red;
 		}
 	</style>
@@ -70,21 +55,18 @@
 					<div class="form-group">
 						<label for="email">이메일</label>
 						<input type="email" class="form-control" id="email" name="email" placeholder="이메일" oninput = "checkEmail()">
-						<span class="okEmail">사용가능한 이메일 입니다.</span>
 						<span class="noEmail">사용할 수 없는 이메일 입니다.</span>
 					</div>
 					<!-- inline -->
 					<div class="form-group">
 						<label for="name" class="col-md-3 col-form-label">이름</label>
 						<input type="text" class="form-control input-full" id="name" name="name" placeholder="이름입력" oninput = "checkName()">
-						<span class="okName">사용가능한 이름 입니다.</span>
-						<span class="noName">사용할 수 없는 이름 입니다.</span>
+						<span class="noName">이름을 작성하여 주십시요</span>
 					</div>                        
 					<div class="form-group">
 						<label for="password">제공 비밀번호</label>
 						<input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" autoComplete="off"  oninput = "checkPassword()">
-						<span class="okPassword">사용가능한 비밀번호 입니다.</span>
-						<span class="noPassword">사용할 수 없는 비밀번호 입니다.</span>
+						<span class="noPassword">비밀번호는 4자리 이상 작성해주셔야합니다.</span>
 					</div>
 					<div class="form-group">
 						<label for="phone" class="col-md-3 col-form-label">연락처</label>
@@ -92,8 +74,7 @@
 							id="phone" maxlength="13"
 							placeholder="'-'없이 숫자만 입력."
 							oninput = "checkPhone(); autoHyphen(this);">
-						<span class="okPhone">사용가능한 연락쳐 입니다.</span>
-						<span class="noPhone">사용할 수 없는 연락쳐 입니다.</span>
+						<span class="noPhone">전화번호 11자리를 모두 채워주십시요.</span>
 					</div>  
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">직급</label>
@@ -155,11 +136,12 @@ let uploadFileInput = document.querySelector("#uploadFile");
 function valueCheck(){
     // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
     if(
-        $('.okEmail').css('display') != "none"
-        && nameInput.value.length > 0 
-        && passwordInput.value.length > 0 
-        && phoneInput.value.length > 0 
-        && uploadFileInput.value  
+        $('.noEmail').css('display') == "none"
+        && $('#email').hasClass('is-valid') === true 
+        && $('#name').hasClass('is-valid')  === true
+				&& $('#phone').hasClass('is-valid') === true
+        && $('#password').hasClass('is-valid') === true
+        && $('#uploadFile').hasClass('is-valid')  === true
     ){
 			$('#addEmployee').attr("disabled", false);
     }else{
@@ -169,11 +151,22 @@ function valueCheck(){
 // 초기화 버튼 클릭
 $('#resetEmployee').on('click', function(event){
 	$('form')[0].reset();
-	checkEmail();
-	checkName();
-	checkPassword();
-	checkPhone();
-	checkImage();
+	$('#email').removeClass("is-valid");
+	$('#name').removeClass("is-valid");
+	$('#phone').removeClass("is-valid");
+	$('#password').removeClass("is-valid");
+	$('#uploadFile').removeClass("is-valid");
+	$('#email').removeClass("is-invalid");
+	$('#name').removeClass("is-invalid");
+	$('#phone').removeClass("is-invalid");
+	$('#password').removeClass("is-invalid");
+	$('#uploadFile').removeClass("is-invalid");
+	$('.noEmail').css("display", "none");
+	$('.noName').css("display", "none");
+	$('.noPassword').css("display", "none");
+	$('.noPhone').css("display", "none");
+	$('.noImage').css("display", "none");
+	valueCheck();
 })
 // 직원 추가
 $('#addEmployee').on('click', function(event){
@@ -223,65 +216,93 @@ function checkEmail(){
     var email = $('#email').val(); 
     if(email.length <= 0){
         $('.noEmail').css("display","inline-block");
-        $('.okEmail').css("display", "none");
+				$('#email').addClass("is-invalid");
+				$('#email').removeClass("is-valid");
     	return null;
     }
+		let atIdx = email.indexOf('@');
+		if(atIdx == -1){
+			$('.noEmail').css("display","inline-block");
+			$('#email').addClass("is-invalid");
+			$('#email').removeClass("is-valid");
+			return null;
+		}else{
+			if(email.substr(atIdx).length < 2 ){
+				$('.noEmail').css("display","inline-block");
+				$('#email').addClass("is-invalid");
+				$('#email').removeClass("is-valid");
+				return null;
+			}
+		}
     $.ajax({
         url:'/manager/emailCheck', 
         type:'post', 
         data:{"email":email},
         success:function(answer){ 
             if(answer == 0){ // 사용가능한경우
-                $('.okEmail').css("display","inline-block"); 
                 $('.noEmail').css("display", "none");
+								$('#email').removeClass("is-invalid");
+								$('#email').addClass("is-valid");
             } else { // 사용불가능한경우
                 $('.noEmail').css("display","inline-block");
-                $('.okEmail').css("display", "none");
+								$('#email').addClass("is-invalid");
+								$('#email').removeClass("is-valid");
             }
 						valueCheck();
         },
         error:function(){
             $('.noEmail').css("display","inline-block");
-            $('.okEmail').css("display", "none");
+						$('#email').addClass("is-invalid");
+						$('#email').removeClass("is-valid");
 						valueCheck();
         }
     });
 };
 function checkName(){
 	if(nameInput.value.length > 0 ){
-		$('.okName').css("display","inline-block"); 
 		$('.noName').css("display", "none");
+		$('#name').removeClass("is-invalid");
+		$('#name').addClass("is-valid");
 	}else{
 		$('.noName').css("display","inline-block");
-		$('.okName').css("display", "none");
+		$('#name').addClass("is-invalid");
+		$('#name').removeClass("is-valid");
 	}
 	valueCheck();
 }
 function checkPassword(){
-	if(passwordInput.value.length > 0 ){
-		$('.okPassword').css("display","inline-block"); 
+	if(passwordInput.value.length > 3 ){
 		$('.noPassword').css("display", "none");
+		$('#password').removeClass("is-invalid");
+		$('#password').addClass("is-valid");
 	}else{
 		$('.noPassword').css("display","inline-block");
-		$('.okPassword').css("display", "none");
+		$('#password').addClass("is-invalid");
+		$('#password').removeClass("is-valid");
 	}
 	valueCheck();
 }
 function checkPhone(){
-	if(phoneInput.value.length > 0 ){
-		$('.okPhone').css("display","inline-block"); 
+	if(phoneInput.value.length >= 13 ){
 		$('.noPhone').css("display", "none");
+		$('#phone').removeClass("is-invalid");
+		$('#phone').addClass("is-valid");
 	}else{
 		$('.noPhone').css("display","inline-block");
-		$('.okPhone').css("display", "none");
+		$('#phone').addClass("is-invalid");
+		$('#phone').removeClass("is-valid");
 	}
 	valueCheck();
 }
 function checkImage(){
 	if(uploadFileInput.value){
 		$('.noImage').css("display", "none");
+		$('#uploadFile').removeClass("is-invalid");
+		$('#uploadFile').addClass("is-valid");
 	}else{
 		$('.noImage').css("display", "inline-block");
+		$('#uploadFile').addClass("is-invalid");
+		$('#uploadFile').removeClass("is-valid");
 	}
 	valueCheck();
 }

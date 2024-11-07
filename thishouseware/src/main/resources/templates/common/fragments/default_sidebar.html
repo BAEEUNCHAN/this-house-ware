@@ -190,24 +190,30 @@
             </li>
           </ul>
         </div>
-      </li> -->
+      </li> --> 
+      <!--결재문서 등록-->
+      <li>
+        <a th:href="@{/edms/edmsInsert}">
+          <span class="sub-item">문서등록</span>
+        </a>
+      </li>
       <!-- 결재양식 -->
       <li>
         <a th:href="@{/edms/edmsFormList}">
           <span class="sub-item">결재양식</span>
         </a>
       </li>
-      <li>
+      <!-- <li>
         <a th:href="@{/edms/edmsDocList}">
           <span class="sub-item">결재문서</span>
         </a>
-      </li>
+      </li> -->
+      <!-- 결재라인 -->
       <li>
         <a th:href="@{/appr/apprLineList}">
           <span class="sub-item">결재라인</span>
         </a>
       </li>
-      <!-- 결재라인 -->
       <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-line">
           <span class="sub-item">결재라인</span>
@@ -228,11 +234,6 @@
           </ul>
         </div>
       </li> -->
-      <li>
-        <a th:href="@{/edms/edmsInsert}">
-          <span class="sub-item">결재문서등록</span>
-        </a>
-      </li>
       
       <!-- <li>
         <a data-bs-toggle="collapse" href="#subnav-form">

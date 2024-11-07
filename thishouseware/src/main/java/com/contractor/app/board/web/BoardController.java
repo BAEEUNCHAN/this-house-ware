@@ -1,6 +1,8 @@
 package com.contractor.app.board.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -119,14 +121,18 @@ public class BoardController {
 		// 게시판 유형 조회 - boardsType
 		List<CommonCodeVO> boardsType = commonCodeService.selectCommonCode("0O");
 
-		// 로그인 한 계정의 포지션 코드를 체크한후 a3(본부장) 등급이면
-		if (positionCode.equals("a3")) {
+		// 사장, 또는 관리자
+		if (positionCode.equals("a1") || positionCode.equals("a2")) {			
+			List<BoardsVO> filteredBoards = list;
+			model.addAttribute("boards", filteredBoards);
+		}
+		// 로그인 한 계정의 포지션 코드를 체크한후 a3(본부장) 혹은 a4(팀장) 등급이면
+		else if (positionCode.equals("a3")) {
 			boardsType.remove(0);
 			// 전체 게시판, 해당 본부 부서 게시판만 필터링
 			List<BoardsVO> filteredBoards = list.stream().filter(board -> board.getBoardsType().equals("전체게시판")
 					|| (upperDepartmentNo.stream().anyMatch(dept -> dept.getDepartmentName().equals(board.getTitle()))))
 					.collect(Collectors.toList());
-
 			model.addAttribute("boards", filteredBoards);
 		} /*
 			 * else if (positionCode.equals("a4")) { boardsType.remove(0); // 전체 게시판, 해당 부서
@@ -137,15 +143,33 @@ public class BoardController {
 			 * 
 			 * model.addAttribute("boards", filteredBoards); }
 			 */
+		else if (positionCode.equals("a4") || positionCode.equals("a5")) {
+			boardsType.remove(0);			
+			// 전체 게시판, 해당 본부 부서 게시판만 필터링
+			List<BoardsVO> filteredBoards = list.stream().filter(board -> board.getBoardsType().equals("전체게시판")
+					|| departments.getDepartmentName().equals(board.getTitle()))
+					.collect(Collectors.toList());
 
+			model.addAttribute("boards", filteredBoards);
+		}
+		
 		// 머리글 유형 조회 - postsType
-		List<CommonCodeVO> postsType = commonCodeService.selectCommonCode("0P");
+		// List<CommonCodeVO> postsType = commonCodeService.selectCommonCode("0P");
  
-		// 로그인 한 계정의 포지션 코드를 체크한후 a3(본부장)이면
-		if (positionCode.equals("a3")) {
-			// 전체 게시판, 해당 부서 게시판만 필터링
+		Map<String, String> postsType = new HashMap<>();
+		// 로그인 한 계정의 포지션 코드를 체크한후 사장, 관리자 또는 a3(본부장)이면		
+		if (positionCode.equals("a1") || positionCode.equals("a2") || positionCode.equals("a3")) {
+			// 공지, 필독, 일반 쓰기 권한
+			postsType.put("공지", "p1");
+			postsType.put("필독", "p2");
+			postsType.put("일반", "p3");						
 			
+		} else if (positionCode.equals("a4")) {			
+			postsType.put("필독", "p2");
+			postsType.put("일반", "p3");	
 			
+		} else if (positionCode.equals("a5")) {
+			postsType.put("일반", "p3");
 		}
 
 		// 게시 기간여부

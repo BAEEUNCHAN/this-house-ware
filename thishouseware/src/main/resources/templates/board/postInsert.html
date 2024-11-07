@@ -52,9 +52,13 @@
 													<td><select class="form-select"
 														aria-label="Default select example" name="postsType">
 															<option value="">선택</option>
-															<option th:each="opt : ${postsType}"
+															<!-- <option th:each="opt : ${postsType}"
 																th:value="${opt.commonCodeId}"
-																th:text="${opt.commonCodeName}"></option>
+																th:text="${opt.commonCodeName}"></option> -->
+																<option th:each="type : ${postsType}"
+																th:value="${type.value}"
+																th:text="${type.key}">																
+																</option>
 													</select></td>
 												</tr>
 												<tr>
@@ -122,12 +126,11 @@
 		function postInsertHandler(event) {
 			event.preventDefault();
 
-			let postsType = $('form [name="postsType"]');
+			let postsType = $('form [name="postsType"]');			
 			if (postsType.val() == '') {
 				alert('게시글 유형이 입력되지 않았습니다.');
 				postsType.focus();
 				return;
-			}
 
 			let title = $('form [name="title"]');
 			if (title.val() == '') {

@@ -5,25 +5,13 @@
 	layout:fragment="Content">
 <head>
 	<style>
-		.okEmail{
-			color : blue;
-		}
 		.noEmail{
 			display : none;
 			color : red;
 		}
-    .okName{
-			display : none;
-			color : blue;
-		}
 		.noName{
 			display : none;
 			color : red;
-		}
-
-		.okPhone{
-			display : none;
-			color : blue;
 		}
 		.noPhone{
 			display : none;
@@ -53,8 +41,7 @@
             <div class="form-group">
               <label for="email">이메일 변경</label>
               <input type="text" class="form-control" th:field="*{email}" oninput = "checkEmail()">
-              <span class="okEmail">사용가능한 이메일 입니다.</span>
-            <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
+              <span class="noEmail">사용할 수 없는 이메일 입니다.</span>
             </div>
             <input type="hidden"  th:field="*{id}" >
             <input type="hidden"  th:field="*{imageLink}" >
@@ -62,7 +49,6 @@
             <div class="form-group">
               <label for="name" class="col-md-3 col-form-label">이름 변경</label>
               <input type="text" class="form-control input-full" th:field="*{name}" oninput = "checkName()">
-              <span class="okName">사용가능한 이름 입니다.</span>
               <span class="noName">사용할 수 없는 이름 입니다.</span>
             </div>                        
             <div class="form-group">
@@ -71,7 +57,6 @@
               th:field="*{phone}" 
               maxlength="13"
               oninput = "checkPhone(); autoHyphen(this);">
-              <span class="okPhone">사용가능한 연락쳐 입니다.</span>
               <span class="noPhone">사용할 수 없는 연락쳐 입니다.</span>
             </div>  
             <div class="form-group">
@@ -164,9 +149,9 @@ let phoneInput = document.querySelector("#phone");
 function valueCheck(){
     // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
     if(
-        $('.okEmail').css('display') != "none" &&
-        nameInput.value.length > 0 &&
-        phoneInput.value.length > 0
+      $('#email').hasClass('is-invalid') === false 
+      && $('#name').hasClass('is-invalid')  === false
+			&& $('#phone').hasClass('is-invalid') === false
     ){
 			$('#modifyEmployee').attr("disabled", false);
     }else{
@@ -221,54 +206,80 @@ $('#modifyEmployee').on('click', function(event){
 function checkEmail(){
     var email = $('#email').val(); 
     if(email.length <= 0){
-        $('.noEmail').css("display","inline-block");
-        $('.okEmail').css("display", "none");
+      $('.noEmail').css("display","inline-block");
+			$('#email').addClass("is-invalid");
+			$('#email').removeClass("is-valid");
+      valueCheck();
     	return null;
     }
+    let atIdx = email.indexOf('@');
+		if(atIdx == -1){
+			$('.noEmail').css("display","inline-block");
+			$('#email').addClass("is-invalid");
+			$('#email').removeClass("is-valid");
+      valueCheck();
+			return null;
+		}else{
+			if(email.substr(atIdx).length < 2 ){
+				$('.noEmail').css("display","inline-block");
+				$('#email').addClass("is-invalid");
+				$('#email').removeClass("is-valid");
+        valueCheck();
+				return null;
+			}
+		}
     if(originEmail == email){
-    	$('.okEmail').css("display","inline-block"); 
-        $('.noEmail').css("display", "none");
-        return null;
+      $('.noEmail').css("display", "none");
+			$('#email').removeClass("is-invalid");
+			$('#email').addClass("is-valid");
+      valueCheck();
+      return null;
     }
     $.ajax({
         url:'/manager/emailCheck', 
         type:'post', 
         data:{"email":email},
         success:function(answer){ 
-            if(answer == 0){ // 사용가능한경우
-                $('.okEmail').css("display","inline-block"); 
-                $('.noEmail').css("display", "none");
-                valueCheck();
-            } else { // 사용불가능한경우
-                $('.noEmail').css("display","inline-block");
-                $('.okEmail').css("display", "none");
-                valueCheck();
-            }
+          if(answer == 0){ // 사용가능한경우
+            $('.noEmail').css("display", "none");
+            $('#email').removeClass("is-invalid");
+            $('#email').addClass("is-valid");
+          } else { // 사용불가능한경우
+            $('.noEmail').css("display","inline-block");
+            $('#email').addClass("is-invalid");
+            $('#email').removeClass("is-valid");
+          }
+          valueCheck();
         },
         error:function(){
-            $('.noEmail').css("display","inline-block");
-            $('.okEmail').css("display", "none");
-            valueCheck();
+          $('.noEmail').css("display","inline-block");
+          $('#email').addClass("is-invalid");
+          $('#email').removeClass("is-valid");
+          valueCheck();
         }
     });
 };
 function checkName(){
 	if(nameInput.value.length > 0 ){
-		$('.okName').css("display","inline-block"); 
 		$('.noName').css("display", "none");
+		$('#name').removeClass("is-invalid");
+		$('#name').addClass("is-valid");
 	}else{
 		$('.noName').css("display","inline-block");
-		$('.okName').css("display", "none");
+		$('#name').addClass("is-invalid");
+		$('#name').removeClass("is-valid");
 	}
 	valueCheck();
 }
 function checkPhone(){
-	if(phoneInput.value.length > 0 ){
-		$('.okPhone').css("display","inline-block"); 
+	if(phoneInput.value.length >= 13 ){
 		$('.noPhone').css("display", "none");
+		$('#phone').removeClass("is-invalid");
+		$('#phone').addClass("is-valid");
 	}else{
 		$('.noPhone').css("display","inline-block");
-		$('.okPhone').css("display", "none");
+		$('#phone').addClass("is-invalid");
+		$('#phone').removeClass("is-valid");
 	}
 	valueCheck();
 }

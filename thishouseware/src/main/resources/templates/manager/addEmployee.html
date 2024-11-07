@@ -136,12 +136,11 @@ let uploadFileInput = document.querySelector("#uploadFile");
 function valueCheck(){
     // 인풋테그의 내용이 모두 1글자 이상일경우 허가한다.
     if(
-        $('.noEmail').css('display') == "none"
-        && $('#email').hasClass('is-valid') === true 
-        && $('#name').hasClass('is-valid')  === true
-				&& $('#phone').hasClass('is-valid') === true
-        && $('#password').hasClass('is-valid') === true
-        && $('#uploadFile').hasClass('is-valid')  === true
+			$('#email').hasClass('is-valid') === true 
+			&& $('#name').hasClass('is-valid')  === true
+			&& $('#phone').hasClass('is-valid') === true
+			&& $('#password').hasClass('is-valid') === true
+			&& $('#uploadFile').hasClass('is-valid')  === true
     ){
 			$('#addEmployee').attr("disabled", false);
     }else{

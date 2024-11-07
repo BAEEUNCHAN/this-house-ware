@@ -52,7 +52,7 @@ public class employeeController {
 		}
 		
 		try {
-			emailService.sendEmail(email, "회원님의 아이디입니다.","요청하신 아이디 값입니다.",empVO.getId());
+			emailService.sendEmail(email, "회원님의 아이디입니다.","요청하신 아이디 입니다.",empVO.getId());
 		} catch (Exception e) {
 			return "error2";
 		}

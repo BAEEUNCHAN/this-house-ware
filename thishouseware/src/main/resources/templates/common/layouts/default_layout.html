@@ -7,6 +7,28 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title></title>
   <th:block th:replace="~{common/configs/default_config :: 'ConfigFrag'}"></th:block>
+  <style>
+  	.dataTable > thead > tr > th{
+  		text-align: center !important;
+  	} 
+  	.dataTable > tbody > tr > td{
+  		text-align: center !important;
+  	} 
+  	.dataTable tbody tr:hover {
+	    cursor:pointer;
+	    background-color:#ddd;
+	}
+	.dt-type-numeric{
+		text-align: center !important;
+	}
+  	.thisTable{
+	    text-align: center;
+	}
+  	.thisTable tbody tr:hover {
+	    cursor:pointer;
+	    background-color:#ddd;
+	}
+  </style>
 </head>
   <body>
     <div class="wrapper">

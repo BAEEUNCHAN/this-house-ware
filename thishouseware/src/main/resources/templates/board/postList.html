@@ -5,9 +5,9 @@
 	layout:fragment="Content">
 <style>
 .page-inner, .col-md-12 {
-    width: 100%;
-    max-width: 2400px;
-    margin: 0 auto;
+	width: 100%;
+	max-width: 2400px;
+	margin: 0 auto;
 }
 
 .pagination .active .page-link {
@@ -27,7 +27,8 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">게시판</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="/main?boardsNo=${board.boardsNo}"> <i class="icon-home"></i>
+					<li class="nav-home"><a
+						href="/main?boardsNo=${board.boardsNo}"> <i class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/board/boardMainPage">게시판</a></li>
@@ -47,7 +48,6 @@
 										<button class="btn btn-primary">글쓰기</button>
 									</a>
 								</div>
-
 							</div>
 							<div class="card-body">
 								<div class="row">
@@ -58,11 +58,18 @@
 												type="hidden" th:value="${board.boardsNo}"> <input
 												name="cntPerPage" type="hidden"
 												th:value="${paging.cntPerPage}">
-											<div style="text-align: right;">
+											<div
+												style="display: flex; align-items: center; justify-content: flex-end;">
 												<input name="searchWord" type="text"
+													class="form-control form-control-sm"
+													style="width: 200px; margin-right: 5px;"
 													th:value="${paging.searchWord}" placeholder="검색어를 입력해 주세요.">
-												<button type="submit">검색</button>
+												<button type="submit" class="btn btn-secondary"
+													style="width: 30px; height: 30px; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+													<i class="fas fa-search"></i>
+												</button>
 											</div>
+
 										</form>
 										<!-- <span>게시글 수 [[${#lists.size(posts)}]]</span> -->
 										<table class="table">
@@ -80,8 +87,19 @@
 													<!--  PostsVO => <tr/> -->
 													<tr th:if="${info.display == 'q1'}">
 														<td>[[ ${info.postsNo}]]</td>
-														<td>[[ ${info.postsType}]]</td>
-														<td>[[ ${info.title}]]</td>
+														<!-- <td>[[ ${info.postsType}]]</td> -->
+														<td><span th:switch="${info.postsType}"> <span
+																th:case="공지" th:class="'postsType-p1'"> <span
+																	class="badge badge-warning">공지</span>
+															</span> <span th:case="필독" th:class="'postsType-p2'"> <span
+																	class="badge badge-danger">필독</span>
+															</span> <span th:case="일반" th:class="'postsType-p3'"> <span
+																	class="badge badge-primary">일반</span>
+															</span>
+														</span></td>
+														<td
+															style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+															[[ ${info.title}]]</td>
 														<td>[[ ${info.name}]]</td>
 														<td><span
 															th:text="(${info.postSetting == 'q1'} and ${info.display == 'q2'}) 
@@ -95,43 +113,37 @@
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-body" style="margin-top: -30px;">
-				<div class="row">
-					<div class="text-center">
-						<!-- 페이지 네이션 -->
-						<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
-						<nav aria-label="Page navigation" class="text-center mx-auto">
-							<ul class="pagination justify-content-center">
-								<li class="page-item"
-									th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
-									class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
-								<li class="page-item"
-									th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
-									class="page-link"
-									th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
-								<li
-									th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
-									class="page-item"
-									th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
-									class="page-link" th:href="|javascript:gopage(${num})|"
-									th:text="${num}"></a></li>
+							<!-- 페이지 네이션 -->
+							<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
+							<nav aria-label="Page navigation" class="text-center mx-auto" style="margin-bottom: 20px;">
+								<ul class="pagination justify-content-center">
+									<li class="page-item"
+										th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a
+										class="page-link" th:href="|javascript:gopage(1)|">처음</a></li>
+									<li class="page-item"
+										th:classappend="${paging.startPage} == 1 ? 'disabled'"><a
+										class="page-link"
+										th:href="|javascript:gopage(${paging.startPage - 1})|">이전</a></li>
+									<li
+										th:each="num : ${#numbers.sequence(paging.startPage, paging.endPage)}"
+										class="page-item"
+										th:classappend="${num == paging.nowPage} ? 'active' : ''"><a
+										class="page-link" th:href="|javascript:gopage(${num})|"
+										th:text="${num}"></a></li>
 
-								<li class="page-item"
-									th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
-									<a class="page-link"
-									th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
-								</li>
-								<li class="page-item"
-									th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
-									<a class="page-link"
-									th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
-								</li>
-							</ul>
-						</nav>
+									<li class="page-item"
+										th:classappend="${paging.endPage == paging.lastPage} ? 'disabled'">
+										<a class="page-link"
+										th:href="|javascript:gopage(${paging.endPage + 1})|">다음</a>
+									</li>
+									<li class="page-item"
+										th:classappend="${paging.lastPage} <= ${paging.endPage} ? 'disabled'">
+										<a class="page-link"
+										th:href="|javascript:gopage(${paging.lastPage})|">끝</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
 					</div>
 				</div>
 			</div>

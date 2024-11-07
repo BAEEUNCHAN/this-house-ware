@@ -130,7 +130,8 @@ public class EdmsController {
 	        String nextApproverId = approvers.get(nextOrder).getApprover();
 
 	        edmsDoc.setApproverOrder(nextOrder);
-	        edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED); // 다음 결재자가 수신 상태로 확인할 수 있도록 설정
+	        edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_PENDING); // 다음 결재자가 수신 상태로 확인할 수 있도록 설정
+	        //edmsDoc.setApprovalStatus(EdmsDocVO.STATUS_RECEIVED); // 다음 결재자가 수신 상태로 확인할 수 있도록 설정
 	        edmsDoc.setCurrentApproverId(nextApproverId); // 다음 결재자 ID 확인
 
 	        // 캡처 (다음 결재자로 넘어갈 때마다)

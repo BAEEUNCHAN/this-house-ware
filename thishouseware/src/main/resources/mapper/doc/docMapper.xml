@@ -37,14 +37,23 @@
 	    FROM 
 	        edms_doc d
 	    JOIN employees e
-	    	<if test='"결재대기".equals(approvalStatus)'>
-	    		ON d.id = e.id
-	    	</if>
-	    	<if test='"결재수신".equals(approvalStatus)'>
-		    	ON d.current_approver_id = e.id	    	
-	    	</if> 
-	    WHERE 
-	        d.approval_status = '결재대기'
+	    	<choose>
+	    		<when test='"결재수신".equals(approvalStatus)'>
+		    		ON d.current_approver_id = e.id
+	    		</when>
+	    		<otherwise>
+	    			ON d.id = e.id
+	    		</otherwise>
+	    	</choose> 
+	    WHERE
+	    	<choose>
+	    		<when test='"결재완료".equals(approvalStatus)'>
+	    			d.approval_status = '결재완료'	    		
+	    		</when>
+	    		<otherwise>
+	        		d.approval_status = '결재대기'	    		
+	    		</otherwise>
+	    	</choose>
 	        AND e.id = #{userId}
 	    ORDER BY 
 	        d.submit_dt DESC

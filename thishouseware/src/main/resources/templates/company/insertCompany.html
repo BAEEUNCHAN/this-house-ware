@@ -3,9 +3,9 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+	
 <body>
 
-<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">거래처</h3>
@@ -31,7 +31,7 @@
 							<div class="text-center">
 								<form name="insertForm" th:action="@{/company/insertCompany}"
 									method="post">
-									<table class="table">
+									<table class="table" style="width:50%; float:center; text-align:center;">
 										<tr>
 											<th class="col-md-6">회사명</th>
 											<td><input type="text" name="companyName" aria-label="Username"
@@ -48,7 +48,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	</div>
 	<script>

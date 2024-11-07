@@ -20,7 +20,7 @@
 		,p.company_name
 		FROM complains c JOIN companys p
 		ON c.company_no = p.company_no
-		ORDER BY complain_no DESC
+		ORDER BY c.complain_no DESC
 
 	</select>
 	<select id="selectComplainAll0To2" resultType="ComplainsVO">
@@ -40,6 +40,7 @@
 		FROM complains c JOIN companys p
 		ON c.company_no = p.company_no
 		WHERE c.progress = 0 OR c.progress = 1 OR c.progress = 2
+		ORDER BY c.complain_no DESC
 
 	</select>
 	
@@ -69,6 +70,7 @@
 		JOIN results r
 		ON r.complain_no = c.complain_no
 		WHERE c.complain_no = #{complainNo}
+		ORDER BY c.complain_no DESC
 		
 	</select>
 	
@@ -90,6 +92,7 @@
 		FROM complains c JOIN companys p
 		ON c.company_no = p.company_no
 		where c.progress = 3 OR c.progress = 4
+		ORDER BY c.complain_no DESC
 
 	</select>
 	

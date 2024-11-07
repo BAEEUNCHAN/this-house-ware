@@ -16,10 +16,24 @@
 .dataTables_info {
 	float: left;
 }
+thead{
+	background-color: #1b3a6e !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
 
 #example tbody tr:hover {
     cursor:pointer;
     background-color:#ddd;
+}
+th.sorting:after,
+th.sorting:before,
+th.sorting_asc:after,
+th.sorting_asc:before,
+th.sorting_desc:after, 
+th.sorting_desc:before {
+    display: none !important;
 }
 </style>
 
@@ -27,7 +41,6 @@
 <body>
 
 
-	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
@@ -42,8 +55,6 @@
 			</div>
 			<div></div>
 
-			<div class="page-inner">
-				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
@@ -104,7 +115,7 @@
 
 															<button type="button" class="btn btn-danger alert_demo_7"
 																data-toggle="modal" data-target="#exampleModal"
-																th:value="info">
+																th:value="info" style="width:30px; height:30px; padding:0px; margin:0px;">
 																<i class="icon-trash"></i>
 															</button>
 														</td>
@@ -119,9 +130,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 
 
 	<!-- Modal -->
@@ -244,10 +252,25 @@
 			location.href = url;
 		});
 		
-		
+		var lang_kor = {
+				"zeroRecords" : "검색된 데이터가 없습니다.",
+				"paginate" : {
+					"first" : "첫 페이지",
+					"last" : "마지막 페이지",
+					"next" : "다음",
+					"previous" : "이전"
+				},
+			}
 		
 	$(document).ready(function () {
-		var table = $('#example').DataTable();
+		var table = $('#example').DataTable({
+			info: false,
+			language : lang_kor,
+			dom: '<"top"f>rt<"bottom"p><"clear">',  // 검색창(f)을 상단에 표시
+			pageLength: 10,  // 페이지당 항목 수를 10으로 고정
+			lengthChange: false,  // 항목 수 변경을 비활성화
+			/* ordering: false, */
+		});
 
 		$('#progressDropdown').on('change', function () {
 			var selectedProgress = $(this).val();

@@ -9,7 +9,150 @@
 	rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
 <style>
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.page-inner, .col-md-12 {
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.card-header {
+    background-color: #1b3a6e;
+    color: #ffffff;
+    padding: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card-body {
+    padding: 20px;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.table thead th {
+    background-color: #1b3a6e !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+thead{
+	background-color: #1b3a6e !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+#example tbody tr:hover {
+    cursor: pointer;
+    background-color: #ddd;  /* !important 추가 */
+}
+
+
+.chk_box input[type="checkbox"] {
+    display: none;
+}
+
+.chk_box {
+    cursor: pointer;
+    position: relative;
+}
+
+.chk_box .fa-star {
+    color: #6c757d;
+    font-size: 20px;
+}
+
+.chk_box input[type="checkbox"]:checked + .fa-star {
+    color: #ffc107;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .card {
+        padding: 10px;
+    }
+    
+    .table th, .table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .card-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 991.5px) {
+    .navbar-header {
+        position: absolute;
+    }
+}
 .dataTables_length {
 	float: left; 
 }
@@ -27,13 +170,22 @@
 	width: 30px;
 	height: 30px;
 }
+th.sorting:after,
+th.sorting:before,
+th.sorting_asc:after,
+th.sorting_asc:before,
+th.sorting_desc:after, 
+th.sorting_desc:before {
+    display: none !important;
+}
+
+
 </style>
 
 
 <body>
 
 
-	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">불편/장애사항</h3>
@@ -48,8 +200,6 @@
 			</div>
 			<div></div>
 			
-			<div class="page-inner">
-				<div class="row">
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
@@ -119,9 +269,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 
 <!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -244,10 +391,25 @@
 			location.href = url;
 		});
 		
-		
+		var lang_kor = {
+				"zeroRecords" : "검색된 데이터가 없습니다.",
+				"paginate" : {
+					"first" : "첫 페이지",
+					"last" : "마지막 페이지",
+					"next" : "다음",
+					"previous" : "이전"
+				},
+			}
 		
 	$(document).ready(function () {
-		var table = $('#example').DataTable();
+		var table = $('#example').DataTable({
+	        info: false,
+	        language : lang_kor,
+	        dom: '<"top"f>rt<"bottom"p><"clear">',  // 검색창(f)을 상단에 표시
+	        pageLength: 10,  // 페이지당 항목 수를 10으로 고정
+	        lengthChange: false,  // 항목 수 변경을 비활성화
+	        ordering: false,  // 정렬 기능 활성화
+	    });
 
 		$('#progressDropdown').on('change', function () {
 			var selectedProgress = $(this).val();

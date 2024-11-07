@@ -12,158 +12,329 @@
 	href="https://cdn.datatables.net/2.1.4/css/dataTables.dataTables.css"
 	rel="stylesheet">
 <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+<style>
+/* 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.page-inner, .col-md-12 {
+    width: 100%;
+    max-width: 2400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff;
+    margin-bottom: 30px;
+}
+
+.card-header {
+    background-color: #1b3a6e;
+    color: #ffffff;
+    padding: 20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card-body {
+    padding: 20px;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.table thead th {
+    background-color: #1b3a6e;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.chk_box input[type="checkbox"] {
+    display: none;
+}
+
+.chk_box {
+    cursor: pointer;
+    position: relative;
+}
+
+.chk_box .fa-star {
+    color: #6c757d;
+    font-size: 20px;
+}
+
+.chk_box input[type="checkbox"]:checked + .fa-star {
+    color: #ffc107;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .card {
+        padding: 10px;
+    }
+    
+    .table th, .table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .card-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 991.5px) {
+    .navbar-header {
+        position: absolute;
+    }
+}
+.card-action{
+	margin-left:70px;
+	margin-right:70px;
+}
+.card-body{
+	margin-left:70px;
+	margin-right:70px;
+}
+</style>
 <body>
-	<div class="container">
-		<div class="page-inner">
-			<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
-				<div class="page-header">
-					<h3 class="fw-bold mb-3">불편/장애사항</h3>
-					<ul class="breadcrumbs mb-3">
-						<li class="nav-home"><a href="/main?boardsNo=1"> <i class="icon-home"></i>
-						</a></li>
-						<li class="separator"><i class="icon-arrow-right"></i></li>
-						<li class="nav-item"><a href="/reply/replyList">고객관리</a></li>
-						<li class="separator"><i class="icon-arrow-right"></i></li>
-						<li class="nav-item"><a href="#">불편/장애사항 확인</a></li>
-					</ul>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">불편/장애사항 확인</div>
-							</div>
-							<div class="card-body">
-								<div class="row">
-									<!-- 왼쪽화면 -->
-									<div class="col-md-6 col-lg-30">
-
-										<label for="companyName">회사명 :
-											[[${complain.companyName}]]</label> <br /> <br /> <label
-											for="customerName">고객명 : [[${complain.customerName}]]</label>
-										<br /> <br /> <label for="phone">연락처 :
-											[[${complain.phone}]]</label> <br /> <br />
-
-									</div>
-									<!-- 왼쪽화면 끝-->
-									<!-- 오른쪽화면 -->
-									<div class="col-md-6 col-lg-30">
-										<label for="uploadDt">문제발생일 :
-											[[${#dates.format(complain.complainDt, 'yyyy년 MM월 dd일')}]]</label> <br />
-										<br /> <span>문의구분 : [[${complain.complainType == 1 ?
-											'고객불편' : (complain.complainType == 2 ? '운영장애' : '')}]] / 처리상황
-											: </span><label for="customerName"> <select
-											class="form-select" id="progress" name="progress"
-											aria-label="Progress Dropdown" style="width: 100px;">
-												<option th:value="0" th:selected="${complain.progress == 0}">대기</option>
-												<option th:value="1" th:selected="${complain.progress == 1}">접수</option>
-												<option th:value="2" th:selected="${complain.progress == 2}">진행</option>
-												<option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
-												<option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
-										</select>
-										</label> <br /> <br /> <label for="phone">작성일 :
-											[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
-										<br />
-									</div>
-								</div>
-								<div class="card-action">
-									<div class="text-center">
-										<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
-									</div>
-
-									<p style="font-weight: bold; font-size: 16px;">
-										<i class="fas fa-check-square"> 문의내용</i>
-									</p>
-									<label for="customerName" th:utext="${complain.complainContent}"></label>
-									<br /> <br />
-									<p style="font-weight: bold; font-size: 16px;">
-										<i class="fas fa-check-square"> 요구사항</i>
-									</p>
-									<label for="phone" th:utext="${complain.complainRequest}"></label> <br />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">문의답변/조치사항</div>
-							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="col-md-12 col-lg-12">
-										<br />
-
-
-										<th:block th:each="info : ${replys}">
-
-											<div class="timeline-panel">
-												<div class="timeline-heading">
-													<h4 class="timeline-title" style="font-weight: bolder;">
-														[[${info.departmentName}]] [[${info.name}]]
-														<th:block
-															th:if="${#authentication.principal.empVO.id} == ${info.id}">
-															<!-- 삭제버튼 -->
-															<i class="fas fa-times-circle"
-																style="float: right; color: gray;"
-																th:data-id="${info.replyNo}"> </i>
-															<!-- 수정버튼 -->
-															<i class="far fa-edit" style="float: right; color: gray;"
-																th:data-id="${info.replyNo}"></i>
-														</th:block>
-													</h4>
-													<p>
-														<small class="text-muted"><i
-															class="far fa-paper-plane"></i>[[${#dates.format(info.replyDt,
-															'yyyy년 MM월 dd일 a hh:mm')}]] </small>
-													</p>
-
-
-
-
-												</div>
-												<div class="timeline-body">
-												<label for="replyContent" th:utext="${info.replyContent}"></label>
-												</div>
-
-											</div>
-											<br />
-											<br />
-										</th:block>
-										<small class="text-muted"><i
-											class="far fa-paper-plane">
-												[[${#authentication.principal.empVO.departmentName}]]
-												[[${#authentication.principal.empVO.name}]]</i></small>
-										<textarea class="form-control" name="replyContent"
-											id="replyContent" rows="5" maxlength="500" wrap="soft"
-											style="background-color: lightyellow; white-space: pre-wrap;"></textarea>
-
-
-
-
-
-
-										<br />
-
-										<button type="submit" class="btn btn-success"
-											style="float: right;">등록</button>
-										<input type="hidden" name="complainNo"
-											th:value="${complain.complainNo}"> <input
-											type="hidden" name="id"
-											th:value="${#authentication.principal.empVO.id}">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</form>
-			<div class="text-center">
-				<a href="/reply/replyList"><button class="btn btn-primary">목록</button></a>
+	<div class="page-inner">
+		<form name="updateForm" th:action="@{/reply/replyInfo}" method="post">
+			<div class="page-header">
+				<h3 class="fw-bold mb-3">불편/장애사항</h3>
+				<ul class="breadcrumbs mb-3">
+					<li class="nav-home"><a href="/main?boardsNo=1"> <i
+							class="icon-home"></i>
+					</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="/reply/replyList">고객관리</a></li>
+					<li class="separator"><i class="icon-arrow-right"></i></li>
+					<li class="nav-item"><a href="#">불편/장애사항 확인</a></li>
+				</ul>
 			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								불편/장애사항 확인 <span th:switch="${complain.progress}"> <span
+									th:case="0" class="badge badge-danger">대기</span> <span
+									th:case="1" class="badge badge-warning">접수</span> <span
+									th:case="2" class="badge badge-success">진행</span> <span
+									th:case="3" class="badge badge-primary">완료</span> <span
+									th:case="4" class="badge badge-primary">완료</span>
+								</span>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row"
+								style="padding-left: 100px; padding-right: 20px;">
+								<!-- 왼쪽화면 -->
+								<div class="col-md-4 col-lg-30">
+
+									<label for="companyName"><i class="fas fa-caret-right">
+											회사명 : </i> [[${complain.companyName}]]</label> <br /> <br /> <label
+										for="customerName"><i class="fas fa-caret-right">
+											고객명 : </i> [[${complain.customerName}]]</label> <br /> <br />
+
+								</div>
+								<!-- 왼쪽화면 끝-->
+								<!-- 오른쪽화면 -->
+								<div class="col-md-4 col-lg-30">
+									<label for="phone"><i class="fas fa-caret-right">
+											연락처 : </i> [[${complain.phone}]]</label> <br />
+									<br /> <label for="customerName"> <span><i
+											class="fas fa-caret-right"> 문의구분 : </i></span>
+										[[${complain.complainType == 1 ? '고객불편' :
+										(complain.complainType == 2 ? '운영장애' : '')}]] <br /></label>
+
+								</div>
+								<!-- 3번째화면 -->
+								<div class="col-md-4 col-lg-30">
+									<label for="uploadDt"><i class="fas fa-caret-right">
+											문제발생일 : </i> [[${#dates.format(complain.complainDt, 'yyyy년 MM월
+										dd일')}]]</label> <br /> <br /> <label for="phone"><i
+										class="fas fa-caret-right"> 작성일 : </i>
+										[[${#dates.format(complain.uploadDt, 'yyyy년 MM월 dd일')}]]</label> <br />
+									<br />
+								</div>
+							</div>
+							<div class="card-action">
+								<div class="text-center">
+									<p style="font-weight: bold; font-size: 22px;">[[${complain.complainTitle}]]</p>
+								</div>
+								<br />
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square" style="color: #0d6efd;"></i>
+									문의내용
+								</p>
+								<label for="customerName" th:utext="${complain.complainContent}"
+									style="padding: 20px;"></label> <br /> <br />
+
+								<p style="font-weight: bold; font-size: 16px;">
+									<i class="fas fa-check-square" style="color: #0d6efd;"></i>
+									요구사항
+								</p>
+								<label for="phone" th:utext="${complain.complainRequest}"
+									style="padding: 20px;"></label> <br /> <br />
+
+								<div class="text-center">
+									<!-- <button class="btn btn-success"
+										th:onclick='|location.href="@{/complain/complainUpdate(complainNo=${complain.complainNo})}"|'>수정</button>
+									<button type="button" class="btn btn-danger alert_demo_7"
+										data-toggle="modal" data-target="#exampleModal"
+										th:value="${complain.complainNo}">삭제</button> -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">문의답변/조치사항</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12 col-lg-12">
+									<br />
+
+
+									<th:block th:each="info : ${replys}">
+
+										<div class="timeline-panel">
+											<div class="timeline-heading">
+												<h3 class="timeline-title"
+												style="font-weight: bold; display: inline;">
+												[[${info.departmentName}]] [[${info.name}]]
+													<th:block
+														th:if="${#authentication.principal.empVO.id} == ${info.id}">
+														<!-- 삭제버튼 -->
+														<i class="fas fa-times-circle"
+															style="float: right; color: gray;"
+															th:data-id="${info.replyNo}"> </i>
+														<!-- 수정버튼 -->
+														<i class="far fa-edit" style="float: right; color: gray;"
+															th:data-id="${info.replyNo}"></i>
+													</th:block>
+												</h3>
+												<p>
+													<small class="text-muted" style="display: inline;"> <i
+												class="far fa-paper-plane"
+												style="font-size: 12px; margin-left: 8px;"></i>
+												[[${#dates.format(info.replyDt, 'yyyy년 MM월 dd일 a hh:mm')}]]
+											</small>
+											</div>
+											<div class="timeline-body" style="padding: 10px;">
+												<label for="replyContent" th:utext="${info.replyContent}"></label>
+											</div>
+
+										</div>
+										<br />
+										<br />
+									</th:block>
+									<small class="text-muted"><i class="far fa-paper-plane">
+											[[${#authentication.principal.empVO.departmentName}]]
+											[[${#authentication.principal.empVO.name}]]</i></small>
+									<textarea class="form-control" name="replyContent"
+										id="replyContent" rows="5" maxlength="500" wrap="soft"
+										style="background-color: lightyellow; white-space: pre-wrap;"></textarea>
+
+
+
+
+									<br /><br />
+<div style="text-align: right;">
+    <p style="display: inline-block; margin-right: 10px; font-weight:bold;"></p>
+    <select class="form-select" id="progress" name="progress"
+        aria-label="Progress Dropdown" style="width: 100px; display: inline-block; margin-right:10px;">
+        <option th:value="0" th:selected="${complain.progress == 0}">대기</option>
+        <option th:value="1" th:selected="${complain.progress == 1}">접수</option>
+        <option th:value="2" th:selected="${complain.progress == 2}">진행</option>
+        <option th:value="3" th:selected="${complain.progress == 3}">상황완료</option>
+        <option th:value="4" th:selected="${complain.progress == 4}">보고완료</option>
+    </select>
+
+									<button type="submit" class="btn btn-success"
+										style="float: right;">등록</button>
+									<input type="hidden" name="complainNo"
+										th:value="${complain.complainNo}"> <input
+										type="hidden" name="id"
+										th:value="${#authentication.principal.empVO.id}">
+								</div></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="text-center">
+			<a href="/reply/replyList"><button class="btn btn-primary">목록</button></a>
 		</div>
 	</div>
 

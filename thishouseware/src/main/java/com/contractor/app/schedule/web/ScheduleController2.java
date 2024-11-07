@@ -58,10 +58,10 @@ public class ScheduleController2 {
 			HttpServletRequest request) {
 		
 		// 회사 컴퓨터로 로그인된것인지 확인한다.
-		String requestIp = GetIPUtil.getPublicIP();
-		System.out.println("public ip"+requestIp);
-		String priIP = GetIPUtil.getClientIp(request);
-		System.out.println("private ip"+priIP);
+		String requestIp =  GetIPUtil.getClientIp(request);
+//		System.out.println("public ip"+requestIp);
+//		String priIP = GetIPUtil.getClientIp(request);
+//		System.out.println("private ip"+priIP);
 		
 		if(!requestIp.contains(companyIpFront)) {
 			return "error1";

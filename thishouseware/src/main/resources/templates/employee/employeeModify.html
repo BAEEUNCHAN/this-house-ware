@@ -48,7 +48,7 @@
                   id="phone" maxlength="13"
                   placeholder="'-'없이 숫자만 입력."
                   oninput = "autoHyphen(this); newPhoneCheck();">
-                  <span class="noPhone">전화번호 11자리를 모두 채워주십시요.</span>
+                  <span class="noPhone">전화번호 11자리를 모두 채워주십시오.</span>
                 </div>  
                 <div class="form-group">
                   <label for="newPassword" class="col-md-3 col-form-label">비밀번호 변경</label>
@@ -111,6 +111,7 @@ function newPasswordCheck(){
     $('#checkNewPassword').removeClass("is-invalid");
   }else if(newPasswordInput.value.length < 4 && checkNewPasswordInput.value.length < 4){
     $('.noNewPassword').css("display","inline-block");
+    $('.noCheckPassword').css("display","none");
 
     $('#newPassword').removeClass("is-valid");
     $('#checkNewPassword').removeClass("is-valid");
@@ -122,6 +123,7 @@ function newPasswordCheck(){
     if(newPasswordInput.value == checkNewPasswordInput.value)
     {
       $('.noCheckPassword').css("display","none");
+
       $('#newPassword').addClass("is-valid");
       $('#checkNewPassword').addClass("is-valid");
       $('#newPassword').removeClass("is-invalid");
@@ -186,7 +188,7 @@ $('#modifyEmployee').on('click', function(event){
 		}else if(result == 'error3'){
 			alert("서버오류가 발생하였습니다.");
 		}else{
-			alert("회원 정보 수정이 성공하셧습니다.");
+			alert("내 정보 수정이 성공했습니다.");
 			location.href = "/employee/info/"+ id.value;
 		}
 	})

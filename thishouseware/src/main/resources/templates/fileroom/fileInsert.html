@@ -35,7 +35,7 @@
 												<tr>
 													<th>자료실</th>
 													<td><select class="form-select" name="fileRoomsNo"
-														onchange="filterFoldersByRooms()">
+														onchange="filterFoldersByRooms()" style="width: 170px;">
 															<option value="">선택</option>
 															<optgroup th:each="optgrp : ${fileRoomsType}"
 																th:label="${optgrp.commonCodeName}">
@@ -51,7 +51,7 @@
 												<tr>
 													<th>폴더</th>
 													<td><select class="form-select" name="folderNo"
-														aria-label="Default select example">
+														aria-label="Default select example" style="width: 170px;">
 															<option value="">선택</option>
 															<option th:each="opt : ${folders}"
 																th:data-fileRoomsNo="${opt.fileRoomsNo}"

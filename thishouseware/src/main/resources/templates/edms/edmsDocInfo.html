@@ -5,169 +5,349 @@
       layout:fragment="Content">
 <head>
 <style>
+.table tbody td.title-cell {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 350px; /* 원하는 최대 너비 설정 */
+}
+/* 기본 체크박스 숨기기 */
+.chk_box input[type="checkbox"] {
+	display: none; /* 체크박스 숨기기 */
+}
+
+/* 체크박스 스타일 */
+.chk_box {
+	cursor: pointer; /* 커서 포인터로 변경 */
+	position: relative; /* 상대 위치 지정 */
+}
+
+/* 기본 별 아이콘 색상 */
+.chk_box .fa-star {
+	color: #6c757d; /* 기본 색상 */
+	font-size: 20px; /* 별 아이콘 크기 조정 */
+}
+
+/* 체크된 상태의 별 아이콘 색상 */
+.chk_box input[type="checkbox"]:checked+.fa-star {
+	color: #ffc107; /* 체크 시 별 색상 변경 */
+}
+/* 모달 버튼 */
+.custom-confirm-btn {
+	background-color: #4a90e2; /* 차분한 파란색 */
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 25px; /* 둥근 모서리 */
+	font-size: 16px;
+	font-weight: bold;
+	margin-right: 15px; /* 버튼 간격 추가 */
+	transition: background-color 0.3s ease;
+	cursor: pointer;
+}
+
+.custom-confirm-btn:hover {
+	background-color: #357ABD; /* 파란색 어두운 버전 */
+}
+
+.custom-cancel-btn {
+	background-color: #6c757d; /* 중간 회색 */
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 25px;
+	font-size: 16px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+	cursor: pointer;
+}
+
+.custom-success-btn {
+	background-color: #28a745; /* 녹색 */
+	color: white;
+	padding: 10px 20px;
+	border-radius: 25px; /* 둥근 모서리 */
+	font-size: 16px;
+	font-weight: bold;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.custom-success-btn:hover {
+	background-color: #218838; /* Hover 시 어두운 녹색 */
+}
+/* 오류 발생 모달 확인 버튼 스타일 */
+.custom-error-btn {
+	background-color: #e74c3c; /* 붉은색 계열 */
+	color: white;
+	padding: 12px 24px;
+	border: none;
+	border-radius: 25px; /* 둥근 모서리 */
+	font-size: 16px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+	cursor: pointer;
+}
+
+.custom-error-btn:hover {
+	background-color: #c0392b; /* 호버 시 어두운 붉은색 */
+}
+/* 기본 스타일 초기화 */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #f8f9fa;
+	color: #333;
+	overflow-x: hidden;
+}
+
+/* 전체 레이아웃 */
+.page-inner {
+	padding: 20px;
+	width: 95%;
+	max-width: 1400px;
+	margin: 0 auto;
+}
+
+/* 카드 스타일 */
+.card {
+	border-radius: 12px;
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+	background-color: #ffffff;
+	margin-bottom: 30px;
+	overflow: hidden;
+}
+
+.card-header {
+	background-color: #1b3a6e; /* 짙은 남색 */
+	color: #ffffff;
+	padding: 20px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+
+.card-title {
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+/* card-body 높이를 늘리기 위해 flex 설정 */
+.card-body {
+	padding: 20px;
+	overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
+}
+
 /* 테이블 스타일 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 16px;
-    text-align: left;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	margin: 20px 0;
+	background-color: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 테이블 헤더 스타일 */
-th, td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+.table th, .table td {
+	padding: 15px;
+	border-bottom: 1px solid #f0f0f0;
+	text-align: center;
+	font-size: 1rem;
 }
 
-th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+.table thead th {
+	background-color: #1b3a6e; /* 짙은 남색 */
+	color: #ffffff;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
-/* 라벨 스타일 */
-label {
-    font-weight: bold;
-    margin-right: 10px;
+.table tbody tr {
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 테이블 데이터 스타일 */
-td span {
-    display: block;
-    color: #333;
+.table tbody td {
+	background-color: #ffffff;
+	border-right: 1px solid #f0f0f0; /* 세로 테두리 추가 */
 }
 
-/* 테이블 행 배경색 (홀수 행 스타일) */
-tr:nth-child(odd) {
-    background-color: #f9f9f9;
+.table tbody td:last-child {
+	border-right: none; /* 마지막 열의 세로 테두리 제거 */
 }
 
-/* 버튼을 가운데 정렬 */
-.button-container {
-    text-align: center;
-    margin-top: 20px;
+/* 숨김 요소 스타일 */
+.hidden {
+	display: none;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+/* 문서함 테이블 행 클릭 효과 */
+.docBox tr {
+	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: #0056b3;
+.docBox tr:hover {
+	background-color: #e9ecef;
 }
 
-/* 추가된 결재/반려 버튼 스타일 */
-.custom-approve-btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-    margin: 5px;
-    cursor: pointer;
+/* 버튼 및 인터랙션 스타일 */
+.text-center {
+	text-align: center;
 }
 
-.custom-approve-btn:hover {
-    background-color: #45A049;
+/* 버튼 스타일 */
+.button {
+	display: inline-block;
+	background-color: #17a2b8;
+	color: #ffffff;
+	padding: 10px 20px;
+	text-decoration: none;
+	border-radius: 8px;
+	transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.custom-reject-btn {
-    background-color: #FF6347;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-    margin: 5px;
-    cursor: pointer;
+.button:hover {
+	background-color: #138496;
+	transform: scale(1.05);
 }
 
-.custom-reject-btn:hover {
-    background-color: #FF4500;
+/* 반응형 스타일 */
+@media ( max-width : 768px) {
+	.card {
+		padding: 10px;
+	}
+	.table th, .table td {
+		padding: 10px;
+		font-size: 0.9rem;
+	}
+	.card-title {
+		font-size: 1.3rem;
+	}
+	.pagination a {
+		padding: 8px 12px;
+	}
+	@media ( max-width : 991.5px) {
+		.navbar-header {
+			position: absolute;
+		}
+	}
 }
 
 /* 반려 사유 모달 스타일 */
 #rejectModal {
     position: fixed;
-    z-index: 1;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
 #rejectModal .modal-content {
-    background-color: #fff;
-    padding: 20px;
-    width: 400px;
-    max-width: 90%;
+    background-color: #ffffff;
+    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 400px;
     position: relative;
+    text-align: center;
 }
 
 #rejectModal h4 {
-    margin-top: 0;
-    font-size: 18px;
+    margin: 0;
+    font-size: 1.2em;
     font-weight: bold;
     color: #333;
-    text-align: center;
 }
 
 #rejectModal textarea {
     width: 100%;
     height: 100px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 8px;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1em;
     resize: none;
-    font-size: 14px;
 }
 
 #rejectModal .modal-footer {
+    margin-top: 20px;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
 }
 
-#rejectModal .modal-footer button {
-    width: 45%;
-    padding: 8px;
-    font-size: 14px;
-}
+/* 버튼 스타일 */
 .button-container {
+    margin-top: 30px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
+}
+
+.btn-list, .custom-approve-btn, .custom-reject-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn-list {
-    padding: 10px 20px;
     background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+    color: #ffffff;
 }
 
-.center-buttons {
-    text-align: center;
-    flex-grow: 1;
+.custom-approve-btn {
+    background-color: #34a853;
+    color: #ffffff;
 }
 
-.center-buttons button {
-    margin: 5px;
+.custom-approve-btn:hover {
+    background-color: #2c8c43;
+}
+
+.custom-reject-btn {
+    background-color: #ea4335;
+    color: #ffffff;
+}
+
+.custom-reject-btn:hover {
+    background-color: #d93927;
+}
+
+#closeModal {
+    background-color: #6c757d;
+    color: #ffffff;
+}
+
+#confirmReject {
+    background-color: #ea4335;
+    color: #ffffff;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .card-header, .table th, .table td {
+        font-size: 0.9em;
+    }
+
+    .btn-list, .custom-approve-btn, .custom-reject-btn {
+        font-size: 0.9em;
+        padding: 10px;
+    }
 }
 </style>
 </head>
@@ -183,7 +363,7 @@ button:hover {
                 <div class="card-body">
                     <div class="row">
                         <div class="text-center">
-                            <table class="table">
+                            <table class="table table-striped mt-3">
                                 <tr>
                                     <td><label for="dno">문서번호</label></td>
                                     <td><span th:text="${edmsDocs.edmsDocNo}"></span></td>
@@ -198,7 +378,7 @@ button:hover {
                                 </tr>
                                 <tr>
                                     <td><label for="dcontent">내용</label></td>
-                                    <td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="400px" height="1500px" th:src="|/upload/${edmsDocs.fileName}|" ></td>                                    
+                                    <td><img id="edmsImg" class="card-img-top" alt="기안 이미지" width="100px"th:src="|/upload/${edmsDocs.fileName}|" ></td>                                    
                                 </tr>
                                 <tr>
                                     <td><label for="datt">첨부파일명</label></td>

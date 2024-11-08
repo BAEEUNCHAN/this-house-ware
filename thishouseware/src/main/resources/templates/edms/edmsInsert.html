@@ -11,7 +11,6 @@
 </head>
 <style>
 body {
-    font-family: 'Roboto', sans-serif;
     background-color: #f8f9fa;
     color: #333;
     overflow-x: hidden;
@@ -80,7 +79,7 @@ button:hover {
 	background-color: #0056b3;
 }
 /* 인풋 및 셀렉트 스타일 */
-input[type="text"], select {
+input[type="text"], select,input[type="number"] {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
@@ -235,6 +234,7 @@ input[type="file"] {
     text-align: center;
     font-size: 1rem !important;
     border-bottom: 1px solid #ddd !important;
+    width: 20%; /* 셀 너비 고정 */
 }
 
 /* 직급 셀 스타일: 너비 조정, 강조 배경색 */
@@ -242,7 +242,7 @@ input[type="file"] {
     font-weight: bold;
     color: #2a4d69 !important;
     border-right: 2px solid #1b3a6e; /* 셀 간 구분을 위한 테두리 */
-    width: 30%; /* 직급 칸의 가로 크기 조정 */
+    width: 30%; /* 직급 칸의 고정 너비 */
 }
 
 /* 이름 셀 스타일: 폰트 크기와 두께 증가, 강조 배경색 */
@@ -251,6 +251,8 @@ input[type="file"] {
     font-size: 1.2rem !important; 
     font-weight: bold !important;
     border-left: 2px solid #1b3a6e; 
+    width: 25%; /* 이름 칸의 고정 너비 */
+}
 
 /* 결재자 라인 제목 스타일 */
 .approval-title {
@@ -262,7 +264,7 @@ input[type="file"] {
     border-radius: 8px;
     margin-bottom: 15px;
     font-size: 1.2rem;
-}
+  }
 </style>
 <div class="page-inner">
 	<div class="page-header">
@@ -328,8 +330,8 @@ input[type="file"] {
 												</optgroup>
 										</select></td>
 									<tr>
-										<td><label for="edmsContent">내용</label></td>
-										<td><div id="edmsContent"></div></td>
+										<td colspan='2'><div class ="" style ="text-align:center ;" id="edmsContent">선택한 결재문서가 보입니다.</div></td>
+										
 									</tr>
 									<tr>
 									<tr>
@@ -338,13 +340,13 @@ input[type="file"] {
 									        <label for="attatch" class="file-upload-label">
 									            <i class="bi bi-folder"></i> 파일 선택
 									        </label>
-									        <input type="file" id="attatch" name="uploadFile">
+									        <input type="file" id="attatch" name="uploadFile" class = "">
 									        <span id="file-chosen">선택된 파일 없음</span>
 									    </td>
 									</tr>
-									<tr>
-										<td><span name="approverNos"></span></td>
-									</tr>
+									<!-- <tr>
+										<td colspan='2'><span name="approverNos"></span></td>
+									</tr> -->
 								</table>
 								<div style="text-align: center; margin-top: 20px;">
 									<input type="button" class="btnSave btn btn-info" value="임시저장"
@@ -434,21 +436,19 @@ input[type="file"] {
 		  			// 결재선 선택시 결재자 테이블 생성
 		  			// approvalOrder로 정렬하도록 apprMapper에서 지정되어 있어서 순번대로 그려줌 
 		  			function getTableTag(result) {
-		  			    let tableTag = $('<table class="styled-table"></table>'); // 클래스 이름 추가
+		  			    let tableTag = $('<table class="styled-table" style="table-layout: fixed; width: 100%; max-width: 800px; margin: 0 auto; border-collapse: collapse;"></table>'); // 클래스 이름 추가 및 스타일 적용
 	
 		  			    // 테이블 헤더 행 추가
 		  			    let headerRow = $('<tr></tr>');
-		  			    headerRow.append('<th>직급 </th>');
-		  			    for (approver of result) {
-		  			        headerRow.append('<th class="styled-td position">' + approver.positionName + '</th>');
+		  			    for (let i = 0; i < result.length && i < 5; i++) { // 최대 5개의 셀까지 생성
+		  			        headerRow.append('<th class="styled-td position" style="width: 20%; font-weight: bold;">' + result[i].positionName + '</th>');
 		  			    }
 		  			    tableTag.append(headerRow);
 	
 		  			    // 결재자 이름 행 추가
 		  			    let nameRow = $('<tr></tr>');
-		  			    nameRow.append('<td>이름</td>');
-		  			    for (approver of result) {
-		  			        nameRow.append('<td class="styled-td name">' + approver.name + '</td>');
+		  			    for (let i = 0; i < result.length && i < 5; i++) { // 최대 5개의 셀까지 생성
+		  			        nameRow.append('<td class="styled-td name" style="width: 20%; text-align: center; font-size: 1rem; font-weight: bold;">' + result[i].name + '</td>');
 		  			    }
 		  			    tableTag.append(nameRow);
 	

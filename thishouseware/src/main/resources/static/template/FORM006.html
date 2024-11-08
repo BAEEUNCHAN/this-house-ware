@@ -6,32 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>비밀서약서 양식</title>
-<style>
-.table {
-	width: 100%;
-	border-collapse: collapse;
-}
 
-th, td {
-	border: 1px solid #000;
-	padding: 10px;
-	text-align: left;
-}
-
-th {
-	background-color: #f4f4f4;
-}
-
-.buttons {
-	margin-top: 20px;
-}
-
-</style>
 </head>
 <body>
-	<div class="page-inner">
-		<div class="row">
-			<div class="col-md-12">
+
 				<div class="card">
 					<div class="card-header">
 						<div class="card-title">비밀서약서 양식</div>
@@ -42,10 +20,10 @@ th {
 								<form action="/submitEducation" method="post">
 								<table class="table">
 										<tr>
-											<th>신청서 번호</th>
-											<td></td>
-											<th>결재선 지정</th>
-											<td><span id="apprLineSel"></span></td>											
+											<th width="15%">신청서 번호</th>
+											<td width="10%"></td>
+											<th width="15%">결재선 지정</th>
+											<td width="60%"><span id="apprLineSel"></span></td>											
 										</tr>
 									</table>
 									<h2 style="text-align: center;">비밀유지 서약서</h2>
@@ -53,15 +31,15 @@ th {
 										<table border="1"
 										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 											<tr>
-												<th>소속</th>
+												<th width="15%">소속</th>
 												<td><input type="text" name="affiliation" required ></td>
-												<th>성명</th>
+												<th width="15%">성명</th>
 												<td><input type="text" name="name" required ></td>
 											</tr>
 											<tr>
-												<th>생년월일</th>
+												<th width="15%">생년월일</th>
 												<td><input type="date" name="birthdate" required ></td>
-												<th>주소</th>
+												<th width="15%">주소</th>
 												<td><input type="text" name="address" required ></td>
 											</tr>
 										</table>
@@ -124,8 +102,5 @@ th {
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 </body>
 </html>

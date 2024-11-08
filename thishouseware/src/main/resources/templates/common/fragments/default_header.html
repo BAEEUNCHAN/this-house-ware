@@ -97,6 +97,18 @@
                               th:if="${session.attendance.attendancesCode == 'j1'}">
                               외출
                             </button>
+                                                        <button type="button" 
+                              class="btn btn-danger fs-6" 
+                              id="attendanceBtn2"
+                              th:if="${session.attendance.attendancesCode == 'j4'}">
+                              퇴근
+                            </button>
+                            <button type="button" 
+                              class="btn btn-secondary fs-6" 
+                              id="attendanceBtn3"
+                              th:if="${session.attendance.attendancesCode == 'j4'}">
+                              외출
+                            </button>
                             <button type="button" 
                               class="btn btn-success fs-6" 
                               id="attendanceBtn4"
@@ -140,7 +152,7 @@ var SweetAlert2Demo = (function () {
     });
     // 복귀 버튼
     $("#attendanceBtn4").click(function (e) {
-      attendanceEvent('j1','복귀하시겠습니까?');
+      attendanceEvent('j4','복귀하시겠습니까?');
     });
     
   };

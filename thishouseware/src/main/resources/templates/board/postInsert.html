@@ -31,6 +31,8 @@
 										method="post">
 										<input type="hidden" name="id"
 											th:value="${#authentication.principal.empVO.id}">
+										<input type="hidden" name="positionCode"
+											th:value="${#positionCode}">
 										<table class="table">
 											<tr>
 												<td colspan=2>
@@ -60,10 +62,9 @@
 														<div class="col-sm-10">
 															<select class="form-select" style="width: 170px;"
 																aria-label="Default select example" name="postsType">
-																<option value="">선택</option>
+																<!-- <option value="">선택</option>
 																<option th:each="type : ${postsType}"
-																	th:value="${type.value}" th:text="${type.key}">
-																</option>
+																	th:value="${type.value}" th:text="${type.key}">	 -->															
 															</select>
 														</div>
 													</div> <!-- 제목 -->
@@ -128,6 +129,42 @@
 		</div>
 	</div>
 	<script th:inline="javascript">
+		// 게시판 선택시 선택 항목에 따라 머릿글 권한 지정
+		var positionCode = [[${positionCode}]];
+		let selectTag = $("select[name='postsType']");
+		// 본부장, 팀장
+		if (positionCode == 'a3' || positionCode == 'a4') {
+			$("#boardsNo").change(function(event) {
+				if ($("#boardsNo option:checked").text() == '자유게시판' ||
+				$("#boardsNo option:checked").text() == '익명게시판') {
+					selectTag.empty();
+					selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+				}
+				else {
+					selectTag.empty();
+					selectTag.append($('<option>', {value: 'p1', text : '공지'}));
+					selectTag.append($('<option>', {value: 'p2', text : '필독'}));
+					selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+				}
+			});			
+		}
+		// 사원
+		else if (positionCode == 'a5') {
+			$("#boardsNo").change(function(event) {
+				selectTag.empty();
+				selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+			});
+		}
+		// 사장, 관리자
+		else {
+			$("#boardsNo").change(function(event) {
+				selectTag.empty();
+				selectTag.append($('<option>', {value: 'p1', text : '공지'}));
+				selectTag.append($('<option>', {value: 'p2', text : '필독'}));
+				selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+			});
+		}
+	
 		// 기본으로 게시 기간여부를 '무'로 설정
 		document.querySelector('input[name="postSetting"][value="q2"]').checked = true;
 
@@ -144,7 +181,7 @@
 				postEndTime.setAttribute("disabled", "disabled");
 			}
 		}
-
+		
 		// submit을 하기 전 게시판 유형, 익명 여부, 제목, 권한 확인
 		$(insertForm).on('submit', postInsertHandler);
 

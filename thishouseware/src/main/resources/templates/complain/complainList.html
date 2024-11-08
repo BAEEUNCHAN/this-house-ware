@@ -61,11 +61,21 @@ thead{
 			</ul>
 		</div>
 		<div></div>
-		<button class="btn btn-secondary" id="customerIssueBtn">고객불편</button>
-		<button class="btn btn-secondary" id="operationIssueBtn">운영장애</button>
-		<br />
+		<!-- <button class="btn btn-secondary" id="customerIssueBtn">고객불편</button>
+		<button class="btn btn-secondary" id="operationIssueBtn">운영장애</button> -->
 		<br />
 		<div class="col-md-12">
+		<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="allTheComplain" style="color:black;">전체</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="customerIssueBtn" style="color:black;">고객불편</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" id="operationIssueBtn" style="color:black;">운영장애</a>
+  </li>
+</ul>
 			<div class="card">
 				<div class="card-header">
 					<div class="card-title">
@@ -264,6 +274,7 @@ thead{
 		 */
 
 		var lang_kor = {
+				 "search" : "",
 			"zeroRecords" : "검색된 데이터가 없습니다.",
 			"paginate" : {
 				"first" : "첫 페이지",
@@ -284,6 +295,11 @@ thead{
 				ordering : false, // 정렬 기능 활성화
 			});
 			// 고객불편
+			$('#allTheComplain').on('click', function() {
+				table.column(4).search('').draw();
+			});
+			
+			// 고객불편
 			$('#customerIssueBtn').on('click', function() {
 				table.column(4).search('고객불편').draw();
 			});
@@ -292,7 +308,42 @@ thead{
 			$('#operationIssueBtn').on('click', function() {
 				table.column(4).search('운영장애').draw();
 			});
+			
+			 $("div.dataTables_filter label").addClass("search-icon");
+			 $("div.dataTables_filter input").before('<i class="fas fa-search" style="margin-left: 8px; background-color: #ddd; padding:7px; border-radius:20%;"></i>');
 		});
+		 
+		
+		 
+		 $(document).ready(function() {
+			    // 초기 상태: 고객불편 탭을 기본으로 active 처리
+			    $('#allTheComplain').addClass('active');
+			    
+			    // 전체
+			    $('#allTheComplain').on('click', function() {
+			        // 'active' 클래스 추가/제거
+			        $(this).addClass('active');
+			        $('#operationIssueBtn').removeClass('active');
+			        $('#customerIssueBtn').removeClass('active');
+			    });
+			    
+			    // 고객불편 탭 클릭 시
+			    $('#customerIssueBtn').on('click', function() {
+			        // 'active' 클래스 추가/제거
+			        $(this).addClass('active');
+			        $('#allTheComplain').removeClass('active');
+			        $('#operationIssueBtn').removeClass('active');
+			    });
+
+			    // 운영장애 탭 클릭 시
+			    $('#operationIssueBtn').on('click', function() {
+			        // 'active' 클래스 추가/제거
+			        $(this).addClass('active');
+			        $('#allTheComplain').removeClass('active');
+			        $('#customerIssueBtn').removeClass('active');
+			    });
+			});
+
 	</script>
 
 

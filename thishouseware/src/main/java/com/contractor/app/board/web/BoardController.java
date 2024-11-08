@@ -181,7 +181,7 @@ public class BoardController {
 		// model.addAttribute("boards", list);
 		model.addAttribute("postsType", postsType);
 		model.addAttribute("postSetting", postSetting);
-
+		model.addAttribute("positionCode", positionCode);
 		return "board/postInsert";
 		// classpath:/templates/board/postInsert.html => 실제 경로
 	}

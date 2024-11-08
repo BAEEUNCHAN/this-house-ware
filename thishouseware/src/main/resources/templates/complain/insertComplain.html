@@ -387,7 +387,7 @@ button:hover {
 			 // 문의내용 빈칸 확인
 			let complainContent = $('form [name="complainContent"]'); // 공백은 하위요소 찾는 것.
 			if (complainContent.val() == '') {
-				alert('제목을 입력해주세요.');
+				alert('문의내용을 입력해주세요.');
 				complainContent.focus();
 				return;
 			}
@@ -395,7 +395,7 @@ button:hover {
 			// 요청사항 빈칸 확인
 			let complainRequest = $('form [name="complainRequest"]'); // 공백은 하위요소 찾는 것.
 			if (complainRequest.val() == '') {
-				alert('제목을 입력해주세요.');
+				alert('요청사항을 입력해주세요.');
 				complainRequest.focus();
 				return;
 			} 

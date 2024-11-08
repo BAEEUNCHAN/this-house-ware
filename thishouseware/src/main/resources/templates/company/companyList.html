@@ -164,6 +164,7 @@ th.sorting_desc:before {
 	    dom: '<"top"f>rt<"bottom"p><"clear">',  // 검색창(f)을 상단에 표시
 	    pageLength: 10,  // 페이지당 항목 수를 10으로 고정
 	    lengthChange: false,  // 항목 수 변경을 비활성화
+	    
 	});
 	
 	document.getElementById('dt-search-0').placeholder = '검색할 키워드를 입력하세요.';
@@ -237,6 +238,8 @@ th.sorting_desc:before {
 	    table.on('draw', function () {
 	        initDeleteModal();
 	    });
+	    $("div.dataTables_filter label").addClass("search-icon");
+		$("div.dataTables_filter input").before('<i class="fas fa-search" style="margin-left: 8px; background-color: #ddd; padding:7px; border-radius:20%;"></i>');
 	});
 
 

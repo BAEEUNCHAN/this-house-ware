@@ -72,16 +72,18 @@
 <script>
 $(document).ready(function () {
 
-    var table = $('#myTable').DataTable({
-		// 표시건수 기능 숨기기
-	  	lengthChange: false,
-	  	// 검색 기능 숨기기
-	  	// searching: false,
-	  	// 정렬 기능 숨기기
-	  	ordering: false,
-	  	// 정보 표시 숨기기
-	  	info: false,
-    });
+	var table = $('#myTable').DataTable({
+	// 표시건수 기능 숨기기
+		lengthChange: false,
+		// 검색 기능 숨기기
+		// searching: false,
+		// 정렬 기능 숨기기
+		ordering: false,
+		// 정보 표시 숨기기
+		info: false,
+		language: lang_kor,// 페이징 한글
+
+	});
     
     // 퇴직자와 근무자를 나누어 띄어주기 
 	// 근무자
@@ -139,5 +141,8 @@ $(document).ready(function () {
 		console.log("test");
 			table.draw();
 	} );
+	$("div.dataTables_filter label").addClass("search-icon");
+	$("div.dataTables_filter input").before('<i class="fas fa-search" style="margin-left: 8px; background-color: #ddd; padding:7px; border-radius:20%;"></i>');
+	// $("#myTable #select").children().eq(1).remove();
 });
 </script>

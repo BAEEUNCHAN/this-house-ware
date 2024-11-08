@@ -50,6 +50,9 @@
 	    		<when test='"결재완료".equals(approvalStatus)'>
 	    			d.approval_status = '결재완료'	    		
 	    		</when>
+	    		<when test='"임시저장".equals(approvalStatus)'>
+	    			d.approval_status = '임시저장'	    		
+	    		</when>
 	    		<otherwise>
 	        		d.approval_status = '결재대기'	    		
 	    		</otherwise>

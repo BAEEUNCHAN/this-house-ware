@@ -195,7 +195,7 @@ public class EdmsController {
 			String month = new SimpleDateFormat("MM").format(createDate);
 			String day = new SimpleDateFormat("dd").format(createDate);
 
-			String path = "/d:/upload/edms/" + year + "/" + month + "/" + day + "/";
+			String path = "/upload/edms/" + year + "/" + month + "/" + day + "/";
 			UUID uuid = UUID.randomUUID();
 			String image = uuid + ".png";
 

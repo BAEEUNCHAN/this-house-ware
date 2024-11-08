@@ -360,6 +360,10 @@ body {
 		        var colIndex = document.querySelector('#select').selectedIndex;
 		        table.column(colIndex).search(this.value).draw();
 		    });
+		    
+		 	// 검색에서 숨김처리된 컬럼 검색조건에서 삭제
+	        $("#myTable_filter #select").children().eq(0).remove();
+	        $("#myTable_filter #select").children().eq(1).remove();
 		});
 	</script>
 	<script src="/assets/js/chan/importantModal.js"></script>

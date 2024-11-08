@@ -129,6 +129,8 @@
 								
 								<br/><br/><br/>
 								<div class="text-center">
+								<input type="hidden" name="complainNo" th:value="${complain.complainNo}">
+								
 									<a><button type="submit" class="btn btn-success">등록</button></a>
 									<button type="button" class="btn btn-danger"
 										th:onclick='|location.href="@{/complain/complainList}"|'>취소</button>

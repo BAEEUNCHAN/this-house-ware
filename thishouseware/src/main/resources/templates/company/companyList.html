@@ -155,90 +155,90 @@ th.sorting_desc:before {
 	</div>
 
 	<script>
-	// 삭제모달 처리
-	var SweetAlert2Demo = (function () {
-		var initDemos = function () {
-			$(".alert_demo_7").click(function (e) {
-				event.stopPropagation();
-				let companyNo = $(e.currentTarget).closest('tr').children().first().text();
-				swal({
-					title: "회사정보 삭제",
-					text: "해당 회사를 삭제하시겠습니까?",
-					type: "warning",
-					buttons: {
-						confirm: {
-							text: "삭제",
-							className: "btn btn-danger",
-						},
-						cancel: {
-							text: "취소",
-							className: "btn btn-black",
-						},
-					},
-				}).then((Delete) => {
-					if (Delete) {
-						$.ajax({
-							url: `/company/companyDelete?companyNo=${companyNo}`, 
-							type: 'DELETE',
-							success: function (response) {
-								swal({
-									title: "삭제완료!",
-									text: "해당 회사가 목록에서 삭제되었습니다.",
-									icon: "success",
-									buttons: {
-										confirm: {
-											text: "확인",
-											className: "btn btn-success",
-										},
-									},
-								}).then(() => {
-									location.reload();
-								});
-							},
-							error: function (error) {
-								swal({
-									title: "오류!",
-									text: "회사정보를 삭제하려면 해당 회사의 문의사항을 모두 삭제해주세요.",
-									icon: "error",
-									buttons: {
-										confirm: {
-											text: "확인",
-											className: "btn btn-danger",
-										},
-									},
-								});
-							}
-						});
-					} else {
-						swal.close();
-					}
-				});
-			});
-		};
-		return {
-			init: function () {
-				initDemos();
-			},
-		};
-	})();
-	
-	// Document Ready
-	jQuery(document).ready(function () {
-		SweetAlert2Demo.init();
-	});
-
 	// DataTable 설정
-	$('#example').DataTable({
-			info: false,
-			language: {
-				search: "",  // 검색 텍스트를 빈 문자열로 설정
-			},
-			dom: '<"top"f>rt<"bottom"p><"clear">',  // 검색창(f)을 상단에 표시
-			pageLength: 10,  // 페이지당 항목 수를 10으로 고정
-			lengthChange: false,  // 항목 수 변경을 비활성화
-		});
+	var table = $('#example').DataTable({
+	    info: false,
+	    language: {
+	        search: "",  // 검색 텍스트를 빈 문자열로 설정
+	    },
+	    dom: '<"top"f>rt<"bottom"p><"clear">',  // 검색창(f)을 상단에 표시
+	    pageLength: 10,  // 페이지당 항목 수를 10으로 고정
+	    lengthChange: false,  // 항목 수 변경을 비활성화
+	});
 	
 	document.getElementById('dt-search-0').placeholder = '검색할 키워드를 입력하세요.';
+	
+	// 삭제 모달 초기화 함수
+	function initDeleteModal() {
+	    $(".alert_demo_7").off("click").on("click", function (e) {
+	        event.stopPropagation();
+	        let companyNo = $(e.currentTarget).closest('tr').children().first().text();
+	        swal({
+	            title: "회사정보 삭제",
+	            text: "해당 회사를 삭제하시겠습니까?",
+	            type: "warning",
+	            buttons: {
+	                confirm: {
+	                    text: "삭제",
+	                    className: "btn btn-danger",
+	                },
+	                cancel: {
+	                    text: "취소",
+	                    className: "btn btn-black",
+	                },
+	            },
+	        }).then((Delete) => {
+	            if (Delete) {
+	                $.ajax({
+	                    url: `/company/companyDelete?companyNo=${companyNo}`, 
+	                    type: 'DELETE',
+	                    success: function (response) {
+	                        swal({
+	                            title: "삭제완료!",
+	                            text: "해당 회사가 목록에서 삭제되었습니다.",
+	                            icon: "success",
+	                            buttons: {
+	                                confirm: {
+	                                    text: "확인",
+	                                    className: "btn btn-success",
+	                                },
+	                            },
+	                        }).then(() => {
+	                            location.reload();
+	                        });
+	                    },
+	                    error: function (error) {
+	                        swal({
+	                            title: "오류!",
+	                            text: "회사정보를 삭제하려면 해당 회사의 문의사항을 모두 삭제해주세요.",
+	                            icon: "error",
+	                            buttons: {
+	                                confirm: {
+	                                    text: "확인",
+	                                    className: "btn btn-danger",
+	                                },
+	                            },
+	                        });
+	                    }
+	                });
+	            } else {
+	                swal.close();
+	            }
+	        });
+	    });
+	}
+
+	// Document Ready
+	jQuery(document).ready(function () {
+	    SweetAlert2Demo.init();
+	    initDeleteModal();  // 초기 모달 이벤트 바인딩
+
+	    // DataTable의 페이지 전환 또는 정렬 시 이벤트 재바인딩
+	    table.on('draw', function () {
+	        initDeleteModal();
+	    });
+	});
+
 
 	</script>
 

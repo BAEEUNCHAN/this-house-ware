@@ -21,4 +21,6 @@ public class FileRoomsVO {
 	List<FilesVO> files;
 	
 	List<FolderFileVO> folderFile;
+	
+	List<FileRoomsVO> fileRooms;
 }

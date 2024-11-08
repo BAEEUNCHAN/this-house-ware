@@ -37,8 +37,7 @@
 /* post-item을 중앙에 배치 */
 .post-item {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	width: 100%;
 	margin: 5px 0;
 }
 
@@ -128,11 +127,26 @@
 								<div class="card-body">
 									<ul class="post-list">
 										<li th:each="post : ${board.posts}" class="post-item"
-											id="posts"><a th:text="${post.postsNo}"
+											id="posts">
+											<a th:text="${post.postsNo}"
 											class="post-header"
 											th:style="${post.postsNo != null ? 'display:none' : 'display:inline-block'}"></a>
-											<strong th:text="${post.postsType}" class="post-header">[머리글]</strong>
-											<a th:text="${post.title}" class="post-title">게시글 제목</a></li>
+											<span th:switch="${post.postsType}" class="post-header"
+											style="display: inline-block; align-items: center; margin-right: 10px; width: 15%;">
+												<span th:case="공지" th:class="'postsType-p1'"> <span
+													class="badge badge-warning">공지</span>
+											</span> <span th:case="필독" th:class="'postsType-p2'"> <span
+													class="badge badge-danger">필독</span>
+											</span> <span th:case="일반" th:class="'postsType-p3'"> <span
+													class="badge badge-primary">일반</span>
+											</span>
+										</span> 
+										<span style="display: inline-block; ">
+										<a
+											style="display: inline-block; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+											th:text="${post.title}" class="post-title">게시글 제목</a>
+										</span>
+											</li>
 									</ul>
 								</div>
 							</div>

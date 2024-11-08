@@ -60,7 +60,7 @@
         ON l.id = e.id
 		<where>
 		<if test="departmentNo != null and departmentNo != ''">
-		id = #{id}
+		l.id = #{id}
 		</if>
 		</where>
 	</select>

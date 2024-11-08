@@ -31,7 +31,7 @@
         ON s.id = e.id
         <where>
         <if test="id != null and id != ''">
-         id = #{id}
+         s.id = #{id}
          </if>
         </where>
     </select>
@@ -51,7 +51,7 @@
         ON s.id = e.id
         <where>
         <if test="departmentNo != null and departmentNo != ''">
-         department_no = #{departmentNo}
+         s.department_no = #{departmentNo}
          </if>
         </where>
     </select>

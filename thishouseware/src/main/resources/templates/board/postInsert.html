@@ -129,8 +129,39 @@
 		</div>
 	</div>
 	<script th:inline="javascript">
+		$(document).ready(function(){
+			let selBoardType = $("#boardsNo option:checked").text();
+			let selectTag = $("select[name='postsType']");
+			// 본부장, 팀장
+			if (positionCode == 'a3' || positionCode == 'a4') {
+				if (selBoardType == '자유게시판' || selBoardType == '익명게시판') {
+					selectTag.empty();
+					selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+				}
+				else {
+					selectTag.empty();
+					selectTag.append($('<option>', {value: 'p1', text : '공지'}));
+					selectTag.append($('<option>', {value: 'p2', text : '필독'}));
+					selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+				}						
+			}
+			// 사원
+			else if (positionCode == 'a5') {				
+				selectTag.empty();
+				selectTag.append($('<option>', {value: 'p3', text : '일반'}));			
+			}
+			// 사장, 관리자
+			else {
+				selectTag.empty();
+				selectTag.append($('<option>', {value: 'p1', text : '공지'}));
+				selectTag.append($('<option>', {value: 'p2', text : '필독'}));
+				selectTag.append($('<option>', {value: 'p3', text : '일반'}));
+			}
+		});
+	
 		// 게시판 선택시 선택 항목에 따라 머릿글 권한 지정
-		var positionCode = [[${positionCode}]];
+		let positionCode = [[${positionCode}]];
+		
 		let selectTag = $("select[name='postsType']");
 		// 본부장, 팀장
 		if (positionCode == 'a3' || positionCode == 'a4') {

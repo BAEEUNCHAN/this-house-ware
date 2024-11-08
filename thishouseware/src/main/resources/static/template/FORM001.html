@@ -6,31 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>지출결의서 양식</title>
-<style>
-.table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th, td {
-	border: 1px solid #000;
-	padding: 10px;
-	text-align: left;
-}
-
-th {
-	background-color: #f4f4f4;
-}
-
-.buttons {
-	margin-top: 20px;
-}
-</style>
 </head>
 <body>
-	<div class="page-inner">
-		<div class="row">
-			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
 						<div class="card-title">지출결의서 양식</div>
@@ -41,17 +18,17 @@ th {
 								<form action="/submitEducation" method="post">	
 								<table class="table">
 										<tr>
-											<th>신청서 번호</th>
-											<td></td>
-											<th>결재선 지정</th>
-											<td><span id="apprLineSel"></span></td>											
+											<th width="15%">신청서 번호</th>
+											<td width="10%"></td>
+											<th width="15%">결재선 지정</th>
+											<td width="60%"><span id="apprLineSel"></span></td>											
 										</tr>
 									</table>								
 									<h2 style="text-align: center;">지출 결의서</h2>
 									<table border="1"
 										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
-											<th>지출 항목</th>
+											<th width="15%">지출 항목</th>
 											<td><select name="expenseType" required>
 													<option value="식비">식비</option>
 													<option value="교통비">교통비</option>
@@ -79,9 +56,6 @@ th {
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 	<script>	
 		// 결재선 지정 버튼 클릭시 appr/apprLineList로 이동(모달창으로 띄우는게 좋을듯)
 		$('#apprLineBtn').on('click', function(event) {

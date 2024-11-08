@@ -6,31 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>일반기안서 양식</title>
-<style>
-.table {
-	width: 100%;
-	border-collapse: collapse;
-}
 
-th, td {
-	border: 1px solid #000;
-	padding: 10px;
-	text-align: left;
-}
-
-th {
-	background-color: #f4f4f4;
-}
-
-.buttons {
-	margin-top: 20px;
-}
-</style>
 </head>
 <body>
-	<div class="page-inner">
-		<div class="row">
-			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header">
 						<div class="card-title">일반기안서 양식</div>
@@ -40,22 +18,22 @@ th {
 							<div class="text-center">
 								<form action="/submitProposal" method="post">
 								<table class="table">
-										<tr>
-											<th>신청서 번호</th>
-											<td></td>
-											<th>결재선 지정</th>
-											<td><span id="apprLineSel"></span></td>											
-										</tr>
+									<tr>
+										 <th width="15%">신청서 번호</th>
+										 <td width="10%"></td>
+										 <th width="15%">결재선 지정</th>
+										 <td width="60%"><span id="apprLineSel"></span></td>	
+ 									</tr>
 									</table>
 									<h2 style="text-align: center;">일반 기안서</h2>
 									<table border="1"
 										style="border-collapse: collapse; width: 100%; margin: 0 auto;">
 										<tr>
-											<th>제목</th>
+											<th width="15%">제목</th>
 											<td><input type="text" name="basicTitle" style="width: 100%" required></td>
 										</tr>
 										<tr>
-											<th>내용</th>
+											<th width="15%">내용</th>
 											<td>
 												<textarea name="basicContent" style="height: 500px; width: 100%;" required></textarea>
 											</td>

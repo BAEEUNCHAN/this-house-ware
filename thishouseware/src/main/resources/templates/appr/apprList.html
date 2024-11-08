@@ -72,7 +72,7 @@
 
 /* 드래그 가능한 행 스타일 */
 .approverRows tr {
-    cursor: grab;
+    cursor: grab !important; /* 드래그 가능 커서 */
     transition: background-color 0.2s ease;
 }
 
@@ -89,6 +89,7 @@
 
 /* 드래그 중인 행 스타일 */
 .ui-sortable-helper {
+    cursor: grabbing; /* 드래그 중일 때 커서 변경 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     background-color: #e6f7ff;
 }

@@ -87,8 +87,9 @@ body {
     text-transform: uppercase;
 }
 
-.table tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
+.table tbody tr {
+    cursor: pointer;  /* 클릭 시 손가락 모양으로 변경 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .table tbody tr:hover {

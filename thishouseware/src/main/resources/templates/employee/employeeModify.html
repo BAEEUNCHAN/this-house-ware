@@ -3,6 +3,24 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
+  <style>
+    .noPhone{
+			display : none;
+			color : red;
+		}
+
+		.noNewPassword{
+			display : none;
+			color : red;
+		}
+
+		.noCheckPassword{
+			display : none;
+			color : red;
+		}
+  </style>
+</head>
   <input type="hidden" id="id" th:value="${employee.id}" placeholder="연락처">
   <div class="page-inner">
 		<div class="page-header">
@@ -30,14 +48,17 @@
                   id="phone" maxlength="13"
                   placeholder="'-'없이 숫자만 입력."
                   oninput = "autoHyphen(this); newPhoneCheck();">
+                  <span class="noPhone">전화번호 11자리를 모두 채워주십시요.</span>
                 </div>  
                 <div class="form-group">
                   <label for="newPassword" class="col-md-3 col-form-label">비밀번호 변경</label>
                   <input type="password" class="form-control input-full" id="newPassword" placeholder="새 비밀번호" oninput="newPasswordCheck()">
+                  <span class="noNewPassword">비밀번호는 4자리 이상 작성해주셔야합니다.</span>
                 </div>  
                 <div class="form-group">
                   <label for="newPassword" class="col-md-3 col-form-label">비밀번호 변경 확인</label>
                   <input type="password" class="form-control input-full" id="checkNewPassword" placeholder="새 비밀번호 확인" oninput="newPasswordCheck()">
+                  <span class="noCheckPassword">변경할 비밀번호와 일치하지 않습니다.</span>
                 </div>  
                 <div class="form-group">
                   <label for="password" class="col-md-3 col-form-label">비밀번호 확인</label>
@@ -81,23 +102,33 @@ function valueCheck(){
 }
 function newPasswordCheck(){
   if(newPasswordInput.value.length < 1 && checkNewPasswordInput.value.length < 1){
+    $('.noNewPassword').css("display","none");
+    $('.noCheckPassword').css("display","none");
+
     $('#newPassword').removeClass("is-valid");
     $('#checkNewPassword').removeClass("is-valid");
     $('#newPassword').removeClass("is-invalid");
     $('#checkNewPassword').removeClass("is-invalid");
   }else if(newPasswordInput.value.length < 4 && checkNewPasswordInput.value.length < 4){
+    $('.noNewPassword').css("display","inline-block");
+
     $('#newPassword').removeClass("is-valid");
     $('#checkNewPassword').removeClass("is-valid");
     $('#newPassword').addClass("is-invalid");
     $('#checkNewPassword').addClass("is-invalid");
   }else{
+    $('.noNewPassword').css("display","none");
+
     if(newPasswordInput.value == checkNewPasswordInput.value)
     {
+      $('.noCheckPassword').css("display","none");
       $('#newPassword').addClass("is-valid");
       $('#checkNewPassword').addClass("is-valid");
       $('#newPassword').removeClass("is-invalid");
       $('#checkNewPassword').removeClass("is-invalid");
     }else{
+      $('.noCheckPassword').css("display","inline-block");
+
       $('#newPassword').addClass("is-invalid");
       $('#checkNewPassword').addClass("is-invalid");
       $('#newPassword').removeClass("is-valid");
@@ -108,12 +139,15 @@ function newPasswordCheck(){
 }
 function newPhoneCheck(){
   if(phoneInput.value.length < 1){
+    $('.noPhone').css("display","none");
     $('#phone').removeClass("is-invalid");
     $('#phone').removeClass("is-valid");
   }else if(phoneInput.value.length >= 13){
+    $('.noPhone').css("display","none");
     $('#phone').addClass("is-valid");
     $('#phone').removeClass("is-invalid");
   }else{
+    $('.noPhone').css("display","inline-block");
     $('#phone').addClass("is-invalid");
     $('#phone').removeClass("is-valid");
   }
@@ -130,6 +164,10 @@ $('#modifyEmployee').on('click', function(event){
 	formData.append('checkNewPassword', checkNewPasswordInput.value);
 	formData.append('checkPassword', checkPasswordInput.value);
 	
+  if (checkPasswordInput.value < 1){
+    $('#checkPassword').addClass("is-invalid");
+    return null;
+  }
 	// $.Ajax 방식 
 	$.ajax('/employee/modify/'+id.value,{
 		type : 'post',

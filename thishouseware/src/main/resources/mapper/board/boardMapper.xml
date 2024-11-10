@@ -259,6 +259,7 @@
 	<delete id="deleteBoradInfo" parameterType="int">
 		DELETE FROM posts
 		WHERE POSTS_NO = #{postsNo}
+		<!-- AND BOARDS_NO = #{boardsNo} -->
 	</delete>
 
 	<!-- 댓글 전체조회 -->

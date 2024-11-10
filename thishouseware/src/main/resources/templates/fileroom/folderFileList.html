@@ -3,6 +3,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
 <style>
 .pagination .active .page-link {
 	background-color: #007bff; /* 활성 페이지의 배경색 */
@@ -28,41 +29,50 @@
 	width: 100%;
 	table-layout: fixed; /* 고정된 테이블 레이아웃 사용 */
 }
-  .btn-danger {
-    padding: 0; /* 패딩 0 */
-    font-size: 10px; /* 글자 크기 12px */
-    width: 25px; /* 버튼 너비를 자동으로 설정 */
-    height: 25px; /* 버튼 높이를 자동으로 설정 */
-  }
-.form-control.form-control-sm{
-	width:500px;
+
+.btn-danger {
+	padding: 0; /* 패딩 0 */
+	font-size: 10px; /* 글자 크기 12px */
+	width: 25px; /* 버튼 너비를 자동으로 설정 */
+	height: 25px; /* 버튼 높이를 자동으로 설정 */
 }
+
+.form-control.form-control-sm {
+	width: 500px;
+}
+
 .pagination {
-    display: flex;
-    justify-content: center;  /* 가운데 정렬 */
-    margin-top: 20px;          /* 필요시 여백 추가 */
-    padding: 0;                /* 패딩 제거 */
+	display: flex;
+	justify-content: center; /* 가운데 정렬 */
+	margin-top: 20px; /* 필요시 여백 추가 */
+	padding: 0; /* 패딩 제거 */
 }
 /* .dataTables_paginate {
     display: flex;
     float:center;
     
 } */
-
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+}
 </style>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+	rel="stylesheet">
+</head>
 <body>
 	<div class="container">
 		<div class="page-inner">
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">자료실</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href="#"> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/main?boardsNo=1"> <i
+							class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
-					<li class="nav-item"><a
-						href="/file/folderFileList?fileRoomsNo=${fileRoom.fileRoomsNo}">[[${fileRoom.fileRoomsName}]]</a></li>
+					<li class="nav-item fileRoomsName">[[${fileRoom.fileRoomsName}]]</li>
 				</ul>
 			</div>
 			<div class="row">
@@ -82,35 +92,44 @@
 								<div class="row gx-7">
 									<div class="col border-end">
 										<div class="folder-section folder">
-											<div class="d-flex justify-content-between mb-2">
+											<div class="mb-2">
 												<form name="insertForm" th:action="@{/file/folderFileList}"
 													method="post">
 													<input type="hidden" name="id"
 														th:value="${#authentication.principal.empVO.id}">
 													<input type="hidden" name="fileRoomsNo"
-														th:value="${fileRoom.fileRoomsNo}"> <input
-														th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
-                     (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"
-														type="text" name="folderName" placeholder="폴더 이름을 입력하세요"
-														id="folderName"
-														style="width: 170px; height: 30px; margin-right: 5px;"><button class="btn btn-round btn-primary"
-														th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
-                     (fileRoom.fileRoomsName != '전체게시판' and ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or employeeVO.departmentName == fileRoom.fileRoomsName))}"
-														type="submit"
-														style="font-size: 12px; width: 30px; height: 30px; padding:0px; border-radius:2px !important;"><i class="fas fa-plus
-														"></i>
-														</button><button id="noneFolderSearch"
-														class="btn btn-round btn-success"
-														style="margin-left:20px; font-size: 12px; width: 150px; height: 30px; padding:0px; border-radius:5px !important;">폴더
-														없는대상 조회</button>
+														th:value="${fileRoom.fileRoomsNo}">
+
+													<!-- 왼쪽에 정렬될 폴더 이름 입력 필드 및 추가 버튼 -->
+													<div style="float: left;">
+														<input
+															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
+                            (fileRoom.fileRoomsName != '전체게시판' and 
+                            ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or 
+                             employeeVO.departmentName == fileRoom.fileRoomsName))}"
+															type="text" name="folderName" placeholder="폴더 이름을 입력하세요"
+															id="folderName" class="form-control form-control-sm"
+															style="width: 150px; height: 30px; margin-right: 5px; display: inline-block;">
+														<button class="btn btn-round btn-primary"
+															th:if="${(fileRoom.fileRoomsName == '전체게시판' and (employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2')) or 
+                            (fileRoom.fileRoomsName != '전체게시판' and 
+                            ((employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2') or 
+                             employeeVO.departmentName == fileRoom.fileRoomsName))}"
+															type="submit"
+															style="font-size: 12px; width: 30px; height: 30px; padding: 0px; border-radius: 2px !important; display: inline-block;">
+															<i class="fas fa-plus"></i>
+														</button>
+													</div>
+
+													<!-- 오른쪽에 정렬될 폴더 없는대상 조회 버튼 -->
+													<div style="float: right;">
+														<button id="noneFolderSearch"
+															class="btn btn-round btn-success"
+															style="font-size: 12px; width: 150px; height: 30px; padding: 0px; border-radius: 5px !important;">
+															폴더 없는 대상 조회</button>
+													</div>
 												</form>
-												<div class="float-end">
-													<!-- <button id="noneSearch" class="btn btn-round btn-warning"
-														style="font-size: 12px; width: 130px; height: 40px;">되돌리기</button> -->
-												</div>
 											</div>
-													
-													
 											<table class="table table-striped table-hover">
 												<thead>
 													<tr>
@@ -135,14 +154,14 @@
 											</table>
 										</div>
 									</div>
-									
-									
-									
-									
+
+
+
+
 									<div class="col-8">
 										<div class="file-section file">
 											<table class="table table-striped table-hover"
-												id="filesTable" style="width:90%; margin:auto;">
+												id="filesTable" style="width: 90%; margin: auto;">
 												<thead>
 													<tr>
 														<th class="col-2">파일 번호</th>
@@ -160,7 +179,9 @@
 															<td><a
 																th:href="@{'fileDownload?fileLink=' + ${info.attatch}}"
 																th:text="${info.fileName}"></a></td>
-															<td>[[${info.folderName}]]</td>
+															<td><a
+																th:href="@{'fileDownload?fileLink=' + ${info.attatch}}"
+																th:text="${info.folderName}"></a></td>
 															<td>
 																<button type="button" class="btn btn-danger"
 																	th:style="${employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2' or info.id == #authentication.principal.empVO.id} ? '' : 'display:none;'"
@@ -196,7 +217,14 @@
 		// 제이쿼리 객체 생성
 		// 파일 업로드 자료실 번호 받아오기
 		let fileRoomsNo = /*[[${fileRoom.fileRoomsNo}]]*/'';
-
+		
+		// 상단 메뉴 해당 게시판 이동
+		$('li.fileRoomsName').on('click', function(event) {
+		    let hTag = event.currentTarget; // 클릭된 li 요소
+		    let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
+		    location.href = url; // 해당 URL로 페이지 이동
+		});
+		
 		$(document).ready(function() {
 			var table = $('#filesTable').DataTable({
 				// 표시건수 기능 숨기기
@@ -229,6 +257,9 @@
 
 			// 폴더 없는 대상 검색
 			$('#noneFolderSearch').on('click', function(event) {
+				// 폴더 이름 확인 로직을 건너뛰기 위해 폼 제출을 막음
+			    event.preventDefault();
+				
 				// 데이터가 없는 대상을 검색하기 위해 .search('^$', true, false) 사용 
 				table.column(2).search('^$', true, false).draw();
 			});

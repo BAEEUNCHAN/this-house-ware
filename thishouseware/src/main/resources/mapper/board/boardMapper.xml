@@ -51,6 +51,7 @@
 		ON p.BOARDS_NO =
 		b.BOARDS_NO
 		WHERE b.BOARDS_NO = #{boardsNo}
+		AND p.DISPLAY = 'q1'  <!-- 'q1'인 게시글만 조회 -->
 		ORDER BY type, p.POSTS_NO
 		desc
 		)

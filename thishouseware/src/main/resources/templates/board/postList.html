@@ -91,7 +91,7 @@ body {
 											<tbody>
 												<th:block th:each="info : ${posts}">
 													<!-- PostsVO => <tr/> -->
-													<tr th:if="${info.display == 'q1'}">
+													<tr th:if="${info.display == 'q1'}" style="cursor: pointer;">
 														<td>[[ ${info.postsNo}]]</td>
 														<!-- <td>[[ ${info.postsType}]]</td> -->
 														<td

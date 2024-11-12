@@ -222,9 +222,10 @@ public class BoardController {
 	@GetMapping("/postDelete") // QueryString : @RequestParam
 	public String postDelete(@RequestParam Integer postsNo, @RequestParam Integer boardsNo, PostsVO postsVO) {
 		boardService.deletePost(postsNo);
+		//return "redirect:postList?boardsNo=" + postsVO.getBoardsNo();
 		return "redirect:postList?boardsNo=" + boardsNo;
 	}
-
+	
 	// 게시글 단건조회 + 댓글 : URI - postInfo / PARAMETER - PostsVO(QueryString)
 	// RETURN - board/postInfo
 	@GetMapping("postInfo") // postInfo?key=value

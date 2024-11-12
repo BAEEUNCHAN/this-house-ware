@@ -5,40 +5,127 @@
 	layout:fragment="Content">
 <head>
 <style>
+.folder-label {
+    font-weight: bold; /* 텍스트를 굵게 */
+    color: black; /* 파란색 */
+    font-size: 16px; /* 폰트 크기 */
+    background-color: #f4f4f4; /* 부드러운 배경색 */
+    padding: 5px 10px; /* 여백 추가 */
+    border-radius: 5px; /* 둥근 모서리 */
+    display: inline-block; /* 텍스트가 한 줄로 출력되도록 설정 */
+}
+
 /* 자료실 이름과 폴더 목록 사이 간격 추가 */
 .card-title {
-	margin-bottom: 15px;
+	flex-grow: 0; /* 제목 영역 크기 고정 */
+	white-space: nowrap; /* 제목이 한 줄로만 보이도록 설정 */
+	overflow: hidden;
+	text-overflow: ellipsis; /* 넘치는 텍스트는 '...'으로 표시 */
+	text-decoration: none; /* 제목에 밑줄이 없도록 설정 */
+}
+
+/* 카드 본문 중앙 정렬 */
+.card-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center; /* 중앙 정렬 */
+	justify-content: center; /* 수직 중앙 정렬 */
+	flex-grow: 1;
+	text-align: center;
 }
 
 /* 폴더, 파일 목록 앞 점 제거 */
-.folder-list, .file-list {
+.folder-list {
+	display: flex;
+	flex-wrap: wrap; /* 여러 줄로 나누기 위해 설정 */
+	justify-content: center; /* 항목들을 수평으로 중앙 정렬 */
+	align-items: center; /* 항목들을 수직으로 중앙 정렬 */
 	list-style-type: none;
 	padding-left: 0;
+	margin: 0;
+	width: 100%;
 }
 
-/* 게시글 제목 스타일 */
-.post-title {
+.folder-item {
+  display: flex;
+  justify-content: center; /* 항목을 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin: 5px 10px; /* 항목 간 여백 */
+  cursor: pointer; /* 클릭 가능한 느낌을 주기 위해 커서 변경 */
+  width: auto; /* 항목 너비 자동 설정 */
+}
+
+.fileroom-header {
+	font-size: 14px;
+	color: #6c757d;
+	margin-right: 10px;
+	cursor: pointer; /* 클릭 가능한 느낌을 주기 위해 커서 변경 */
+}
+
+/* 폴더 제목 스타일 */
+.folder-title {
 	display: inline-block;
 	width: 200px;
 	text-align: left;
 	margin-left: 10px; /* 제목과 머리글 사이 간격 추가 */
-	font-weight: bold; /* 제목을 더 두껍게 */
 }
 
-/* 카드 안의 폴더 목록 가운데 정렬 */
-.folder-container {
+/* 카드 스타일 */
+.card {
+	padding: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	min-height: 300px;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
+	justify-content: center; /* 카드 전체 중앙 정렬 */
 }
 
-.folder-item {
-	margin-top: 10px; /* 폴더 항목 간의 간격 */
-	font-size: 14px; /* 폴더 이름 폰트 크기 */
+.card-header {
+	display: flex;
+	justify-content: space-between; /* 요소를 양 끝에 배치 */
+	align-items: center; /* 세로 중앙 정렬 */
+	width: 100%; /* 전체 너비를 차지하도록 설정 */
+	border-bottom: none; /* 밑줄 제거 */
+	box-shadow: none; /* 그림자 제거 */
+	text-decoration: none; /* 밑줄 제거 */
+}
+
+/* 자료실을 한 줄에 두 개씩 배치하기 위한 스타일 */
+.file-rooms-row {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.file-room-item {
+	width: 48%; /* 한 줄에 두 개씩 배치 (여백을 고려하여 48%로 설정) */
+	margin: 10px 1%; /* 여백을 주어 두 항목이 나란히 보이게 함 */
+	box-sizing: border-box;
+}
+
+/* .no-custom-style 클래스가 있는 카드에는 스타일 적용 제외 */
+.card.no-custom-style {
+	padding: 20px; /* 카드 내부 여백 */
+	margin-bottom: 20px; /* 카드 사이의 간격 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+	border-radius: 10px; /* 둥근 모서리 */
+	height: auto; /* 높이를 자동으로 조정 */
+	min-height: unset; /* 기본 카드의 min-height 속성을 제거 */
+}
+
+/* mb-4는 기존 유지 */
+.mb-4 {
+	margin-bottom: 30px;
+}
+
+body {
+	font-family: 'Noto Sans KR', sans-serif;
 }
 </style>
+<link
+	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+	rel="stylesheet">
 </head>
 <body>
 	<div class="container">
@@ -46,92 +133,97 @@
 			<div class="page-header">
 				<h3 class="fw-bold mb-3">자료실</h3>
 				<ul class="breadcrumbs mb-3">
-					<li class="nav-home"><a href=""> <i class="icon-home"></i>
+					<li class="nav-home"><a href="/main?boardsNo=1"> <i
+							class="icon-home"></i>
 					</a></li>
 					<li class="separator"><i class="icon-arrow-right"></i></li>
 					<li class="nav-item"><a href="/file/fileMainPage">자료실</a></li>
 				</ul>
 			</div>
-			<div class="page-inner">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">
-									자료실 <a href="/file/fileInsert" class="float-end"><button
-											class="btn btn-primary">파일 업로드</button></a>
+			<div class="col-md-12">
+				<div class="card no-custom-style">
+					<div class="card-header"
+						style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+						<div class="card-title">자료실</div>
+						<a href="/file/fileInsert" class="float-end"><button
+								class="btn btn-primary">파일 업로드</button></a>
+					</div>
+				</div>
+				<div class="board-container">
+					<div class="row text-center">
+						<!-- 자료실 목록 출력 -->
+						<!-- 전체 자료실을 출력할 조건: employeeVO.positionCode가 a1 또는 a2인 경우 -->
+						<div class="file-rooms-row"
+							th:if="${employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2'}">
+							<!-- 자료실을 두 개씩 배치 -->
+							<div th:each="fileRoom : ${fileRooms}" class="file-room-item">
+								<div class="card">
+									<div class="fileroom-header"
+										style="display: flex; justify-content: center; align-items: center; padding: 10px; background-color: #f4f4f4; border-radius: 8px;"
+										th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
+										<div
+											style="display: flex; align-items: center; justify-content: center;">
+											<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
+										</div>
+									</div>
+									<div class="card-body">
+										<!-- 폴더 목록 -->
+										<ul class="folder-list">
+											<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
+												class="folder-item"
+												th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><span class="folder-label">폴더</span>
+												<span th:text="${folder.folderName}" class="folder-title"></span></li>
+											<!-- 폴더가 없을 경우 -->
+											<li th:if="${folderMap[fileRoom.fileRoomsNo].size() == 0}"
+												class="folder-item"
+												style="text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; height: 100px;">
+												<span>폴더가 없습니다.</span>
+											</li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="card-body">
-							<div class="row text-center">
-								<div class="board-container">
-									<div class="row">
-										<!-- 자료실 목록 출력 -->
-										<!-- 전체 자료실을 출력할 조건: employeeVO.positionCode가 a1 또는 a2인 경우 -->
+
+						<!-- 특정 조건에 맞는 자료실과 폴더, 파일만 출력할 조건: boardsType이 o1(공지사항) 또는 o2(전체게시판)인 경우 및 departmentName이 board.title과 일치하는 경우 -->
+						<div class="file-rooms-row"
+							th:if="${employeeVO.positionCode != 'a1' and employeeVO.positionCode != 'a2'}">
+							<div th:each="fileRoom : ${fileRooms}" class="file-room-item"
+								th:if="${fileRoom.fileRoomsName == '전체자료실' or employeeVO.departmentName == fileRoom.fileRoomsName}">
+								<div class="card">
+									<div class="fileroom-header"
+										style="display: flex; justify-content: center; align-items: center; padding: 10px; background-color: #f4f4f4; border-radius: 8px;"
+										th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
 										<div
-											th:if="${employeeVO.positionCode == 'a1' or employeeVO.positionCode == 'a2'}">
-											<div th:each="fileRoom : ${fileRooms}" class="col-md-12 mb-4">
-												<div class="card">
-													<div class="fileroom-header"
-														th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
-														<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
-													</div>
-
-													<div class="folder-container">
-														<!-- 폴더 목록 -->
-														<ul class="folder-list">
-															<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
-																class="folder-item"
-																th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><strong>폴더</strong>
-																<span th:text="${folder.folderName}"></span></li>
-														</ul>
-													</div>
-
-													<!-- 파일 목록
-												<ul class="file-list">
-													<li th:each="file : ${fileMap[fileRoom.fileRoomsNo]}"
-														class="file-item" data-file-no="${file.fileNo}"><strong>파일</strong>
-														<span th:text="${file.fileName}"></span>
-													</li>
-												</ul> -->
-												</div>
-											</div>
-										</div>
-
-										<!-- 특정 조건에 맞는 자료실과 폴더, 파일만 출력할 조건: boardsType이 o1(공지사항) 또는 o2(전체게시판)인 경우 및 departmentName이 board.title과 일치하는 경우 -->
-										<div
-											th:if="${employeeVO.positionCode != 'a1' and employeeVO.positionCode != 'a2'}">
-											<div th:each="fileRoom : ${fileRooms}"
-												th:if="${fileRoom.fileRoomsName == '전체자료실' or employeeVO.departmentName == fileRoom.fileRoomsName}"
-												class="col-md-12 mb-4">
-												<div class="card">
-													<div class="fileroom-header"
-														th:data-file-rooms-no="${fileRoom.fileRoomsNo}">
-														<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
-													</div>
-
-													<div class="folder-container">
-														<!-- 폴더 목록 -->
-														<ul class="folder-list">
-															<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
-																class="folder-item"
-																th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><strong>폴더</strong>
-																<span th:text="${folder.folderName}"></span></li>
-														</ul>
-													</div>
-
-													<!-- 파일 목록
-												<ul class="file-list">
-													<li th:each="file : ${fileMap[fileRoom.fileRoomsNo]}"
-														class="file-item" data-file-no="${file.fileNo}"><strong>파일</strong>
-														<span th:text="${file.fileName}"></span>
-													</li>
-												</ul> -->
-												</div>
-											</div>
+											style="display: flex; align-items: center; justify-content: center;">
+											<h4 th:text="${fileRoom.fileRoomsName}" class="card-title"></h4>
 										</div>
 									</div>
+
+									<div class="card-body">
+										<!-- 폴더 목록 -->
+										<ul class="folder-list">
+											<li th:each="folder : ${folderMap[fileRoom.fileRoomsNo]}"
+												class="folder-item"
+												th:data-file-rooms-no="${fileRoom.fileRoomsNo}"><span class="folder-label">폴더</span>
+												<span th:text="${folder.folderName}" class="bold-text"></span></li>
+											<!-- 폴더가 없을 경우 -->
+											<li th:if="${folderMap[fileRoom.fileRoomsNo].size() == 0}"
+												class="folder-item"
+												style="text-align: center; width: 100%; display: flex; justify-content: center; align-items: center; height: 100px;">
+												<span>폴더가 없습니다.</span>
+											</li>
+										</ul>
+
+									</div>
+
+									<!-- 파일 목록
+												<ul class="file-list">
+													<li th:each="file : ${fileMap[fileRoom.fileRoomsNo]}"
+														class="file-item" data-file-no="${file.fileNo}"><strong>파일</strong>
+														<span th:text="${file.fileName}"></span>
+													</li>
+												</ul> -->
 								</div>
 							</div>
 						</div>
@@ -162,7 +254,12 @@
 			// 폴더 클릭 시 해당 자료실 페이지로 이동
 			$('.folder-item').on('click', function(event) {
 				let fileRoomsNo = $(this).attr("data-file-rooms-no");
-				console.log("File Rooms No:", fileRoomsNo);
+
+				// fileRoomsNo가 null인 경우 클릭하지 않도록 처리
+				if (!fileRoomsNo) {
+					return; // 아무 작업도 하지 않고 종료
+				}
+
 				let url = '/file/folderFileList?fileRoomsNo=' + fileRoomsNo;
 				location.href = url;
 			});

@@ -10,6 +10,13 @@
     <script src="/park/DataTables/datatables.min.js"></script>
 </head>
  <style>
+ 
+ .table tbody td.title-cell {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 150px; /* 원하는 최대 너비 설정 */
+}
 /* 기본 체크박스 숨기기 */
 .chk_box input[type="checkbox"] {
 	display: none; /* 체크박스 숨기기 */
@@ -39,7 +46,6 @@
 }
 
 body {
-	font-family: 'Roboto', sans-serif;
 	background-color: #f8f9fa;
 	color: #333;
 	overflow-x: hidden;
@@ -126,12 +132,6 @@ body {
 	border-right: none; /* 마지막 열의 세로 테두리 제거 */
 }
 
-/* 테이블 제목 강조 */
-.table tbody td.title-cell {
-	font-weight: bold;
-	color: #1b3a6e;
-}
-
 /* 숨김 요소 스타일 */
 .hidden {
 	display: none;
@@ -183,9 +183,10 @@ body {
 	.pagination a {
 		padding: 8px 12px;
 	}
-@media ( max-width : 991.5px) {
-	.navbar-header {
-		position: absolute;
+	@media ( max-width : 991.5px) {
+		.navbar-header {
+			position: absolute;
+		}
 	}
 }
 </style>
@@ -213,7 +214,7 @@ body {
 					<div class="card-body">
 						<div class="row">
 							<div class="text-center">
-								 <table class="table" id="myTable">
+								 <table class="table table-striped mt-3" id="myTable">
 									<thead>
 										<tr>
 											<th class=hidden style="display: none">문서번호</th>
@@ -233,7 +234,7 @@ body {
 												<td>[[${sts.count}]]</td> 
 												<td class="departmentNo" style="display: none;">[[${info.departmentNo}]]</td>
 												<td>[[${info.departmentName}]]</td>
-												<td>[[${info.title}]]</td>
+												<td class="title-cell">[[${info.title}]]</td>
 												<td>[[${info.id}]]</td>
 												<!--<td>[[${info.submitDt}]]</td>-->
 												<td>[[${#dates.format(info.submitDt, "yyyy-MM-dd")}]]</td>

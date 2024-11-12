@@ -18,92 +18,100 @@
 						href="/board/postList?boardsNo=${board.boardsNo}">[[${post.boardTitle}]]</a></li>
 				</ul>
 			</div>
-			<div class="page-inner">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">
-									[[${post.boardTitle}]] <a class="float-end">
-										<button type="button" class="btn btn-danger"
-											th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
-											th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">취소</button>
-									</a>
-								</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								[[${post.boardTitle}]] <a class="float-end">
+									<button type="button" class="btn btn-danger"
+										th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''"
+										th:onclick="|location.href='@{/board/postInfo(postsNo=${post.postsNo})}'|">취소</button>
+								</a>
 							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="text-center">
-										<form name="updateForm" th:action="@{/board/postUpdate}"
-											method="post">
-											<input type="hidden" name="postsNo"
-												th:value="${post.postsNo}">
-											<!-- 게시글 번호 전달 -->
-											<table class="table">
-												<tr>
-													<th>게시판 이름</th>
-													<td>[[ ${post.boardTitle} ]]</td>
-												</tr>
-												<tr>
-													<th>게시글 제목</th>
-													<td><input type="text" name="title"
-														th:value="${post.title}" required></td>
-												</tr>
-												<tr>
-													<th>작성자</th>
-													<td>[[ ${post.name} ]]
-												</tr>
-												<tr>
-													<th>작성일자</th>
-													<td>[[ ${ #dates.format(post.submitDT, "yyyy-MM-dd")}
-														]]</td>
-												</tr>
-												<tr>
-													<th>내용</th>
-													<td><textarea name="content" rows="5" cols="40"
-															th:text="${post.content}" required></textarea></td>
-												</tr>
-											</table>
-											<div>
-												<button type="submit" class="btn btn-success"
-													th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''">수정</button>
-											</div>
-										</form>
-									</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="text-center">
+									<form name="updateForm" th:action="@{/board/postUpdate}"
+										method="post">
+										<input type="hidden" name="postsNo" th:value="${post.postsNo}">
+										<!-- 게시글 번호 전달 -->
+										<table class="table">
+											<tr>
+												<td colspan=2>
+													<div class="mb-3 row d-flex align-items-center">
+														<label for="boardTitle"
+															class="col-sm-2 col-form-label fw-bold">게시판 이름</label>
+														<div class="col-sm-10 text-start" th:text="${post.boardTitle}"></div>
+													</div>
+													<div class="mb-3 row d-flex align-items-center">
+														<label for="title" class="col-sm-2 col-form-label fw-bold">제목</label>
+														<div class="col-sm-10">
+															<input type="text" class="form-control" name="title" th:value="${post.title}"
+																required>
+														</div>
+													</div>
+													<div class="mb-3 row d-flex align-items-center">
+														<label for="name" class="col-sm-2 col-form-label fw-bold">작성자</label>
+														<div class="col-sm-10 text-start">[[ ${post.name} ]]</div>
+													</div>
+													<div class="mb-3 row d-flex align-items-center">
+														<label for="submitDT"
+															class="col-sm-2 col-form-label fw-bold">작성일자</label>
+														<div class="col-sm-10 text-start">[[ ${
+															#dates.format(post.submitDT, "yyyy-MM-dd")} ]]</div>
+													</div>
+													<div class="mb-3 row d-flex align-items-center">
+														<label for="content"
+															class="col-sm-2 col-form-label fw-bold">내용</label>
+														<div class="col-sm-10">
+															<textarea class="form-control" name="content" rows="5" cols="40"
+																th:text="${post.content}" required></textarea>
+														</div>
+													</div>
+												</td>
+											</tr>
+										</table>
+										<div>
+											<button type="submit" class="btn btn-success"
+												th:style="${post.name != #authentication.principal.empVO.name} ? 'display:none;' : ''">수정</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
-						<div class="card">
-							<div class="card-header">
-								<div class="card-title">
-									댓글 목록 <a class="float-end"> </a>
-								</div>
+					</div>
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								댓글 목록 <a class="float-end"> </a>
 							</div>
-							<div class="card-body">
-								<div class="row">
-									<div class="text-center">
-										<!-- 댓글 조회 -->
-										<table class="table">
-											<thead>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="text-center">
+									<!-- 댓글 조회 -->
+									<table class="table">
+										<thead>
+											<tr>
+												<th>댓글 번호</th>
+												<th>작성자</th>
+												<th>작성일자</th>
+												<th>내용</th>
+											</tr>
+										</thead>
+										<tbody>
+											<th:block th:each="info : ${comments}">
 												<tr>
-													<th>댓글 번호</th>
-													<th>작성자</th>
-													<th>작성일자</th>
-													<th>내용</th>
+													<td>[[ ${info.commentsNo} ]]</td>
+													<td>[[ ${info.name} ]]</td>
+													<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")}
+														]]</td>
+													<td>[[ ${info.content} ]]</td>
 												</tr>
-											</thead>
-											<tbody>
-												<th:block th:each="info : ${comments}">
-													<tr>
-														<td>[[ ${info.commentsNo} ]]</td>
-														<td>[[ ${info.name} ]]</td>
-														<td>[[ ${ #dates.format(info.submitDT, "yyyy-MM-dd")}
-															]]</td>
-														<td>[[ ${info.content} ]]</td>
-													</tr>
-											</tbody>
-										</table>
-									</div>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>

@@ -241,7 +241,7 @@ function saveSchedule() {
 			if(result.success) {
 				obj.scheduleNo = result.scheduleNo;
 				alert("저장했습니다");
-		         location.reload();
+		         //location.reload();
 			}
 			else {
 				alert("저장에 실패했습니다");
@@ -277,7 +277,7 @@ function updateSchedule(info) {
 		success: function(result) {
 			if(result.success) {
 				alert("수정했습니다");
-		         location.reload();		        
+		         //location.reload();		        
 			}
 			else {
 				alert("수정 중 오류가 발생했습니다");

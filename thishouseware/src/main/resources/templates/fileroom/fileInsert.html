@@ -33,37 +33,52 @@
 												type="hidden" name="extension" id="fileExtension">
 											<table class="table">
 												<tr>
-													<th>자료실</th>
-													<td><select class="form-select" name="fileRoomsNo"
-														onchange="filterFoldersByRooms()">
-															<option value="">선택</option>
-															<optgroup th:each="optgrp : ${fileRoomsType}"
-																th:label="${optgrp.commonCodeName}">
-																<option th:each="opt : ${fileRooms}"
-																	th:if="${optgrp.commonCodeName} == ${opt.fileRoomsType}"
-																	th:text="${opt.fileRoomsName}"
-																	th:value="${opt.fileRoomsNo}"
-																	th:selected="${opt.fileRoomsNo} == ${selectedfileRoomsNo}">
-																</option>
-															</optgroup>
-													</select></td>
-												</tr>
-												<tr>
-													<th>폴더</th>
-													<td><select class="form-select" name="folderNo"
-														aria-label="Default select example">
-															<option value="">선택</option>
-															<option th:each="opt : ${folders}"
-																th:data-fileRoomsNo="${opt.fileRoomsNo}"
-																th:value="${opt.folderNo}" th:text="${opt.folderName}">
-															</option>
-													</select></td>
-												</tr>
-												<tr>
-													<th>첨부파일</th>
-													<td><input type="file" name="uploadFile" class="form-control" id="attatch inputGroupFile01"
-														onchange="updateFileInfo()"> <input type="hidden"
-														name="fileName" id="fileNameInput"></td>
+													<td colspan=2>
+														<div class="mb-3 row d-flex align-items-center">
+															<label for="fileRoomsNo"
+																class="col-sm-2 col-form-label fw-bold">자료실</label>
+															<div class="col-sm-10">
+																<select class="form-select" name="fileRoomsNo"
+																	onchange="filterFoldersByRooms()" style="width: 170px;">
+																	<option value="">선택</option>
+																	<optgroup th:each="optgrp : ${fileRoomsType}"
+																		th:label="${optgrp.commonCodeName}">
+																		<option th:each="opt : ${fileRooms}"
+																			th:if="${optgrp.commonCodeName} == ${opt.fileRoomsType}"
+																			th:text="${opt.fileRoomsName}"
+																			th:value="${opt.fileRoomsNo}"
+																			th:selected="${opt.fileRoomsNo} == ${selectedfileRoomsNo}">
+																		</option>
+																	</optgroup>
+																</select>
+															</div>
+														</div>
+														<div class="mb-3 row d-flex align-items-center">
+															<label for="folderNo"
+																class="col-sm-2 col-form-label fw-bold">폴더</label>
+															<div class="col-sm-10">
+																<select class="form-select" name="folderNo"
+																	aria-label="Default select example"
+																	style="width: 170px;">
+																	<option value="">선택</option>
+																	<option th:each="opt : ${folders}"
+																		th:data-fileRoomsNo="${opt.fileRoomsNo}"
+																		th:value="${opt.folderNo}" th:text="${opt.folderName}">
+																	</option>
+																</select>
+															</div>
+														</div>
+														<div class="mb-3 row d-flex align-items-center">
+															<label for="uploadFile"
+																class="col-sm-2 col-form-label fw-bold">첨부파일</label>
+															<div class="col-sm-10">
+																<input type="file" name="uploadFile"
+																	class="form-control" id="attatch inputGroupFile01"
+																	onchange="updateFileInfo()"> <input
+																	type="hidden" name="fileName" id="fileNameInput">
+															</div>
+														</div>
+													</td>
 												</tr>
 											</table>
 											<button class="btn btn-primary" type="submit">등록</button>

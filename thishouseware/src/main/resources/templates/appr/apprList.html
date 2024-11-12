@@ -72,7 +72,7 @@
 
 /* 드래그 가능한 행 스타일 */
 .approverRows tr {
-    cursor: grab;
+    cursor: grab !important; /* 드래그 가능 커서 */
     transition: background-color 0.2s ease;
 }
 
@@ -89,6 +89,7 @@
 
 /* 드래그 중인 행 스타일 */
 .ui-sortable-helper {
+    cursor: grabbing; /* 드래그 중일 때 커서 변경 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     background-color: #e6f7ff;
 }
@@ -99,7 +100,7 @@
     <div class="text-center">
         <div class="table-header">결재자 조회</div>
         <input type="hidden" name="approvalLineNo" th:value="${param.approvalLineNo}">
-        <table class="table">
+        <table class="table table-striped mt-3">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="checkAllApprovers"></th>
@@ -125,10 +126,10 @@
                 </th:block>
             </tbody>
         </table>
-        <div class="d-flex justify-content-end" style="padding: 10px;">
-            <button id="addApproverButton" class="btn btn-info btn-sm" style="width: 80px;">추가</button>
-            <button id="deleteApproverButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
-        </div>
+       <div class="d-flex justify-content-end" style="padding: 10px;">
+		    <button id="addApproverButton" class="btn btn-info btn-sm" style="width: 80px; margin-right: 5px;">추가</button>
+		    <button id="deleteApproverButton" class="btn btn-success btn-sm" style="width: 80px;">삭제</button>
+		</div>
     </div>
 </div>
 

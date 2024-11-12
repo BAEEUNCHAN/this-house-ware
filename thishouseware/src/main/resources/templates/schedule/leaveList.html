@@ -176,6 +176,86 @@ button:hover {
         position: absolute;
     }
 }
+/* Modal 스타일 */
+.modal-content {
+  background-color: #f9f9f9; /* 모달 배경 색상 */
+  border-radius: 10px; /* 모서리 둥글게 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/* 모달 헤더 */
+.modal-header {
+  background-color: #1b3a6e; /* 헤더 배경 색상 */
+  color: #ffffff; /* 헤더 텍스트 색상 */
+  padding: 15px; /* 내부 여백 */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.modal-title {
+  font-weight: bold; /* 타이틀 글씨 두껍게 */
+}
+
+.btn-close {
+  color: #ffffff;
+}
+
+/* 모달 바디 */
+.modal-body {
+  padding: 20px; /* 내부 여백 */
+  font-size: 16px; /* 글씨 크기 */
+}
+
+.modal-body input[type="text"],
+.modal-body input[type="datetime-local"],
+.modal-body textarea,
+.modal-body select {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* 모달 푸터 */
+.modal-footer {
+  padding: 15px;
+  justify-content: space-around; /* 버튼 간격 조정 */
+}
+
+.modal-footer .btn {
+  min-width: 100px; /* 버튼 최소 너비 */
+}
+
+#addSchedule,
+#modSchedule {
+  background-color: #007bff; /* 추가/수정 버튼 색상 */
+  border-color: #007bff;
+}
+
+#addSchedule:hover,
+#modSchedule:hover {
+  background-color: #0056b3; /* 추가/수정 버튼 호버 색상 */
+}
+
+#delSchedule {
+  background-color: #dc3545; /* 삭제 버튼 색상 */
+  border-color: #dc3545;
+}
+
+#delSchedule:hover {
+  background-color: #c82333; /* 삭제 버튼 호버 색상 */
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* 취소 버튼 색상 */
+  border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268; /* 취소 버튼 호버 색상 */
+}
 
 </style>
 <body>
@@ -260,11 +340,11 @@ button:hover {
 				</div>
 				<div
 					class="modal-footer d-flex justify-content-center align-items-center">
-					<button type="button" class="btn btn-secondary"
+					<button type="button" class="btn btn-warning"
 						data-bs-dismiss="modal">취소</button>
 					<button type="button" class="btn btn-primary" id="modLeave">
 						수정</button>
-					<button type="button" class="btn btn-warning" id="delLeave">
+					<button type="button" class="btn btn-danger" id="delLeave">
 						삭제</button>
 				</div>
 			</div>

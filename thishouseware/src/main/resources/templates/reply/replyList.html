@@ -27,6 +27,10 @@ thead{
     cursor:pointer;
     background-color:#ddd;
 }
+#example tbody th {
+    padding:0px !important;
+    padding-right:0px !important;
+}
 th.sorting:after,
 th.sorting:before,
 th.sorting_asc:after,
@@ -75,13 +79,13 @@ th.sorting_desc:before {
 										<table class="display" id="example">
 											<thead>
 												<tr>
-													<th class="col-md-1" style="text-align: center;">No</th>
-													<th class="col-md-3" style="text-align: center;">제목</th>
-													<th class="col-md-1" style="text-align: center;">고객</th>
-													<th class="col-md-2" style="text-align: center;">회사명</th>
-													<th class="col-md-2" style="text-align: center;">유형</th>
-													<th class="col-md-1" style="text-align: center;">처리상황</th>
-													<th class="col-md-2" style="text-align: center;">작성날짜</th>
+													<th class="col-md-1" style="text-align: center; padding:10px !important;">No</th>
+													<th class="col-md-3" style="text-align: center; padding:10px !important;">제목</th>
+													<th class="col-md-1" style="text-align: center; padding:10px !important;">고객</th>
+													<th class="col-md-2" style="text-align: center; padding:10px !important;">회사명</th>
+													<th class="col-md-2" style="text-align: center; padding:10px !important;">유형</th>
+													<th class="col-md-1" style="text-align: center !important; padding:10px !important;">상태</th>
+													<th class="col-md-2" style="text-align: center; padding:10px !important;">작성일</th>
 													<th class="col-md-1"></th>
 													<!-- yyyy년MM월dd일 -->
 												</tr>
@@ -254,6 +258,7 @@ th.sorting_desc:before {
 		
 		var lang_kor = {
 				"zeroRecords" : "검색된 데이터가 없습니다.",
+				"search" : "",
 				"paginate" : {
 					"first" : "첫 페이지",
 					"last" : "마지막 페이지",
@@ -270,6 +275,7 @@ th.sorting_desc:before {
 			pageLength: 10,  // 페이지당 항목 수를 10으로 고정
 			lengthChange: false,  // 항목 수 변경을 비활성화
 			/* ordering: false, */
+			
 		});
 
 		$('#progressDropdown').on('change', function () {
@@ -298,6 +304,8 @@ th.sorting_desc:before {
 		            table.column(5).search('').draw(); 
 		        }
 		    });
+		$("div.dataTables_filter label").addClass("search-icon");
+		$("div.dataTables_filter input").before('<i class="fas fa-search" style="margin-left: 8px; background-color: #ddd; padding:7px; border-radius:20%;"></i>');
 		});
 		
 	</script>

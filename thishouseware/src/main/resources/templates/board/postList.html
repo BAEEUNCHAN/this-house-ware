@@ -76,7 +76,6 @@
 											<thead>
 												<tr>
 													<th>게시글 번호</th>
-													<th>머리글</th>
 													<th>제목</th>
 													<th>작성자</th>
 													<th>등록날짜</th>
@@ -84,38 +83,48 @@
 											</thead>
 											<tbody>
 												<th:block th:each="info : ${posts}">
-													<!--  PostsVO => <tr/> -->
+													<!-- PostsVO => <tr/> -->
 													<tr th:if="${info.display == 'q1'}">
 														<td>[[ ${info.postsNo}]]</td>
 														<!-- <td>[[ ${info.postsType}]]</td> -->
-														<td><span th:switch="${info.postsType}"> <span
-																th:case="공지" th:class="'postsType-p1'"> <span
-																	class="badge badge-warning">공지</span>
-															</span> <span th:case="필독" th:class="'postsType-p2'"> <span
-																	class="badge badge-danger">필독</span>
-															</span> <span th:case="일반" th:class="'postsType-p3'"> <span
-																	class="badge badge-primary">일반</span>
-															</span>
-														</span></td>
 														<td
-															style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
-															[[ ${info.title}]]</td>
+															style="display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+															<span th:switch="${info.postsType}"
+															style="display: inline-flex; align-items: center; margin-right: 10px;">
+																<span th:case="공지" th:class="'postsType-p1'">
+																 <span class="badge badge-warning">공지</span>
+																</span> 
+																<span th:case="필독" th:class="'postsType-p2'"> 
+																	<span
+																	class="badge badge-danger">필독</span>
+																</span> 
+																<span th:case="일반" th:class="'postsType-p3'"> 
+																	<span
+																	class="badge badge-primary">일반</span>
+																</span>
+															</span> 
+															<span
+															style="display: inline-block; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+																[[ ${info.title}]] </span>
+														</td>
 														<td>[[ ${info.name}]]</td>
 														<td><span
 															th:text="(${info.postSetting == 'q1'} and ${info.display == 'q2'}) 
-																		? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} 
-																		: ${#dates.format(info.submitDT, 'yyyy-MM-dd')}">
+						? ${#dates.format(info.postStartTime, 'yyyy-MM-dd')} 
+						: ${#dates.format(info.submitDT, 'yyyy-MM-dd')}">
 														</span></td>
 													</tr>
 												</th:block>
 											</tbody>
+
 										</table>
 									</div>
 								</div>
 							</div>
 							<!-- 페이지 네이션 -->
 							<!-- <th:block th:insert="~{common/fragments/pagination :: pagination(paging)}"></th:block> -->
-							<nav aria-label="Page navigation" class="text-center mx-auto" style="margin-bottom: 20px;">
+							<nav aria-label="Page navigation" class="text-center mx-auto"
+								style="margin-bottom: 20px;">
 								<ul class="pagination justify-content-center">
 									<li class="page-item"
 										th:classappend="${paging.nowPage} == 1 ? 'disabled'"><a

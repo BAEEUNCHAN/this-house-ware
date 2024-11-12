@@ -5,7 +5,23 @@
 	layout:fragment="Content">
   <link href="/park/DataTables/datatables.min.css" rel="stylesheet">
   <script src="/park/DataTables/datatables.min.js"></script>
+<head>
+<style>
+	#myTable_filter #select{
+		border-color: #ebedf2;
+		border-width: 2px;
+		min-height: calc(1.5em + .5rem + calc(var(--bs-border-width)* 2));
+		border-radius: var(--bs-border-radius-sm);
+	}
+	table #max,#min{
+		border-color: #ebedf2;
+		border-width: 2px;
+		min-height: calc(1.5em + .5rem + calc(var(--bs-border-width)* 2));
+		border-radius: var(--bs-border-radius-sm);
+	}
+</style>
 
+</head>
 <div class="page-inner">
 	<div class="page-header">
 		<h3 class="fw-bold mb-3">직원 리스트</h3>
@@ -72,16 +88,18 @@
 <script>
 $(document).ready(function () {
 
-    var table = $('#myTable').DataTable({
-		// 표시건수 기능 숨기기
-	  	lengthChange: false,
-	  	// 검색 기능 숨기기
-	  	// searching: false,
-	  	// 정렬 기능 숨기기
-	  	ordering: false,
-	  	// 정보 표시 숨기기
-	  	info: false,
-    });
+	var table = $('#myTable').DataTable({
+	// 표시건수 기능 숨기기
+		lengthChange: false,
+		// 검색 기능 숨기기
+		// searching: false,
+		// 정렬 기능 숨기기
+		ordering: false,
+		// 정보 표시 숨기기
+		info: false,
+		language: lang_kor,// 페이징 한글
+
+	});
     
     // 퇴직자와 근무자를 나누어 띄어주기 
 	// 근무자
@@ -139,5 +157,8 @@ $(document).ready(function () {
 		console.log("test");
 			table.draw();
 	} );
+	$("div.dataTables_filter label").addClass("search-icon");
+	$("div.dataTables_filter input").before('<i class="fas fa-search" style="margin-left: 8px; background-color: #ddd; padding:7px; border-radius:20%;"></i>');
+	$("#myTable_filter>#select").children().eq(4).remove();
 });
 </script>

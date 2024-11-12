@@ -3,7 +3,9 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
+<head>
 
+</head>
   <div class="page-inner">
     <div class="page-header">
       <h3 class="fw-bold mb-3">해당 페이지 제목</h3>
@@ -19,13 +21,16 @@
         <div class="card-header">
           <div class="card-title">내 정보</div>
         </div>
-        <div class="card-body">
+        <div class="card-body"  style="padding-right: 300px;">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="card card-post card-round">
-                <img class="card-img-top" 
-                  th:src="@{/upload/}+${employee.imageLink}" 
-                  alt="사원 이미지" width="100px" height="300px">
+                <div class="overCard">
+                  <div class="overlay"></div>
+                  <img class="card-img-top" 
+                    th:src="@{/upload/}+${employee.imageLink}" 
+                    alt="사원 이미지" width="100px" height="300px">
+                </div>
                 <div class="card-body">
                   <div class="d-flex">
                     <div class="info-post ms-2">
@@ -43,7 +48,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
               <div class="card-body">
                 <table class="table table-typo">
                   <tbody>
@@ -81,3 +86,39 @@
       </form>
     </div>
 </div>
+<script>
+var container =document.querySelector('.card-img-top');
+var overlay = document.querySelector('.overlay');
+
+// 매개변수 e 에 자동으로 마우스 이벤트 발생할 때마다
+// 마우스의 정보값을 인수로 넣어준다.
+container.addEventListener('mousemove', function(e){
+    // 인수로부터 마우스 좌표값 추출
+    var x = e.offsetX;
+    var y = e.offsetY;
+    // 좌표값을 통해 적용하고자하는 각도를 작성
+    // y 축은 x의 값을 기준으로 회전한다.
+    var rotateY = -1/5 * x +10;
+    // x 축은 y의 값을 기준으로 회전한다.
+    var rotateX = -1/5 * y +10;
+    // 따로 나눌 수 없고 x y 를 함꼐 작성해야한다.
+    // 따로 작성하면 외에 값이 아래 값에 의하여 초기화된다.
+    // transform 전체값이 해당 값으로 치환되기 때문에
+    // css에 같은 값이 있더라도 작성해줘야한다.
+    container.style = `transform : 
+     perspective(500px)
+     rotateX(${rotateX}deg)
+     rotateY(${rotateY}deg)`;
+    
+    var overlayRotateX = x/5;
+    var overlayRotateY = y/5;
+    overlay.style = `background-position : ${overlayRotateX +overlayRotateY}`
+});
+
+/* 마우스 를 때면 다시 초기화 시켜준다. */
+container.addEventListener('mouseout',function(){
+    overlay.style = 'filter :opacity(0)'
+    container.style = 'transform : perspective(200px)'+
+    'rotateY(0deg) rotateX(0deg)'
+})
+</script>

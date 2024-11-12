@@ -335,5 +335,7 @@
 		select * from posts
 		where boards_no = 1
 		and display ='q1'
+        and posts_type ='p2'
+		order by posts_no desc
 	</select>
 </mapper>
